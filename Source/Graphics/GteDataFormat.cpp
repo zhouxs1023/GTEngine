@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/06/23)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteDataFormat.h>
@@ -418,7 +418,7 @@ DFChannelType const DataFormat::msChannelType[DF_NUM_FORMATS] =
     DF_UINT,            // DF_R32_UINT
     DF_INT,             // DF_R32_SINT
     DF_UNSUPPORTED,     // DF_R24G8_TYPELESS
-    DF_UINT,            // DF_D24_UNORM_S8_UINT
+    DF_UINT_24_8,       // DF_D24_UNORM_S8_UINT
     DF_UNSUPPORTED,     // DF_R24_UNORM_X8_TYPELESS
     DF_UNSUPPORTED,     // DF_X24_TYPELESS_G8_UINT
     DF_UNSUPPORTED,     // DF_R8G8_TYPELESS

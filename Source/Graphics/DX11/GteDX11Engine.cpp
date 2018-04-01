@@ -93,20 +93,20 @@ DX11Engine::~DX11Engine()
 
 DX11Engine::DX11Engine(D3D_FEATURE_LEVEL minFeatureLevel)
 {
-    Initialize(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, minFeatureLevel);
+    Initialize(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, minFeatureLevel, false);
     CreateDevice();
 }
 
 DX11Engine::DX11Engine(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType,
     HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel)
 {
-    Initialize(adapter, driverType, softwareModule, flags, minFeatureLevel);
+    Initialize(adapter, driverType, softwareModule, flags, minFeatureLevel, false);
     CreateDevice();
 }
 
-DX11Engine::DX11Engine(HWND handle, UINT xSize, UINT ySize, D3D_FEATURE_LEVEL minFeatureLevel)
+DX11Engine::DX11Engine(HWND handle, UINT xSize, UINT ySize, bool useDepth24Stencil8, D3D_FEATURE_LEVEL minFeatureLevel)
 {
-    Initialize(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, minFeatureLevel);
+    Initialize(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, minFeatureLevel, useDepth24Stencil8);
 
     if (CreateDevice() && CreateSwapChain(handle, xSize, ySize) && CreateBackBuffer(xSize, ySize))
     {
@@ -122,10 +122,10 @@ DX11Engine::DX11Engine(HWND handle, UINT xSize, UINT ySize, D3D_FEATURE_LEVEL mi
 }
 
 DX11Engine::DX11Engine(IDXGIAdapter* adapter, HWND handle, UINT xSize,
-    UINT ySize, D3D_DRIVER_TYPE driverType, HMODULE softwareModule,
-    UINT flags, D3D_FEATURE_LEVEL minFeatureLevel)
+    UINT ySize, bool useDepth24Stencil8, D3D_DRIVER_TYPE driverType,
+    HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel)
 {
-    Initialize(adapter, driverType, softwareModule, flags, minFeatureLevel);
+    Initialize(adapter, driverType, softwareModule, flags, minFeatureLevel, useDepth24Stencil8);
 
     if (CreateDevice() && CreateSwapChain(handle, xSize, ySize) && CreateBackBuffer(xSize, ySize))
     {
@@ -337,7 +337,8 @@ void DX11Engine::EndTimer(DX11PerformanceCounter& counter)
 // Private interface specific to DX11.
 //----------------------------------------------------------------------------
 void DX11Engine::Initialize(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType,
-    HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel)
+    HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel,
+    bool useDepth24Stencil8)
 {
     // Initialization of DX11Engine members.
     mAdapter = adapter;
@@ -348,6 +349,7 @@ void DX11Engine::Initialize(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType,
     mDevice = nullptr;
     mImmediate = nullptr;
     mFeatureLevel = D3D_FEATURE_LEVEL_9_1;
+    mUseDepth24Stencil8 = useDepth24Stencil8;
 
     mSwapChain = nullptr;
     mColorBuffer = nullptr;
@@ -663,7 +665,7 @@ bool DX11Engine::CreateBackBuffer(UINT xSize, UINT ySize)
     desc.Height = ySize;
     desc.MipLevels = 1;
     desc.ArraySize = 1;
-    desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    desc.Format = (mUseDepth24Stencil8 ? DXGI_FORMAT_D24_UNORM_S8_UINT : DXGI_FORMAT_D32_FLOAT);
     desc.SampleDesc.Count = 1;
     desc.SampleDesc.Quality = 0;
     desc.Usage = D3D11_USAGE_DEFAULT;

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/09/16)
 
 #include "CubeMapsWindow.h"
 
@@ -113,7 +113,7 @@ bool CubeMapsWindow::OnCharPress(unsigned char key, int x, int y)
         return true;
     }
 
-    return Window3::OnKeyDown(key, x, y);
+    return Window3::OnCharPress(key, x, y);
 }
 
 bool CubeMapsWindow::SetEnvironment()

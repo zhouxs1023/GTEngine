@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2016/12/09)
+// File Version: 3.0.3 (2017/06/23)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteFontArialW400H18.h>
@@ -105,7 +105,7 @@ void GL4Engine::DestroyDefaultFont()
     }
 }
 
-bool GL4Engine::Initialize(int requiredMajor, int requiredMinor, bool saveDriverInfo)
+bool GL4Engine::Initialize(int requiredMajor, int requiredMinor, bool, bool saveDriverInfo)
 {
     if (saveDriverInfo)
     {

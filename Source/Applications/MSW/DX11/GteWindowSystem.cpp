@@ -27,8 +27,8 @@ void WindowSystem::CreateEngineAndProgramFactory(MSWWindow::Parameters& paramete
     Window::Parameters& p = static_cast<Window::Parameters&>(parameters);
 
     auto engine = std::make_shared<DX11Engine>(nullptr, p.handle, p.xSize,
-        p.ySize, D3D_DRIVER_TYPE_HARDWARE, nullptr, p.deviceCreationFlags,
-        p.featureLevel);
+        p.ySize, p.useDepth24Stencil8, D3D_DRIVER_TYPE_HARDWARE, nullptr,
+        p.deviceCreationFlags, p.featureLevel);
 
     if (engine->GetDevice())
     {

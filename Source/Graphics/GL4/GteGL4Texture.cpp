@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/06/23)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GL4/GteGL4Texture.h>
@@ -265,17 +265,18 @@ GLuint const GL4Texture::msGLTextureExternalFormat[DF_NUM_FORMATS]
 
 GLuint const GL4Texture::msGLTextureExternalType[DF_NUM_CHANNEL_TYPES] =
 {
-    GL_ZERO,                        // DF_UNSUPPORTED
-    GL_BYTE,                        // DF_BYTE
-    GL_UNSIGNED_BYTE,               // DF_UBYTE
-    GL_SHORT,                       // DF_SHORT
-    GL_UNSIGNED_SHORT,              // DF_USHORT
-    GL_INT,                         // DF_INT
-    GL_UNSIGNED_INT,                // DF_UINT
-    GL_HALF_FLOAT,                  // DF_HALF_FLOAT
-    GL_FLOAT,                       // DF_FLOAT
-    GL_DOUBLE,                      // DF_DOUBLE
-    GL_INT_2_10_10_10_REV,          // DF_INT_10_10_2
-    GL_UNSIGNED_INT_2_10_10_10_REV, // DF_UINT_10_10_2
-    GL_UNSIGNED_INT_10F_11F_11F_REV // DF_FLOAT_11_11_10
+    GL_ZERO,                            // DF_UNSUPPORTED
+    GL_BYTE,                            // DF_BYTE
+    GL_UNSIGNED_BYTE,                   // DF_UBYTE
+    GL_SHORT,                           // DF_SHORT
+    GL_UNSIGNED_SHORT,                  // DF_USHORT
+    GL_INT,                             // DF_INT
+    GL_UNSIGNED_INT,                    // DF_UINT
+    GL_HALF_FLOAT,                      // DF_HALF_FLOAT
+    GL_FLOAT,                           // DF_FLOAT
+    GL_DOUBLE,                          // DF_DOUBLE
+    GL_INT_2_10_10_10_REV,              // DF_INT_10_10_2
+    GL_UNSIGNED_INT_2_10_10_10_REV,     // DF_UINT_10_10_2
+    GL_UNSIGNED_INT_10F_11F_11F_REV,    // DF_FLOAT_11_11_10
+    GL_UNSIGNED_INT_24_8                // DF_UINT_24_8
 };

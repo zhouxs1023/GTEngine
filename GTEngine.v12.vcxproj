@@ -1082,6 +1082,7 @@
     <ClInclude Include="Include\Mathematics\GteNURBSCurve.h" />
     <ClInclude Include="Include\Mathematics\GteNURBSSurface.h" />
     <ClInclude Include="Include\Mathematics\GteNURBSVolume.h" />
+    <ClInclude Include="Include\Mathematics\GteOBBTreeOfPoints.h" />
     <ClInclude Include="Include\Mathematics\GteOdeEuler.h" />
     <ClInclude Include="Include\Mathematics\GteOdeImplicitEuler.h" />
     <ClInclude Include="Include\Mathematics\GteOdeMidpoint.h" />

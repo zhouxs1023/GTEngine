@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/30)
+// File Version: 3.0.2 (2017/06/29)
 
 #pragma once
 
@@ -28,8 +28,8 @@ public:
     // the comment in GteGL4Engine.h for 'MeetsRequirements()'.
     virtual ~GLXEngine();
     GLXEngine(_XDisplay* display, unsigned long window, __GLXcontextRec* context,
-        int xSize, int ySize, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
-    GLXEngine(bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
+        int xSize, int ySize, bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
+    GLXEngine(bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
 
     // Member access.
     inline _XDisplay* GetDisplay() const { return mDisplay; }
@@ -46,7 +46,7 @@ public:
 
 private:
     // Helpers for construction and destruction.
-    virtual bool Initialize(int requiredMajor, int requiredMinor, bool saveDriverInfo) override;
+    virtual bool Initialize(int requiredMajor, int requiredMinor, bool useDepth24Stencil8, bool saveDriverInfo) override;
     void Terminate();
 
     _XDisplay* mDisplay;

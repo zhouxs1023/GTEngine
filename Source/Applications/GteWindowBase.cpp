@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/06/23)
 
 #include <GTEnginePCH.h>
 #include <Applications/GteWindowBase.h>
@@ -17,7 +17,8 @@ WindowBase::Parameters::Parameters()
     xSize(0),
     ySize(0),
     allowResize(false),
-    created(false)
+    created(false),
+    useDepth24Stencil8(true)
 {
 }
 
@@ -30,7 +31,8 @@ WindowBase::Parameters::Parameters(std::wstring const& inTitle,
     xSize(inXSize),
     ySize(inYSize),
     allowResize(false),
-    created(false)
+    created(false),
+    useDepth24Stencil8(true)
 {
 }
 

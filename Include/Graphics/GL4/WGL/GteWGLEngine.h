@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/30)
+// File Version: 3.0.2 (2017/06/23)
 
 #pragma once
 
@@ -17,13 +17,15 @@ class GTE_IMPEXP WGLEngine : public GL4Engine
 public:
     // Construction and destruction.  The first constructor is for windowed
     // graphics applications.  The second constructor is for windowless
-    // compute-program applications.
+    // compute-program applications.  If useDepth24Stencil8 is 'true', the
+    // standard 24-bits depth and 8-bits stencil buffer is created.  If the
+    // value is 'false', a 32-bit depth buffer is create (no stencil support).
     //
     // TODO: Currently, OpenGL 4.3 is required for compute shaders.  See
     // the comment in GteGL4Engine.h for 'MeetsRequirements()'.
     virtual ~WGLEngine();
-    WGLEngine(HWND handle, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
-    WGLEngine(bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
+    WGLEngine(HWND handle, bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
+    WGLEngine(bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
 
     // Access to members that correspond to constructor inputs.
     inline HDC GetDevice() const;
@@ -39,7 +41,7 @@ public:
 
 private:
     // Helpers for construction and destruction.
-    virtual bool Initialize(int requiredMajor, int requiredMinor, bool saveDriverInfo) override;
+    virtual bool Initialize(int requiredMajor, int requiredMinor, bool useDepth24Stencil8, bool saveDriverInfo) override;
     void Terminate();
 
     // Inputs to the constructor.

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/07/02)
 
 uniform PVWMatrix
 {
@@ -14,7 +14,7 @@ layout(location = 0) in vec3 modelPosition;
 layout(location = 1) in vec2 modelTCoord;
 
 layout(location = 0) out vec2 vertexTCoord;
-layout(location = 1) out float perspectiveDepth;
+layout(location = 1) noperspective out float perspectiveDepth;
 
 void main()
 {

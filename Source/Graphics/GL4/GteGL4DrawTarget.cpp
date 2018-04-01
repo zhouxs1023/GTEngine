@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/06/23)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
@@ -70,7 +70,17 @@ void GL4DrawTarget::Enable()
     // Attach depth buffer if there is one.
     if (mDSTexture)
     {
-        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, mDSTexture->GetGLHandle(), 0);
+        DFType format = mDSTexture->GetTexture()->GetFormat();
+        GLenum attachment;
+        if (format == DF_D24_UNORM_S8_UINT)
+        {
+            attachment = GL_DEPTH_STENCIL_ATTACHMENT;
+        }
+        else  // for now only DF_D24_UNORM_S8_UINT or DF_D32_FLOAT supported
+        {
+            attachment = GL_DEPTH_ATTACHMENT;
+        }
+        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attachment, GL_TEXTURE_2D, mDSTexture->GetGLHandle(), 0);
     }
 
     // Attach each render target.

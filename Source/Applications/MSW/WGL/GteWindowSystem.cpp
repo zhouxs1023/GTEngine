@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/06/23)
 
 #include <GTEnginePCH.h>
 #include <Applications/MSW/WGL/GteWindowSystem.h>
@@ -26,7 +26,8 @@ void WindowSystem::CreateEngineAndProgramFactory(MSWWindow::Parameters& paramete
 {
     Window::Parameters& p = static_cast<Window::Parameters&>(parameters);
 
-    auto engine = std::make_shared<WGLEngine>(p.handle, (p.deviceCreationFlags > 0));
+    bool saveDriverInfo = ((p.deviceCreationFlags & 0x00000001) != 0);
+    auto engine = std::make_shared<WGLEngine>(p.handle, p.useDepth24Stencil8, saveDriverInfo);
     if (!engine->MeetsRequirements())
     {
         LogError("OpenGL 4.3 or later is required.");

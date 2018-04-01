@@ -50,10 +50,11 @@ public:
     //     nullptr, 0, D3D_FEATURE_LEVEL_11_0);
     //
     DX11Engine(HWND handle, UINT xSize, UINT ySize,
+        bool useDepth24Stencil8 = true,
         D3D_FEATURE_LEVEL minFeatureLevel = D3D_FEATURE_LEVEL_11_0);
     DX11Engine(IDXGIAdapter* adapter, HWND handle, UINT xSize, UINT ySize,
-        D3D_DRIVER_TYPE driverType, HMODULE softwareModule, UINT flags,
-        D3D_FEATURE_LEVEL minFeatureLevel);
+        bool useDepth24Stencil8, D3D_DRIVER_TYPE driverType, HMODULE softwareModule,
+        UINT flags, D3D_FEATURE_LEVEL minFeatureLevel);
 
     // Access to members that correspond to constructor inputs.
     inline IDXGIAdapter* GetAdapter() const;
@@ -92,7 +93,8 @@ public:
 private:
     // Helpers for construction and destruction.
     void Initialize(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType,
-        HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel);
+        HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel,
+        bool useDepth24Stencil8);
     bool CreateDevice();
     bool CreateBestMatchingDevice();
     bool CreateSwapChain(HWND handle, UINT xSize, UINT ySize);
@@ -130,12 +132,16 @@ private:
     void EnableSamplers(Shader const* shader, DX11Shader* dxShader);
     void DisableSamplers(Shader const* shader, DX11Shader* dxShader);
 
-    // Inputs to the constructors.
+    // Inputs to the constructors.  If mUseDepth24Stencil8 is 'true', the
+    // back buffer has a 24-bit depth and 8-bit stencil buffer.  If the
+    // value is 'false', the back buffer has a 32-bit depth buffer (no
+    // stencil information).
     IDXGIAdapter* mAdapter;
     D3D_DRIVER_TYPE mDriverType;
     HMODULE mSoftwareModule;
     UINT mFlags;
     D3D_FEATURE_LEVEL mMinFeatureLevel;
+    bool mUseDepth24Stencil8;
 
     // Objects created by the constructors.
     ID3D11Device* mDevice;

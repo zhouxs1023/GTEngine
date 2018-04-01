@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/06/29)
 
 #include <LowLevel/GteLogReporter.h>
 #include <fstream>
@@ -23,9 +23,9 @@ using namespace gte;
 void ReflectVertexColoring()
 {
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     auto program = std::dynamic_pointer_cast<GLSLVisualProgram>(factory.CreateFromFiles(
@@ -45,9 +45,9 @@ void ReflectVertexColoring()
 void ReflectTexturing()
 {
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     auto program = std::dynamic_pointer_cast<GLSLVisualProgram>(factory.CreateFromFiles(
@@ -67,9 +67,9 @@ void ReflectTexturing()
 void ReflectBillboards()
 {
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     auto program = std::dynamic_pointer_cast<GLSLVisualProgram>(factory.CreateFromFiles(
@@ -89,9 +89,9 @@ void ReflectBillboards()
 void ReflectNestedStruct()
 {
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     auto program = std::dynamic_pointer_cast<GLSLComputeProgram>(factory.CreateFromFile(
@@ -111,9 +111,9 @@ void ReflectNestedStruct()
 void ReflectTextureArrays()
 {
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     auto program = std::dynamic_pointer_cast<GLSLVisualProgram>(factory.CreateFromFiles(
@@ -133,9 +133,9 @@ void ReflectTextureArrays()
 void ReflectSimpleBuffers()
 {
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     auto program = std::dynamic_pointer_cast<GLSLComputeProgram>(factory.CreateFromFile(
@@ -155,9 +155,9 @@ void ReflectSimpleBuffers()
 void ReflectAppendConsume()
 {
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     auto program = std::dynamic_pointer_cast<GLSLComputeProgram>(factory.CreateFromFile(

@@ -3,13 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/07/06)
 
 #include <cstdlib>
 #include <iostream>
 #include "ProjectTemplate.v12.h"
 #include "ProjectTemplate.v14.h"
-
+#include "ProjectTemplate.v15.h"
 
 int main(int numArguments, char* arguments[])
 {
@@ -53,6 +53,13 @@ int main(int numArguments, char* arguments[])
     {
         std::cout << "Could not create the V14 project files." << std::endl;
         return -6;
+    }
+
+    TemplateV15 generatev15(name, gtPath, success);
+    if (!success)
+    {
+        std::cout << "Could not create the V15 project files." << std::endl;
+        return -7;
     }
 
     return 0;

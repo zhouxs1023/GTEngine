@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/01)
+// File Version: 3.0.2 (2017/06/29)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GL4/GLX/GteGLXEngine.h>
@@ -18,7 +18,7 @@ GLXEngine::~GLXEngine()
 }
 
 GLXEngine::GLXEngine(Display* display, unsigned long window, GLXContext context,
-    int xSize, int ySize, bool saveDriverInfo, int requiredMajor, int requiredMinor)
+    int xSize, int ySize, bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor, int requiredMinor)
     :
     GL4Engine(),
     mDisplay(display),
@@ -28,10 +28,10 @@ GLXEngine::GLXEngine(Display* display, unsigned long window, GLXContext context,
 {
     mXSize = xSize;
     mYSize = ySize;
-    Initialize(requiredMajor, requiredMinor, saveDriverInfo);
+    Initialize(requiredMajor, requiredMinor, useDepth24Stencil8, saveDriverInfo);
 }
 
-GLXEngine::GLXEngine(bool saveDriverInfo, int requiredMajor, int requiredMinor)
+GLXEngine::GLXEngine(bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor, int requiredMinor)
     :
     GL4Engine(),
     mDisplay(nullptr),
@@ -39,10 +39,10 @@ GLXEngine::GLXEngine(bool saveDriverInfo, int requiredMajor, int requiredMinor)
     mImmediate(nullptr),
     mIsComputeWindow(false)
 {
-    if (TheWindowSystem.Create(mDisplay, mImmediate, mWindow))
+    if (TheWindowSystem.Create(mDisplay, mImmediate, mWindow, useDepth24Stencil8))
     {
         mIsComputeWindow = true;
-        Initialize(requiredMajor, requiredMinor, saveDriverInfo);
+        Initialize(requiredMajor, requiredMinor, useDepth24Stencil8, saveDriverInfo);
     }
 }
 
@@ -67,7 +67,7 @@ void GLXEngine::DisplayColorBuffer(unsigned int syncInterval)
     glXSwapBuffers(mDisplay, mWindow);
 }
 
-bool GLXEngine::Initialize(int requiredMajor, int requiredMinor, bool saveDriverInfo)
+bool GLXEngine::Initialize(int requiredMajor, int requiredMinor, bool useDepth24Stencil8, bool saveDriverInfo)
 {
     if (!glXMakeCurrent(mDisplay, mWindow, mImmediate))
     {
@@ -81,7 +81,7 @@ bool GLXEngine::Initialize(int requiredMajor, int requiredMinor, bool saveDriver
 
     // Get the function pointers for OpenGL; initialize the viewport,
     // default global state, and default font.
-    return GL4Engine::Initialize(requiredMajor, requiredMinor, saveDriverInfo);
+    return GL4Engine::Initialize(requiredMajor, requiredMinor, useDepth24Stencil8, saveDriverInfo);
 }
 
 void GLXEngine::Terminate()

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/30)
+// File Version: 3.0.2 (2017/06/23)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GL4/WGL/GteWGLEngine.h>
@@ -14,7 +14,7 @@ WGLEngine::~WGLEngine()
     Terminate();
 }
 
-WGLEngine::WGLEngine(HWND handle, bool saveDriverInfo, int requiredMajor, int requiredMinor)
+WGLEngine::WGLEngine(HWND handle, bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor, int requiredMinor)
     :
     GL4Engine(),
     mHandle(handle),
@@ -22,10 +22,10 @@ WGLEngine::WGLEngine(HWND handle, bool saveDriverInfo, int requiredMajor, int re
     mImmediate(nullptr),
     mComputeWindowAtom(0)
 {
-    Initialize(requiredMajor, requiredMinor, saveDriverInfo);
+    Initialize(requiredMajor, requiredMinor, useDepth24Stencil8, saveDriverInfo);
 }
 
-WGLEngine::WGLEngine(bool saveDriverInfo, int requiredMajor, int requiredMinor)
+WGLEngine::WGLEngine(bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor, int requiredMinor)
     :
     GL4Engine(),
     mHandle(nullptr),
@@ -57,7 +57,7 @@ WGLEngine::WGLEngine(bool saveDriverInfo, int requiredMajor, int requiredMinor)
         int ySize = static_cast<int>(rect.bottom - rect.top + 1);
         mHandle = CreateWindow(mComputeWindowClass.c_str(), L"", style,
             0, 0, xSize, ySize, nullptr, nullptr, nullptr, nullptr);
-        Initialize(requiredMajor, requiredMinor, saveDriverInfo);
+        Initialize(requiredMajor, requiredMinor, useDepth24Stencil8, saveDriverInfo);
     }
     else
     {
@@ -85,7 +85,7 @@ void WGLEngine::DisplayColorBuffer(unsigned int syncInterval)
     SwapBuffers(mDevice);
 }
 
-bool WGLEngine::Initialize(int requiredMajor, int requiredMinor, bool saveDriverInfo)
+bool WGLEngine::Initialize(int requiredMajor, int requiredMinor, bool useDepth24Stencil8, bool saveDriverInfo)
 {
     if (!mHandle)
     {
@@ -121,9 +121,17 @@ bool WGLEngine::Initialize(int requiredMajor, int requiredMinor, bool saveDriver
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 32;
 
-    // Create a D24S8 depth-stencil buffer.
-    pfd.cDepthBits = 24;
-    pfd.cStencilBits = 8;
+    // Create a depth-stencil buffer.
+    if (useDepth24Stencil8)
+    {
+        pfd.cDepthBits = 24;
+        pfd.cStencilBits = 8;
+    }
+    else
+    {
+        pfd.cDepthBits = 32;
+        pfd.cStencilBits = 0;
+    }
 
     // Set the pixel format for the rendering context.
     int pixelFormat = ChoosePixelFormat(mDevice, &pfd);
@@ -181,7 +189,7 @@ bool WGLEngine::Initialize(int requiredMajor, int requiredMinor, bool saveDriver
 
     // Get the function pointers for OpenGL; initialize the viewport,
     // default global state, and default font.
-    return GL4Engine::Initialize(requiredMajor, requiredMinor, saveDriverInfo);
+    return GL4Engine::Initialize(requiredMajor, requiredMinor, useDepth24Stencil8, saveDriverInfo);
 }
 
 void WGLEngine::Terminate()

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/01)
+// File Version: 3.0.2 (2017/06/29)
 
 #include <GTEnginePCH.h>
 #include <Applications/GLX/GteWindowSystem.h>
@@ -48,7 +48,7 @@ WindowSystem::WindowSystem()
     }
 }
 
-bool WindowSystem::Create(_XDisplay*& display, __GLXcontextRec*& context, unsigned long& window)
+bool WindowSystem::Create(_XDisplay*& display, __GLXcontextRec*& context, unsigned long& window, bool useDepth24Stencil8)
 {
     display = mDisplay;
     context = nullptr;
@@ -70,10 +70,20 @@ bool WindowSystem::Create(_XDisplay*& display, __GLXcontextRec*& context, unsign
     attributes[i++] = 8;
 
     // depthStencilFormat is ignored, create 24-8 depthstencil buffer.
-    attributes[i++] = GLX_DEPTH_SIZE;
-    attributes[i++] = 24;
-    attributes[i++] = GLX_STENCIL_SIZE;
-    attributes[i++] = 8;
+    if (useDepth24Stencil8)
+    {
+        attributes[i++] = GLX_DEPTH_SIZE;
+        attributes[i++] = 24;
+        attributes[i++] = GLX_STENCIL_SIZE;
+        attributes[i++] = 8;
+    }
+    else
+    {
+        attributes[i++] = GLX_DEPTH_SIZE;
+        attributes[i++] = 32;
+        attributes[i++] = GLX_STENCIL_SIZE;
+        attributes[i++] = 0;
+    }
 
     // Use double buffering.
     attributes[i++] = GLX_DOUBLEBUFFER;
@@ -171,10 +181,20 @@ void WindowSystem::CreateFrom(Window::Parameters& parameters)
     attributes[i++] = 8;
 
     // depthStencilFormat is ignored, create 24-8 depthstencil buffer.
-    attributes[i++] = GLX_DEPTH_SIZE;
-    attributes[i++] = 24;
-    attributes[i++] = GLX_STENCIL_SIZE;
-    attributes[i++] = 8;
+    if (parameters.useDepth24Stencil8)
+    {
+        attributes[i++] = GLX_DEPTH_SIZE;
+        attributes[i++] = 24;
+        attributes[i++] = GLX_STENCIL_SIZE;
+        attributes[i++] = 8;
+    }
+    else
+    {
+        attributes[i++] = GLX_DEPTH_SIZE;
+        attributes[i++] = 32;
+        attributes[i++] = GLX_STENCIL_SIZE;
+        attributes[i++] = 0;
+    }
 
     // Use double buffering.
     attributes[i++] = GLX_DOUBLEBUFFER;
@@ -255,7 +275,7 @@ void WindowSystem::CreateFrom(Window::Parameters& parameters)
 
     // Create a GLX rendering engine.
     auto engine = std::make_shared<GLXEngine>(mDisplay, parameters.window, context,
-        parameters.xSize, parameters.ySize, (parameters.deviceCreationFlags != 0));
+        parameters.xSize, parameters.ySize, parameters.useDepth24Stencil8, (parameters.deviceCreationFlags != 0));
     if (!engine->MeetsRequirements())
     {
         LogError("OpenGL 4.3 or later is required.");

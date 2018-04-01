@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.11 (2017/06/18)
+// File Version: 3.0.12 (2017/07/26)
 
 #pragma once
 
@@ -82,6 +82,7 @@
 #include <Mathematics/GteMinimumVolumeBox3.h>
 #include <Mathematics/GteMinimumVolumeSphere3.h>
 #include <Mathematics/GteNearestNeighborQuery.h>
+#include <Mathematics/GteOBBTreeOfPoints.h>
 #include <Mathematics/GtePlanarMesh.h>
 #include <Mathematics/GtePrimalQuery2.h>
 #include <Mathematics/GtePrimalQuery3.h>

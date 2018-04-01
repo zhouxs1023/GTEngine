@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/06/29)
 
 #pragma once
 
@@ -52,6 +52,11 @@ class GTE_IMPEXP VertexFormat
 public:
     // Construction.
     VertexFormat();
+
+    // Support for reusing a VertexFormat object within a scope.  This
+    // call resets the object to the state produced by the default
+    // constructor call.
+    void Reset();
 
     // Create a packed vertex format, where all attributes are contiguous in
     // memory.  The order of the attributes is determined by the order of

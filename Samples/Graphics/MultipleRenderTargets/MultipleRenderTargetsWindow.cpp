@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/07/02)
 
 #include "MultipleRenderTargetsWindow.h"
 
@@ -342,10 +342,11 @@ void MultipleRenderTargetsWindow::CreateOverlays()
     // Create the draw target with 2 render targets and 1 depth-stencil
     // texture.  Each of these is used as a texture for an overlay.
     mDrawTarget = std::make_shared<DrawTarget>(2, DF_R32G32B32A32_FLOAT,
-        mXSize, mYSize, true, true, DF_D24_UNORM_S8_UINT, true);
+        mXSize, mYSize, true, true, DF_D32_FLOAT, true);
     mDrawTarget->AutogenerateRTMipmaps();
     mDrawTarget->GetRTTexture(0)->SetUsage(Resource::SHADER_OUTPUT);
     mDrawTarget->GetDSTexture()->SetCopyType(Resource::COPY_STAGING_TO_CPU);
+    mEngine->Bind(mDrawTarget);
 
     // Display mSquare that was rendered to a draw target with mipmaps
     // enabled.  The depth texture output is linearized depth, not perspective
@@ -382,7 +383,7 @@ void MultipleRenderTargetsWindow::CreateOverlays()
     }
 
     // Display mSquare using linearized depth.
-    mLinearDepth = std::make_shared<Texture2>(DF_R32_UINT, mXSize, mYSize);
+    mLinearDepth = std::make_shared<Texture2>(DF_R32_FLOAT, mXSize, mYSize);
     mLinearDepth->SetUsage(Resource::SHADER_OUTPUT);
     mLinearDepth->SetCopyType(Resource::COPY_CPU_TO_STAGING);
     mOverlay[5] = std::make_shared<OverlayEffect>(mProgramFactory, mXSize,
@@ -415,7 +416,7 @@ void MultipleRenderTargetsWindow::CreateOverlays()
 
 std::string const MultipleRenderTargetsWindow::msGLSLOverlayPSSource[5] =
 {
-    "layout (r32ui) uniform readonly uimage2D depthTexture;\n"
+    "layout (r32f) uniform readonly image2D depthTexture;\n"
     "layout (rgba32f) uniform writeonly image2D colorTexture;\n"
     "uniform sampler2D inPositionSampler;\n"
     "\n"
@@ -425,9 +426,8 @@ std::string const MultipleRenderTargetsWindow::msGLSLOverlayPSSource[5] =
     "void main()\n"
     "{\n"
     "    vec4 pos = texture(inPositionSampler, vertexTCoord);\n"
-    "    uint depthR24S8 = imageLoad(depthTexture, ivec2(pos.xy)).x;\n"
-    "    float gray = (depthR24S8 & 0x00FFFFFF) / 16777215.0f;\n"
-    "    pixelColor0 = vec4(gray, gray, gray, 1.0f);\n"
+    "    float depth = imageLoad(depthTexture, ivec2(pos.xy)).x;\n"
+    "    pixelColor0 = vec4(depth, depth, depth, 1.0f);\n"
     "    imageStore(colorTexture, ivec2(pos.xy), vec4(0.4f, 0.5f, 0.6f, 1.0f));\n"
     "}\n",
 
@@ -474,7 +474,7 @@ std::string const MultipleRenderTargetsWindow::msGLSLOverlayPSSource[5] =
 
 std::string const MultipleRenderTargetsWindow::msHLSLOverlayPSSource[5] =
 {
-    "Texture2D<uint> depthTexture;\n"
+    "Texture2D<float> depthTexture;\n"
     "Texture2D<float4> positionTexture;\n"
     "RWTexture2D<float4> colorTexture;\n"
     "SamplerState inSampler;\n"
@@ -493,9 +493,8 @@ std::string const MultipleRenderTargetsWindow::msHLSLOverlayPSSource[5] =
     "{\n"
     "    PS_OUTPUT output;\n"
     "    float4 pos = positionTexture.Sample(inSampler, input.vertexTCoord);\n"
-    "    uint depthR24S8 = depthTexture[(int2)pos.xy];\n"
-    "    float gray = (depthR24S8 & 0x00FFFFFF) / 16777215.0f;\n"
-    "    output.pixelColor0 = float4(gray, gray, gray, 1.0f);\n"
+    "    float depth = depthTexture[(int2)pos.xy];\n"
+    "    output.pixelColor0 = float4(depth, depth, depth, 1.0f);\n"
     "    colorTexture[(int2)pos.xy] = float4(0.4f, 0.5f, 0.6f, 1.0f);\n"
     "    return output;\n"
     "}\n",

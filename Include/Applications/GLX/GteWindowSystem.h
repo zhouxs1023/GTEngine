@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/01)
+// File Version: 3.0.2 (2017/06/29)
 
 #pragma once
 
@@ -30,7 +30,7 @@ public:
     std::shared_ptr<WindowType> Create(typename WindowType::Parameters& parameters);
 
     // Creation of information used for a compute-shader-only GLXEngine.
-    bool Create(_XDisplay*& display, __GLXcontextRec*& context, unsigned long& window);
+    bool Create(_XDisplay*& display, __GLXcontextRec*& context, unsigned long& window, bool useDepth24Stencil8);
 
     template <typename WindowType>
     void Destroy(std::shared_ptr<WindowType>& window);

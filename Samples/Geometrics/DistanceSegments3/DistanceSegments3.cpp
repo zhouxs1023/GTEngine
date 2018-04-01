@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/04/01)
+// File Version: 3.0.2 (2017/06/29)
 
 #include <GTEngine.h>
 #if defined(__LINUX__)
@@ -343,9 +343,9 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
     unsigned int const numGroups = blockSize / numThreads;
 
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     factory.defines.Set("NUM_X_THREADS", numThreads);
@@ -542,9 +542,9 @@ void GPUPerformanceTest(bool getClosest, bool testNonparallel)
     unsigned int const numGroups = blockSize / numThreads;
 
 #if defined(__MSWINDOWS__)
-    WGLEngine engine(false);
+    WGLEngine engine(true, false);
 #else
-    GLXEngine engine(false);
+    GLXEngine engine(true, false);
 #endif
     GLSLProgramFactory factory;
     factory.defines.Set("NUM_X_THREADS", numThreads);

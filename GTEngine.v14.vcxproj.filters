@@ -217,6 +217,9 @@
     <Filter Include="Files\Mathematics\SIMD\MSW">
       <UniqueIdentifier>{c2941c28-fca2-4701-a52e-6c148c862737}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\LowLevel\Logger\MSW">
+      <UniqueIdentifier>{46527d1d-76a1-4b38-ad55-d19094902b3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Applications\GteCommand.h">
@@ -1947,12 +1950,6 @@
     <ClInclude Include="Include\Graphics\GL4\WGL\GteWGLEngine.h">
       <Filter>Files\Graphics\OpenGL4\WGL</Filter>
     </ClInclude>
-    <ClInclude Include="Include\LowLevel\MSW\GteLogToMessageBox.h">
-      <Filter>Files\LowLevel\Logger</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\LowLevel\MSW\GteLogToOutputWindow.h">
-      <Filter>Files\LowLevel\Logger</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Applications\GteWindowBase.h">
       <Filter>Files\Applications</Filter>
     </ClInclude>
@@ -2060,6 +2057,15 @@
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteFunctionsIEEEBinary16.h">
       <Filter>Files\Mathematics\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteOBBTreeOfPoints.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LowLevel\MSW\GteLogToMessageBox.h">
+      <Filter>Files\LowLevel\Logger\MSW</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LowLevel\MSW\GteLogToOutputWindow.h">
+      <Filter>Files\LowLevel\Logger\MSW</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2747,12 +2753,6 @@
     <ClCompile Include="Source\Graphics\GL4\WGL\GteWGLExtensions.cpp">
       <Filter>Files\Graphics\OpenGL4\WGL</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LowLevel\MSW\GteLogToOutputWindow.cpp">
-      <Filter>Files\LowLevel\Logger</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LowLevel\MSW\GteLogToMessageBox.cpp">
-      <Filter>Files\LowLevel\Logger</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Applications\GteWindowBase.cpp">
       <Filter>Files\Applications</Filter>
     </ClCompile>
@@ -2782,6 +2782,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteBaseEngine.cpp">
       <Filter>Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LowLevel\MSW\GteLogToMessageBox.cpp">
+      <Filter>Files\LowLevel\Logger\MSW</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LowLevel\MSW\GteLogToOutputWindow.cpp">
+      <Filter>Files\LowLevel\Logger\MSW</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

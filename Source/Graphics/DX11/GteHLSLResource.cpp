@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/09/12)
+// File Version: 3.0.2 (2017/09/05)
 
 #include <GTEnginePCH.h>
 #include <Graphics/DX11/GteHLSLResource.h>
@@ -110,7 +110,7 @@ void HLSLResource::Print(std::ofstream& output) const
 }
 
 
-std::string const HLSLResource::msSIType[]
+std::string const HLSLResource::msSIType[] =
 {
     "D3D_SIT_CBUFFER",
     "D3D_SIT_TBUFFER",
