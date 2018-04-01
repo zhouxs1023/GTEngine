@@ -901,7 +901,6 @@
     <ClInclude Include="Include\Mathematics\GteDistTriangle3OrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteDistTriangle3Rectangle3.h" />
     <ClInclude Include="Include\Mathematics\GteDistTriangle3Triangle3.h" />
-    <ClInclude Include="Include\Mathematics\GteDualQuaternion.h" />
     <ClInclude Include="Include\Mathematics\GteEdgeKey.h" />
     <ClInclude Include="Include\Mathematics\GteEllipse3.h" />
     <ClInclude Include="Include\Mathematics\GteETManifoldMesh.h" />

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/02/06)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteBitHacks.h>
@@ -106,11 +106,10 @@ int32_t GetLeadingBit(int64_t value)
 
 int32_t GetTrailingBit(uint32_t value)
 {
-#pragma warning(push)
-#pragma warning(disable : 4146)  // Do not warn on negation of uint32_t.
-    uint32_t key = ((uint32_t)((value & -value) * 0x077CB531u)) >> 27;
+    // Avoid warning for negation of unsigned 'value'.
+    int32_t const& iValue = reinterpret_cast<int32_t const&>(value);
+    uint32_t key = ((uint32_t)((iValue & -iValue) * 0x077CB531u)) >> 27;
     return gsTrailingBitTable[key];
-#pragma warning(pop)
 }
 
 int32_t GetTrailingBit(int32_t value)
