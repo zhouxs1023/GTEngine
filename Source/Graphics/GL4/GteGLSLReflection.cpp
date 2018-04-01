@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/03)
+// File Version: 3.0.2 (2018/02/17)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
@@ -524,7 +524,7 @@ void GLSLReflection::ReflectUniforms()
             info.referencedBy[ST_TESSEVALUATION] = *current++;
 
             // To be sure the bufferBinding field is set correctly, use this approach.
-            if (GL_INVALID_INDEX == info.blockIndex)
+            if (GL_INVALID_INDEX == static_cast<unsigned int>(info.blockIndex))
             {
                 info.location = glGetUniformLocation(mHandle, info.name.c_str());
             }

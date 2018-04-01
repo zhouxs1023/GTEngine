@@ -1,7 +1,7 @@
 CFG ?= Debug
 
 CC := /usr/bin/g++
-CFLAGS += -c -std=c++14 -D__LINUX__ -DGTE_DEV_OPENGL -DGTE_DISABLE_PCH
+CFLAGS += -c -std=c++14 -Wall -D__LINUX__ -DGTE_DEV_OPENGL -DGTE_DISABLE_PCH
 INCLUDE := -I Include
 LIBDIR := lib/$(CFG)
 
@@ -13,7 +13,7 @@ endif
 
 ifeq (Dynamic,$(findstring Dynamic,$(CFG)))
 SOVER = 3
-RELVER = $(SOVER).11
+RELVER = $(SOVER).12
 CFLAGS += -fPIC
 AR := $(CC)
 ARFLAGS := $(LDFLAGS) -shared -fPIC -Wl,-soname,libgtengine.so.$(SOVER) -o

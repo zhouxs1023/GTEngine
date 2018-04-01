@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.1 (2016/08/25)
+// File Version: 3.1.2 (2018/02/17)
 
 #include "FreeFormDeformationWindow.h"
 
@@ -40,9 +40,9 @@ FreeFormDeformationWindow::FreeFormDeformationWindow(Parameters& parameters)
     mOldWorldPosition({ 0.0f, 0.0f, 0.0f, 1.0f }),
     mAmplitude(0.01f),
     mRadius(0.25f),
+    mLastUpdateTime(mMotionTimer.GetSeconds()),
     mDoRandom(false),
     mDrawSegmentsBoxes(true),
-    mLastUpdateTime(mMotionTimer.GetSeconds()),
     mMouseDown(false)
 {
     if (!SetEnvironment())

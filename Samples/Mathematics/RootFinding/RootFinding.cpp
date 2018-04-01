@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/06/29)
+// File Version: 3.0.2 (2018/02/17)
 
 #include <GTEngine.h>
 #if defined(__LINUX__)
@@ -14,9 +14,18 @@
 #include <thread>
 using namespace gte;
 
+// To avoid breaking the C++ strict-aliasing rules that occur when
+//   unsigned int encoding = <some value>;
+//   float number = *(float*)&encoding;
+union IEEEFloatType
+{
+    float number;
+    unsigned int encoding;
+};
+
 float MyFunction(float z)
 {
-    return (z - 1.1f)*(z + 2.2f);
+    return (z - 1.1f) * (z + 2.2f);
 }
 
 void FindRootsCPU(std::set<float>& roots)
@@ -26,26 +35,24 @@ void FindRootsCPU(std::set<float>& roots)
     {
         for (unsigned int biased = 0; biased < 255; ++biased)
         {
-            unsigned int exponent = (biased << 23);
-            unsigned int encoding0 = exponent | trailing;
-            unsigned int encoding1 = encoding0 + 1;
-            float z0 = *(float*)&encoding0;
-            float z1 = *(float*)&encoding1;
+            IEEEFloatType z0, z1;
+            z0.encoding = (biased << 23) | trailing;
+            z1.encoding = z0.encoding + 1;
 
-            float f0 = MyFunction(z0);
-            float f1 = MyFunction(z1);
-            if (f0*f1 <= 0.0f)
+            float f0 = MyFunction(z0.number);
+            float f1 = MyFunction(z1.number);
+            if (f0 * f1 <= 0.0f)
             {
-                roots.insert(std::abs(f0) <= std::abs(f1) ? z0 : z1);
+                roots.insert(std::abs(f0) <= std::abs(f1) ? z0.number : z1.number);
             }
 
-            z0 = -z0;
-            z1 = -z1;
-            f0 = MyFunction(z0);
-            f1 = MyFunction(z1);
-            if (f0*f1 <= 0.0f)
+            z0.number = -z0.number;
+            z1.number = -z1.number;
+            f0 = MyFunction(z0.number);
+            f1 = MyFunction(z1.number);
+            if (f0 * f1 <= 0.0f)
             {
-                roots.insert(std::abs(f0) <= std::abs(f1) ? z0 : z1);
+                roots.insert(std::abs(f0) <= std::abs(f1) ? z0.number : z1.number);
             }
         }
     }
@@ -125,26 +132,24 @@ void FindSubRootsCPU(unsigned int tmin, unsigned int tsup,
     {
         for (unsigned int biased = 0; biased < 255; ++biased)
         {
-            unsigned int exponent = (biased << 23);
-            unsigned int encoding0 = exponent | trailing;
-            unsigned int encoding1 = encoding0 + 1;
-            float z0 = *(float*)&encoding0;
-            float z1 = *(float*)&encoding1;
+            IEEEFloatType z0, z1;
+            z0.encoding = (biased << 23) | trailing;
+            z1.encoding = z0.encoding + 1;
 
-            float f0 = MyFunction(z0);
-            float f1 = MyFunction(z1);
-            if (f0*f1 <= 0.0f)
+            float f0 = MyFunction(z0.number);
+            float f1 = MyFunction(z1.number);
+            if (f0 * f1 <= 0.0f)
             {
-                roots.insert(std::abs(f0) <= std::abs(f1) ? z0 : z1);
+                roots.insert(std::abs(f0) <= std::abs(f1) ? z0.number : z1.number);
             }
 
-            z0 = -z0;
-            z1 = -z1;
-            f0 = MyFunction(z0);
-            f1 = MyFunction(z1);
-            if (f0*f1 <= 0.0f)
+            z0.number = -z0.number;
+            z1.number = -z1.number;
+            f0 = MyFunction(z0.number);
+            f1 = MyFunction(z1.number);
+            if (f0 * f1 <= 0.0f)
             {
-                roots.insert(std::abs(f0) <= std::abs(f1) ? z0 : z1);
+                roots.insert(std::abs(f0) <= std::abs(f1) ? z0.number : z1.number);
             }
         }
     }

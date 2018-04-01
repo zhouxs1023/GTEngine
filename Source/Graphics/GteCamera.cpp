@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/02/17)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteCamera.h>
@@ -25,18 +25,22 @@ void Camera::SetParallaxProjectionMatrix(Vector4<float> const& p00, Vector4<floa
     LogAssert(nearExtrude > 0.0f, "Invalid nearExtrude.");
     LogAssert(farExtrude > nearExtrude, "Invalid farExtrude.");
 
-    // Compute the near face of the view volume.
+    // Compute the near face of the view volume.  The commented out line of
+    // code shows what q110 should be, but the actual algorithm does not need
+    // to compute it.
     Vector4<float> origin{ 0.0f, 0.0f, 0.0f, 1.0f };
     Vector4<float> q000 = origin + nearExtrude*(p00 - origin);
     Vector4<float> q100 = origin + nearExtrude*(p10 - origin);
-    Vector4<float> q110 = origin + nearExtrude*(p11 - origin);
+    //Vector4<float> q110 = origin + nearExtrude*(p11 - origin);
     Vector4<float> q010 = origin + nearExtrude*(p01 - origin);
 
-    // Compute the far face of the view volume.
+    // Compute the far face of the view volume.  The commented out lines of
+    // code show what q101 and q011 should be, but the actual algorithm does
+    // not need to compute them.
     Vector4<float> q001 = origin + farExtrude*(p00 - origin);
-    Vector4<float> q101 = origin + farExtrude*(p10 - origin);
+    //Vector4<float> q101 = origin + farExtrude*(p10 - origin);
     Vector4<float> q111 = origin + farExtrude*(p11 - origin);
-    Vector4<float> q011 = origin + farExtrude*(p01 - origin);
+    //Vector4<float> q011 = origin + farExtrude*(p01 - origin);
 
     // Compute the representation of q111.
     Vector4<float> u0 = q100 - q000;

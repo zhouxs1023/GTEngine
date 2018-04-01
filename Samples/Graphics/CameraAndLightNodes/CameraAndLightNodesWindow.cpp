@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/02/17)
 
 #include "CameraAndLightNodesWindow.h"
 
@@ -393,11 +393,6 @@ void CameraAndLightNodesWindow::CameraNodeRig::MoveForward()
 void CameraAndLightNodesWindow::CameraNodeRig::MoveBackward()
 {
     Vector4<float> position = mCameraNode->localTransform.GetTranslationW1();
-#if defined(GTE_USE_MAT_VEC)
-    Vector4<float> direction = mCameraNode->localTransform.GetRotation().GetCol(0);
-#else
-    Vector4<float> direction = mCameraNode->localTransform.GetRotation().GetRow(0);
-#endif
     position -= mTranslationSpeed * mCamera->GetDVector();
     mCameraNode->localTransform.SetTranslation(position);
     mCameraNode->Update();

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2017/06/23)
+// File Version: 3.0.4 (2018/02/17)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteFontArialW400H18.h>
@@ -329,7 +329,7 @@ void GL4Engine::EnableCBuffers(Shader const* shader, GLuint program)
             if (gl4CB)
             {
                 auto const blockIndex = cb.bindPoint;
-                if (GL_INVALID_INDEX != blockIndex)
+                if (GL_INVALID_INDEX != static_cast<unsigned int>(blockIndex))
                 {
                     auto const unit = mUniformUnitMap.AcquireUnit(program, blockIndex);
                     glUniformBlockBinding(program, blockIndex, unit);
@@ -354,7 +354,7 @@ void GL4Engine::DisableCBuffers(Shader const* shader, GLuint program)
     for (auto const& cb : shader->GetData(index))
     {
         auto const blockIndex = cb.bindPoint;
-        if (GL_INVALID_INDEX != blockIndex)
+        if (GL_INVALID_INDEX != static_cast<unsigned int>(blockIndex))
         {
             auto const unit = mUniformUnitMap.GetUnit(program, blockIndex);
             glBindBufferBase(GL_UNIFORM_BUFFER, unit, 0);
@@ -440,7 +440,7 @@ void GL4Engine::EnableSBuffers(Shader const* shader, GLuint program)
             if (gl4SB)
             {
                 auto const blockIndex = sb.bindPoint;
-                if (GL_INVALID_INDEX != blockIndex)
+                if (GL_INVALID_INDEX != static_cast<unsigned int>(blockIndex))
                 {
                     auto const unit = mShaderStorageUnitMap.AcquireUnit(program, blockIndex);
                     glShaderStorageBlockBinding(program, blockIndex, unit);
@@ -507,7 +507,7 @@ void GL4Engine::DisableSBuffers(Shader const* shader, GLuint program)
             if (gl4SB)
             {
                 auto const blockIndex = sb.bindPoint;
-                if (GL_INVALID_INDEX != blockIndex)
+                if (GL_INVALID_INDEX != static_cast<unsigned int>(blockIndex))
                 {
                     auto const unit = mShaderStorageUnitMap.GetUnit(program, blockIndex);
                     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, unit, 0);

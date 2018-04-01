@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/26)
+// File Version: 3.0.2 (2018/02/17)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteVector2.h>
@@ -37,7 +37,11 @@ Font::Font(std::shared_ptr<ProgramFactory> const& factory, unsigned int width, u
     // |  \ |   |  \ | 
     // 1 -- 3   5 -- 7  ... <-- tex.y = 1
     Vertex* vertices = mVertexBuffer->Get<Vertex>();
-    memset(vertices, 0, numVertices * sizeof(Vertex));
+    for (unsigned int i = 0; i < numVertices; ++i)
+    {
+        vertices[i].position = Vector2<float>::Zero();
+        vertices[i].tcoord = Vector2<float>::Zero();
+    }
     for (unsigned int i = 0; i < mMaxMessageLength; ++i)
     {
         Vertex& v0 = vertices[4 * i + 0];

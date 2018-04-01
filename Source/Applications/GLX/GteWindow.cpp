@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.4 (2018/02/08)
+// File Version: 3.0.5 (2018/02/17)
 
 #include <GTEnginePCH.h>
 #include <Applications/GLX/GteWindow.h>
@@ -89,8 +89,6 @@ int Window::ProcessedEvent()
 
     XEvent evt;
     XNextEvent(mDisplay, &evt);
-    int index;
-    bool state;
 
     if (evt.type == ButtonPress || evt.type == ButtonRelease)
     {
@@ -237,7 +235,7 @@ int Window::ProcessedEvent()
         int count;
         if (XGetWMProtocols(mDisplay, mWindow, &wmDelete, &count))
         {
-            if (evt.xclient.data.l[0] == *wmDelete)
+            if ((unsigned long)evt.xclient.data.l[0] == *wmDelete)
             {
                 return EVT_QUIT;
             }

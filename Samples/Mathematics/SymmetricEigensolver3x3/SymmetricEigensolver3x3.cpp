@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/02/17)
 
 #include <GTEngine.h>
 #include <iostream>
@@ -26,7 +26,7 @@ int main(int, char const*[])
     std::array<double, 3> eval;
     std::array<std::array<double, 3>, 3> evec;
     SymmetricEigensolver3x3<double> esolver;
-    int iters;
+    int iters;  // for debugging, but not used elsewhere
     double test[3];  // should be (0,0,0)
     double det;  // should be 1
 
@@ -327,5 +327,7 @@ int main(int, char const*[])
         }
     }
     std::cout << "maxError = " << maxComponentError << std::endl;
-    return 0;
+
+    // Avoid warnings about unused 'iters'.
+    return (iters > 0 ? 0 : -1);
 }
