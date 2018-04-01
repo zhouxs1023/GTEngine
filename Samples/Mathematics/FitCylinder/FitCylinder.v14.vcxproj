@@ -38,7 +38,7 @@
     <ProjectGuid>{86cff4c6-fb7e-4a0e-b58f-1be4001d179e}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>FitCylinder</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

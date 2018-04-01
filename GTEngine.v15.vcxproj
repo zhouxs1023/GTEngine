@@ -1,0 +1,2232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugGL4|Win32">
+      <Configuration>DebugGL4</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugGL4|x64">
+      <Configuration>DebugGL4</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseGL4|Win32">
+      <Configuration>ReleaseGL4</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseGL4|x64">
+      <Configuration>ReleaseGL4</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\Applications\GteCommand.h" />
+    <ClInclude Include="Include\Applications\GteEnvironment.h" />
+    <ClInclude Include="Include\Applications\GteOnIdleTimer.h" />
+    <ClInclude Include="Include\Applications\GteTextureIO.h" />
+    <ClInclude Include="Include\Applications\GteWindow2.h" />
+    <ClInclude Include="Include\Applications\GteWindow3.h" />
+    <ClInclude Include="Include\Applications\GteWindowBase.h" />
+    <ClInclude Include="Include\Applications\MSW\DX11\GteWindow.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Applications\MSW\DX11\GteWindowSystem.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Applications\MSW\GteMSWWindow.h" />
+    <ClInclude Include="Include\Applications\MSW\GteMSWWindowSystem.h" />
+    <ClInclude Include="Include\Applications\MSW\GteWICFileIO.h" />
+    <ClInclude Include="Include\Applications\MSW\WGL\GteWindow.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Applications\MSW\WGL\GteWindowSystem.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11BlendState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Buffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11ComputeShader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11ConstantBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11DepthStencilState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11DrawingState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11DrawTarget.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Engine.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11GeometryShader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11GraphicsObject.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Include.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11IndexBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11IndirectArgumentsBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11InputLayout.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11InputLayoutManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11PerformanceCounter.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11PixelShader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11RasterizerState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11RawBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Resource.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11SamplerState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Shader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11StructuredBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture1.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture1Array.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture2.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture2Array.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture3.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureArray.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureCube.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureCubeArray.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureDS.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureRT.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureSingle.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11VertexBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDX11VertexShader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDXGIAdapter.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteDXGIOutput.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLBaseBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLByteAddressBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLComputeProgram.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLConstantBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLFactory.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLParameter.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLProgramFactory.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLResource.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLResourceBindInfo.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLSamplerState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLShader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderFactory.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderType.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderVariable.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLStructuredBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLTexture.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLTextureArray.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLTextureBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLVisualProgram.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4AtomicCounterBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4BlendState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Buffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4ConstantBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4DepthStencilState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4DrawingState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4DrawTarget.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Engine.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4GraphicsObject.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4IndexBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4InputLayout.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4InputLayoutManager.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4RasterizerState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Resource.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4SamplerState.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4StructuredBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture1.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture1Array.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture2.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture2Array.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture3.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureArray.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureCube.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureCubeArray.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureDS.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureRT.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureSingle.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGL4VertexBuffer.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGLSLComputeProgram.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGLSLProgramFactory.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGLSLReflection.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteGLSLVisualProgram.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteOpenGL.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GteOpenGLHelper.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\WGL\GteWGLEngine.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteAmbientLightEffect.h" />
+    <ClInclude Include="Include\Graphics\GteBaseEngine.h" />
+    <ClInclude Include="Include\Graphics\GteBillboardNode.h" />
+    <ClInclude Include="Include\Graphics\GteBlendState.h" />
+    <ClInclude Include="Include\Graphics\GteBlendTransformController.h" />
+    <ClInclude Include="Include\Graphics\GteBoundingSphere.h" />
+    <ClInclude Include="Include\Graphics\GteBspNode.h" />
+    <ClInclude Include="Include\Graphics\GteBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteCamera.h" />
+    <ClInclude Include="Include\Graphics\GteCameraRig.h" />
+    <ClInclude Include="Include\Graphics\GteComputeProgram.h" />
+    <ClInclude Include="Include\Graphics\GteComputeShader.h" />
+    <ClInclude Include="Include\Graphics\GteConstantBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteConstantColorEffect.h" />
+    <ClInclude Include="Include\Graphics\GteControlledObject.h" />
+    <ClInclude Include="Include\Graphics\GteController.h" />
+    <ClInclude Include="Include\Graphics\GteCuller.h" />
+    <ClInclude Include="Include\Graphics\GteCullingPlane.h" />
+    <ClInclude Include="Include\Graphics\GteDataFormat.h" />
+    <ClInclude Include="Include\Graphics\GteDepthStencilState.h" />
+    <ClInclude Include="Include\Graphics\GteDirectionalLightEffect.h" />
+    <ClInclude Include="Include\Graphics\GteDirectionalLightTextureEffect.h" />
+    <ClInclude Include="Include\Graphics\GteDrawingState.h" />
+    <ClInclude Include="Include\Graphics\GteDrawTarget.h" />
+    <ClInclude Include="Include\Graphics\GteFont.h" />
+    <ClInclude Include="Include\Graphics\GteFontArialW400H18.h" />
+    <ClInclude Include="Include\Graphics\GteGEDrawTarget.h" />
+    <ClInclude Include="Include\Graphics\GteGEInputLayoutManager.h" />
+    <ClInclude Include="Include\Graphics\GteGEObject.h" />
+    <ClInclude Include="Include\Graphics\GteGeometryShader.h" />
+    <ClInclude Include="Include\Graphics\GteGraphicsEngine.h" />
+    <ClInclude Include="Include\Graphics\GteGraphicsObject.h" />
+    <ClInclude Include="Include\Graphics\GteIndexBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteIndexFormat.h" />
+    <ClInclude Include="Include\Graphics\GteIndirectArgumentsBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteKeyframeController.h" />
+    <ClInclude Include="Include\Graphics\GteLight.h" />
+    <ClInclude Include="Include\Graphics\GteLightCameraGeometry.h" />
+    <ClInclude Include="Include\Graphics\GteLighting.h" />
+    <ClInclude Include="Include\Graphics\GteLightingEffect.h" />
+    <ClInclude Include="Include\Graphics\GteMaterial.h" />
+    <ClInclude Include="Include\Graphics\GteMemberLayout.h" />
+    <ClInclude Include="Include\Graphics\GteMeshFactory.h" />
+    <ClInclude Include="Include\Graphics\GteNode.h" />
+    <ClInclude Include="Include\Graphics\GteOverlayEffect.h" />
+    <ClInclude Include="Include\Graphics\GtePicker.h" />
+    <ClInclude Include="Include\Graphics\GtePickRecord.h" />
+    <ClInclude Include="Include\Graphics\GtePixelShader.h" />
+    <ClInclude Include="Include\Graphics\GtePlanarReflectionEffect.h" />
+    <ClInclude Include="Include\Graphics\GtePointLightEffect.h" />
+    <ClInclude Include="Include\Graphics\GtePointLightTextureEffect.h" />
+    <ClInclude Include="Include\Graphics\GteProgramDefines.h" />
+    <ClInclude Include="Include\Graphics\GteProgramFactory.h" />
+    <ClInclude Include="Include\Graphics\GtePVWUpdater.h" />
+    <ClInclude Include="Include\Graphics\GteRasterizerState.h" />
+    <ClInclude Include="Include\Graphics\GteRawBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteResource.h" />
+    <ClInclude Include="Include\Graphics\GteSamplerState.h" />
+    <ClInclude Include="Include\Graphics\GteShader.h" />
+    <ClInclude Include="Include\Graphics\GteSkinController.h" />
+    <ClInclude Include="Include\Graphics\GteSpatial.h" />
+    <ClInclude Include="Include\Graphics\GteSpotLightEffect.h" />
+    <ClInclude Include="Include\Graphics\GteStructuredBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteTextEffect.h" />
+    <ClInclude Include="Include\Graphics\GteTexture.h" />
+    <ClInclude Include="Include\Graphics\GteTexture1.h" />
+    <ClInclude Include="Include\Graphics\GteTexture1Array.h" />
+    <ClInclude Include="Include\Graphics\GteTexture2.h" />
+    <ClInclude Include="Include\Graphics\GteTexture2Array.h" />
+    <ClInclude Include="Include\Graphics\GteTexture2Effect.h" />
+    <ClInclude Include="Include\Graphics\GteTexture3.h" />
+    <ClInclude Include="Include\Graphics\GteTexture3Effect.h" />
+    <ClInclude Include="Include\Graphics\GteTextureArray.h" />
+    <ClInclude Include="Include\Graphics\GteTextureBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteTextureCube.h" />
+    <ClInclude Include="Include\Graphics\GteTextureCubeArray.h" />
+    <ClInclude Include="Include\Graphics\GteTextureDS.h" />
+    <ClInclude Include="Include\Graphics\GteTextureRT.h" />
+    <ClInclude Include="Include\Graphics\GteTextureSingle.h" />
+    <ClInclude Include="Include\Graphics\GteTrackball.h" />
+    <ClInclude Include="Include\Graphics\GteTransform.h" />
+    <ClInclude Include="Include\Graphics\GteTransformController.h" />
+    <ClInclude Include="Include\Graphics\GteTypedBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteVertexBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteVertexColorEffect.h" />
+    <ClInclude Include="Include\Graphics\GteVertexFormat.h" />
+    <ClInclude Include="Include\Graphics\GteVertexShader.h" />
+    <ClInclude Include="Include\Graphics\GteViewVolume.h" />
+    <ClInclude Include="Include\Graphics\GteViewVolumeNode.h" />
+    <ClInclude Include="Include\Graphics\GteVisual.h" />
+    <ClInclude Include="Include\Graphics\GteVisualEffect.h" />
+    <ClInclude Include="Include\Graphics\GteVisualProgram.h" />
+    <ClInclude Include="Include\GTApplications.h" />
+    <ClInclude Include="Include\GTEngine.h" />
+    <ClInclude Include="Include\GTEngineDEF.h" />
+    <ClInclude Include="Include\GTEnginePCH.h" />
+    <ClInclude Include="Include\GTGraphics.h" />
+    <ClInclude Include="Include\GTGraphicsDX11.h" />
+    <ClInclude Include="Include\GTGraphicsGL4.h" />
+    <ClInclude Include="Include\GTImagics.h" />
+    <ClInclude Include="Include\GTLowLevel.h" />
+    <ClInclude Include="Include\GTMathematics.h" />
+    <ClInclude Include="Include\GTPhysics.h" />
+    <ClInclude Include="Include\GTWindows.h" />
+    <ClInclude Include="Include\Imagics\GteHistogram.h" />
+    <ClInclude Include="Include\Imagics\GteImage.h" />
+    <ClInclude Include="Include\Imagics\GteImage2.h" />
+    <ClInclude Include="Include\Imagics\GteImage3.h" />
+    <ClInclude Include="Include\Imagics\GteImageUtility2.h" />
+    <ClInclude Include="Include\Imagics\GteImageUtility3.h" />
+    <ClInclude Include="Include\Imagics\GteMarchingCubes.h" />
+    <ClInclude Include="Include\Imagics\GteMarchingCubesTable.h" />
+    <ClInclude Include="Include\Imagics\GteSurfaceExtractor.h" />
+    <ClInclude Include="Include\LowLevel\GteArray2.h" />
+    <ClInclude Include="Include\LowLevel\GteArray3.h" />
+    <ClInclude Include="Include\LowLevel\GteArray4.h" />
+    <ClInclude Include="Include\LowLevel\GteAtomicMinMax.h" />
+    <ClInclude Include="Include\LowLevel\GteComputeModel.h" />
+    <ClInclude Include="Include\LowLevel\GteLexicoArray2.h" />
+    <ClInclude Include="Include\LowLevel\GteLogger.h" />
+    <ClInclude Include="Include\LowLevel\GteLogReporter.h" />
+    <ClInclude Include="Include\LowLevel\GteLogToFile.h" />
+    <ClInclude Include="Include\LowLevel\GteLogToStdout.h" />
+    <ClInclude Include="Include\LowLevel\GteLogToStringArray.h" />
+    <ClInclude Include="Include\LowLevel\GteMinHeap.h" />
+    <ClInclude Include="Include\LowLevel\GteRangeIteration.h" />
+    <ClInclude Include="Include\LowLevel\GteThreadSafeMap.h" />
+    <ClInclude Include="Include\LowLevel\GteThreadSafeQueue.h" />
+    <ClInclude Include="Include\LowLevel\GteTimer.h" />
+    <ClInclude Include="Include\LowLevel\GteWrapper.h" />
+    <ClInclude Include="Include\LowLevel\MSW\GteLogToMessageBox.h" />
+    <ClInclude Include="Include\LowLevel\MSW\GteLogToOutputWindow.h" />
+    <ClInclude Include="Include\Mathematics\GteACosEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteAlignedBox.h" />
+    <ClInclude Include="Include\Mathematics\GteApprCircle2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprCylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprEllipse2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprEllipseByArcs.h" />
+    <ClInclude Include="Include\Mathematics\GteApprEllipsoid3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprGaussian2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprGaussian3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprGreatCircle3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprHeightLine2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprHeightPlane3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprOrthogonalLine2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprOrthogonalLine3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprOrthogonalPlane3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprParaboloid3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprPolynomial2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprPolynomial3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprPolynomial4.h" />
+    <ClInclude Include="Include\Mathematics\GteApprPolynomialSpecial2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprPolynomialSpecial3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprPolynomialSpecial4.h" />
+    <ClInclude Include="Include\Mathematics\GteApprQuadratic2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprQuadratic3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprQuery.h" />
+    <ClInclude Include="Include\Mathematics\GteApprSphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteArc2.h" />
+    <ClInclude Include="Include\Mathematics\GteArithmetic.h" />
+    <ClInclude Include="Include\Mathematics\GteASinEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteATanEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteAxisAngle.h" />
+    <ClInclude Include="Include\Mathematics\GteBandedMatrix.h" />
+    <ClInclude Include="Include\Mathematics\GteBasisFunction.h" />
+    <ClInclude Include="Include\Mathematics\GteBezierCurve.h" />
+    <ClInclude Include="Include\Mathematics\GteBitHacks.h" />
+    <ClInclude Include="Include\Mathematics\GteBSNumber.h" />
+    <ClInclude Include="Include\Mathematics\GteBSplineCurve.h" />
+    <ClInclude Include="Include\Mathematics\GteBSplineCurveFit.h" />
+    <ClInclude Include="Include\Mathematics\GteBSplineSurface.h" />
+    <ClInclude Include="Include\Mathematics\GteBSplineSurfaceFit.h" />
+    <ClInclude Include="Include\Mathematics\GteBSplineVolume.h" />
+    <ClInclude Include="Include\Mathematics\GteBSPrecision.h" />
+    <ClInclude Include="Include\Mathematics\GteBSRational.h" />
+    <ClInclude Include="Include\Mathematics\GteCapsule.h" />
+    <ClInclude Include="Include\Mathematics\GteChebyshevRatio.h" />
+    <ClInclude Include="Include\Mathematics\GteCircle3.h" />
+    <ClInclude Include="Include\Mathematics\GteCone.h" />
+    <ClInclude Include="Include\Mathematics\GteConstants.h" />
+    <ClInclude Include="Include\Mathematics\GteConstrainedDelaunay2.h" />
+    <ClInclude Include="Include\Mathematics\GteContCapsule3.h" />
+    <ClInclude Include="Include\Mathematics\GteContCircle2.h" />
+    <ClInclude Include="Include\Mathematics\GteContCylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteContEllipse2.h" />
+    <ClInclude Include="Include\Mathematics\GteContEllipse2MinCR.h" />
+    <ClInclude Include="Include\Mathematics\GteContEllipsoid3.h" />
+    <ClInclude Include="Include\Mathematics\GteContEllipsoid3MinCR.h" />
+    <ClInclude Include="Include\Mathematics\GteContOrientedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteContOrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteContPointInPolygon2.h" />
+    <ClInclude Include="Include\Mathematics\GteContPointInPolyhedron3.h" />
+    <ClInclude Include="Include\Mathematics\GteContScribeCircle2.h" />
+    <ClInclude Include="Include\Mathematics\GteContScribeCircle3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteContSphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteConvertCoordinates.h" />
+    <ClInclude Include="Include\Mathematics\GteConvexHull2.h" />
+    <ClInclude Include="Include\Mathematics\GteConvexHull3.h" />
+    <ClInclude Include="Include\Mathematics\GteConvexPolyhedron3.h" />
+    <ClInclude Include="Include\Mathematics\GteCosEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteCubicRootsQR.h" />
+    <ClInclude Include="Include\Mathematics\GteCylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteDarbouxFrame.h" />
+    <ClInclude Include="Include\Mathematics\GteDCPQuery.h" />
+    <ClInclude Include="Include\Mathematics\GteDelaunay2.h" />
+    <ClInclude Include="Include\Mathematics\GteDelaunay2Mesh.h" />
+    <ClInclude Include="Include\Mathematics\GteDelaunay3.h" />
+    <ClInclude Include="Include\Mathematics\GteDelaunay3Mesh.h" />
+    <ClInclude Include="Include\Mathematics\GteDistAlignedBox3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistAlignedBoxAlignedBox.h" />
+    <ClInclude Include="Include\Mathematics\GteDistCircle3Circle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistLine3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistLine3Circle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistLine3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistLine3Rectangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistLine3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistLineLine.h" />
+    <ClInclude Include="Include\Mathematics\GteDistLineRay.h" />
+    <ClInclude Include="Include\Mathematics\GteDistLineSegment.h" />
+    <ClInclude Include="Include\Mathematics\GteDistOrientedBox3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPoint3Circle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPoint3ConvexPolyhedron3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPoint3Cylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPoint3Frustum3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPoint3Plane3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPoint3Rectangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPoint3Tetrahedron3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPointAlignedBox.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPointHyperellipsoid.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPointLine.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPointOrientedBox.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPointRay.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPointSegment.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPointTriangle.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPointTriangleExact.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRay3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRay3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRay3Rectangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRay3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRayRay.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRaySegment.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3Rectangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistSegment3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistSegment3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistSegment3Rectangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistSegment3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistSegmentSegment.h" />
+    <ClInclude Include="Include\Mathematics\GteDistSegmentSegmentExact.h" />
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3Rectangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteEdgeKey.h" />
+    <ClInclude Include="Include\Mathematics\GteEllipse3.h" />
+    <ClInclude Include="Include\Mathematics\GteETManifoldMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteEulerAngles.h" />
+    <ClInclude Include="Include\Mathematics\GteExp2Estimate.h" />
+    <ClInclude Include="Include\Mathematics\GteExpEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteFeatureKey.h" />
+    <ClInclude Include="Include\Mathematics\GteFIQuery.h" />
+    <ClInclude Include="Include\Mathematics\GteFrenetFrame.h" />
+    <ClInclude Include="Include\Mathematics\GteFrustum3.h" />
+    <ClInclude Include="Include\Mathematics\GteFunctions.h" />
+    <ClInclude Include="Include\Mathematics\GteGaussianElimination.h" />
+    <ClInclude Include="Include\Mathematics\GteGenerateMeshUV.h" />
+    <ClInclude Include="Include\Mathematics\GteGMatrix.h" />
+    <ClInclude Include="Include\Mathematics\GteGVector.h" />
+    <ClInclude Include="Include\Mathematics\GteHalfspace.h" />
+    <ClInclude Include="Include\Mathematics\GteHyperellipsoid.h" />
+    <ClInclude Include="Include\Mathematics\GteHyperplane.h" />
+    <ClInclude Include="Include\Mathematics\GteHypersphere.h" />
+    <ClInclude Include="Include\Mathematics\GteIEEEBinary.h" />
+    <ClInclude Include="Include\Mathematics\GteIEEEBinary16.h" />
+    <ClInclude Include="Include\Mathematics\GteIndexAttribute.h" />
+    <ClInclude Include="Include\Mathematics\GteIntegration.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpAkima1.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpAkimaNonuniform1.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpAkimaUniform1.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpAkimaUniform2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpAkimaUniform3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpBicubic2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpBilinear2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpLinearNonuniform2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpLinearNonuniform3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpQuadraticNonuniform2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpSphere2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpThinPlateSpline2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpThinPlateSpline3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpTricubic3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpTrilinear3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpVectorField2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2AlignedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2OrientedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Cone3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Cylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrArc2Arc2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrCapsule3Capsule3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrCircle2Arc2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrCircle2Circle2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrConvexPolygonPlane.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrDisk2Sector2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrEllipse2Ellipse2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrEllipsoid3Ellipsoid3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrHalfspace2Polygon2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrHalfspace3Capsule3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrHalfspace3Cylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrHalfspace3Ellipsoid3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrHalfspace3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrHalfspace3Segment3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrHalfspace3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrHalfspace3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrIntervals.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine2AlignedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine2Arc2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine2Circle2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine2Line2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine2OrientedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine2Ray2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine2Segment2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine2Triangle2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3Capsule3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3Cone3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3Cylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3Ellipsoid3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3Plane3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrLine3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox2Circle2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox2Cone2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox2OrientedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox2Sector2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Cone3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Cylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Frustum3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrPlane3Capsule3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrPlane3Circle3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrPlane3Cylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrPlane3Ellipsoid3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrPlane3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrPlane3Plane3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrPlane3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrPlane3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay2AlignedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay2Arc2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay2Circle2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay2OrientedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay2Ray2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay2Segment2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay2Triangle2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3Capsule3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3Cone3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3Cylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3Ellipsoid3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3Plane3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrRay3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment2AlignedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment2Arc2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment2Circle2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment2OrientedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment2Segment2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment2Triangle2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3Capsule3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3Cone3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3Cylinder3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3Ellipsoid3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3Plane3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSegment3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSphere3Cone3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSphere3Frustum3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSphere3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrTriangle3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteInvSqrtEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteIsPlanarGraph.h" />
+    <ClInclude Include="Include\Mathematics\GteLCPSolver.h" />
+    <ClInclude Include="Include\Mathematics\GteLine.h" />
+    <ClInclude Include="Include\Mathematics\GteLinearSystem.h" />
+    <ClInclude Include="Include\Mathematics\GteLog2Estimate.h" />
+    <ClInclude Include="Include\Mathematics\GteLogEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteMatrix.h" />
+    <ClInclude Include="Include\Mathematics\GteMatrix2x2.h" />
+    <ClInclude Include="Include\Mathematics\GteMatrix3x3.h" />
+    <ClInclude Include="Include\Mathematics\GteMatrix4x4.h" />
+    <ClInclude Include="Include\Mathematics\GteMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteMinimalCycleBasis.h" />
+    <ClInclude Include="Include\Mathematics\GteMinimize1.h" />
+    <ClInclude Include="Include\Mathematics\GteMinimizeN.h" />
+    <ClInclude Include="Include\Mathematics\GteMinimumAreaBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteMinimumAreaCircle2.h" />
+    <ClInclude Include="Include\Mathematics\GteMinimumVolumeBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteMinimumVolumeSphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteNaturalSplineCurve.h" />
+    <ClInclude Include="Include\Mathematics\GteNearestNeighborQuery.h" />
+    <ClInclude Include="Include\Mathematics\GteNURBSCurve.h" />
+    <ClInclude Include="Include\Mathematics\GteNURBSSurface.h" />
+    <ClInclude Include="Include\Mathematics\GteNURBSVolume.h" />
+    <ClInclude Include="Include\Mathematics\GteOdeEuler.h" />
+    <ClInclude Include="Include\Mathematics\GteOdeImplicitEuler.h" />
+    <ClInclude Include="Include\Mathematics\GteOdeMidpoint.h" />
+    <ClInclude Include="Include\Mathematics\GteOdeRungeKutta4.h" />
+    <ClInclude Include="Include\Mathematics\GteOdeSolver.h" />
+    <ClInclude Include="Include\Mathematics\GteOrientedBox.h" />
+    <ClInclude Include="Include\Mathematics\GteParametricCurve.h" />
+    <ClInclude Include="Include\Mathematics\GteParametricSurface.h" />
+    <ClInclude Include="Include\Mathematics\GtePlanarMesh.h" />
+    <ClInclude Include="Include\Mathematics\GtePolygon2.h" />
+    <ClInclude Include="Include\Mathematics\GtePolyhedron3.h" />
+    <ClInclude Include="Include\Mathematics\GtePolynomial1.h" />
+    <ClInclude Include="Include\Mathematics\GtePrimalQuery2.h" />
+    <ClInclude Include="Include\Mathematics\GtePrimalQuery3.h" />
+    <ClInclude Include="Include\Mathematics\GteProjection.h" />
+    <ClInclude Include="Include\Mathematics\GteQuarticRootsQR.h" />
+    <ClInclude Include="Include\Mathematics\GteQuaternion.h" />
+    <ClInclude Include="Include\Mathematics\GteRay.h" />
+    <ClInclude Include="Include\Mathematics\GteRectangle.h" />
+    <ClInclude Include="Include\Mathematics\GteRectangleMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteRectanglePatchMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteRevolutionMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteRootsBisection.h" />
+    <ClInclude Include="Include\Mathematics\GteRootsBrentsMethod.h" />
+    <ClInclude Include="Include\Mathematics\GteRootsPolynomial.h" />
+    <ClInclude Include="Include\Mathematics\GteRotation.h" />
+    <ClInclude Include="Include\Mathematics\GteSector2.h" />
+    <ClInclude Include="Include\Mathematics\GteSegment.h" />
+    <ClInclude Include="Include\Mathematics\GteSeparatePoints2.h" />
+    <ClInclude Include="Include\Mathematics\GteSeparatePoints3.h" />
+    <ClInclude Include="Include\Mathematics\GteSinEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteSingularValueDecomposition.h" />
+    <ClInclude Include="Include\Mathematics\GteSlerpEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteSqrtEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteSymmetricEigensolver.h" />
+    <ClInclude Include="Include\Mathematics\GteSymmetricEigensolver2x2.h" />
+    <ClInclude Include="Include\Mathematics\GteSymmetricEigensolver3x3.h" />
+    <ClInclude Include="Include\Mathematics\GteTanEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteTCBSplineCurve.h" />
+    <ClInclude Include="Include\Mathematics\GteTetrahedron3.h" />
+    <ClInclude Include="Include\Mathematics\GteTetrahedronKey.h" />
+    <ClInclude Include="Include\Mathematics\GteTIQuery.h" />
+    <ClInclude Include="Include\Mathematics\GteTorus3.h" />
+    <ClInclude Include="Include\Mathematics\GteTriangle.h" />
+    <ClInclude Include="Include\Mathematics\GteTriangleKey.h" />
+    <ClInclude Include="Include\Mathematics\GteTriangulateCDT.h" />
+    <ClInclude Include="Include\Mathematics\GteTriangulateEC.h" />
+    <ClInclude Include="Include\Mathematics\GteTSManifoldMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteTubeMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteUIntegerALU32.h" />
+    <ClInclude Include="Include\Mathematics\GteUIntegerAP32.h" />
+    <ClInclude Include="Include\Mathematics\GteUIntegerFP32.h" />
+    <ClInclude Include="Include\Mathematics\GteUniqueVerticesTriangles.h" />
+    <ClInclude Include="Include\Mathematics\GteUnsymmetricEigenvalues.h" />
+    <ClInclude Include="Include\Mathematics\GteVector.h" />
+    <ClInclude Include="Include\Mathematics\GteVector2.h" />
+    <ClInclude Include="Include\Mathematics\GteVector3.h" />
+    <ClInclude Include="Include\Mathematics\GteVector4.h" />
+    <ClInclude Include="Include\Mathematics\GteVEManifoldMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteVertexAttribute.h" />
+    <ClInclude Include="Include\Mathematics\GteVertexCollapseMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteVETManifoldMesh.h" />
+    <ClInclude Include="Include\Mathematics\MSW\GteIntelSSE.h" />
+    <ClInclude Include="Include\Physics\GteBoxManager.h" />
+    <ClInclude Include="Include\Physics\GteExtremalQuery3.h" />
+    <ClInclude Include="Include\Physics\GteExtremalQuery3BSP.h" />
+    <ClInclude Include="Include\Physics\GteExtremalQuery3PRJ.h" />
+    <ClInclude Include="Include\Physics\GteFluid2.h" />
+    <ClInclude Include="Include\Physics\GteFluid2AdjustVelocity.h" />
+    <ClInclude Include="Include\Physics\GteFluid2ComputeDivergence.h" />
+    <ClInclude Include="Include\Physics\GteFluid2EnforceStateBoundary.h" />
+    <ClInclude Include="Include\Physics\GteFluid2InitializeSource.h" />
+    <ClInclude Include="Include\Physics\GteFluid2InitializeState.h" />
+    <ClInclude Include="Include\Physics\GteFluid2Parameters.h" />
+    <ClInclude Include="Include\Physics\GteFluid2SolvePoisson.h" />
+    <ClInclude Include="Include\Physics\GteFluid2UpdateState.h" />
+    <ClInclude Include="Include\Physics\GteFluid3.h" />
+    <ClInclude Include="Include\Physics\GteFluid3AdjustVelocity.h" />
+    <ClInclude Include="Include\Physics\GteFluid3ComputeDivergence.h" />
+    <ClInclude Include="Include\Physics\GteFluid3EnforceStateBoundary.h" />
+    <ClInclude Include="Include\Physics\GteFluid3InitializeSource.h" />
+    <ClInclude Include="Include\Physics\GteFluid3InitializeState.h" />
+    <ClInclude Include="Include\Physics\GteFluid3Parameters.h" />
+    <ClInclude Include="Include\Physics\GteFluid3SolvePoisson.h" />
+    <ClInclude Include="Include\Physics\GteFluid3UpdateState.h" />
+    <ClInclude Include="Include\Physics\GteMassSpringArbitrary.h" />
+    <ClInclude Include="Include\Physics\GteMassSpringCurve.h" />
+    <ClInclude Include="Include\Physics\GteMassSpringSurface.h" />
+    <ClInclude Include="Include\Physics\GteMassSpringVolume.h" />
+    <ClInclude Include="Include\Physics\GteParticleSystem.h" />
+    <ClInclude Include="Include\Physics\GtePolyhedralMassProperties.h" />
+    <ClInclude Include="Include\Physics\GteRectangleManager.h" />
+    <ClInclude Include="Include\Physics\GteRigidBody.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Applications\GteCommand.cpp" />
+    <ClCompile Include="Source\Applications\GteEnvironment.cpp" />
+    <ClCompile Include="Source\Applications\GteOnIdleTimer.cpp" />
+    <ClCompile Include="Source\Applications\GteWindow2.cpp" />
+    <ClCompile Include="Source\Applications\GteWindow3.cpp" />
+    <ClCompile Include="Source\Applications\GteWindowBase.cpp" />
+    <ClCompile Include="Source\Applications\MSW\DX11\GteWindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Applications\MSW\DX11\GteWindowSystem.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Applications\MSW\GteMSWWindow.cpp" />
+    <ClCompile Include="Source\Applications\MSW\GteMSWWindowSystem.cpp" />
+    <ClCompile Include="Source\Applications\MSW\GteWICFileIO.cpp" />
+    <ClCompile Include="Source\Applications\MSW\WGL\GteWindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Applications\MSW\WGL\GteWindowSystem.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11BlendState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Buffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11ComputeShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11ConstantBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11DepthStencilState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11DrawingState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11DrawTarget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Engine.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11GeometryShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11GraphicsObject.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11IndexBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11IndirectArgumentsBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11InputLayout.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11InputLayoutManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11PerformanceCounter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11PixelShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11RasterizerState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11RawBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Resource.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11SamplerState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Shader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11StructuredBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture1.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture1Array.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture2Array.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture3.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureArray.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureCube.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureCubeArray.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureDS.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureRT.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureSingle.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11VertexBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDX11VertexShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDXGIAdapter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteDXGIOutput.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLBaseBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLByteAddressBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLComputeProgram.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLConstantBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLParameter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLProgramFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLResource.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLResourceBindInfo.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLSamplerState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLShader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderType.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderVariable.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLStructuredBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLTexture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLTextureArray.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLTextureBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLVisualProgram.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4AtomicCounterBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4BlendState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Buffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4ConstantBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4DepthStencilState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4DrawingState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4DrawTarget.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Engine.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4GraphicsObject.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4IndexBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4InputLayout.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4InputLayoutManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4RasterizerState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Resource.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4SamplerState.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4StructuredBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture1.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture1Array.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture2Array.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture3.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureArray.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureCube.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureCubeArray.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureDS.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureRT.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureSingle.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGL4VertexBuffer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGLSLComputeProgram.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGLSLProgramFactory.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGLSLReflection.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteGLSLVisualProgram.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteOpenGL.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">
+      </PrecompiledHeaderFile>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GteOpenGLHelper.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">
+      </PrecompiledHeaderFile>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\WGL\GteWGLEngine.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\WGL\GteWGLExtensions.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteAmbientLightEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteBaseEngine.cpp" />
+    <ClCompile Include="Source\Graphics\GteBillboardNode.cpp" />
+    <ClCompile Include="Source\Graphics\GteBlendState.cpp" />
+    <ClCompile Include="Source\Graphics\GteBlendTransformController.cpp" />
+    <ClCompile Include="Source\Graphics\GteBoundingSphere.cpp" />
+    <ClCompile Include="Source\Graphics\GteBspNode.cpp" />
+    <ClCompile Include="Source\Graphics\GteBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteCamera.cpp" />
+    <ClCompile Include="Source\Graphics\GteCameraRig.cpp" />
+    <ClCompile Include="Source\Graphics\GteComputeProgram.cpp" />
+    <ClCompile Include="Source\Graphics\GteComputeShader.cpp" />
+    <ClCompile Include="Source\Graphics\GteConstantBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteConstantColorEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteControlledObject.cpp" />
+    <ClCompile Include="Source\Graphics\GteController.cpp" />
+    <ClCompile Include="Source\Graphics\GteCuller.cpp" />
+    <ClCompile Include="Source\Graphics\GteCullingPlane.cpp" />
+    <ClCompile Include="Source\Graphics\GteDataFormat.cpp" />
+    <ClCompile Include="Source\Graphics\GteDepthStencilState.cpp" />
+    <ClCompile Include="Source\Graphics\GteDirectionalLightEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteDirectionalLightTextureEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteDrawingState.cpp" />
+    <ClCompile Include="Source\Graphics\GteDrawTarget.cpp" />
+    <ClCompile Include="Source\Graphics\GteFont.cpp" />
+    <ClCompile Include="Source\Graphics\GteFontArialW400H18.cpp" />
+    <ClCompile Include="Source\Graphics\GteGEDrawTarget.cpp" />
+    <ClCompile Include="Source\Graphics\GteGEObject.cpp" />
+    <ClCompile Include="Source\Graphics\GteGeometryShader.cpp" />
+    <ClCompile Include="Source\Graphics\GteGraphicsEngine.cpp" />
+    <ClCompile Include="Source\Graphics\GteGraphicsObject.cpp" />
+    <ClCompile Include="Source\Graphics\GteIndexBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteIndirectArgumentsBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteKeyframeController.cpp" />
+    <ClCompile Include="Source\Graphics\GteLight.cpp" />
+    <ClCompile Include="Source\Graphics\GteLightCameraGeometry.cpp" />
+    <ClCompile Include="Source\Graphics\GteLighting.cpp" />
+    <ClCompile Include="Source\Graphics\GteLightingEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteMaterial.cpp" />
+    <ClCompile Include="Source\Graphics\GteMeshFactory.cpp" />
+    <ClCompile Include="Source\Graphics\GteNode.cpp" />
+    <ClCompile Include="Source\Graphics\GteOverlayEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GtePicker.cpp" />
+    <ClCompile Include="Source\Graphics\GtePickRecord.cpp" />
+    <ClCompile Include="Source\Graphics\GtePixelShader.cpp" />
+    <ClCompile Include="Source\Graphics\GtePlanarReflectionEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GtePointLightEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GtePointLightTextureEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteProgramDefines.cpp" />
+    <ClCompile Include="Source\Graphics\GteProgramFactory.cpp" />
+    <ClCompile Include="Source\Graphics\GtePVWUpdater.cpp" />
+    <ClCompile Include="Source\Graphics\GteRasterizerState.cpp" />
+    <ClCompile Include="Source\Graphics\GteRawBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteResource.cpp" />
+    <ClCompile Include="Source\Graphics\GteSamplerState.cpp" />
+    <ClCompile Include="Source\Graphics\GteShader.cpp" />
+    <ClCompile Include="Source\Graphics\GteSkinController.cpp" />
+    <ClCompile Include="Source\Graphics\GteSpatial.cpp" />
+    <ClCompile Include="Source\Graphics\GteSpotLightEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteStructuredBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteTextEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteTexture.cpp" />
+    <ClCompile Include="Source\Graphics\GteTexture1.cpp" />
+    <ClCompile Include="Source\Graphics\GteTexture1Array.cpp" />
+    <ClCompile Include="Source\Graphics\GteTexture2.cpp" />
+    <ClCompile Include="Source\Graphics\GteTexture2Array.cpp" />
+    <ClCompile Include="Source\Graphics\GteTexture2Effect.cpp" />
+    <ClCompile Include="Source\Graphics\GteTexture3.cpp" />
+    <ClCompile Include="Source\Graphics\GteTexture3Effect.cpp" />
+    <ClCompile Include="Source\Graphics\GteTextureArray.cpp" />
+    <ClCompile Include="Source\Graphics\GteTextureBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteTextureCube.cpp" />
+    <ClCompile Include="Source\Graphics\GteTextureCubeArray.cpp" />
+    <ClCompile Include="Source\Graphics\GteTextureDS.cpp" />
+    <ClCompile Include="Source\Graphics\GteTextureRT.cpp" />
+    <ClCompile Include="Source\Graphics\GteTextureSingle.cpp" />
+    <ClCompile Include="Source\Graphics\GteTrackball.cpp" />
+    <ClCompile Include="Source\Graphics\GteTransform.cpp" />
+    <ClCompile Include="Source\Graphics\GteTransformController.cpp" />
+    <ClCompile Include="Source\Graphics\GteTypedBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteVertexBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteVertexColorEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteVertexFormat.cpp" />
+    <ClCompile Include="Source\Graphics\GteVertexShader.cpp" />
+    <ClCompile Include="Source\Graphics\GteViewVolume.cpp" />
+    <ClCompile Include="Source\Graphics\GteViewVolumeNode.cpp" />
+    <ClCompile Include="Source\Graphics\GteVisual.cpp" />
+    <ClCompile Include="Source\Graphics\GteVisualEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteVisualProgram.cpp" />
+    <ClCompile Include="Source\GTEnginePCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Source\Imagics\GteHistogram.cpp" />
+    <ClCompile Include="Source\Imagics\GteImageUtility2.cpp" />
+    <ClCompile Include="Source\Imagics\GteImageUtility3.cpp" />
+    <ClCompile Include="Source\Imagics\GteMarchingCubes.cpp" />
+    <ClCompile Include="Source\Imagics\GteMarchingCubesTable.cpp" />
+    <ClCompile Include="Source\LowLevel\GteLogger.cpp" />
+    <ClCompile Include="Source\LowLevel\GteLogReporter.cpp" />
+    <ClCompile Include="Source\LowLevel\GteLogToFile.cpp" />
+    <ClCompile Include="Source\LowLevel\GteLogToStdout.cpp" />
+    <ClCompile Include="Source\LowLevel\GteLogToStringArray.cpp" />
+    <ClCompile Include="Source\LowLevel\GteTimer.cpp" />
+    <ClCompile Include="Source\LowLevel\GteWrapper.cpp" />
+    <ClCompile Include="Source\LowLevel\MSW\GteLogToMessageBox.cpp" />
+    <ClCompile Include="Source\LowLevel\MSW\GteLogToOutputWindow.cpp" />
+    <ClCompile Include="Source\Mathematics\GteBitHacks.cpp" />
+    <ClCompile Include="Source\Mathematics\GteBSPrecision.cpp" />
+    <ClCompile Include="Source\Mathematics\GteEdgeKey.cpp" />
+    <ClCompile Include="Source\Mathematics\GteETManifoldMesh.cpp" />
+    <ClCompile Include="Source\Mathematics\GteGenerateMeshUV.cpp" />
+    <ClCompile Include="Source\Mathematics\GteIEEEBinary16.cpp" />
+    <ClCompile Include="Source\Mathematics\GteTetrahedronKey.cpp" />
+    <ClCompile Include="Source\Mathematics\GteTriangleKey.cpp" />
+    <ClCompile Include="Source\Mathematics\GteTSManifoldMesh.cpp" />
+    <ClCompile Include="Source\Mathematics\GteUIntegerAP32.cpp" />
+    <ClCompile Include="Source\Mathematics\GteVEManifoldMesh.cpp" />
+    <ClCompile Include="Source\Mathematics\GteVETManifoldMesh.cpp" />
+    <ClCompile Include="Source\Mathematics\MSW\GteIntelSSE.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid2.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid2AdjustVelocity.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid2ComputeDivergence.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid2EnforceStateBoundary.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid2InitializeSource.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid2InitializeState.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid2SolvePoisson.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid2UpdateState.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid3.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid3AdjustVelocity.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid3ComputeDivergence.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid3EnforceStateBoundary.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid3InitializeSource.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid3InitializeState.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid3SolvePoisson.cpp" />
+    <ClCompile Include="Source\Physics\GteFluid3UpdateState.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Include\Graphics\DX11\GteFloatFunction.hlsli" />
+    <None Include="Include\Graphics\DX11\GteSqrtEstimate.hlsli" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>GTEnginev15</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">
+    <OutDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">
+    <OutDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">
+    <OutDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">
+    <OutDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>_Output\$(PlatformToolset)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;GTE_DEV_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;GTE_DEV_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;GTE_DEV_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;GTE_DEV_OPENGL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

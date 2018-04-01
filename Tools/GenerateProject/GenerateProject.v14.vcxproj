@@ -37,7 +37,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{019F62EC-B949-4DC6-94C3-0AE8D603526F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>GenerateProjectv14</RootNamespace>
+    <RootNamespace>GenerateProject</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -343,10 +343,12 @@ xcopy /DFYV "$(TargetPath)" "..\..\Executable\$(PlatformToolset)\$(Platform)\$(C
     <ClCompile Include="GenerateProject.cpp" />
     <ClCompile Include="ProjectTemplate.v12.cpp" />
     <ClCompile Include="ProjectTemplate.v14.cpp" />
+    <ClCompile Include="ProjectTemplate.v15.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectTemplate.v12.h" />
     <ClInclude Include="ProjectTemplate.v14.h" />
+    <ClInclude Include="ProjectTemplate.v15.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

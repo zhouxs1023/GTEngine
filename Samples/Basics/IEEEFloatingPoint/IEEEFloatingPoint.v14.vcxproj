@@ -37,7 +37,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{865bb73d-6ef6-4463-8d74-7c20214543d4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>IEEEFloatingPointv14</RootNamespace>
+    <RootNamespace>IEEEFloatingPoint</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

@@ -38,7 +38,7 @@
     <ProjectGuid>{04cfb6d2-f71e-44ac-8ea5-8df76c3a778c}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ApproximateEllipsesByArcs</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -38,7 +38,7 @@
     <ProjectGuid>{c2f94ad1-97ef-4f7f-a85b-4239248c5533}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>FoucaultPendulum</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

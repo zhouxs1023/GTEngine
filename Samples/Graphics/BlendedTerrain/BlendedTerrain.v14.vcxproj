@@ -37,7 +37,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C8A7A472-E9FB-443A-B138-102E40BF1E29}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>BlendedTerrainv14</RootNamespace>
+    <RootNamespace>BlendedTerrain</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

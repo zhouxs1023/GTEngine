@@ -38,7 +38,7 @@
     <ProjectGuid>{1271c825-ec77-47b5-a1c3-1858ee2c14dc}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>BallRubberBand</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

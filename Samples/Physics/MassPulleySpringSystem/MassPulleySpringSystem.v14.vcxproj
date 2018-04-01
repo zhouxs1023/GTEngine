@@ -38,7 +38,7 @@
     <ProjectGuid>{8dd0f1c6-29d5-4afb-bb38-b4771172d9b4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>MassPulleySpringSystem</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

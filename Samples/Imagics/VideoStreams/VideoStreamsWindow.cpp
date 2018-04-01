@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/04/01)
 
 #include "VideoStreamsWindow.h"
 
@@ -42,16 +42,17 @@ VideoStreamsWindow::VideoStreamsWindow(Parameters& parameters)
 {
     // Locate the context for the application regardless of where the
     // executable is launched.
-    std::string prefix = GetGTEPath();
-    if (prefix == "")
+    std::string path = GetGTEPath();
+    if (path == "")
     {
         parameters.created = false;
         return;
     }
-    prefix += "/Samples/Imagics/VideoStreams/Data/VideoStream";
+    path += "/Samples/Imagics/VideoStreams/Data/";
+    mEnvironment.Insert(path);
 
     int const txWidth = 640, txHeight = 512;
-#if 0
+
     // Generate dummy video files.  This avoids having to post large data
     // files for the sample.  After you have created these the first time,
     // you can change the "#if 1" to "if 0" to reduce program initialization
@@ -70,7 +71,12 @@ VideoStreamsWindow::VideoStreamsWindow(Parameters& parameters)
     std::uniform_int_distribution<unsigned int> rnd(0, 127);
     for (int i = 0; i < NUM_VIDEO_STREAMS; ++i)
     {
-        std::string name = prefix + std::to_string(i) + ".raw";
+        std::string name = "VideoStream" + std::to_string(i) + ".raw";
+        if (mEnvironment.GetPath(name) != "")
+        {
+            continue;
+        }
+        name = path + name;
         std::ofstream output(name, std::ios::binary);
         if (!output)
         {
@@ -99,7 +105,6 @@ VideoStreamsWindow::VideoStreamsWindow(Parameters& parameters)
         }
         output.close();
     }
-#endif
 
     if (!CreateOverlays(txWidth, txHeight))
     {
@@ -111,8 +116,9 @@ VideoStreamsWindow::VideoStreamsWindow(Parameters& parameters)
 
     for (int i = 0; i < NUM_VIDEO_STREAMS; ++i)
     {
-        std::string name = prefix + std::to_string(i) + ".raw";
-        mVideoStreams[i] = std::make_shared<FileVideoStream>(name, mEngine);
+        std::string name = "VideoStream" + std::to_string(i) + ".raw";
+        mVideoStreams[i] = std::make_shared<FileVideoStream>(
+            mEnvironment.GetPath(name), mEngine);
     }
     mVideoStreamManager = std::make_unique<VideoStreamManager>(mVideoStreams, 30);
 

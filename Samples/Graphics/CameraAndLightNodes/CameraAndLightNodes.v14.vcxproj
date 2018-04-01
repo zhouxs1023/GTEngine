@@ -38,7 +38,7 @@
     <ProjectGuid>{f7fb1c89-f1cc-4ed1-9784-8c545ba0969c}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>CameraAndLightNodes</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

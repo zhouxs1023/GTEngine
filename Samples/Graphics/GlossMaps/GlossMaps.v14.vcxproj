@@ -38,7 +38,7 @@
     <ProjectGuid>{37a232bd-b938-4e92-a989-2dea0d90c237}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GlossMaps</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

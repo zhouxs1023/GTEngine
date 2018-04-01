@@ -38,7 +38,7 @@
     <ProjectGuid>{d1b36340-26e2-413f-916e-674fbe35eef2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GelatinBlob</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

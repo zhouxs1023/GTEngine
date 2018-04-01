@@ -38,7 +38,7 @@
     <ProjectGuid>{f2d1423e-4bf8-41ac-9d64-51f28c303f3c}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>BlendedAnimations</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

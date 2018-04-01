@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/08/17)
+// File Version: 3.3.1 (2017/04/01)
 
 #include "FitCylinderWindow.h"
 #include <Mathematics/GteApprCylinder3.h>
@@ -34,6 +34,12 @@ int main(int, char const*[])
         Logger::Listener::LISTEN_FOR_ALL,
         Logger::Listener::LISTEN_FOR_ALL,
         Logger::Listener::LISTEN_FOR_ALL);
+#endif
+
+#if defined(_DEBUG) && defined(USE_MESH_POINTS)
+    std::cout << "This program takes a really long time to run in a Debug build." << std::endl;
+    std::cout << "The costs of range checking and iterator checking for std::array" << std::endl;
+    std::cout << "and std::vector are enormous. Consider running a Release build instead." << std::endl;
 #endif
 
     Window::Parameters parameters(L"FitCylinderWindow", 0, 0, 1024, 1024);

@@ -38,7 +38,7 @@
     <ProjectGuid>{7a804471-aea4-4641-b127-608e475c506c}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DistanceTriangleBox</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

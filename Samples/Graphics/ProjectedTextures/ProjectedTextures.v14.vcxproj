@@ -38,7 +38,7 @@
     <ProjectGuid>{4ae681cc-4086-4b8a-ad9d-4938e29a8277}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ProjectedTextures</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

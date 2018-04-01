@@ -38,7 +38,7 @@
     <ProjectGuid>{2f01fbcd-1882-424a-8991-517594bcec9c}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>FlowingSkirt</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

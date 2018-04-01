@@ -38,7 +38,7 @@
     <ProjectGuid>{566094bc-6a68-464d-bdaa-b0225c6b9710}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ContourEdges</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

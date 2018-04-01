@@ -38,7 +38,7 @@
     <ProjectGuid>{d8bf1252-0f21-415d-8fec-85bb671e451d}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>KeplerPolarForm</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

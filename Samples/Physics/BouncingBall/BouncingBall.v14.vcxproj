@@ -38,7 +38,7 @@
     <ProjectGuid>{169f121e-3a0c-4d5c-8d86-672bcc458826}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>BouncingBall</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

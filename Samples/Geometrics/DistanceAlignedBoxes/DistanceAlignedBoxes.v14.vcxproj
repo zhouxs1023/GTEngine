@@ -38,7 +38,7 @@
     <ProjectGuid>{712a7198-23ec-4fc1-9305-99de8812a0d5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DistanceAlignedBoxes</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

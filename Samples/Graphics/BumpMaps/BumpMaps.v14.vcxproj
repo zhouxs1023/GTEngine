@@ -38,7 +38,7 @@
     <ProjectGuid>{ed83aab0-2cb7-4d28-a246-b44d10cb0b17}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>BumpMaps</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

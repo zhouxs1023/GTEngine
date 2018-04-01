@@ -37,7 +37,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9983e720-bd11-465e-a297-c7b2d1f76b44}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>BitmapFontCreatorv12</RootNamespace>
+    <RootNamespace>BitmapFontCreator</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

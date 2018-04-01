@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/04/01)
 
 #include <GTEngine.h>
 #if defined(__LINUX__)
@@ -13,6 +13,12 @@
 #include <iostream>
 using namespace gte;
 
+Environment gEnvironment;
+#if defined(GTE_DEV_OPENGL)
+std::string gShaderFile = "DistanceSeg3Seg3.glsl";
+#else
+std::string gShaderFile = "DistanceSeg3Seg3.hlsl";
+#endif
 
 // The function dist3D_Segment_to_Segment is from Dan Sunday's website:
 //   http://geomalgorithms.com/a07-_distance.html
@@ -350,7 +356,7 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
     factory.defines.Set("GET_CLOSEST", (getClosest ? 1 : 0));
 
     std::shared_ptr<ComputeProgram> cprogram =
-        factory.CreateFromFile("Shaders/DistanceSeg3Seg3.glsl");
+        factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
     std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
     std::shared_ptr<ConstantBuffer> block =
         std::make_shared<ConstantBuffer>(2 * sizeof(uint32_t), true);
@@ -548,7 +554,7 @@ void GPUPerformanceTest(bool getClosest, bool testNonparallel)
     factory.defines.Set("VECREAL", "dvec4");
     factory.defines.Set("GET_CLOSEST", (getClosest ? 1 : 0));
     std::shared_ptr<ComputeProgram> cprogram =
-        factory.CreateFromFile("Shaders/DistanceSeg3Seg3.glsl");
+        factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
     std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
 
     std::shared_ptr<ConstantBuffer> block =
@@ -678,7 +684,7 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
     factory.defines.Set("GET_CLOSEST", (getClosest ? 1 : 0));
 
     std::shared_ptr<ComputeProgram> cprogram =
-        factory.CreateFromFile("Shaders/DistanceSeg3Seg3.hlsl");
+        factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
     std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
     std::shared_ptr<ConstantBuffer> block =
         std::make_shared<ConstantBuffer>(2 * sizeof(uint32_t), true);
@@ -867,7 +873,7 @@ void GPUPerformanceTest(bool getClosest, bool testNonparallel)
     factory.defines.Set("VECREAL", "double3");
     factory.defines.Set("GET_CLOSEST", (getClosest ? 1 : 0));
     std::shared_ptr<ComputeProgram> cprogram =
-        factory.CreateFromFile("Shaders/DistanceSeg3Seg3.hlsl");
+        factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
     std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
 
     std::shared_ptr<ConstantBuffer> block =
@@ -985,6 +991,26 @@ int main(int, char const*[])
         Logger::Listener::LISTEN_FOR_ALL,
         Logger::Listener::LISTEN_FOR_ALL);
 #endif
+
+    std::string message;
+    std::string path = gEnvironment.GetVariable("GTE_PATH");
+    if (path == "")
+    {
+        message = "You must create the environment variable GTE_PATH.";
+        std::cout << message << std::endl;
+        LogError(message);
+        return -1;
+    }
+
+    gEnvironment.Insert(path + "/Samples/Geometrics/DistanceSegments3/Shaders/");
+
+    if (gEnvironment.GetPath(gShaderFile) == "")
+    {
+        message = "Cannot find file " + gShaderFile;
+        std::cout << message << std::endl;
+        LogError(message);
+        return -2;
+    }
 
     //CPUAccuracyTest(true, true);
     //CPUAccuracyTest(true, false);

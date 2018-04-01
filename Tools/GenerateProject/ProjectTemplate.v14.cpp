@@ -93,7 +93,7 @@ std::regex const TemplateV14::mRQPattern("REQUIREDGUID");
 std::regex const TemplateV14::mGTPattern("GTGUID");
 std::string const TemplateV14::msGTGUID("43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829");
 
-#if defined(__MSWINDOWS__) && _MSC_VER == 1900
+#if _MSC_VER == 1900
 // MSVS 2015 Update 1 was shipped with a bug whereby a warning for static
 // class members involving std::vector> is generated incorrectly.  The bug
 // fix will appear in Update 2.  For now, turn off the warning.
@@ -114,13 +114,13 @@ std::vector<std::string> const TemplateV14::msSolutionLines =
 "EndProject",
 "Global",
 "	GlobalSection(SolutionConfigurationPlatforms) = preSolution",
-"		Debug|Win32 = Debug|Win32",
+"		Debug|x86 = Debug|x86",
 "		Debug|x64 = Debug|x64",
-"		DebugGL4|Win32 = DebugGL4|Win32",
+"		DebugGL4|x86 = DebugGL4|x86",
 "		DebugGL4|x64 = DebugGL4|x64",
-"		Release|Win32 = Release|Win32",
+"		Release|x86 = Release|x86",
 "		Release|x64 = Release|x64",
-"		ReleaseGL4|Win32 = ReleaseGL4|Win32",
+"		ReleaseGL4|x86 = ReleaseGL4|x86",
 "		ReleaseGL4|x64 = ReleaseGL4|x64",
 "	EndGlobalSection",
 "	GlobalSection(ProjectConfigurationPlatforms) = postSolution",
@@ -208,7 +208,7 @@ std::vector<std::string> const TemplateV14::msProjectLines =
 "    <ProjectGuid>{PROJECTGUID}</ProjectGuid>",
 "    <Keyword>Win32Proj</Keyword>",
 "    <RootNamespace>PROJECTNAME</RootNamespace>",
-"    <TargetPlatformVersion>8.1</TargetPlatformVersion>",
+"    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>",
 "  </PropertyGroup>",
 "  <Import Project=\"$(VCTargetsPath)\\Microsoft.Cpp.Default.props\" />",
 "  <PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\" Label=\"Configuration\">",
@@ -579,6 +579,6 @@ std::vector<std::string> const TemplateV14::msWinCLines =
 "}"
 };
 
-#if defined(__MSWINDOWS__) && _MSC_VER == 1900
+#if _MSC_VER == 1900
 #pragma warning(pop)
 #endif

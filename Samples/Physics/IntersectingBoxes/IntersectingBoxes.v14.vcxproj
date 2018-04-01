@@ -38,7 +38,7 @@
     <ProjectGuid>{2c629959-6c08-4e97-a0a9-ee41d65ff41a}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>IntersectingBoxes</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

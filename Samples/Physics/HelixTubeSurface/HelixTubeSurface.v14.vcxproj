@@ -38,7 +38,7 @@
     <ProjectGuid>{45c325ab-6c9e-49be-8676-93355e0e8835}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>HelixTubeSurface</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

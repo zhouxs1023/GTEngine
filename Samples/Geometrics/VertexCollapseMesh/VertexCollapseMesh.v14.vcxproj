@@ -38,7 +38,7 @@
     <ProjectGuid>{208f27df-6d69-430e-a98a-6a7dce3e17f3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>VertexCollapseMesh</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

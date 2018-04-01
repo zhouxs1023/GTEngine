@@ -38,7 +38,7 @@
     <ProjectGuid>{05f08c5f-1984-4ec7-9808-b28eea8f76ea}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>BeadSlide</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

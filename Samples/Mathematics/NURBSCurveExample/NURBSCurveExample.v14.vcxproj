@@ -38,7 +38,7 @@
     <ProjectGuid>{6de822ee-4dc4-49d4-80ec-ac094716b1f9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>NURBSCurveExample</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

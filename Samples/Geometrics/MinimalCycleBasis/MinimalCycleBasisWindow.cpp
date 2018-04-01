@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/04/01)
 
 #include "MinimalCycleBasisWindow.h"
 
@@ -30,9 +30,16 @@ MinimalCycleBasisWindow::MinimalCycleBasisWindow(Parameters& parameters)
     Window2(parameters),
     mDrawRawData(false)
 {
+    if (!SetEnvironment())
+    {
+        parameters.created = false;
+        return;
+    }
+
     mDoFlip = true;
 
-    std::ifstream input("Data/SimpleGraph0.txt");
+    // Possible inputs are "SimpleGraphN.txt", where N is in {0,1,2,3,4,5}.
+    std::ifstream input(mEnvironment.GetPath("SimpleGraph0.txt"));
     int numPositions;
     input >> numPositions;
     mPositions.resize(numPositions);
@@ -152,6 +159,29 @@ bool MinimalCycleBasisWindow::OnCharPress(unsigned char key, int x, int y)
         return true;
     }
     return Window2::OnCharPress(key, x, y);
+}
+
+bool MinimalCycleBasisWindow::SetEnvironment()
+{
+    std::string path = GetGTEPath();
+    if (path != "")
+    {
+        mEnvironment.Insert(path + "/Samples/Geometrics/MinimalCycleBasis/Data/");
+        for (int i = 0; i < 6; ++i)
+        {
+            std::string filename = "SimpleGraph" + std::to_string(i) + ".txt";
+            if (mEnvironment.GetPath(filename) == "")
+            {
+                LogError("Cannot find input file " + filename);
+                return false;
+            }
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void MinimalCycleBasisWindow::DrawTree(std::shared_ptr<MinimalCycleBasis<Rational>::Tree> const& tree)

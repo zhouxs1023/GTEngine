@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/02/23)
 
 #pragma once
 
@@ -75,42 +75,51 @@ FIQuery<Real, Arc2<Real>, Arc2<Real>>::operator()(Arc2<Real> const& arc0, Arc2<R
             {
                 if (arc0.Contains(arc1.end[0]) && arc0.Contains(arc1.end[1]))
                 {
-                    // arc0 and arc1 overlap in two disjoint subsets.
-                    if (arc0.end[0] != arc1.end[1])
+                    if (arc0.end[0] == arc1.end[0] && arc0.end[1] == arc1.end[1])
                     {
-                        if (arc1.end[0] != arc0.end[1])
-                        {
-                            // The arcs overlap in two disjoint subarcs, each
-                            // of positive subtended angle: <A0,B1>, <A1,B0>
-                            result.configuration = COCIRCULAR_TWO_ARCS;
-                            result.arc[0] = Arc2<Real>(arc0.center, arc0.radius, arc0.end[0], arc1.end[1]);
-                            result.arc[1] = Arc2<Real>(arc0.center, arc0.radius, arc1.end[0], arc0.end[1]);
-                        }
-                        else  // B0 = A1
-                        {
-                            // The intersection is a point {A1} and an
-                            // arc <A0,B1>.
-                            result.configuration = COCIRCULAR_ONE_POINT_ONE_ARC;
-                            result.point[0] = arc0.end[1];
-                            result.arc[0] = Arc2<Real>(arc0.center, arc0.radius, arc0.end[0], arc1.end[1]);
-                        }
+                        // The arcs are the same.
+                        result.configuration = COCIRCULAR_ONE_ARC;
+                        result.arc[0] = arc0;
                     }
-                    else  // A0 = B1
+                    else
                     {
-                        if (arc1.end[0] != arc0.end[1])
+                        // arc0 and arc1 overlap in two disjoint subsets.
+                        if (arc0.end[0] != arc1.end[1])
                         {
-                            // The intersection is a point {A0} and an
-                            // arc <A1,B0>.
-                            result.configuration = COCIRCULAR_ONE_POINT_ONE_ARC;
-                            result.point[0] = arc0.end[0];
-                            result.arc[0] = Arc2<Real>(arc0.center, arc0.radius, arc1.end[0], arc0.end[1]);
+                            if (arc1.end[0] != arc0.end[1])
+                            {
+                                // The arcs overlap in two disjoint subarcs, each
+                                // of positive subtended angle: <A0,B1>, <A1,B0>
+                                result.configuration = COCIRCULAR_TWO_ARCS;
+                                result.arc[0] = Arc2<Real>(arc0.center, arc0.radius, arc0.end[0], arc1.end[1]);
+                                result.arc[1] = Arc2<Real>(arc0.center, arc0.radius, arc1.end[0], arc0.end[1]);
+                            }
+                            else  // B0 = A1
+                            {
+                                // The intersection is a point {A1} and an
+                                // arc <A0,B1>.
+                                result.configuration = COCIRCULAR_ONE_POINT_ONE_ARC;
+                                result.point[0] = arc0.end[1];
+                                result.arc[0] = Arc2<Real>(arc0.center, arc0.radius, arc0.end[0], arc1.end[1]);
+                            }
                         }
-                        else
+                        else  // A0 = B1
                         {
-                            // The arcs shared endpoints, so the union is a circle.
-                            result.configuration = COCIRCULAR_TWO_POINTS;
-                            result.point[0] = arc0.end[0];
-                            result.point[1] = arc0.end[1];
+                            if (arc1.end[0] != arc0.end[1])
+                            {
+                                // The intersection is a point {A0} and an
+                                // arc <A1,B0>.
+                                result.configuration = COCIRCULAR_ONE_POINT_ONE_ARC;
+                                result.point[0] = arc0.end[0];
+                                result.arc[0] = Arc2<Real>(arc0.center, arc0.radius, arc1.end[0], arc0.end[1]);
+                            }
+                            else
+                            {
+                                // The arcs shared endpoints, so the union is a circle.
+                                result.configuration = COCIRCULAR_TWO_POINTS;
+                                result.point[0] = arc0.end[0];
+                                result.point[1] = arc0.end[1];
+                            }
                         }
                     }
                 }

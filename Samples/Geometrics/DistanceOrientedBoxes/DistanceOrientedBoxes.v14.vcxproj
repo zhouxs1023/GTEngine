@@ -38,7 +38,7 @@
     <ProjectGuid>{7072e18a-617c-498a-a1e6-b7c4ce42a7e7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DistanceOrientedBoxes</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

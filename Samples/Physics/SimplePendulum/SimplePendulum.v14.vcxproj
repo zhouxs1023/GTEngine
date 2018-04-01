@@ -38,7 +38,7 @@
     <ProjectGuid>{94f4d78d-a551-4a93-b27a-1f7afc690e10}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SimplePendulum</RootNamespace>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
