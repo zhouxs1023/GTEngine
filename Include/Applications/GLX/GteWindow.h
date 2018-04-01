@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2017
+// Copyright (c) 1998-2018
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/11/14)
+// File Version: 3.0.2 (2018/02/08)
 
 #pragma once
 
@@ -37,6 +37,8 @@ protected:
     Window(Parameters& parameters);
 public:
     virtual ~Window();
+
+    virtual void SetTitle(std::wstring const& title);
 
     // Draw the window.
     void ShowWindow();

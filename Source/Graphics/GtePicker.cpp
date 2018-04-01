@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2017
+// Copyright (c) 1998-2018
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/02/06)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteDistLineSegment.h>
@@ -253,10 +253,11 @@ void Picker::PickTriangles(std::shared_ptr<Visual> const& visual, char const* po
     unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line)
 {
     // Compute intersections with the model-space triangles.
-    unsigned int const numTriangles = ibuffer->GetNumPrimitives();
+    unsigned int const firstTriangle = ibuffer->GetFirstPrimitive();
+    unsigned int const numTriangles = ibuffer->GetNumActivePrimitives();
     bool isIndexed = ibuffer->IsIndexed();
     IPType primitiveType = ibuffer->GetPrimitiveType();
-    for (unsigned int i = 0; i < numTriangles; ++i)
+    for (unsigned int i = firstTriangle; i < numTriangles; ++i)
     {
         // Get the vertex indices for the triangle.
         unsigned int v0, v1, v2;
@@ -327,10 +328,11 @@ void Picker::PickSegments(std::shared_ptr<Visual> const& visual, char const* pos
     unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line)
 {
     // Compute distances from the model-space segments to the line.
-    unsigned int const numSegments = ibuffer->GetNumPrimitives();
+    unsigned int const firstSegment = ibuffer->GetFirstPrimitive();
+    unsigned int const numSegments = ibuffer->GetNumActivePrimitives();
     bool isIndexed = ibuffer->IsIndexed();
     IPType primitiveType = ibuffer->GetPrimitiveType();
-    for (unsigned int i = 0; i < numSegments; ++i)
+    for (unsigned int i = firstSegment; i < numSegments; ++i)
     {
         // Get the vertex indices for the segment.
         unsigned int v0, v1;
@@ -398,9 +400,10 @@ void Picker::PickPoints(std::shared_ptr<Visual> const& visual, char const* posit
     unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line)
 {
     // Compute distances from the model-space points to the line.
-    unsigned int const numPoints = ibuffer->GetNumPrimitives();
+    unsigned int const firstPoint = ibuffer->GetFirstPrimitive();
+    unsigned int const numPoints = ibuffer->GetNumActivePrimitives();
     bool isIndexed = ibuffer->IsIndexed();
-    for (unsigned int i = 0; i < numPoints; ++i)
+    for (unsigned int i = firstPoint; i < numPoints; ++i)
     {
         // Get the vertex index for the point.
         unsigned int v;

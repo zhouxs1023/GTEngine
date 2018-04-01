@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2017
+// Copyright (c) 1998-2018
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.12 (2017/07/26)
+// File Version: 3.0.13 (2017/11/06)
 
 #pragma once
 
@@ -198,6 +198,9 @@
 #include <Mathematics/GteExp2Estimate.h>
 #include <Mathematics/GteExpEstimate.h>
 #include <Mathematics/GteFunctions.h>
+#include <Mathematics/GteFunctionsBSNumber.h>
+#include <Mathematics/GteFunctionsBSRational.h>
+#include <Mathematics/GteFunctionsIEEEBinary16.h>
 #include <Mathematics/GteInvSqrtEstimate.h>
 #include <Mathematics/GteLog2Estimate.h>
 #include <Mathematics/GteLogEstimate.h>
