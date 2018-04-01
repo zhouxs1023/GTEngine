@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/10/12)
 
 #include <GTEnginePCH.h>
 #include <Applications/MSW/GteMSWWindowSystem.h>
@@ -387,7 +387,7 @@ LRESULT CALLBACK MSWWindowSystem::WindowProcedure(HWND handle, UINT message,
     }
     case WM_CLOSE:
     {
-        PostQuitMessage(0);
+        window.OnClose();
         return 0;
     }
     }

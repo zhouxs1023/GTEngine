@@ -100,6 +100,6 @@ PS_OUTPUT PSMain(PS_INPUT input)
 
     float3 color = lightingColor * textureColor.rgb;
     output.pixelColor0.rgb = materialEmissive.rgb + attenuation * color;
-    output.pixelColor0.a = materialDiffuse.a * texture.a;
+    output.pixelColor0.a = materialDiffuse.a * textureColor.a;
     return output;
 }

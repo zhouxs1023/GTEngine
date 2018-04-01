@@ -9,7 +9,7 @@
 
 #include <Applications/GteEnvironment.h>
 #include <Applications/GteOnIdleTimer.h>
-#include <Graphics/GteGraphicsEngine.h>
+#include <Graphics/GteBaseEngine.h>
 #include <Graphics/GteProgramFactory.h>
 
 namespace gte
@@ -31,7 +31,7 @@ public:
         std::wstring title;
         int xOrigin, yOrigin, xSize, ySize;
         bool allowResize, created;
-        std::shared_ptr<GraphicsEngine> engine;
+        std::shared_ptr<BaseEngine> engine;
         std::shared_ptr<ProgramFactory> factory;
     };
 
@@ -156,7 +156,7 @@ protected:
     OnIdleTimer mTimer;
 
     // Graphics device and camera.
-    std::shared_ptr<GraphicsEngine> mEngine;
+    std::shared_ptr<BaseEngine> mBaseEngine;
     std::shared_ptr<ProgramFactory> mProgramFactory;
 };
 

@@ -680,6 +680,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Include\Graphics\GteAmbientLightEffect.h" />
+    <ClInclude Include="Include\Graphics\GteBaseEngine.h" />
     <ClInclude Include="Include\Graphics\GteBillboardNode.h" />
     <ClInclude Include="Include\Graphics\GteBlendState.h" />
     <ClInclude Include="Include\Graphics\GteBlendTransformController.h" />
@@ -1848,6 +1849,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteAmbientLightEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteBaseEngine.cpp" />
     <ClCompile Include="Source\Graphics\GteBillboardNode.cpp" />
     <ClCompile Include="Source\Graphics\GteBlendState.cpp" />
     <ClCompile Include="Source\Graphics\GteBlendTransformController.cpp" />

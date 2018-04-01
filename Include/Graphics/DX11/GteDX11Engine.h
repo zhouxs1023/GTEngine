@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/16)
+// File Version: 3.0.2 (2016/11/13)
 
 #pragma once
 
@@ -20,6 +20,7 @@ class DX11GeometryShader;
 class DX11GraphicsObject;
 class DX11PixelShader;
 class DX11Shader;
+class DX11Texture2;
 class DX11VertexShader;
 
 class GTE_IMPEXP DX11Engine : public GraphicsEngine
@@ -93,6 +94,7 @@ private:
     void Initialize(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType,
         HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel);
     bool CreateDevice();
+    bool CreateBestMatchingDevice();
     bool CreateSwapChain(HWND handle, UINT xSize, UINT ySize);
     bool CreateBackBuffer(UINT xSize, UINT ySize);
     void CreateDefaultObjects();
@@ -169,7 +171,7 @@ private:
     std::map<std::wstring, bool> mFullscreenState;
 
 
-// Overrides from GraphicsEngine.
+// Overrides from BaseEngine.
 public:
     // Viewport management.  The measurements are in window coordinates.  The
     // origin of the window is (x,y), the window width is w, and the window
@@ -203,6 +205,10 @@ public:
     // and depth-stencil target.
     virtual void Enable(std::shared_ptr<DrawTarget> const& target) override;
     virtual void Disable(std::shared_ptr<DrawTarget> const& target) override;
+
+    // Allow creation of a DX11Texture2 object from known ID3D11* interfaces.
+    DX11Texture2* BindTexture(std::shared_ptr<Texture2> const& texture,
+        ID3D11Texture2D* dxTexture, ID3D11ShaderResourceView* dxSRView);
 
     // Support for copying from CPU to GPU via mapped memory.
     virtual bool Update(std::shared_ptr<Buffer> const& buffer) override;

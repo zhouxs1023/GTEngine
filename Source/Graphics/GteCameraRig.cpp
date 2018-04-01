@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/11/13)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteCameraRig.h>
@@ -63,12 +63,31 @@ bool CameraRig::PopMotion(int trigger)
 
 bool CameraRig::Move()
 {
+    // The current semantics allow for processing all active motions,
+    // which was the semantics in Wild Magic 5.  For example, if you
+    // move the camera with the up-arrow (forward motion) and with
+    // the right-arrow (turn-right motion), both will occur during the
+    // idle loop.
+    if (mNumActiveMotions > 0)
+    {
+        for (int i = 0; i < mNumActiveMotions; ++i)
+        {
+            (this->*mActiveMotions[i])();
+        }
+        return true;
+    }
+    return false;
+
+#if 0
+    // If you prefer the previous semantics where only one key press is
+    // processed at a time, use this previous version of the code.
     if (mMotion)
     {
         (this->*mMotion)();
         return true;
     }
     return false;
+#endif
 }
 
 void CameraRig::ClearMotions()

@@ -8,6 +8,7 @@
 #pragma once
 
 #include <Applications/MSW/GteMSWWindow.h>
+#include <Graphics/GteGraphicsEngine.h>
 #include <Graphics/DX11/GteDX11Include.h>
 
 namespace gte
@@ -32,6 +33,11 @@ protected:
     Window(Parameters& parameters);
 public:
     virtual ~Window();
+
+protected:
+    // This is assigned mBaseEngine, which allows development of the DX12
+    // engine independently of DX11 and WGL.
+    std::shared_ptr<GraphicsEngine> mEngine;
 };
 
 }

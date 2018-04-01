@@ -15,16 +15,11 @@ GraphicsEngine::~GraphicsEngine()
 
 GraphicsEngine::GraphicsEngine()
     :
-    mXSize(0),
-    mYSize(0),
-    mClearDepth(1.0f),
-    mClearStencil(0),
     mCreateGEDrawTarget(nullptr),
     mGEObjectCreator(nullptr),
     mAllowOcclusionQuery(false),
     mWarnOnNonemptyBridges(true)
 {
-    mClearColor.fill(1.0f);
     mCreateGEObject.fill(nullptr);
 
     mGOListener = std::make_shared<GOListener>(this);
@@ -272,45 +267,24 @@ void GraphicsEngine::GetTotalAllocation(size_t& numBytes, size_t& numObjects) co
     }
 }
 
-void GraphicsEngine::CreateDefaultGlobalState()
-{
-    mDefaultBlendState = std::make_shared<BlendState>();
-    mDefaultDepthStencilState = std::make_shared<DepthStencilState>();
-    mDefaultRasterizerState = std::make_shared<RasterizerState>();
-
-#if defined(GTE_GRAPHICS_USE_NAMED_OBJECTS)
-    mDefaultBlendState->SetName("GraphicsEngine::mDefaultBlendState");
-    mDefaultDepthStencilState->SetName("GraphicsEngine::mDefaultDepthStencilState");
-    mDefaultRasterizerState->SetName("GraphicsEngine::mDefaultRasterizerState");
-#endif
-
-    SetDefaultBlendState();
-    SetDefaultDepthStencilState();
-    SetDefaultRasterizerState();
-}
-
 void GraphicsEngine::DestroyDefaultGlobalState()
 {
     if (mDefaultBlendState)
     {
         Unbind(mDefaultBlendState);
-        mDefaultBlendState = nullptr;
-        mActiveBlendState = nullptr;
     }
 
     if (mDefaultDepthStencilState)
     {
         Unbind(mDefaultDepthStencilState);
-        mDefaultDepthStencilState = nullptr;
-        mActiveDepthStencilState = nullptr;
     }
 
     if (mDefaultRasterizerState)
     {
         Unbind(mDefaultRasterizerState);
-        mDefaultRasterizerState = nullptr;
-        mActiveRasterizerState = nullptr;
     }
+
+    BaseEngine::DestroyDefaultGlobalState();
 }
 
 bool GraphicsEngine::Unbind(GraphicsObject const* object)

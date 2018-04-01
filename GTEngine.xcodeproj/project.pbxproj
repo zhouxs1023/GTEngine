@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C28C9291DD91B09003BE2A7 /* GteIntrOrientedBox3Cylinder3.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C91C1DD91B09003BE2A7 /* GteIntrOrientedBox3Cylinder3.h */; };
+		3C28C92A1DD91B09003BE2A7 /* GteIndexAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C91D1DD91B09003BE2A7 /* GteIndexAttribute.h */; };
+		3C28C92B1DD91B09003BE2A7 /* GteIntrAlignedBox3Cylinder3.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C91E1DD91B09003BE2A7 /* GteIntrAlignedBox3Cylinder3.h */; };
+		3C28C92C1DD91B09003BE2A7 /* GteLCPSolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C91F1DD91B09003BE2A7 /* GteLCPSolver.h */; };
+		3C28C92D1DD91B09003BE2A7 /* GteIntrAlignedBox3Sphere3.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9201DD91B09003BE2A7 /* GteIntrAlignedBox3Sphere3.h */; };
+		3C28C92E1DD91B09003BE2A7 /* GteRevolutionMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9211DD91B09003BE2A7 /* GteRevolutionMesh.h */; };
+		3C28C92F1DD91B09003BE2A7 /* GteRectanglePatchMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9221DD91B09003BE2A7 /* GteRectanglePatchMesh.h */; };
+		3C28C9301DD91B09003BE2A7 /* GteTubeMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9231DD91B09003BE2A7 /* GteTubeMesh.h */; };
+		3C28C9311DD91B09003BE2A7 /* GteRectangleMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9241DD91B09003BE2A7 /* GteRectangleMesh.h */; };
+		3C28C9321DD91B09003BE2A7 /* GteMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9251DD91B09003BE2A7 /* GteMesh.h */; };
+		3C28C9331DD91B09003BE2A7 /* GteVertexAttribute.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9261DD91B09003BE2A7 /* GteVertexAttribute.h */; };
+		3C28C9341DD91B09003BE2A7 /* GteApprCylinder3.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9271DD91B09003BE2A7 /* GteApprCylinder3.h */; };
+		3C28C9351DD91B09003BE2A7 /* GteIntpAkimaNonuniform1.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C28C9281DD91B09003BE2A7 /* GteIntpAkimaNonuniform1.h */; };
 		3C317F5C1CF3473E00B5EC3B /* GteIntrConvexPolygonPlane.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C317F521CF3473E00B5EC3B /* GteIntrConvexPolygonPlane.h */; };
 		3C317F5D1CF3473E00B5EC3B /* GteIntrTriangle3OrientedBox3.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C317F531CF3473E00B5EC3B /* GteIntrTriangle3OrientedBox3.h */; };
 		3C317F5E1CF3473E00B5EC3B /* GteUnsymmetricEigenvalues.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C317F541CF3473E00B5EC3B /* GteUnsymmetricEigenvalues.h */; };
@@ -1528,6 +1541,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C28C91C1DD91B09003BE2A7 /* GteIntrOrientedBox3Cylinder3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteIntrOrientedBox3Cylinder3.h; sourceTree = "<group>"; };
+		3C28C91D1DD91B09003BE2A7 /* GteIndexAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteIndexAttribute.h; sourceTree = "<group>"; };
+		3C28C91E1DD91B09003BE2A7 /* GteIntrAlignedBox3Cylinder3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteIntrAlignedBox3Cylinder3.h; sourceTree = "<group>"; };
+		3C28C91F1DD91B09003BE2A7 /* GteLCPSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteLCPSolver.h; sourceTree = "<group>"; };
+		3C28C9201DD91B09003BE2A7 /* GteIntrAlignedBox3Sphere3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteIntrAlignedBox3Sphere3.h; sourceTree = "<group>"; };
+		3C28C9211DD91B09003BE2A7 /* GteRevolutionMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteRevolutionMesh.h; sourceTree = "<group>"; };
+		3C28C9221DD91B09003BE2A7 /* GteRectanglePatchMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteRectanglePatchMesh.h; sourceTree = "<group>"; };
+		3C28C9231DD91B09003BE2A7 /* GteTubeMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteTubeMesh.h; sourceTree = "<group>"; };
+		3C28C9241DD91B09003BE2A7 /* GteRectangleMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteRectangleMesh.h; sourceTree = "<group>"; };
+		3C28C9251DD91B09003BE2A7 /* GteMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteMesh.h; sourceTree = "<group>"; };
+		3C28C9261DD91B09003BE2A7 /* GteVertexAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteVertexAttribute.h; sourceTree = "<group>"; };
+		3C28C9271DD91B09003BE2A7 /* GteApprCylinder3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteApprCylinder3.h; sourceTree = "<group>"; };
+		3C28C9281DD91B09003BE2A7 /* GteIntpAkimaNonuniform1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteIntpAkimaNonuniform1.h; sourceTree = "<group>"; };
 		3C317F521CF3473E00B5EC3B /* GteIntrConvexPolygonPlane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteIntrConvexPolygonPlane.h; sourceTree = "<group>"; };
 		3C317F531CF3473E00B5EC3B /* GteIntrTriangle3OrientedBox3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteIntrTriangle3OrientedBox3.h; sourceTree = "<group>"; };
 		3C317F541CF3473E00B5EC3B /* GteUnsymmetricEigenvalues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GteUnsymmetricEigenvalues.h; sourceTree = "<group>"; };
@@ -2004,6 +2030,7 @@
 				3C52D3891BB12DEF00BD08EA /* GteACosEstimate.h */,
 				3C52D38A1BB12DEF00BD08EA /* GteAlignedBox.h */,
 				3C52D38B1BB12DEF00BD08EA /* GteApprCircle2.h */,
+				3C28C9271DD91B09003BE2A7 /* GteApprCylinder3.h */,
 				3C52D38C1BB12DEF00BD08EA /* GteApprEllipse2.h */,
 				3C317F581CF3473E00B5EC3B /* GteApprEllipseByArcs.h */,
 				3C52D38D1BB12DEF00BD08EA /* GteApprEllipsoid3.h */,
@@ -2135,8 +2162,10 @@
 				3C52D40A1BB12DEF00BD08EA /* GteHypersphere.h */,
 				3C52D40B1BB12DEF00BD08EA /* GteIEEEBinary.h */,
 				3C52D40C1BB12DEF00BD08EA /* GteIEEEBinary16.h */,
+				3C28C91D1DD91B09003BE2A7 /* GteIndexAttribute.h */,
 				3C52D40D1BB12DEF00BD08EA /* GteIntegration.h */,
 				3C52D40F1BB12DEF00BD08EA /* GteIntpAkima1.h */,
+				3C28C9281DD91B09003BE2A7 /* GteIntpAkimaNonuniform1.h */,
 				3C52D4101BB12DEF00BD08EA /* GteIntpAkimaUniform1.h */,
 				3C52D4111BB12DEF00BD08EA /* GteIntpAkimaUniform2.h */,
 				3C52D4121BB12DEF00BD08EA /* GteIntpAkimaUniform3.h */,
@@ -2155,7 +2184,9 @@
 				3C52D41F1BB12DEF00BD08EA /* GteIntrAlignedBox2OrientedBox2.h */,
 				3C52D4201BB12DEF00BD08EA /* GteIntrAlignedBox3AlignedBox3.h */,
 				3C52D4211BB12DEF00BD08EA /* GteIntrAlignedBox3Cone3.h */,
+				3C28C91E1DD91B09003BE2A7 /* GteIntrAlignedBox3Cylinder3.h */,
 				3C52D4221BB12DEF00BD08EA /* GteIntrAlignedBox3OrientedBox3.h */,
+				3C28C9201DD91B09003BE2A7 /* GteIntrAlignedBox3Sphere3.h */,
 				3C52D4231BB12DEF00BD08EA /* GteIntrArc2Arc2.h */,
 				3C52D4241BB12DEF00BD08EA /* GteIntrCapsule3Capsule3.h */,
 				3C52D4251BB12DEF00BD08EA /* GteIntrCircle2Arc2.h */,
@@ -2195,6 +2226,7 @@
 				3C52D4441BB12DEF00BD08EA /* GteIntrOrientedBox2OrientedBox2.h */,
 				3C317F571CF3473E00B5EC3B /* GteIntrOrientedBox2Sector2.h */,
 				3C52D4451BB12DEF00BD08EA /* GteIntrOrientedBox3Cone3.h */,
+				3C28C91C1DD91B09003BE2A7 /* GteIntrOrientedBox3Cylinder3.h */,
 				3C52D4461BB12DEF00BD08EA /* GteIntrOrientedBox3Frustum3.h */,
 				3C52D4471BB12DEF00BD08EA /* GteIntrOrientedBox3OrientedBox3.h */,
 				3C52D4481BB12DEF00BD08EA /* GteIntrOrientedBox3Sphere3.h */,
@@ -2243,6 +2275,7 @@
 				3C317F531CF3473E00B5EC3B /* GteIntrTriangle3OrientedBox3.h */,
 				3C52D4731BB12DEF00BD08EA /* GteInvSqrtEstimate.h */,
 				3C4EC6041C913E590057EA76 /* GteIsPlanarGraph.h */,
+				3C28C91F1DD91B09003BE2A7 /* GteLCPSolver.h */,
 				3C52D4741BB12DEF00BD08EA /* GteLine.h */,
 				3C52D4751BB12DEF00BD08EA /* GteLinearSystem.h */,
 				3C52D4761BB12DEF00BD08EA /* GteLog2Estimate.h */,
@@ -2251,6 +2284,7 @@
 				3C52D4791BB12DEF00BD08EA /* GteMatrix2x2.h */,
 				3C52D47A1BB12DEF00BD08EA /* GteMatrix3x3.h */,
 				3C52D47B1BB12DEF00BD08EA /* GteMatrix4x4.h */,
+				3C28C9251DD91B09003BE2A7 /* GteMesh.h */,
 				3C4EC6051C913E590057EA76 /* GteMinimalCycleBasis.h */,
 				3C52D47C1BB12DEF00BD08EA /* GteMinimize1.h */,
 				3C52D47D1BB12DEF00BD08EA /* GteMinimizeN.h */,
@@ -2282,7 +2316,10 @@
 				3C52D4961BB12DEF00BD08EA /* GteQuaternion.h */,
 				3C52D4971BB12DEF00BD08EA /* GteRay.h */,
 				3C52D4981BB12DEF00BD08EA /* GteRectangle.h */,
+				3C28C9241DD91B09003BE2A7 /* GteRectangleMesh.h */,
+				3C28C9221DD91B09003BE2A7 /* GteRectanglePatchMesh.h */,
 				3C52D4991BB12DEF00BD08EA /* GteRectangleSurface.h */,
+				3C28C9211DD91B09003BE2A7 /* GteRevolutionMesh.h */,
 				3C52D49A1BB12DEF00BD08EA /* GteRootsBisection.h */,
 				3C52D49B1BB12DEF00BD08EA /* GteRootsBrentsMethod.h */,
 				3C52D49C1BB12DEF00BD08EA /* GteRootsPolynomial.h */,
@@ -2309,6 +2346,7 @@
 				3C52D4B01BB12DF000BD08EA /* GteTriangulateCDT.h */,
 				3C52D4B11BB12DF000BD08EA /* GteTriangulateEC.h */,
 				3C52D4B21BB12DF000BD08EA /* GteTSManifoldMesh.h */,
+				3C28C9231DD91B09003BE2A7 /* GteTubeMesh.h */,
 				3C52D4B31BB12DF000BD08EA /* GteTubeSurface.h */,
 				3C52D4B41BB12DF000BD08EA /* GteUIntegerALU32.h */,
 				3C52D4B51BB12DF000BD08EA /* GteUIntegerAP32.h */,
@@ -2320,6 +2358,7 @@
 				3C52D4BA1BB12DF000BD08EA /* GteVector3.h */,
 				3C52D4BB1BB12DF000BD08EA /* GteVector4.h */,
 				3C52D4BC1BB12DF000BD08EA /* GteVEManifoldMesh.h */,
+				3C28C9261DD91B09003BE2A7 /* GteVertexAttribute.h */,
 				3C7EA80A1C53F1B3004CDA77 /* GteVertexCollapseMesh.h */,
 				3C7EA80B1C53F1B3004CDA77 /* GteVETManifoldMesh.h */,
 			);
@@ -3185,6 +3224,7 @@
 				3C52D8171BB12DF000BD08EA /* GteTimer.h in Headers */,
 				3C52DBF71BB12DF000BD08EA /* GteMinimumAreaCircle2.h in Headers */,
 				3C317F5C1CF3473E00B5EC3B /* GteIntrConvexPolygonPlane.h in Headers */,
+				3C28C92A1DD91B09003BE2A7 /* GteIndexAttribute.h in Headers */,
 				3C52D8231BB12DF000BD08EA /* GteAlignedBox.h in Headers */,
 				3C52DB871BB12DF000BD08EA /* GteIntrSegment2Circle2.h in Headers */,
 				3C52D7A31BB12DF000BD08EA /* GTImagics.h in Headers */,
@@ -3202,6 +3242,7 @@
 				3C52D7F71BB12DF000BD08EA /* GteLogToOutputWindow.h in Headers */,
 				3C52D80F1BB12DF000BD08EA /* GteThreadSafeMap.h in Headers */,
 				3C52D9971BB12DF000BD08EA /* GteDistPointTriangle.h in Headers */,
+				3C28C92E1DD91B09003BE2A7 /* GteRevolutionMesh.h in Headers */,
 				3C317F5E1CF3473E00B5EC3B /* GteUnsymmetricEigenvalues.h in Headers */,
 				3C52D83F1BB12DF000BD08EA /* GteApprHeightLine2.h in Headers */,
 				3C52DC1F1BB12DF000BD08EA /* GteOdeMidpoint.h in Headers */,
@@ -3336,6 +3377,7 @@
 				3C52D8571BB12DF000BD08EA /* GteApprPolynomial2.h in Headers */,
 				3C52D9D31BB12DF000BD08EA /* GteDistTriangle3Rectangle3.h in Headers */,
 				3C669BFC1BB26E8500D29A01 /* GteMassSpringSurface.h in Headers */,
+				3C28C92F1DD91B09003BE2A7 /* GteRectanglePatchMesh.h in Headers */,
 				3C52DCA31BB12DF000BD08EA /* GteTetrahedron3.h in Headers */,
 				3C52D8A71BB12DF000BD08EA /* GteBSplineCurve.h in Headers */,
 				3C52D9AB1BB12DF000BD08EA /* GteDistRay3Triangle3.h in Headers */,
@@ -3392,6 +3434,7 @@
 				3C52D7CF1BB12DF000BD08EA /* GteMarchingCubes.h in Headers */,
 				3C52D8771BB12DF000BD08EA /* GteApprQuery.h in Headers */,
 				3C52D9BB1BB12DF000BD08EA /* GteDistSegment3AlignedBox3.h in Headers */,
+				3C28C9321DD91B09003BE2A7 /* GteMesh.h in Headers */,
 				3C52D7971BB12DF000BD08EA /* GTGraphics.h in Headers */,
 				3C52DA271BB12DF000BD08EA /* GteIEEEBinary.h in Headers */,
 				3C52DC531BB12DF000BD08EA /* GteQuaternion.h in Headers */,
@@ -3405,6 +3448,7 @@
 				3C52DC371BB12DF000BD08EA /* GtePlanarMesh.h in Headers */,
 				3C52D8F31BB12DF000BD08EA /* GteContEllipsoid3MinCR.h in Headers */,
 				3C52DB3F1BB12DF000BD08EA /* GteIntrRay2AlignedBox2.h in Headers */,
+				3C28C92C1DD91B09003BE2A7 /* GteLCPSolver.h in Headers */,
 				3C52D9431BB12DF000BD08EA /* GteDistLine3AlignedBox3.h in Headers */,
 				3C317F631CF3473E00B5EC3B /* GteIntrDisk2Sector2.h in Headers */,
 				3C52D8071BB12DF000BD08EA /* GteMinHeap.h in Headers */,
@@ -3417,14 +3461,17 @@
 				3C52DAD31BB12DF000BD08EA /* GteIntrLine2Ray2.h in Headers */,
 				3C52D99B1BB12DF000BD08EA /* GteDistPointTriangleExact.h in Headers */,
 				3C52D91F1BB12DF000BD08EA /* GteCosEstimate.h in Headers */,
+				3C28C9351DD91B09003BE2A7 /* GteIntpAkimaNonuniform1.h in Headers */,
 				3C52DCDF1BB12DF000BD08EA /* GteVector2.h in Headers */,
 				3C52DC871BB12DF000BD08EA /* GteSlerpEstimate.h in Headers */,
 				3C52D81B1BB12DF000BD08EA /* GteWrapper.h in Headers */,
 				3C52D8C71BB12DF000BD08EA /* GteChebyshevRatio.h in Headers */,
 				3C52D8CF1BB12DF000BD08EA /* GteCone.h in Headers */,
 				3C52D8371BB12DF000BD08EA /* GteApprGaussian3.h in Headers */,
+				3C28C9301DD91B09003BE2A7 /* GteTubeMesh.h in Headers */,
 				3C52DCE31BB12DF000BD08EA /* GteVector3.h in Headers */,
 				3C52DC271BB12DF000BD08EA /* GteOdeSolver.h in Headers */,
+				3C28C9331DD91B09003BE2A7 /* GteVertexAttribute.h in Headers */,
 				3C52D97B1BB12DF000BD08EA /* GteDistPoint3Tetrahedron3.h in Headers */,
 				3C52D7C71BB12DF000BD08EA /* GteImageUtility2.h in Headers */,
 				3C52D9071BB12DF000BD08EA /* GteContScribeCircle2.h in Headers */,
@@ -3475,6 +3522,7 @@
 				3C52DC931BB12DF000BD08EA /* GteSymmetricEigensolver2x2.h in Headers */,
 				3C52DBCF1BB12DF000BD08EA /* GteLinearSystem.h in Headers */,
 				3C52DBA71BB12DF000BD08EA /* GteIntrSegment3Ellipsoid3.h in Headers */,
+				3C28C92D1DD91B09003BE2A7 /* GteIntrAlignedBox3Sphere3.h in Headers */,
 				3C52D9DB1BB12DF000BD08EA /* GteEdgeKey.h in Headers */,
 				3C52DC631BB12DF000BD08EA /* GteRootsBisection.h in Headers */,
 				3C52DB7B1BB12DF000BD08EA /* GteIntrRay3Triangle3.h in Headers */,
@@ -3501,6 +3549,7 @@
 				3C52DB1F1BB12DF000BD08EA /* GteIntrPlane3Capsule3.h in Headers */,
 				3C52D9171BB12DF000BD08EA /* GteConvexHull2.h in Headers */,
 				3C52DB8F1BB12DF000BD08EA /* GteIntrSegment2Segment2.h in Headers */,
+				3C28C9311DD91B09003BE2A7 /* GteRectangleMesh.h in Headers */,
 				3C52DC7F1BB12DF000BD08EA /* GteSinEstimate.h in Headers */,
 				3C52DC771BB12DF000BD08EA /* GteSeparatePoints2.h in Headers */,
 				3C52D9371BB12DF000BD08EA /* GteDelaunay3.h in Headers */,
@@ -3521,11 +3570,13 @@
 				3C52D8331BB12DF000BD08EA /* GteApprGaussian2.h in Headers */,
 				3C52DCD71BB12DF000BD08EA /* GteUniqueVerticesTriangles.h in Headers */,
 				3C52D7C31BB12DF000BD08EA /* GteImage3.h in Headers */,
+				3C28C92B1DD91B09003BE2A7 /* GteIntrAlignedBox3Cylinder3.h in Headers */,
 				3C52D84B1BB12DF000BD08EA /* GteApprOrthogonalLine3.h in Headers */,
 				3C52D7BF1BB12DF000BD08EA /* GteImage2.h in Headers */,
 				3C52DB931BB12DF000BD08EA /* GteIntrSegment2Triangle2.h in Headers */,
 				3C52D7A71BB12DF000BD08EA /* GTLowLevel.h in Headers */,
 				3C52DBB31BB12DF000BD08EA /* GteIntrSegment3Sphere3.h in Headers */,
+				3C28C9341DD91B09003BE2A7 /* GteApprCylinder3.h in Headers */,
 				3C52DACF1BB12DF000BD08EA /* GteIntrLine2OrientedBox2.h in Headers */,
 				3C52D8E71BB12DF000BD08EA /* GteContEllipse2.h in Headers */,
 				3C52DA831BB12DF000BD08EA /* GteIntrAlignedBox3OrientedBox3.h in Headers */,
@@ -3533,6 +3584,7 @@
 				3C52D9331BB12DF000BD08EA /* GteDelaunay2Mesh.h in Headers */,
 				3C52DB731BB12DF000BD08EA /* GteIntrRay3Plane3.h in Headers */,
 				3C52DB971BB12DF000BD08EA /* GteIntrSegment3AlignedBox3.h in Headers */,
+				3C28C9291DD91B09003BE2A7 /* GteIntrOrientedBox3Cylinder3.h in Headers */,
 				3C52D9931BB12DF000BD08EA /* GteDistPointSegment.h in Headers */,
 				3C317F601CF3473E00B5EC3B /* GteCubicRootsQR.h in Headers */,
 				3C52DC4B1BB12DF000BD08EA /* GtePrimalQuery3.h in Headers */,

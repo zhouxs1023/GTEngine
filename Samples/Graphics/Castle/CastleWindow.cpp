@@ -246,6 +246,7 @@ void CastleWindow::CreateScene()
     CreateTextures();
     CreateSharedMeshes();
 
+#if 1
     CreateWallTurret02();
     CreateWallTurret01();
     CreateWall02();
@@ -352,6 +353,7 @@ void CastleWindow::CreateScene()
 
     CreateTerrain();
     CreateSkyDome();
+#endif
     CreateWater();
     CreateWater2();
 }

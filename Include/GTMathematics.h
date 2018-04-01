@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2016/08/29)
+// File Version: 3.0.4 (2016/11/08)
 
 #pragma once
 
@@ -247,7 +247,9 @@
 #include <Mathematics/GteIntrAlignedBox2OrientedBox2.h>
 #include <Mathematics/GteIntrAlignedBox3AlignedBox3.h>
 #include <Mathematics/GteIntrAlignedBox3Cone3.h>
+#include <Mathematics/GteIntrAlignedBox3Cylinder3.h>
 #include <Mathematics/GteIntrAlignedBox3OrientedBox3.h>
+#include <Mathematics/GteIntrAlignedBox3Sphere3.h>
 #include <Mathematics/GteIntrArc2Arc2.h>
 #include <Mathematics/GteIntrCapsule3Capsule3.h>
 #include <Mathematics/GteIntrCircle2Arc2.h>
@@ -287,6 +289,7 @@
 #include <Mathematics/GteIntrOrientedBox2OrientedBox2.h>
 #include <Mathematics/GteIntrOrientedBox2Sector2.h>
 #include <Mathematics/GteIntrOrientedBox3Cone3.h>
+#include <Mathematics/GteIntrOrientedBox3Cylinder3.h>
 #include <Mathematics/GteIntrOrientedBox3Frustum3.h>
 #include <Mathematics/GteIntrOrientedBox3OrientedBox3.h>
 #include <Mathematics/GteIntrOrientedBox3Sphere3.h>
@@ -339,6 +342,7 @@
 #include <Mathematics/GteCubicRootsQR.h>
 #include <Mathematics/GteGaussianElimination.h>
 #include <Mathematics/GteIntegration.h>
+#include <Mathematics/GteLCPSolver.h>
 #include <Mathematics/GteLinearSystem.h>
 #include <Mathematics/GteMinimize1.h>
 #include <Mathematics/GteMinimizeN.h>

@@ -648,6 +648,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Include\Graphics\GteAmbientLightEffect.h" />
+    <ClInclude Include="Include\Graphics\GteBaseEngine.h" />
     <ClInclude Include="Include\Graphics\GteBillboardNode.h" />
     <ClInclude Include="Include\Graphics\GteBlendState.h" />
     <ClInclude Include="Include\Graphics\GteBlendTransformController.h" />
@@ -934,7 +935,9 @@
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2OrientedBox2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3AlignedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Cone3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Cylinder3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Sphere3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrArc2Arc2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrCapsule3Capsule3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrCircle2Arc2.h" />
@@ -974,6 +977,7 @@
     <ClInclude Include="Include\Mathematics\GteIntrOrientedBox2OrientedBox2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrOrientedBox2Sector2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Cone3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Cylinder3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Frustum3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3OrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Sphere3.h" />
@@ -1022,6 +1026,7 @@
     <ClInclude Include="Include\Mathematics\GteIntrTriangle3OrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteInvSqrtEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteIsPlanarGraph.h" />
+    <ClInclude Include="Include\Mathematics\GteLCPSolver.h" />
     <ClInclude Include="Include\Mathematics\GteLine.h" />
     <ClInclude Include="Include\Mathematics\GteLinearSystem.h" />
     <ClInclude Include="Include\Mathematics\GteLog2Estimate.h" />
@@ -1800,6 +1805,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteAmbientLightEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteBaseEngine.cpp" />
     <ClCompile Include="Source\Graphics\GteBillboardNode.cpp" />
     <ClCompile Include="Source\Graphics\GteBlendState.cpp" />
     <ClCompile Include="Source\Graphics\GteBlendTransformController.cpp" />

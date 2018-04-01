@@ -41,7 +41,6 @@ DrawTarget::DrawTarget(unsigned int numRenderTargets, DFType rtFormat,
             {
                 mDSTexture = std::make_shared<TextureDS>(dsFormat, width,
                     height, createDSStorage);
-                mDSTexture->SetUsage(Resource::SHADER_OUTPUT);
             }
             else
             {

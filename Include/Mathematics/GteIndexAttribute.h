@@ -3,11 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/08/29)
+// File Version: 3.3.1 (2016/11/14)
 
 #pragma once
 
 #include <GTEngineDEF.h>
+#include <cstddef>
 #include <cstdint>
 
 // The IndexAttribute class represents an array of triples of indices into a

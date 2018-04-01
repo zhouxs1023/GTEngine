@@ -2013,6 +2013,21 @@
     <ClInclude Include="Include\Mathematics\GteIndexAttribute.h">
       <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\GteBaseEngine.h">
+      <Filter>Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteLCPSolver.h">
+      <Filter>Files\Mathematics\NumericalMethods</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Cylinder3.h">
+      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Cylinder3.h">
+      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Sphere3.h">
+      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Applications\GteCommand.cpp">
@@ -2731,6 +2746,9 @@
     </ClCompile>
     <ClCompile Include="Source\Applications\MSW\GteWICFileIO.cpp">
       <Filter>Files\Applications\MSW</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteBaseEngine.cpp">
+      <Filter>Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

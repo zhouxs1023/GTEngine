@@ -122,6 +122,15 @@ DX11Texture2::DX11Texture2(ID3D11Device* device, DX11Texture2 const* dxSharedTex
     }
 }
 
+DX11Texture2::DX11Texture2(Texture2 const* texture, ID3D11Texture2D* dxTexture,
+    ID3D11ShaderResourceView* dxSRView)
+    :
+    DX11TextureSingle(texture)
+{
+    mDXObject = dxTexture;
+    mSRView = dxSRView;
+}
+
 std::shared_ptr<GEObject> DX11Texture2::Create(void* device, GraphicsObject const* object)
 {
     if (object->GetType() == GT_TEXTURE2)

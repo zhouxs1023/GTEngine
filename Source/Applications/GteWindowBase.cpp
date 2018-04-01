@@ -49,7 +49,7 @@ WindowBase::WindowBase(Parameters& parameters)
     mAllowResize(parameters.allowResize),
     mIsMinimized(false),
     mIsMaximized(false),
-    mEngine(parameters.engine),
+    mBaseEngine(parameters.engine),
     mProgramFactory(parameters.factory)
 {
 }
@@ -75,9 +75,9 @@ bool WindowBase::OnResize(int xSize, int ySize)
         mXSize = xSize;
         mYSize = ySize;
 
-        if (mEngine)
+        if (mBaseEngine)
         {
-            mEngine->Resize(xSize, ySize);
+            mBaseEngine->Resize(xSize, ySize);
         }
         return true;
     }

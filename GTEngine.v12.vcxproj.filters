@@ -2001,6 +2001,9 @@
     <ClInclude Include="Include\Mathematics\GteRevolutionMesh.h">
       <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\GteBaseEngine.h">
+      <Filter>Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GTEnginePCH.cpp">
@@ -2719,6 +2722,9 @@
     </ClCompile>
     <ClCompile Include="Source\Applications\MSW\GteWICFileIO.cpp">
       <Filter>Files\Applications\MSW</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteBaseEngine.cpp">
+      <Filter>Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

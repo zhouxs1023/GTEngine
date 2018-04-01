@@ -27,7 +27,8 @@ Window::Parameters::Parameters(std::wstring const& inTitle,
 
 Window::Window(Parameters& parameters)
     :
-    MSWWindow(parameters)
+    MSWWindow(parameters),
+    mEngine(std::static_pointer_cast<GraphicsEngine>(mBaseEngine))
 {
 }
 

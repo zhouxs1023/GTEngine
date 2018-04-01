@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/11/13)
 
 #pragma once
 
@@ -31,7 +31,10 @@ public:
 
 private:
     // Support for construction.
-    void CreateDSView(ID3D11Device* device, D3D11_TEXTURE2D_DESC const& tx);
+    void CreateDSView(ID3D11Device* device);
+    void CreateDSSRView(ID3D11Device* device);
+    DXGI_FORMAT GetDepthResourceFormat(DXGI_FORMAT depthFormat);
+    DXGI_FORMAT GetDepthSRVFormat(DXGI_FORMAT depthFormat);
 
     ID3D11DepthStencilView* mDSView;
 };

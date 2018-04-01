@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/28)
+// File Version: 3.0.2 (2016/11/14)
 
 #include <GTEnginePCH.h>
 #include <Applications/GLX/GteWindow.h>
@@ -43,7 +43,8 @@ Window::Window(Parameters& parameters)
     mShiftDown(false),
     mControlDown(false),
     mAltDown(false),
-    mCommandDown(false)
+    mCommandDown(false),
+    mEngine(std::static_pointer_cast<GraphicsEngine>(mBaseEngine))
 {
 }
 

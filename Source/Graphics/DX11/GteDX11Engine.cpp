@@ -414,6 +414,74 @@ void DX11Engine::Initialize(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType,
 
 bool DX11Engine::CreateDevice()
 {
+    if (mAdapter)
+    {
+        mDriverType = D3D_DRIVER_TYPE_UNKNOWN;
+        return CreateBestMatchingDevice();
+    }
+
+    IDXGIFactory1* factory = nullptr;
+    HRESULT hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
+    if (FAILED(hr))
+    {
+        factory->Release();
+        return false;
+    }
+
+    if (mDriverType == D3D_DRIVER_TYPE_HARDWARE)
+    {
+        for (uint32_t i = 0; /**/; ++i)
+        {
+            IDXGIAdapter1* adapter = nullptr;
+            if (factory->EnumAdapters1(i, &adapter) == DXGI_ERROR_NOT_FOUND)
+            {
+                factory->Release();
+                return false;
+            }
+
+            DXGI_ADAPTER_DESC1 desc;
+            hr = adapter->GetDesc1(&desc);
+            if (FAILED(hr))
+            {
+                factory->Release();
+                adapter->Release();
+                return false;
+            }
+
+            if (desc.Flags != DXGI_ADAPTER_FLAG_SOFTWARE)
+            {
+                if (CreateBestMatchingDevice())
+                {
+                    mAdapter = adapter;
+                    factory->Release();
+                    adapter->Release();
+                    return true;
+                }
+            }
+            else
+            {
+                mDriverType = D3D_DRIVER_TYPE_WARP;
+                if (CreateBestMatchingDevice())
+                {
+                    mAdapter = adapter;
+                    factory->Release();
+                    adapter->Release();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    factory->Release();
+    return false;
+}
+
+bool DX11Engine::CreateBestMatchingDevice()
+{
     // Determine the subarray for creating the device.
     UINT const maxFeatureLevels = 7;
     D3D_FEATURE_LEVEL const featureLevels[maxFeatureLevels] =
@@ -427,12 +495,12 @@ bool DX11Engine::CreateDevice()
         D3D_FEATURE_LEVEL_9_1
     };
 
-    UINT numFeatureLevels;
-    for (numFeatureLevels = 0; numFeatureLevels < maxFeatureLevels; ++numFeatureLevels)
+    UINT numFeatureLevels = 0;
+    for (UINT i = 0; i < maxFeatureLevels; ++i)
     {
-        if (mMinFeatureLevel == featureLevels[numFeatureLevels])
+        if (mMinFeatureLevel == featureLevels[i])
         {
-            ++numFeatureLevels;
+            numFeatureLevels = i + 1;
             break;
         }
     }
@@ -442,22 +510,30 @@ bool DX11Engine::CreateDevice()
         return false;
     }
 
-    // Create the device and device context.
-    if (mAdapter && mDriverType != D3D_DRIVER_TYPE_UNKNOWN)
-    {
-        mDriverType = D3D_DRIVER_TYPE_UNKNOWN;
-        LogWarning("Nonnull adapter requires D3D_DRIVER_TYPE_UNKNOWN.");
-    }
-
-    HRESULT hr = S_FALSE;
     for (UINT i = 0; i < numFeatureLevels; ++i)
     {
-        hr = D3D11CreateDevice(mAdapter, mDriverType, mSoftwareModule, mFlags,
-            &featureLevels[i], 1, D3D11_SDK_VERSION,
+        HRESULT hr = D3D11CreateDevice(mAdapter, mDriverType, mSoftwareModule,
+            mFlags, &featureLevels[i], 1, D3D11_SDK_VERSION,
             &mDevice, &mFeatureLevel, &mImmediate);
         if (SUCCEEDED(hr))
         {
             mGEObjectCreator = mDevice;
+            if (i == 0 || i == 1)
+            {
+                HLSLProgramFactory::defaultVersion = "5_0";
+            }
+            else if (i == 2 || i == 3)
+            {
+                HLSLProgramFactory::defaultVersion = "4_0";
+            }
+            else if (i == 4)
+            {
+                HLSLProgramFactory::defaultVersion = "4_0_level_9_3";
+            }
+            else
+            {
+                HLSLProgramFactory::defaultVersion = "4_0_level_9_1";
+            }
             return true;
         }
     }
@@ -1420,6 +1496,29 @@ void DX11Engine::Disable(std::shared_ptr<DrawTarget> const& target)
             }
         }
     }
+}
+
+DX11Texture2* DX11Engine::BindTexture(std::shared_ptr<Texture2> const& texture,
+    ID3D11Texture2D* dxTexture, ID3D11ShaderResourceView* dxSRView)
+{
+    if (!texture || !dxTexture || !dxSRView)
+    {
+        LogError("Attempt to bind a null object.");
+        return nullptr;
+    }
+
+    GraphicsObject const* gtObject = texture.get();
+    std::shared_ptr<GEObject> geObject;
+    if (!mGOMap.Get(gtObject, geObject))
+    {
+        geObject = std::make_shared<DX11Texture2>(texture.get(), dxTexture, dxSRView);
+        LogAssert(geObject, "Null object.  Out of memory?");
+        mGOMap.Insert(gtObject, geObject);
+#if defined(GTE_GRAPHICS_USE_NAMED_OBJECTS)
+        geObject->SetName(texture->GetName());
+#endif
+    }
+    return static_cast<DX11Texture2*>(geObject.get());
 }
 
 bool DX11Engine::Update(std::shared_ptr<Buffer> const& buffer)

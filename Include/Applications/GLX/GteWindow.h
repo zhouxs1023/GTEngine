@@ -3,11 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/11/14)
 
 #pragma once
 
 #include <Applications/GteWindowBase.h>
+#include <Graphics/GteGraphicsEngine.h>
 
 // Forward declarations to avoid name conflicts caused by #include-ing X11/Xlib.h.
 struct _XDisplay;
@@ -65,6 +66,7 @@ protected:
     bool mControlDown;
     bool mAltDown;
     bool mCommandDown;
+    std::shared_ptr<GraphicsEngine> mEngine;
 };
 
 }

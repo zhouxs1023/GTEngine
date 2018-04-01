@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/08/29)
+// File Version: 3.0.2 (2016/10/31)
 
 #pragma once
 
@@ -273,7 +273,7 @@ std::shared_ptr<T> const Shader::Get(int handle) const
     std::vector<Data> const& data = mData[T::shaderDataLookup];
     if (0 <= handle && handle < static_cast<int>(data.size()))
     {
-        return data[handle].object;
+        return std::static_pointer_cast<T>(data[handle].object);
     }
     return nullptr;
 }

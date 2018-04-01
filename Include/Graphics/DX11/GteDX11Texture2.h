@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1(2016/11/13)
 
 #pragma once
 
@@ -19,7 +19,17 @@ public:
     // Construction.
     DX11Texture2(ID3D11Device* device, Texture2 const* texture);
     DX11Texture2(ID3D11Device* device, DX11Texture2 const* dxSharedTexture);
+
+    // Create a texture with already known ID3D11Texture2 and
+    // ID3D11ShaderResourceView interfaces.  TODO: For now, this allows
+    // creation of DDS textures to be used only as shader resource views,
+    // not as unordered access views, and there is no associated staging
+    // texture.
+    DX11Texture2(Texture2 const* texture, ID3D11Texture2D* dxTexture,
+        ID3D11ShaderResourceView* dxSRView);
+
     static std::shared_ptr<GEObject> Create(void* device, GraphicsObject const* object);
+
 protected:
     // Constructors for DX11TextureRT and DX11TextureDS.
     DX11Texture2(Texture2 const* texture);

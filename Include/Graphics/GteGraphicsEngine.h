@@ -8,6 +8,7 @@
 #pragma once
 
 #include <LowLevel/GteThreadSafeMap.h>
+#include <Graphics/GteBaseEngine.h>
 #include <Graphics/GteBlendState.h>
 #include <Graphics/GteDepthStencilState.h>
 #include <Graphics/GteGEDrawTarget.h>
@@ -24,65 +25,21 @@
 namespace gte
 {
 
-class GTE_IMPEXP GraphicsEngine
+class GTE_IMPEXP GraphicsEngine : public BaseEngine
 {
 public:
     // Abstract base class.
     virtual ~GraphicsEngine();
 
-    // Viewport management.  The measurements are in window coordinates.  The
-    // origin of the window is (x,y), the window width is w, and the window
-    // height is h.  The depth range for the view volume is [zmin,zmax].  The
-    // DX11 viewport is left-handed with origin the upper-left corner of the
-    // window, the x-axis is directed rightward, the y-axis is directed
-    // downward, and the depth range is a subset of [0,1].  The OpenGL
-    // viewport is right-handed with origin the lower-left corner of the
-    // window, the x-axis is directed rightward, the y-axis is directed
-    // upward, and the depth range is a subset of [-1,1].
-    virtual void SetViewport(int x, int y, int w, int h) = 0;
-    virtual void GetViewport(int& x, int& y, int& w, int& h) const = 0;
-    virtual void SetDepthRange(float zmin, float zmax) = 0;
-    virtual void GetDepthRange(float& zmin, float& zmax) const = 0;
-
-    // Window resizing.
-    virtual bool Resize(unsigned int w, unsigned int h) = 0;
-
     // Support for clearing the color, depth, and stencil back buffers.
-    inline void SetClearColor(std::array<float, 4> const& clearColor);
-    inline void SetClearDepth(float clearDepth);
-    inline void SetClearStencil(unsigned int clearStencil);
-    inline std::array<float, 4> const& GetClearColor() const;
-    inline float GetClearDepth() const;
-    inline unsigned int GetClearStencil() const;
     virtual void ClearColorBuffer() = 0;
     virtual void ClearDepthBuffer() = 0;
     virtual void ClearStencilBuffer() = 0;
     virtual void ClearBuffers() = 0;
-    virtual void DisplayColorBuffer(unsigned int syncInterval) = 0;
-
-    // Global drawing state.  The default states are shown in GteBlendState.h,
-    // GteDepthStencil.h, and GteRasterizerState.h.
-    virtual void SetBlendState(std::shared_ptr<BlendState> const& state) = 0;
-    inline std::shared_ptr<BlendState> const& GetBlendState() const;
-    inline void SetDefaultBlendState();
-    inline std::shared_ptr<BlendState> const& GetDefaultBlendState() const;
-
-    virtual void SetDepthStencilState(std::shared_ptr<DepthStencilState> const& state) = 0;
-    inline std::shared_ptr<DepthStencilState> const& GetDepthStencilState() const;
-    inline void SetDefaultDepthStencilState();
-    inline std::shared_ptr<DepthStencilState> const& GetDefaultDepthStencilState() const;
-
-    virtual void SetRasterizerState(std::shared_ptr<RasterizerState> const& state) = 0;
-    inline std::shared_ptr<RasterizerState> const& GetRasterizerState() const;
-    inline void SetDefaultRasterizerState();
-    inline std::shared_ptr<RasterizerState> const& GetDefaultRasterizerState() const;
 
     // Support for bitmapped fonts used in text rendering.  The default font
     // is Arial (height 18, no italics, no bold).
-    void SetFont(std::shared_ptr<Font> const& font);
-    inline std::shared_ptr<Font> const& GetFont() const;
-    inline void SetDefaultFont();
-    inline std::shared_ptr<Font> const& GetDefaultFont() const;
+    virtual void SetFont(std::shared_ptr<Font> const& font) override;
 
     // Support for drawing.  If occlusion queries are enabled, the return
     // values are the number of samples that passed the depth and stencil
@@ -100,7 +57,7 @@ public:
 
     // Draw a 2D rectangular overlay.  This is useful for adding buttons,
     // controls, thumbnails, and other GUI objects to an application window.
-    uint64_t Draw(std::shared_ptr<OverlayEffect> const& overlay);
+    virtual uint64_t Draw(std::shared_ptr<OverlayEffect> const& overlay) override;
 
     // Support for occlusion queries.  When enabled, Draw functions return the
     // number of samples that passed the depth and stencil tests, effectively
@@ -204,9 +161,8 @@ protected:
     GraphicsEngine(GraphicsEngine const&) = delete;
     GraphicsEngine& operator=(GraphicsEngine const&) = delete;
 
-    // Helpers for construction and destruction.
-    void CreateDefaultGlobalState();
-    void DestroyDefaultGlobalState();
+    // Helper for destruction.
+    virtual void DestroyDefaultGlobalState();
 
     // Support for drawing.  If occlusion queries are enabled, the return
     // values are the number of samples that passed the depth and stencil
@@ -223,26 +179,6 @@ protected:
     bool Unbind(GraphicsObject const* object);
     bool Unbind(DrawTarget const* target);
 
-
-    // The window size.
-    unsigned int mXSize, mYSize;
-
-    // Clear values.
-    std::array<float, 4> mClearColor;
-    float mClearDepth;
-    unsigned int mClearStencil;
-
-    // Global state.
-    std::shared_ptr<BlendState> mDefaultBlendState;
-    std::shared_ptr<BlendState> mActiveBlendState;
-    std::shared_ptr<DepthStencilState> mDefaultDepthStencilState;
-    std::shared_ptr<DepthStencilState> mActiveDepthStencilState;
-    std::shared_ptr<RasterizerState> mDefaultRasterizerState;
-    std::shared_ptr<RasterizerState> mActiveRasterizerState;
-
-    // Fonts for text rendering.
-    std::shared_ptr<Font> mDefaultFont;
-    std::shared_ptr<Font> mActiveFont;
 
     // Bridge pattern to create graphics API-specific objects that correspond
     // to front-end objects.  The Bind, Get, and Unbind operations act on
@@ -292,95 +228,6 @@ protected:
     bool mWarnOnNonemptyBridges;
 };
 
-inline void GraphicsEngine::SetClearColor(std::array<float, 4> const& clearColor)
-{
-    mClearColor = clearColor;
-}
-
-inline void GraphicsEngine::SetClearDepth(float clearDepth)
-{
-    mClearDepth = clearDepth;
-}
-
-inline void GraphicsEngine::SetClearStencil(unsigned int clearStencil)
-{
-    mClearStencil = clearStencil;
-}
-
-inline std::array<float, 4> const& GraphicsEngine::GetClearColor() const
-{
-    return mClearColor;
-}
-
-inline float GraphicsEngine::GetClearDepth() const
-{
-    return mClearDepth;
-}
-
-inline unsigned int GraphicsEngine::GetClearStencil() const
-{
-    return mClearStencil;
-}
-
-inline std::shared_ptr<BlendState> const& GraphicsEngine::GetBlendState() const
-{
-    return mActiveBlendState;
-}
-
-inline void GraphicsEngine::SetDefaultBlendState()
-{
-    SetBlendState(mDefaultBlendState);
-}
-
-inline std::shared_ptr<BlendState> const& GraphicsEngine::GetDefaultBlendState() const
-{
-    return mDefaultBlendState;
-}
-
-inline std::shared_ptr<DepthStencilState> const& GraphicsEngine::GetDepthStencilState() const
-{
-    return mActiveDepthStencilState;
-}
-
-inline void GraphicsEngine::SetDefaultDepthStencilState()
-{
-    SetDepthStencilState(mDefaultDepthStencilState);
-}
-
-inline std::shared_ptr<DepthStencilState> const& GraphicsEngine::GetDefaultDepthStencilState() const
-{
-    return mDefaultDepthStencilState;
-}
-
-inline std::shared_ptr<RasterizerState> const& GraphicsEngine::GetRasterizerState() const
-{
-    return mActiveRasterizerState;
-}
-
-inline void GraphicsEngine::SetDefaultRasterizerState()
-{
-    SetRasterizerState(mDefaultRasterizerState);
-}
-
-inline std::shared_ptr<RasterizerState> const& GraphicsEngine::GetDefaultRasterizerState() const
-{
-    return mDefaultRasterizerState;
-}
-
-inline std::shared_ptr<Font> const& GraphicsEngine::GetFont() const
-{
-    return mActiveFont;
-}
-
-inline void GraphicsEngine::SetDefaultFont()
-{
-    SetFont(mDefaultFont);
-}
-
-inline std::shared_ptr<Font> const& GraphicsEngine::GetDefaultFont() const
-{
-    return mDefaultFont;
-}
 
 inline bool GraphicsEngine::Unbind(std::shared_ptr<GraphicsObject> const& object)
 {
