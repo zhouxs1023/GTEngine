@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.10 (2016/11/27)
+// File Version: 3.0.11 (2017/06/18)
 
 #pragma once
 
@@ -53,7 +53,6 @@
 #include <Mathematics/GteApprSphere3.h>
 
 // Arithmetic
-#include <Mathematics/GteArithmetic.h>
 #include <Mathematics/GteBitHacks.h>
 #include <Mathematics/GteBSNumber.h>
 #include <Mathematics/GteBSPrecision.h>

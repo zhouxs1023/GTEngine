@@ -76,14 +76,11 @@
     <Filter Include="Files\Physics\RigidBody">
       <UniqueIdentifier>{df90ea70-770e-4cd8-a6cb-4e06ecbdb452}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Graphics\DirectX11">
+    <Filter Include="Files\Graphics\DirectX12">
       <UniqueIdentifier>{eca17608-cee6-4a3b-be3c-08644d665cc7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Files\Graphics\Effects">
       <UniqueIdentifier>{5e707576-f0be-444b-8144-965ce3320fd7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\OpenGL4">
-      <UniqueIdentifier>{30a3eb72-1f10-47a4-80ae-56916e182835}</UniqueIdentifier>
     </Filter>
     <Filter Include="Files\Graphics\Resources">
       <UniqueIdentifier>{1df2df61-66d0-4d8b-a204-bdf28d60d52e}</UniqueIdentifier>
@@ -97,59 +94,17 @@
     <Filter Include="Files\Graphics\State">
       <UniqueIdentifier>{46075d9c-9503-4a36-968a-e133799a4308}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Graphics\DirectX11\DX11">
+    <Filter Include="Files\Graphics\DirectX12\DX12">
       <UniqueIdentifier>{0c6ce262-0e2b-443b-8449-eb90aaa588d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Graphics\DirectX11\DXGI">
-      <UniqueIdentifier>{e395818c-2c22-49ca-9e28-88b848b8d563}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\DirectX11\HLSL">
+    <Filter Include="Files\Graphics\DirectX12\HLSL">
       <UniqueIdentifier>{b9bcc905-ce96-4761-aec8-75e23cb117e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\DirectX11\DX11\InputLayout">
-      <UniqueIdentifier>{b5d73556-479f-4f20-9ea6-29c530ae9ca3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\DirectX11\DX11\Resources">
-      <UniqueIdentifier>{33ba62f6-b209-43b2-b47f-948b4b037359}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\DirectX11\DX11\State">
-      <UniqueIdentifier>{94ce6e81-971a-4ff1-bcce-8301b452fc8d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\DirectX11\DX11\Resources\Buffers">
-      <UniqueIdentifier>{28f0353f-2f22-41b1-b069-6f5de0b82ca9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\DirectX11\DX11\Resources\Textures">
-      <UniqueIdentifier>{cb10d938-82f4-458e-a842-64f02a9cd650}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\DirectX11\HLSL\HLSLI">
-      <UniqueIdentifier>{7c9179ce-055a-406c-be0d-dfbef90e23fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\OpenGL4\InputLayout">
-      <UniqueIdentifier>{3666a5dc-dbf5-4b47-9ebb-9dd8bc23d8a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\OpenGL4\Resources">
-      <UniqueIdentifier>{0cf215c9-642c-4dfd-8107-369fa4eea5d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\OpenGL4\Shaders">
-      <UniqueIdentifier>{9c9029bb-91f4-4445-b89c-0bd188470dfa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\OpenGL4\State">
-      <UniqueIdentifier>{b6392212-4fd2-48ec-b0ef-c1c76dfe29b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\OpenGL4\Resources\Buffers">
-      <UniqueIdentifier>{b0ca145a-8925-4a30-aa4c-0372ad51f6f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\OpenGL4\Resources\Textures">
-      <UniqueIdentifier>{ed8dffd8-71e6-4234-9911-824e73d9affc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Files\Graphics\Resources\Buffers">
       <UniqueIdentifier>{fa76999e-fb11-4d8b-adcd-ded167031b44}</UniqueIdentifier>
     </Filter>
     <Filter Include="Files\Graphics\Resources\Textures">
       <UniqueIdentifier>{3fc47cf4-9b57-423e-9bf3-e0a8ec4998ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Graphics\DirectX11\DX11\Shaders">
-      <UniqueIdentifier>{12632b4b-9d17-4cfa-ad7f-7629f82b1992}</UniqueIdentifier>
     </Filter>
     <Filter Include="Files\LowLevel\DataTypes">
       <UniqueIdentifier>{190f463a-e0be-44e9-8f11-42d491a9e3fd}</UniqueIdentifier>
@@ -202,20 +157,17 @@
     <Filter Include="Files\Physics\Intersection">
       <UniqueIdentifier>{9c83e1b5-0740-4603-9d4e-d71b16adfd1c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Graphics\OpenGL4\WGL">
-      <UniqueIdentifier>{e5f75ad4-6889-49d8-9c93-4588aacb0a26}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Files\Applications\MSW">
       <UniqueIdentifier>{55618252-c3e1-40c5-9733-59862a3f4742}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Applications\MSW\DX11">
+    <Filter Include="Files\Applications\MSW\DX12">
       <UniqueIdentifier>{d4ffb528-8e49-4c9f-a03e-169a98eb0ae3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Applications\MSW\WGL">
-      <UniqueIdentifier>{7d4d0c2d-e002-4265-806b-7b8fe2cfab5d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Files\Mathematics\SIMD\MSW">
       <UniqueIdentifier>{c2941c28-fca2-4701-a52e-6c148c862737}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Graphics\DirectX12\Programs">
+      <UniqueIdentifier>{50110975-eb84-4e15-ab52-a1fa78ef69a0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -225,236 +177,11 @@
     <ClInclude Include="Include\Applications\GteEnvironment.h">
       <Filter>Files\Applications</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Engine.h">
-      <Filter>Files\Graphics\DirectX11\DX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11GraphicsObject.h">
-      <Filter>Files\Graphics\DirectX11\DX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Include.h">
-      <Filter>Files\Graphics\DirectX11\DX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11PerformanceCounter.h">
-      <Filter>Files\Graphics\DirectX11\DX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDXGIAdapter.h">
-      <Filter>Files\Graphics\DirectX11\DXGI</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDXGIOutput.h">
-      <Filter>Files\Graphics\DirectX11\DXGI</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLBaseBuffer.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLByteAddressBuffer.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLComputeProgram.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLConstantBuffer.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLFactory.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLParameter.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLProgramFactory.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLResource.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLResourceBindInfo.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLSamplerState.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLShader.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderFactory.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderType.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderVariable.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLStructuredBuffer.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLTexture.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLTextureArray.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLTextureBuffer.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteHLSLVisualProgram.h">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11InputLayout.h">
-      <Filter>Files\Graphics\DirectX11\DX11\InputLayout</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11InputLayoutManager.h">
-      <Filter>Files\Graphics\DirectX11\DX11\InputLayout</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11BlendState.h">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11DepthStencilState.h">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11DrawingState.h">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11RasterizerState.h">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11SamplerState.h">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Buffer.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11ComputeShader.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11GeometryShader.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11PixelShader.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Shader.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11VertexShader.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11IndexBuffer.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11IndirectArgumentsBuffer.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11RawBuffer.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11StructuredBuffer.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11DrawTarget.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Resource.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture1.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture1Array.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture2.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture2Array.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11Texture3.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureArray.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureCube.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureCubeArray.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureDS.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureRT.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureSingle.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11VertexBuffer.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Engine.h">
-      <Filter>Files\Graphics\OpenGL4</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4GraphicsObject.h">
-      <Filter>Files\Graphics\OpenGL4</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteOpenGL.h">
-      <Filter>Files\Graphics\OpenGL4</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteOpenGLHelper.h">
-      <Filter>Files\Graphics\OpenGL4</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4BlendState.h">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4DepthStencilState.h">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4RasterizerState.h">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4DrawingState.h">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Buffer.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4ConstantBuffer.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4IndexBuffer.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4VertexBuffer.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Resource.h">
-      <Filter>Files\Graphics\OpenGL4\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4InputLayout.h">
-      <Filter>Files\Graphics\OpenGL4\InputLayout</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4InputLayoutManager.h">
-      <Filter>Files\Graphics\OpenGL4\InputLayout</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGLSLComputeProgram.h">
-      <Filter>Files\Graphics\OpenGL4\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGLSLProgramFactory.h">
-      <Filter>Files\Graphics\OpenGL4\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGLSLReflection.h">
-      <Filter>Files\Graphics\OpenGL4\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGLSLVisualProgram.h">
-      <Filter>Files\Graphics\OpenGL4\Shaders</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12Engine.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12Include.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
     </ClInclude>
     <ClInclude Include="Include\Graphics\GteBlendState.h">
       <Filter>Files\Graphics\State</Filter>
@@ -780,20 +507,11 @@
     <ClInclude Include="Include\GTMathematics.h">
       <Filter>Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\GTGraphicsDX11.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\GTGraphicsGL4.h">
+    <ClInclude Include="Include\GTGraphicsDX12.h">
       <Filter>Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\GTGraphics.h">
       <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11ConstantBuffer.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\DX11\GteDX11TextureBuffer.h">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteApprCircle2.h">
       <Filter>Files\Mathematics\Approximation</Filter>
@@ -914,6 +632,9 @@
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteChebyshevRatio.h">
       <Filter>Files\Mathematics\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteArithmetic.h">
+      <Filter>Files\Mathematics\Arithmetic</Filter>
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteAxisAngle.h">
       <Filter>Files\Mathematics\Algebra</Filter>
@@ -1833,53 +1554,8 @@
     <ClInclude Include="Include\Physics\GteExtremalQuery3PRJ.h">
       <Filter>Files\Physics\Intersection</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4SamplerState.h">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture1.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture1Array.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture2.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture2Array.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4Texture3.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureArray.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureCube.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureCubeArray.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureSingle.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4DrawTarget.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureDS.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4TextureRT.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Mathematics\GteVertexCollapseMesh.h">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4AtomicCounterBuffer.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\GteGL4StructuredBuffer.h">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Include\Graphics\GteGraphicsEngine.h">
       <Filter>Files\Graphics</Filter>
@@ -1944,9 +1620,6 @@
     <ClInclude Include="Include\Mathematics\GteIntpAkimaNonuniform1.h">
       <Filter>Files\Mathematics\Interpolation</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graphics\GL4\WGL\GteWGLEngine.h">
-      <Filter>Files\Graphics\OpenGL4\WGL</Filter>
-    </ClInclude>
     <ClInclude Include="Include\LowLevel\MSW\GteLogToMessageBox.h">
       <Filter>Files\LowLevel\Logger</Filter>
     </ClInclude>
@@ -1962,20 +1635,14 @@
     <ClInclude Include="Include\Applications\MSW\GteMSWWindowSystem.h">
       <Filter>Files\Applications\MSW</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\DX11\GteWindow.h">
-      <Filter>Files\Applications\MSW\DX11</Filter>
+    <ClInclude Include="Include\Applications\MSW\DX12\GteWindow.h">
+      <Filter>Files\Applications\MSW\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\DX11\GteWindowSystem.h">
-      <Filter>Files\Applications\MSW\DX11</Filter>
+    <ClInclude Include="Include\Applications\MSW\DX12\GteWindowSystem.h">
+      <Filter>Files\Applications\MSW\DX12</Filter>
     </ClInclude>
     <ClInclude Include="Include\GTWindows.h">
       <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\WGL\GteWindow.h">
-      <Filter>Files\Applications\MSW\WGL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\WGL\GteWindowSystem.h">
-      <Filter>Files\Applications\MSW\WGL</Filter>
     </ClInclude>
     <ClInclude Include="Include\Mathematics\MSW\GteIntelSSE.h">
       <Filter>Files\Mathematics\SIMD\MSW</Filter>
@@ -1989,6 +1656,9 @@
     <ClInclude Include="Include\Mathematics\GteRevolutionMesh.h">
       <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteRectangleMesh.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Mathematics\GteTubeMesh.h">
       <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
     </ClInclude>
@@ -1998,11 +1668,98 @@
     <ClInclude Include="Include\Mathematics\GteVertexAttribute.h">
       <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteRectangleMesh.h">
-      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLBaseBuffer.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteRectanglePatchMesh.h">
-      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLByteAddressBuffer.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLComputeProgram.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLConstantBuffer.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLFactory.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLParameter.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLProgramFactory.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLResource.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLResourceBindInfo.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLSamplerState.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLShader.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderFactory.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderType.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLShaderVariable.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLStructuredBuffer.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLTexture.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLTextureArray.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLTextureBuffer.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX11\GteHLSLVisualProgram.h">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12Exception.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12GraphicsObject.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12Resource.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12VertexBuffer.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12IndexBuffer.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12ConstantBuffer.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12CompileShader.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12Buffer.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12Texture2.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\d3dx12.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12DescriptorHeap.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12SamplerState.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteApprCylinder3.h">
       <Filter>Files\Mathematics\Approximation</Filter>
@@ -2010,56 +1767,65 @@
     <ClInclude Include="Include\Mathematics\GteIndexAttribute.h">
       <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteRectanglePatchMesh.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12Commander.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12Texture.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12TextureSingle.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12TextureArray.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Graphics\GteBaseEngine.h">
       <Filter>Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteLCPSolver.h">
-      <Filter>Files\Mathematics\NumericalMethods</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteTextFont.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Cylinder3.h">
-      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteTextFontArialW400H18.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Cylinder3.h">
-      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteTextProgram.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Sphere3.h">
-      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteTexture2Program.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteDistTriangle3OrientedBox3.h">
-      <Filter>Files\Mathematics\Distance\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteVertexColorProgram.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteDistTriangle3AlignedBox3.h">
-      <Filter>Files\Mathematics\Distance\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteConstantColorProgram.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteDistRectangle3AlignedBox3.h">
-      <Filter>Files\Mathematics\Distance\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GtePointLightTextureProgram.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteDistRectangle3OrientedBox3.h">
-      <Filter>Files\Mathematics\Distance\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteDirectionalLightTextureProgram.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteConvexPolyhedron3.h">
-      <Filter>Files\Mathematics\GeometricPrimitives\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteBaseProgram.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteDistPoint3ConvexPolyhedron3.h">
-      <Filter>Files\Mathematics\Distance\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteBaseInstance.h">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteDistAlignedBoxAlignedBox.h">
-      <Filter>Files\Mathematics\Distance\ND</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12GenerateMips2.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteDistAlignedBox3OrientedBox3.h">
-      <Filter>Files\Mathematics\Distance\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12TextureDS.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteDistOrientedBox3OrientedBox3.h">
-      <Filter>Files\Mathematics\Distance\3D</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12TextureRT.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteFunctionsBSNumber.h">
-      <Filter>Files\Mathematics\Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteFunctionsBSRational.h">
-      <Filter>Files\Mathematics\Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteFunctionsIEEEBinary16.h">
-      <Filter>Files\Mathematics\Functions</Filter>
+    <ClInclude Include="Include\Graphics\DX12\GteDX12DrawTarget.h">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2068,234 +1834,6 @@
     </ClCompile>
     <ClCompile Include="Source\Applications\GteEnvironment.cpp">
       <Filter>Files\Applications</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Engine.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11GraphicsObject.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11PerformanceCounter.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDXGIAdapter.cpp">
-      <Filter>Files\Graphics\DirectX11\DXGI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDXGIOutput.cpp">
-      <Filter>Files\Graphics\DirectX11\DXGI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLBaseBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLByteAddressBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLComputeProgram.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLConstantBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLParameter.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLProgramFactory.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLResource.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLResourceBindInfo.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLSamplerState.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLShader.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderFactory.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderType.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderVariable.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLStructuredBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLTexture.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLTextureArray.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLTextureBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteHLSLVisualProgram.cpp">
-      <Filter>Files\Graphics\DirectX11\HLSL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11InputLayout.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\InputLayout</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11InputLayoutManager.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\InputLayout</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11BlendState.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11DepthStencilState.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11DrawingState.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11RasterizerState.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11SamplerState.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Buffer.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11ComputeShader.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11ConstantBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11GeometryShader.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11PixelShader.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Shader.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11VertexShader.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11IndexBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11IndirectArgumentsBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11RawBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11StructuredBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11DrawTarget.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Resource.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture1.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture1Array.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture2.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture2Array.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11Texture3.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureArray.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureCube.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureCubeArray.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureDS.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureRT.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureSingle.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11VertexBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Engine.cpp">
-      <Filter>Files\Graphics\OpenGL4</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4GraphicsObject.cpp">
-      <Filter>Files\Graphics\OpenGL4</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteOpenGL.cpp">
-      <Filter>Files\Graphics\OpenGL4</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteOpenGLHelper.cpp">
-      <Filter>Files\Graphics\OpenGL4</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4BlendState.cpp">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4DepthStencilState.cpp">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4RasterizerState.cpp">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4DrawingState.cpp">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Buffer.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4ConstantBuffer.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4IndexBuffer.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4VertexBuffer.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Resource.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4InputLayout.cpp">
-      <Filter>Files\Graphics\OpenGL4\InputLayout</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4InputLayoutManager.cpp">
-      <Filter>Files\Graphics\OpenGL4\InputLayout</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGLSLComputeProgram.cpp">
-      <Filter>Files\Graphics\OpenGL4\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGLSLProgramFactory.cpp">
-      <Filter>Files\Graphics\OpenGL4\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGLSLReflection.cpp">
-      <Filter>Files\Graphics\OpenGL4\Shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGLSLVisualProgram.cpp">
-      <Filter>Files\Graphics\OpenGL4\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteBlendState.cpp">
       <Filter>Files\Graphics\State</Filter>
@@ -2570,9 +2108,6 @@
     <ClCompile Include="Source\Mathematics\GteVEManifoldMesh.cpp">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\DX11\GteDX11TextureBuffer.cpp">
-      <Filter>Files\Graphics\DirectX11\DX11\Resources\Buffers</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\GteBillboardNode.cpp">
       <Filter>Files\Graphics\SceneGraph\Detail</Filter>
     </ClCompile>
@@ -2687,51 +2222,6 @@
     <ClCompile Include="Source\Mathematics\GteVETManifoldMesh.cpp">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4SamplerState.cpp">
-      <Filter>Files\Graphics\OpenGL4\State</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture1.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture1Array.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture2.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture2Array.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4Texture3.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureArray.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureCube.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureCubeArray.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureSingle.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureDS.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4TextureRT.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4DrawTarget.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4AtomicCounterBuffer.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\GteGL4StructuredBuffer.cpp">
-      <Filter>Files\Graphics\OpenGL4\Resources\Buffers</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\GteGraphicsEngine.cpp">
       <Filter>Files\Graphics</Filter>
     </ClCompile>
@@ -2740,12 +2230,6 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteGEObject.cpp">
       <Filter>Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\WGL\GteWGLEngine.cpp">
-      <Filter>Files\Graphics\OpenGL4\WGL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GL4\WGL\GteWGLExtensions.cpp">
-      <Filter>Files\Graphics\OpenGL4\WGL</Filter>
     </ClCompile>
     <ClCompile Include="Source\LowLevel\MSW\GteLogToOutputWindow.cpp">
       <Filter>Files\LowLevel\Logger</Filter>
@@ -2762,17 +2246,11 @@
     <ClCompile Include="Source\Applications\MSW\GteMSWWindowSystem.cpp">
       <Filter>Files\Applications\MSW</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Applications\MSW\DX11\GteWindow.cpp">
-      <Filter>Files\Applications\MSW\DX11</Filter>
+    <ClCompile Include="Source\Applications\MSW\DX12\GteWindow.cpp">
+      <Filter>Files\Applications\MSW\DX12</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Applications\MSW\DX11\GteWindowSystem.cpp">
-      <Filter>Files\Applications\MSW\DX11</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Applications\MSW\WGL\GteWindow.cpp">
-      <Filter>Files\Applications\MSW\WGL</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Applications\MSW\WGL\GteWindowSystem.cpp">
-      <Filter>Files\Applications\MSW\WGL</Filter>
+    <ClCompile Include="Source\Applications\MSW\DX12\GteWindowSystem.cpp">
+      <Filter>Files\Applications\MSW\DX12</Filter>
     </ClCompile>
     <ClCompile Include="Source\Mathematics\MSW\GteIntelSSE.cpp">
       <Filter>Files\Mathematics\SIMD\MSW</Filter>
@@ -2780,16 +2258,152 @@
     <ClCompile Include="Source\Applications\MSW\GteWICFileIO.cpp">
       <Filter>Files\Applications\MSW</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLBaseBuffer.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLByteAddressBuffer.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLComputeProgram.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLConstantBuffer.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLParameter.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLProgramFactory.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLResource.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLResourceBindInfo.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLSamplerState.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLShader.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderFactory.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderType.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLShaderVariable.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLStructuredBuffer.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLTexture.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLTextureArray.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLTextureBuffer.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX11\GteHLSLVisualProgram.cpp">
+      <Filter>Files\Graphics\DirectX12\HLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12Engine.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12Exception.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12GraphicsObject.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12Resource.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12VertexBuffer.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12IndexBuffer.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12ConstantBuffer.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12CompileShader.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12Texture2.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12DescriptorHeap.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12SamplerState.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12Buffer.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12Commander.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12Texture.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12TextureSingle.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12TextureArray.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Graphics\GteBaseEngine.cpp">
       <Filter>Files\Graphics</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Include\Graphics\DX11\GteFloatFunction.hlsli">
-      <Filter>Files\Graphics\DirectX11\HLSL\HLSLI</Filter>
-    </None>
-    <None Include="Include\Graphics\DX11\GteSqrtEstimate.hlsli">
-      <Filter>Files\Graphics\DirectX11\HLSL\HLSLI</Filter>
-    </None>
+    <ClCompile Include="Source\Graphics\DX12\GteTextFont.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteTextFontArialW400H18.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteTextProgram.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteTexture2Program.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteVertexColorProgram.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteConstantColorProgram.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GtePointLightTextureProgram.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDirectionalLightTextureProgram.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteBaseProgram.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteBaseInstance.cpp">
+      <Filter>Files\Graphics\DirectX12\Programs</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12GenerateMips2.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12TextureDS.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12TextureRT.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\DX12\GteDX12DrawTarget.cpp">
+      <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

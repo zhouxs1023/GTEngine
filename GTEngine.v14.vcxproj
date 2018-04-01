@@ -806,7 +806,6 @@
     <ClInclude Include="Include\Mathematics\GteApprQuery.h" />
     <ClInclude Include="Include\Mathematics\GteApprSphere3.h" />
     <ClInclude Include="Include\Mathematics\GteArc2.h" />
-    <ClInclude Include="Include\Mathematics\GteArithmetic.h" />
     <ClInclude Include="Include\Mathematics\GteASinEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteATanEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteAxisAngle.h" />
@@ -912,6 +911,9 @@
     <ClInclude Include="Include\Mathematics\GteFrenetFrame.h" />
     <ClInclude Include="Include\Mathematics\GteFrustum3.h" />
     <ClInclude Include="Include\Mathematics\GteFunctions.h" />
+    <ClInclude Include="Include\Mathematics\GteFunctionsBSNumber.h" />
+    <ClInclude Include="Include\Mathematics\GteFunctionsBSRational.h" />
+    <ClInclude Include="Include\Mathematics\GteFunctionsIEEEBinary16.h" />
     <ClInclude Include="Include\Mathematics\GteGaussianElimination.h" />
     <ClInclude Include="Include\Mathematics\GteGenerateMeshUV.h" />
     <ClInclude Include="Include\Mathematics\GteGMatrix.h" />
