@@ -2028,6 +2028,33 @@
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Sphere3.h">
       <Filter>Files\Mathematics\Intersection\3D</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3OrientedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3AlignedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3AlignedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3OrientedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteConvexPolyhedron3.h">
+      <Filter>Files\Mathematics\GeometricPrimitives\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistPoint3ConvexPolyhedron3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistAlignedBoxAlignedBox.h">
+      <Filter>Files\Mathematics\Distance\ND</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistAlignedBox3OrientedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistOrientedBox3OrientedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Applications\GteCommand.cpp">

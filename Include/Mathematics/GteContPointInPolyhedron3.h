@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/11/25)
 
 #pragma once
 
@@ -118,7 +118,7 @@ public:
     //       does not have to be initialized for each face.
     PointInPolyhedron3(int numPoints, Vector3<Real> const* points,
         int numFaces, SimpleFace const* faces, int numRays,
-        Vector3<Real> const* directions, unsigned intmethod);
+        Vector3<Real> const* directions, unsigned int method);
 
     // This function will select the actual algorithm based on which
     // constructor you used for this class.

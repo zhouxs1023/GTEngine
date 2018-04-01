@@ -53,23 +53,50 @@ std::shared_ptr<Visual> CastleWindow::LoadMeshPNT1(std::string const& name)
     }
     inFile.close();
 
-    // Build the mesh.
+    // Build the meshes.  Generate the unique vertices.  Keep track of indices
+    // to remap the index buffers.
     unsigned int numVertices = static_cast<unsigned int>(PNT1Array.size());
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(mPNT1Format, numVertices);
-    VertexPNT1* vertex = vbuffer->Get<VertexPNT1>();
+    std::vector<unsigned int> remap(numVertices);
+    std::map<VertexPNT1, std::vector<unsigned int>> uniqueVertices;
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         LookupPNT1& lookup = PNT1Array[i];
-        vertex[i].position = positions[lookup.PIndex];
-        vertex[i].normal = normals[lookup.NIndex];
-        vertex[i].tcoord = tcoords[lookup.TIndex];
+        VertexPNT1 vertex;
+        vertex.position = positions[lookup.PIndex];
+        vertex.normal = normals[lookup.NIndex];
+        vertex.tcoord = tcoords[lookup.TIndex];
+        auto iter = uniqueVertices.find(vertex);
+        if (iter == uniqueVertices.end())
+        {
+            uniqueVertices.insert(std::make_pair(vertex, std::vector<unsigned int>{ i }));
+        }
+        else
+        {
+            iter->second.push_back(i);
+        }
+    }
+
+    numVertices = static_cast<unsigned int>(uniqueVertices.size());
+    auto vbuffer = std::make_shared<VertexBuffer>(mPNT1Format, numVertices);
+    VertexPNT1* vertex = vbuffer->Get<VertexPNT1>();
+    unsigned int v = 0;
+    for (auto const& element : uniqueVertices)
+    {
+        vertex[v] = element.first;
+        for (auto index : element.second)
+        {
+            remap[index] = v;
+        }
+        ++v;
     }
 
     unsigned int numIndices = static_cast<unsigned int>(indices.size());
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
-    memcpy(ibuffer->GetData(), &indices[0], numIndices * sizeof(unsigned int));
+    for (auto& index : indices)
+    {
+        index = remap[index];
+    }
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
+    memcpy(ibuffer->GetData(), indices.data(), numIndices * sizeof(unsigned int));
 
     std::shared_ptr<Visual> mesh = std::make_shared<Visual>(vbuffer, ibuffer);
     return mesh;
@@ -123,24 +150,51 @@ std::shared_ptr<Visual> CastleWindow::LoadMeshPNT2(std::string const& name)
     }
     inFile.close();
 
-    // Build the mesh.
+    // Build the meshes.  Generate the unique vertices.  Keep track of indices
+    // to remap the index buffers.
     unsigned int numVertices = static_cast<unsigned int>(PNT2Array.size());
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(mPNT2Format, numVertices);
-    VertexPNT2* vertex = vbuffer->Get<VertexPNT2>();
+    std::vector<unsigned int> remap(numVertices);
+    std::map<VertexPNT2, std::vector<unsigned int>> uniqueVertices;
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         LookupPNT2& lookup = PNT2Array[i];
-        vertex[i].position = positions[lookup.PIndex];
-        vertex[i].normal = normals[lookup.NIndex];
-        vertex[i].tcoord0 = tcoords0[lookup.T0Index];
-        vertex[i].tcoord1 = tcoords1[lookup.T1Index];
+        VertexPNT2 vertex;
+        vertex.position = positions[lookup.PIndex];
+        vertex.normal = normals[lookup.NIndex];
+        vertex.tcoord0 = tcoords0[lookup.T0Index];
+        vertex.tcoord1 = tcoords1[lookup.T1Index];
+        auto iter = uniqueVertices.find(vertex);
+        if (iter == uniqueVertices.end())
+        {
+            uniqueVertices.insert(std::make_pair(vertex, std::vector<unsigned int>{ i }));
+        }
+        else
+        {
+            iter->second.push_back(i);
+        }
+    }
+
+    numVertices = static_cast<unsigned int>(uniqueVertices.size());
+    auto vbuffer = std::make_shared<VertexBuffer>(mPNT2Format, numVertices);
+    VertexPNT2* vertex = vbuffer->Get<VertexPNT2>();
+    unsigned int v = 0;
+    for (auto const& element : uniqueVertices)
+    {
+        vertex[v] = element.first;
+        for (auto index : element.second)
+        {
+            remap[index] = v;
+        }
+        ++v;
     }
 
     unsigned int numIndices = static_cast<unsigned int>(indices.size());
-    std::shared_ptr<IndexBuffer> ibuffer = 
-        std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
-    memcpy(ibuffer->GetData(), &indices[0], numIndices * sizeof(unsigned int));
+    for (auto& index : indices)
+    {
+        index = remap[index];
+    }
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
+    memcpy(ibuffer->GetData(), indices.data(), numIndices * sizeof(unsigned int));
 
     std::shared_ptr<Visual> mesh = std::make_shared<Visual>(vbuffer, ibuffer);
     return mesh;
@@ -203,26 +257,53 @@ std::vector<std::shared_ptr<Visual>> CastleWindow::LoadMeshPNT1Multi(std::string
     }
     inFile.close();
 
-    // Build the meshes.
+    // Build the meshes.  Generate the unique vertices.  Keep track of indices
+    // to remap the index buffers.
     unsigned int numVertices = static_cast<unsigned int>(PNT1Array.size());
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(mPNT1Format, numVertices);
-    VertexPNT1* vertex = vbuffer->Get<VertexPNT1>();
+    std::vector<unsigned int> remap(numVertices);
+    std::map<VertexPNT1, std::vector<unsigned int>> uniqueVertices;
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         LookupPNT1& lookup = PNT1Array[i];
-        vertex[i].position = positions[lookup.PIndex];
-        vertex[i].normal = normals[lookup.NIndex];
-        vertex[i].tcoord = tcoords[lookup.TIndex];
+        VertexPNT1 vertex;
+        vertex.position = positions[lookup.PIndex];
+        vertex.normal = normals[lookup.NIndex];
+        vertex.tcoord = tcoords[lookup.TIndex];
+        auto iter = uniqueVertices.find(vertex);
+        if (iter == uniqueVertices.end())
+        {
+            uniqueVertices.insert(std::make_pair(vertex, std::vector<unsigned int>{ i }));
+        }
+        else
+        {
+            iter->second.push_back(i);
+        }
+    }
+
+    numVertices = static_cast<unsigned int>(uniqueVertices.size());
+    auto vbuffer = std::make_shared<VertexBuffer>(mPNT1Format, numVertices);
+    VertexPNT1* vertex = vbuffer->Get<VertexPNT1>();
+    unsigned int v = 0;
+    for (auto const& element : uniqueVertices)
+    {
+        vertex[v] = element.first;
+        for (auto index : element.second)
+        {
+            remap[index] = v;
+        }
+        ++v;
     }
 
     std::vector<std::shared_ptr<Visual>> meshes(numMeshes);
     for (unsigned int m = 0; m < numMeshes; ++m)
     {
         unsigned int numIndices = static_cast<unsigned int>(indices[m].size());
-        std::shared_ptr<IndexBuffer> ibuffer =
-            std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
-        memcpy(ibuffer->GetData(), &indices[m][0], numIndices * sizeof(unsigned int));
+        for (auto& index : indices[m])
+        {
+            index = remap[index];
+        }
+        auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
+        memcpy(ibuffer->GetData(), indices[m].data(), numIndices * sizeof(unsigned int));
         meshes[m] = std::make_shared<Visual>(vbuffer, ibuffer);
     }
 

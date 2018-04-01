@@ -3,52 +3,69 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.4.0 (2016/11/08)
+// File Version: 3.4.2 (2016/11/24)
 
 #pragma once
 
-#include <Mathematics/GtePolynomial1.h>
 #include <algorithm>
 #include <array>
+#include <vector>
 
+// A class for solving the Linear Complementarity Problem (LCP)
+// w = q + M * z, w^T * z = 0, w >= 0, z >= 0.  The vectors q, w, and z are
+// n-tuples and the matrix M is n-by-n.  The inputs to Solve(...) are q and M.
+// The outputs are w and z, which are valid when the returned bool is true but
+// are invalid when the returned bool is false.
+//
 // The comments at the end of this file explain what the preprocessor symbol
-// means regarding the LCP solver implementation.
+// means regarding the LCP solver implementation.  If the algorithm fails to
+// converge within the specified maximum number of iterations, consider
+// increasing the number and calling Solve(...) again.
 //#define GTE_REPORT_FAILED_TO_CONVERGE
 
 namespace gte
 {
 
-template <typename Real, int n>
-class LCPSolver
+// Support templates for number of dimensions known at compile time or known
+// only at run time.
+template <typename Real, int... Dimensions>
+class LCPSolver {};
+
+
+template <typename Real>
+class LCPSolverShared
 {
+protected:
+    // Abstract base class construction.  A virtual destructor is not provided
+    // because there are no required side effects when destroying objects from
+    // the derived classes.  The member mMaxIterations is set by this call to
+    // the default value of n*n.
+    LCPSolverShared(int n);
+
 public:
-    // A class for solving the Linear Complementarity Problem (LCP)
-    // w = q + M * z, w^T * z = 0, w >= 0, z >= 0.  The vectors q, w, and z
-    // are n-tuples and the matrix M is n-by-n.  The inputs are q and M.
-    // The outputs are w and z, which are valid when the returned bool is
-    // true but are invalid when the returned bool is false.
+    // Theoretically, when there is a solution the algorithm must converge
+    // in a finite number of iterations.  The number of iterations depends
+    // on the problem at hand, but we need to guard against an infinite loop
+    // by limiting the number.  The implementation uses a maximum number of
+    // n*n (chosen arbitrarily).  You can set the number yourself, perhaps
+    // when a call to Solve fails--increase the number of iterations and call
+    // Solve again.
+    inline void SetMaxIterations(int maxIterations);
+    inline int GetMaxIterations() const;
+
+    // Access the actual number of iterations used in a call to Solve.
+    inline int GetNumIterations() const;
 
     enum Result
     {
         HAS_TRIVIAL_SOLUTION,
         HAS_NONTRIVIAL_SOLUTION,
         NO_SOLUTION,
-        FAILED_TO_CONVERGE
+        FAILED_TO_CONVERGE,
+        INVALID_INPUT
     };
 
-    // If you want to know specifically why 'true' or 'false' was returned,
-    // pass the address of a Result variable as the last parameter.
-    bool Solve(std::array<Real, n> const& q, std::array<std::array<Real, n>, n> const& M,
-        std::array<Real, n>& w, std::array<Real, n>& z, Result* result = nullptr);
-
-private:
-    // Support for polynomial with n+1 coefficients and degree no larger
-    // than n.
-    static void MakeZero(Real* poly);
-    static void Copy(Real const* poly0, Real* poly1);
-    static bool LessThan(Real const* poly0, Real const* poly1);
-    static void Multiply(Real const* poly, Real scalar, Real* product);
-
+protected:
     // Bookkeeping of variables during the iterations of the solver.  The name
     // is either 'w' or 'z' and is used for human-readable debugging help.
     // The 'index' is that for the original variables w[index] or z[index].
@@ -65,9 +82,6 @@ private:
         Real* tuple;
     };
 
-    Variable mVarBasic[n + 1];
-    Variable mVarNonbasic[n + 1];
-
     // The augmented problem is w = q + M*z + z[n]*U = 0, where U is an
     // n-tuple of 1-values.  We manipulate the augmented matrix [M | U | p(t)]
     // where p(t) is a column vector of polynomials of at most degree n.  If
@@ -76,45 +90,175 @@ private:
     // (a q-term becomes zero during the iterations).  The basic variables are
     // w[0] through w[n-1] and the nonbasic variables are z[0] through z[n].
     // The returned z consists only of z[0] through z[n-1].
-    Real mAugmented[n][2 * (n + 1)];
+
+    // The derived classes ensure that the pointers point to the correct
+    // of elements for each array.  The matrix M must be stored in row-major
+    // order.
+    bool Solve(Real const* q, Real const* M, Real* w, Real* z, Result* result);
+
+    // Access mAugmented as a 2-dimensional array.
+    inline Real const& Augmented(int row, int col) const;
+    inline Real& Augmented(int row, int col);
+
+    // Support for polynomials with n+1 coefficients and degree no larger
+    // than n.
+    void MakeZero(Real* poly);
+    void Copy(Real const* poly0, Real* poly1);
+    bool LessThan(Real const* poly0, Real const* poly1);
+    bool LessThanZero(Real const* poly);
+    void Multiply(Real const* poly, Real scalar, Real* product);
+
+    int mDimension;
+    int mMaxIterations;
+    int mNumIterations;
+
+    // These pointers are set by the derived-class constructors to arrays
+    // that have the correct number of elements.  The arrays mVarBasic,
+    // mVarNonbasic, mQMin, mMinRatio, and mRatio each have n+1 elements.
+    // The mAugmented array has n rows and 2*(n+1) columns stored in
+    // row-major order in a 1-dimensional array.  The array of pointers
+    // mPoly has n elements.
+    Variable* mVarBasic;
+    Variable* mVarNonbasic;
+    int mNumCols;
+    Real* mAugmented;
+    Real* mQMin;
+    Real* mMinRatio;
+    Real* mRatio;
+    Real** mPoly;
 };
 
+
 template <typename Real, int n>
-bool LCPSolver<Real, n>::Solve(
-    std::array<Real, n> const& q, std::array<std::array<Real, n>, n> const& M,
-    std::array<Real, n>& w, std::array<Real, n>& z, Result* result)
+class LCPSolver<Real, n> : public LCPSolverShared<Real>
+{
+public:
+    // Construction.  The member mMaxIterations is set by this call to the
+    // default value of n*n.
+    LCPSolver();
+
+    // If you want to know specifically why 'true' or 'false' was returned,
+    // pass the address of a Result variable as the last parameter.
+    bool Solve(std::array<Real, n> const& q, std::array<std::array<Real, n>, n> const& M,
+        std::array<Real, n>& w, std::array<Real, n>& z,
+        typename LCPSolverShared<Real>::Result* result = nullptr);
+
+private:
+    std::array<typename LCPSolverShared<Real>::Variable, n + 1> mArrayVarBasic;
+    std::array<typename LCPSolverShared<Real>::Variable, n + 1> mArrayVarNonbasic;
+    std::array<Real, 2 * (n + 1) * n> mArrayAugmented;
+    std::array<Real, n + 1> mArrayQMin;
+    std::array<Real, n + 1> mArrayMinRatio;
+    std::array<Real, n + 1> mArrayRatio;
+    std::array<Real*, n> mArrayPoly;
+};
+
+
+template <typename Real>
+class LCPSolver<Real> : public LCPSolverShared<Real>
+{
+public:
+    // Construction.  The member mMaxIterations is set by this call to the
+    // default value of n*n.
+    LCPSolver(int n);
+
+    // The input q must have n elements and the input M must be an n-by-n
+    // matrix stored in row-major order.  The outputs w and z have n elements.
+    // If you want to know specifically why 'true' or 'false' was returned,
+    // pass the address of a Result variable as the last parameter.
+    bool Solve(std::vector<Real> const& q, std::vector<Real> const& M,
+        std::vector<Real>& w, std::vector<Real>& z,
+        typename LCPSolverShared<Real>::Result* result = nullptr);
+
+private:
+    std::vector<typename LCPSolverShared<Real>::Variable> mVectorVarBasic;
+    std::vector<typename LCPSolverShared<Real>::Variable> mVectorVarNonbasic;
+    std::vector<Real> mVectorAugmented;
+    std::vector<Real> mVectorQMin;
+    std::vector<Real> mVectorMinRatio;
+    std::vector<Real> mVectorRatio;
+    std::vector<Real*> mVectorPoly;
+};
+
+
+template <typename Real>
+LCPSolverShared<Real>::LCPSolverShared(int n)
+    :
+    mNumIterations(0),
+    mVarBasic(nullptr),
+    mVarNonbasic(nullptr),
+    mNumCols(0),
+    mAugmented(nullptr),
+    mQMin(nullptr),
+    mMinRatio(nullptr),
+    mRatio(nullptr),
+    mPoly(nullptr)
+{
+    if (n > 0)
+    {
+        mDimension = n;
+        mMaxIterations = n * n;
+    }
+    else
+    {
+        mDimension = 0;
+        mMaxIterations = 0;
+    }
+}
+
+template <typename Real>
+inline void LCPSolverShared<Real>::SetMaxIterations(int maxIterations)
+{
+    mMaxIterations = (maxIterations > 0 ? maxIterations : mDimension * mDimension);
+}
+
+template <typename Real>
+inline int LCPSolverShared<Real>::GetMaxIterations() const
+{
+    return mMaxIterations;
+}
+
+template <typename Real>
+inline int LCPSolverShared<Real>::GetNumIterations() const
+{
+    return mNumIterations;
+}
+
+template <typename Real>
+bool LCPSolverShared<Real>::Solve(Real const* q, Real const* M,
+    Real* w, Real* z, Result* result)
 {
     // Perturb the q[r] constants to be polynomials of degree r+1 represented
     // as an array of n+1 coefficients.  The coefficient with index r+1 is 1
     // and the coefficients with indices larger than r+1 are 0.
-    Real* p[n];
-    for (int r = 0; r < n; ++r)
+    for (int r = 0; r < mDimension; ++r)
     {
-        p[r] = &mAugmented[r][n + 1];
-        MakeZero(p[r]);
-        p[r][0] = q[r];
-        p[r][r + 1] = (Real)1;
+        mPoly[r] = &Augmented(r, mDimension + 1);
+        MakeZero(mPoly[r]);
+        mPoly[r][0] = q[r];
+        mPoly[r][r + 1] = (Real)1;
     }
 
     // Determine whether there is the trivial solution w = z = 0.
-    Real qmin[n + 1];
-    Copy(p[0], qmin);
+    Copy(mPoly[0], mQMin);
     int basic = 0;
-    for (int r = 1; r < n; ++r)
+    for (int r = 1; r < mDimension; ++r)
     {
-        if (LessThan(p[r], qmin))
+        if (LessThan(mPoly[r], mQMin))
         {
-            Copy(p[r], qmin);
+            Copy(mPoly[r], mQMin);
             basic = r;
         }
     }
 
-    Real zero[n + 1];
-    MakeZero(zero);
-    if (!LessThan(qmin, zero))
+    if (!LessThanZero(mQMin))
     {
-        w = q;
-        z.fill((Real)0);
+        for (int r = 0; r < mDimension; ++r)
+        {
+            w[r] = q[r];
+            z[r] = (Real)0;
+        }
+
         if (result)
         {
             *result = HAS_TRIVIAL_SOLUTION;
@@ -123,57 +267,58 @@ bool LCPSolver<Real, n>::Solve(
     }
 
     // Initialize the remainder of the augmented matrix with M and U.
-    for (int r = 0; r < n; ++r)
+    for (int r = 0; r < mDimension; ++r)
     {
-        for (int c = 0; c < n; ++c)
+        for (int c = 0; c < mDimension; ++c)
         {
-            mAugmented[r][c] = M[r][c];
+            Augmented(r, c) = M[c + mDimension * r];
         }
-        mAugmented[r][n] = (Real)1;
+        Augmented(r, mDimension) = (Real)1;
     }
 
     // Keep track of when the variables enter and exit the dictionary,
     // including where complementary variables are relocated.
-    for (int i = 0; i <= n; ++i)
+    for (int i = 0; i <= mDimension; ++i)
     {
         mVarBasic[i].name = 'w';
         mVarBasic[i].index = i;
         mVarBasic[i].complementary = i;
-        mVarBasic[i].tuple = w.data();
+        mVarBasic[i].tuple = w;
         mVarNonbasic[i].name = 'z';
         mVarNonbasic[i].index = i;
         mVarNonbasic[i].complementary = i;
-        mVarNonbasic[i].tuple = z.data();
+        mVarNonbasic[i].tuple = z;
     }
 
     // The augmented variable z[n] is the initial driving variable for
     // pivoting.  The equation 'basic' is the one to solve for z[n] and
     // pivoting with w[basic].  The last column of M remains all 1-values
     // for this initial step, so no algebraic computations occur for M[r][n].
-    int driving = n;
-    for (int r = 0; r < n; ++r)
+    int driving = mDimension;
+    for (int r = 0; r < mDimension; ++r)
     {
         if (r != basic)
         {
-            for (int c = 0; c < 2 * (n + 1); ++c)
+            for (int c = 0; c < mNumCols; ++c)
             {
-                if (c != n)
+                if (c != mDimension)
                 {
-                    mAugmented[r][c] -= mAugmented[basic][c];
+                    Augmented(r, c) -= Augmented(basic, c);
                 }
             }
         }
     }
 
-    for (int c = 0; c < 2 * (n + 1); ++c)
+    for (int c = 0; c < mNumCols; ++c)
     {
-        if (c != n)
+        if (c != mDimension)
         {
-            mAugmented[basic][c] = -mAugmented[basic][c];
+            Augmented(basic, c) = -Augmented(basic, c);
         }
     }
 
-    for (int i = 0; i <= n+1; ++i)
+    mNumIterations = 0;
+    for (int i = 0; i < mMaxIterations; ++i, ++mNumIterations)
     {
         // The basic variable of equation 'basic' exited the dictionary, so
         // its complementary (nonbasic) variable must become the next driving
@@ -181,17 +326,17 @@ bool LCPSolver<Real, n>::Solve(
         int nextDriving = mVarBasic[basic].complementary;
         mVarNonbasic[nextDriving].complementary = driving;
         std::swap(mVarBasic[basic], mVarNonbasic[driving]);
-        if (mVarNonbasic[driving].index == n)
+        if (mVarNonbasic[driving].index == mDimension)
         {
             // The algorithm has converged.
-            for (int r = 0; r < n; ++r)
+            for (int r = 0; r < mDimension; ++r)
             {
-                mVarBasic[r].tuple[mVarBasic[r].index] = p[r][0];
+                mVarBasic[r].tuple[mVarBasic[r].index] = mPoly[r][0];
             }
-            for (int c = 0; c <= n; ++c)
+            for (int c = 0; c <= mDimension; ++c)
             {
                 int index = mVarNonbasic[c].index;
-                if (index < n)
+                if (index < mDimension)
                 {
                     mVarNonbasic[c].tuple[index] = (Real)0;
                 }
@@ -205,18 +350,17 @@ bool LCPSolver<Real, n>::Solve(
 
         // Determine the 'basic' equation for which the ratio -q[r]/M(r,driving)
         // is minimized among all equations r with M(r,driving) < 0.
-        Real minRatio[n + 1], ratio[n + 1];
         driving = nextDriving;
         basic = -1;
-        for (int r = 0; r < n; ++r)
+        for (int r = 0; r < mDimension; ++r)
         {
-            if (mAugmented[r][driving] < (Real)0)
+            if (Augmented(r, driving) < (Real)0)
             {
-                Real factor = (Real)-1 / mAugmented[r][driving];
-                Multiply(p[r], factor, ratio);
-                if (basic == -1 || LessThan(ratio, minRatio))
+                Real factor = (Real)-1 / Augmented(r, driving);
+                Multiply(mPoly[r], factor, mRatio);
+                if (basic == -1 || LessThan(mRatio, mMinRatio))
                 {
-                    Copy(ratio, minRatio);
+                    Copy(mRatio, mMinRatio);
                     basic = r;
                 }
             }
@@ -227,8 +371,12 @@ bool LCPSolver<Real, n>::Solve(
             // The coefficients of z[driving] in all the equations are
             // nonnegative, so the z[driving] variable cannot leave the
             // dictionary.  There is no solution to the LCP.
-            w.fill((Real)0);
-            z.fill((Real)0);
+            for (int r = 0; r < mDimension; ++r)
+            {
+                w[r] = (Real)0;
+                z[r] = (Real)0;
+            }
+
             if (result)
             {
                 *result = NO_SOLUTION;
@@ -238,35 +386,35 @@ bool LCPSolver<Real, n>::Solve(
 
         // Solve the basic equation so that z[driving] enters the dictionary
         // and w[basic] exits the dictionary.
-        Real invDenom = (Real)1 / mAugmented[basic][driving];
-        for (int r = 0; r < n; ++r)
+        Real invDenom = (Real)1 / Augmented(basic, driving);
+        for (int r = 0; r < mDimension; ++r)
         {
-            if (r != basic && mAugmented[r][driving] != (Real)0)
+            if (r != basic && Augmented(r, driving) != (Real)0)
             {
-                Real multiplier = mAugmented[r][driving] * invDenom;
-                for (int c = 0; c < 2 * (n + 1); ++c)
+                Real multiplier = Augmented(r, driving) * invDenom;
+                for (int c = 0; c < mNumCols; ++c)
                 {
                     if (c != driving)
                     {
-                        mAugmented[r][c] -= mAugmented[basic][c] * multiplier;
+                        Augmented(r, c) -= Augmented(basic, c) * multiplier;
                     }
                     else
                     {
-                        mAugmented[r][driving] = multiplier;
+                        Augmented(r, driving) = multiplier;
                     }
                 }
             }
         }
 
-        for (int c = 0; c < 2 * (n + 1); ++c)
+        for (int c = 0; c < mNumCols; ++c)
         {
             if (c != driving)
             {
-                mAugmented[basic][c] = -mAugmented[basic][c] * invDenom;
+                Augmented(basic, c) = -Augmented(basic, c) * invDenom;
             }
             else
             {
-                mAugmented[basic][driving] = invDenom;
+                Augmented(basic, driving) = invDenom;
             }
         }
     }
@@ -306,28 +454,41 @@ bool LCPSolver<Real, n>::Solve(
     return false;
 }
 
-template <typename Real, int n>
-void LCPSolver<Real, n>::MakeZero(Real* poly)
+template <typename Real>
+inline Real const& LCPSolverShared<Real>::Augmented(int row, int col) const
 {
-    for (int i = 0; i <= n; ++i)
+    return mAugmented[col + mNumCols * row];
+}
+
+template <typename Real>
+inline Real& LCPSolverShared<Real>::Augmented(int row, int col)
+{
+    return mAugmented[col + mNumCols * row];
+}
+
+
+template <typename Real>
+void LCPSolverShared<Real>::MakeZero(Real* poly)
+{
+    for (int i = 0; i <= mDimension; ++i)
     {
         poly[i] = (Real)0;
     }
 }
 
-template <typename Real, int n>
-void LCPSolver<Real, n>::Copy(Real const* poly0, Real* poly1)
+template <typename Real>
+void LCPSolverShared<Real>::Copy(Real const* poly0, Real* poly1)
 {
-    for (int i = 0; i <= n; ++i)
+    for (int i = 0; i <= mDimension; ++i)
     {
         poly1[i] = poly0[i];
     }
 }
 
-template <typename Real, int n>
-bool LCPSolver<Real, n>::LessThan(Real const* poly0, Real const* poly1)
+template <typename Real>
+bool LCPSolverShared<Real>::LessThan(Real const* poly0, Real const* poly1)
 {
-    for (int i = 0; i <= n; ++i)
+    for (int i = 0; i <= mDimension; ++i)
     {
         if (poly0[i] < poly1[i])
         {
@@ -343,13 +504,113 @@ bool LCPSolver<Real, n>::LessThan(Real const* poly0, Real const* poly1)
     return false;
 }
 
-template <typename Real, int n>
-void LCPSolver<Real, n>::Multiply(Real const* poly, Real scalar, Real* product)
+template <typename Real>
+bool LCPSolverShared<Real>::LessThanZero(Real const* poly)
 {
-    for (int i = 0; i <= n; ++i)
+    for (int i = 0; i <= mDimension; ++i)
+    {
+        if (poly[i] < (Real)0)
+        {
+            return true;
+        }
+
+        if (poly[i] > (Real)0)
+        {
+            return false;
+        }
+    }
+
+    return false;
+}
+
+template <typename Real>
+void LCPSolverShared<Real>::Multiply(Real const* poly, Real scalar, Real* product)
+{
+    for (int i = 0; i <= mDimension; ++i)
     {
         product[i] = poly[i] * scalar;
     }
+}
+
+
+template <typename Real, int n>
+LCPSolver<Real, n>::LCPSolver()
+    :
+    LCPSolverShared<Real>(n)
+{
+    this->mVarBasic = mArrayVarBasic.data();
+    this->mVarNonbasic = mArrayVarNonbasic.data();
+    this->mNumCols = 2 * (n + 1);
+    this->mAugmented = mArrayAugmented.data();
+    this->mQMin = mArrayQMin.data();
+    this->mMinRatio = mArrayMinRatio.data();
+    this->mRatio = mArrayRatio.data();
+    this->mPoly = mArrayPoly.data();
+}
+
+template <typename Real, int n>
+bool LCPSolver<Real, n>::Solve(
+    std::array<Real, n> const& q, std::array<std::array<Real, n>, n> const& M,
+    std::array<Real, n>& w, std::array<Real, n>& z,
+    typename LCPSolverShared<Real>::Result* result)
+{
+    return LCPSolverShared<Real>::Solve(q.data(), M.front().data(), w.data(), z.data(), result);
+}
+
+
+template <typename Real>
+LCPSolver<Real>::LCPSolver(int n)
+    :
+    LCPSolverShared<Real>(n)
+{
+    if (n > 0)
+    {
+        mVectorVarBasic.resize(n + 1);
+        mVectorVarNonbasic.resize(n + 1);
+        mVectorAugmented.resize(2 * (n + 1) * n);
+        mVectorQMin.resize(n + 1);
+        mVectorMinRatio.resize(n + 1);
+        mVectorRatio.resize(n + 1);
+        mVectorPoly.resize(n);
+
+        this->mVarBasic = mVectorVarBasic.data();
+        this->mVarNonbasic = mVectorVarNonbasic.data();
+        this->mNumCols = 2 * (n + 1);
+        this->mAugmented = mVectorAugmented.data();
+        this->mQMin = mVectorQMin.data();
+        this->mMinRatio = mVectorMinRatio.data();
+        this->mRatio = mVectorRatio.data();
+        this->mPoly = mVectorPoly.data();
+    }
+}
+
+template <typename Real>
+bool LCPSolver<Real>::Solve(
+    std::vector<Real> const& q, std::vector<Real> const& M,
+    std::vector<Real>& w, std::vector<Real>& z,
+    typename LCPSolverShared<Real>::Result* result)
+{
+    if (this->mDimension > static_cast<int>(q.size())
+        || this->mDimension * this->mDimension > static_cast<int>(M.size()))
+    {
+        if (result)
+        {
+            *result = this->INVALID_INPUT;
+        }
+        return false;
+    }
+
+    if (this->mDimension > static_cast<int>(w.size()))
+    {
+        w.resize(this->mDimension);
+    }
+
+    if (this->mDimension > static_cast<int>(z.size()))
+    {
+        z.resize(this->mDimension);
+    }
+
+    return LCPSolverShared<Real>::Solve(q.data(), M.data(), w.data(), z.data(), result);
 }
 
 }

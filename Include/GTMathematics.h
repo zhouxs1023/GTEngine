@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.4 (2016/11/08)
+// File Version: 3.0.10 (2016/11/27)
 
 #pragma once
 
@@ -141,6 +141,8 @@
 
 // Distance
 #include <Mathematics/GteDCPQuery.h>
+#include <Mathematics/GteDistAlignedBoxAlignedBox.h>
+#include <Mathematics/GteDistAlignedBox3OrientedBox3.h>
 #include <Mathematics/GteDistCircle3Circle3.h>
 #include <Mathematics/GteDistLine3AlignedBox3.h>
 #include <Mathematics/GteDistLine3Circle3.h>
@@ -150,7 +152,9 @@
 #include <Mathematics/GteDistLineLine.h>
 #include <Mathematics/GteDistLineRay.h>
 #include <Mathematics/GteDistLineSegment.h>
+#include <Mathematics/GteDistOrientedBox3OrientedBox3.h>
 #include <Mathematics/GteDistPoint3Circle3.h>
+#include <Mathematics/GteDistPoint3ConvexPolyhedron3.h>
 #include <Mathematics/GteDistPoint3Cylinder3.h>
 #include <Mathematics/GteDistPoint3Frustum3.h>
 #include <Mathematics/GteDistPoint3Plane3.h>
@@ -171,12 +175,16 @@
 #include <Mathematics/GteDistRayRay.h>
 #include <Mathematics/GteDistRaySegment.h>
 #include <Mathematics/GteDistRectangle3Rectangle3.h>
+#include <Mathematics/GteDistRectangle3AlignedBox3.h>
+#include <Mathematics/GteDistRectangle3OrientedBox3.h>
 #include <Mathematics/GteDistSegment3AlignedBox3.h>
 #include <Mathematics/GteDistSegment3OrientedBox3.h>
 #include <Mathematics/GteDistSegment3Rectangle3.h>
 #include <Mathematics/GteDistSegment3Triangle3.h>
 #include <Mathematics/GteDistSegmentSegment.h>
 #include <Mathematics/GteDistSegmentSegmentExact.h>
+#include <Mathematics/GteDistTriangle3AlignedBox3.h>
+#include <Mathematics/GteDistTriangle3OrientedBox3.h>
 #include <Mathematics/GteDistTriangle3Rectangle3.h>
 #include <Mathematics/GteDistTriangle3Triangle3.h>
 
@@ -204,6 +212,7 @@
 #include <Mathematics/GteCapsule.h>
 #include <Mathematics/GteCircle3.h>
 #include <Mathematics/GteCone.h>
+#include <Mathematics/GteConvexPolyhedron3.h>
 #include <Mathematics/GteCylinder3.h>
 #include <Mathematics/GteEllipse3.h>
 #include <Mathematics/GteFrustum3.h>

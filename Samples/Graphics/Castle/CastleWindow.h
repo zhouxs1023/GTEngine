@@ -231,6 +231,15 @@ private:
     {
         Vector3<float> position, normal;
         Vector2<float> tcoord;
+
+        bool operator<(VertexPNT1 const& v) const
+        {
+            if (position < v.position) { return true; }
+            if (position > v.position) { return false; }
+            if (normal < v.normal) { return true; }
+            if (normal > v.normal) { return false; }
+            return tcoord < v.tcoord;
+        }
     };
 
     class LookupPNT2
@@ -245,6 +254,17 @@ private:
     {
         Vector3<float> position, normal;
         Vector2<float> tcoord0, tcoord1;
+
+        bool operator<(VertexPNT2 const& v) const
+        {
+            if (position < v.position) { return true; }
+            if (position > v.position) { return false; }
+            if (normal < v.normal) { return true; }
+            if (normal > v.normal) { return false; }
+            if (tcoord0 < v.tcoord0) { return true; }
+            if (tcoord0 > v.tcoord0) { return false; }
+            return tcoord1 < v.tcoord1;
+        }
     };
 
     std::shared_ptr<Visual> LoadMeshPNT1(std::string const& name);

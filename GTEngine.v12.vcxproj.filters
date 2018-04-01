@@ -2004,6 +2004,30 @@
     <ClInclude Include="Include\Graphics\GteBaseEngine.h">
       <Filter>Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3OrientedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3OrientedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3AlignedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3AlignedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteLCPSolver.h">
+      <Filter>Files\Mathematics\NumericalMethods</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistAlignedBoxAlignedBox.h">
+      <Filter>Files\Mathematics\Distance\ND</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistAlignedBox3OrientedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistOrientedBox3OrientedBox3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GTEnginePCH.cpp">

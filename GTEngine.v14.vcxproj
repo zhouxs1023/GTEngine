@@ -845,6 +845,7 @@
     <ClInclude Include="Include\Mathematics\GteConvertCoordinates.h" />
     <ClInclude Include="Include\Mathematics\GteConvexHull2.h" />
     <ClInclude Include="Include\Mathematics\GteConvexHull3.h" />
+    <ClInclude Include="Include\Mathematics\GteConvexPolyhedron3.h" />
     <ClInclude Include="Include\Mathematics\GteCosEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteCubicRootsQR.h" />
     <ClInclude Include="Include\Mathematics\GteCylinder3.h" />
@@ -854,6 +855,8 @@
     <ClInclude Include="Include\Mathematics\GteDelaunay2Mesh.h" />
     <ClInclude Include="Include\Mathematics\GteDelaunay3.h" />
     <ClInclude Include="Include\Mathematics\GteDelaunay3Mesh.h" />
+    <ClInclude Include="Include\Mathematics\GteDistAlignedBox3OrientedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistAlignedBoxAlignedBox.h" />
     <ClInclude Include="Include\Mathematics\GteDistCircle3Circle3.h" />
     <ClInclude Include="Include\Mathematics\GteDistLine3AlignedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteDistLine3Circle3.h" />
@@ -863,7 +866,9 @@
     <ClInclude Include="Include\Mathematics\GteDistLineLine.h" />
     <ClInclude Include="Include\Mathematics\GteDistLineRay.h" />
     <ClInclude Include="Include\Mathematics\GteDistLineSegment.h" />
+    <ClInclude Include="Include\Mathematics\GteDistOrientedBox3OrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteDistPoint3Circle3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistPoint3ConvexPolyhedron3.h" />
     <ClInclude Include="Include\Mathematics\GteDistPoint3Cylinder3.h" />
     <ClInclude Include="Include\Mathematics\GteDistPoint3Frustum3.h" />
     <ClInclude Include="Include\Mathematics\GteDistPoint3Plane3.h" />
@@ -883,6 +888,8 @@
     <ClInclude Include="Include\Mathematics\GteDistRay3Triangle3.h" />
     <ClInclude Include="Include\Mathematics\GteDistRayRay.h" />
     <ClInclude Include="Include\Mathematics\GteDistRaySegment.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistRectangle3OrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteDistRectangle3Rectangle3.h" />
     <ClInclude Include="Include\Mathematics\GteDistSegment3AlignedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteDistSegment3OrientedBox3.h" />
@@ -890,6 +897,8 @@
     <ClInclude Include="Include\Mathematics\GteDistSegment3Triangle3.h" />
     <ClInclude Include="Include\Mathematics\GteDistSegmentSegment.h" />
     <ClInclude Include="Include\Mathematics\GteDistSegmentSegmentExact.h" />
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3AlignedBox3.h" />
+    <ClInclude Include="Include\Mathematics\GteDistTriangle3OrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteDistTriangle3Rectangle3.h" />
     <ClInclude Include="Include\Mathematics\GteDistTriangle3Triangle3.h" />
     <ClInclude Include="Include\Mathematics\GteEdgeKey.h" />

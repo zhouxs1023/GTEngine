@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/11/17)
 
 #pragma once
 
@@ -73,7 +73,7 @@ DCPQuery<Real, Segment3<Real>, AlignedBox3<Real>> ::operator()(
         auto pbResult = pbQuery(point, box);
         result.sqrDistance = pbResult.sqrDistance;
         result.distance = pbResult.distance;
-        result.segmentParameter = segExtent;
+        result.segmentParameter = -segExtent;
         result.closestPoint[0] = point;
         result.closestPoint[1] = pbResult.boxClosest;
     }
