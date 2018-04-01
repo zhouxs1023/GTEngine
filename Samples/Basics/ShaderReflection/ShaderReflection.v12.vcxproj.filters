@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Sample HLSL Shader Files">
+      <UniqueIdentifier>{1f564956-8adb-43e2-a883-b7fb9a45a978}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sample GLSL Shader Files">
+      <UniqueIdentifier>{be2a49a9-658e-4e03-aa8d-81d6bfceaa80}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ShaderReflection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\AppendConsume.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\BillboardsGS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\BillboardsPS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\BillboardsVS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\NestedStruct.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\SimpleBuffers.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\TextureArraysPS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\TextureArraysVS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\TexturingPS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\TexturingVS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\VertexColoringPS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\VertexColoringVS.glsl">
+      <Filter>Sample GLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\VertexColoring.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\AppendConsume.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Billboards.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\NestedStruct.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\SimpleBuffers.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\TextureArrays.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Texturing.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
