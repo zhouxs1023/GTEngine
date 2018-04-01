@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2017
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/01/02)
 
 #pragma once
 
@@ -82,7 +82,9 @@ public:
     // nonmanifold, the default behavior is to trigger a LogError message.
     // You can disable this behavior in situations where you want the Logger
     // system on but you want to continue gracefully without an assertion.
-    void AssertOnNonmanifoldInsertion(bool doAssert);
+    // The return value is the previous value of the internal state
+    // mAssertOnNonmanifoldInsertion.
+    bool AssertOnNonmanifoldInsertion(bool doAssert);
 
     // If <v0,v1,v2> is not in the mesh, a Triangle object is created and
     // returned; otherwise, <v0,v1,v2> is in the mesh and nullptr is returned.

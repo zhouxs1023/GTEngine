@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2017
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/01/22)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteBitHacks.h>
@@ -112,7 +112,7 @@ uint16_t IEEEBinary16::Convert32To16(uint32_t encoding)
     // Generate the channels for the IEEEBinary16 number.
     uint16_t sign16 = static_cast<uint16_t>(sign32 >> DIFF_NUM_ENCODING_BITS);
     uint16_t biased16, trailing16;
-    uint32_t intpart, frcpart;
+    uint32_t frcpart;
 
     if (biased32 == 0)
     {
@@ -139,19 +139,16 @@ uint16_t IEEEBinary16::Convert32To16(uint32_t encoding)
         {
             // 2^{-24} < nonneg32 < 2^{-14}, round to nearest
             // 16-subnormal with ties to even.  Note that biased16 is zero.
-            intpart =
-                ((trailing32 & INT_PART_MASK) >> DIFF_NUM_TRAILING_BITS);
+            trailing16 = static_cast<uint16_t>(((trailing32 & INT_PART_MASK) >> DIFF_NUM_TRAILING_BITS));
             frcpart = (trailing32 & FRC_PART_MASK);
-            if (frcpart > FRC_HALF || (frcpart == FRC_HALF && (intpart & 1)))
+            if (frcpart > FRC_HALF || (frcpart == FRC_HALF && (trailing16 & 1)))
             {
                 // If there is a carry into the exponent, the nearest is
                 // actually 16-min-normal 1.0*2^{-14}, so the high-order bit
                 // of trailing16 makes biased16 equal to 1 and the result is
                 // correct.
-                ++intpart;
+                ++trailing16;
             }
-            trailing16 = static_cast<uint16_t>(
-                intpart << IEEEBinary16::NUM_TRAILING_BITS);
             return sign16 | trailing16;
         }
 
@@ -162,18 +159,15 @@ uint16_t IEEEBinary16::Convert32To16(uint32_t encoding)
             biased16 = static_cast<uint16_t>((biased32 - F32_EXPONENT_BIAS +
                 IEEEBinary16::EXPONENT_BIAS)
                 << IEEEBinary16::NUM_TRAILING_BITS);
-            intpart =
-                ((trailing32 & INT_PART_MASK) >> DIFF_NUM_TRAILING_BITS);
+            trailing16 = static_cast<uint16_t>(((trailing32 & INT_PART_MASK) >> DIFF_NUM_TRAILING_BITS));
             frcpart = (trailing32 & FRC_PART_MASK);
-            if (frcpart > FRC_HALF || (frcpart == FRC_HALF && (intpart & 1)))
+            if (frcpart > FRC_HALF || (frcpart == FRC_HALF && (trailing16 & 1)))
             {
                 // If there is a carry into the exponent, the addition of
                 // trailing16 to biased16 (rather than or-ing) produces the
                 // correct result.
-                ++intpart;
+                ++trailing16;
             }
-            trailing16 = static_cast<uint16_t>(
-                intpart << IEEEBinary16::NUM_TRAILING_BITS);
             return sign16 | (biased16 + trailing16);
         }
 

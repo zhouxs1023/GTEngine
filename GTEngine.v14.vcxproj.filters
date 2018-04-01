@@ -2055,6 +2055,9 @@
     <ClInclude Include="Include\Mathematics\GteDistOrientedBox3OrientedBox3.h">
       <Filter>Files\Mathematics\Distance\3D</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDualQuaternion.h">
+      <Filter>Files\Mathematics\Algebra</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Applications\GteCommand.cpp">

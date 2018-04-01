@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2017
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/11/28)
 
 #pragma once
 
@@ -29,6 +29,11 @@ public:
     // to 'this' number of vertices.
     VertexBuffer(VertexFormat const& vformat,
         std::shared_ptr<StructuredBuffer> const& sbuffer);
+
+    // This constructor is used for vertex-id-based drawing that does not
+    // require vertices; for example, the shader itself can generate the
+    // positions from the identifiers.
+    VertexBuffer(unsigned int numVertices);
 
     // Member access.  The function StandardUsage() returns 'true' when the
     // first constructor is used or 'false' when the second constructor is
@@ -60,7 +65,7 @@ inline VertexFormat const& VertexBuffer::GetFormat() const
 
 inline bool VertexBuffer::StandardUsage() const
 {
-    return mSBuffer == nullptr;
+    return mVFormat.GetNumAttributes() != 0 && mSBuffer == nullptr;
 }
 
 inline std::shared_ptr<StructuredBuffer> const& VertexBuffer::GetSBuffer() const

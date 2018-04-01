@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2017
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/11/28)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
@@ -28,13 +28,24 @@ Resource::Resource(unsigned int numElements, size_t elementSize,
 {
     mType = GT_RESOURCE;
 
-    if (mNumElements > 0 && mElementSize > 0)
+    if (mNumElements > 0)
     {
-        mNumBytes = mNumElements*mElementSize;
-        mNumActiveElements = mNumElements;
-        if (createStorage)
+        if (mElementSize > 0)
         {
-            CreateStorage();
+            mNumBytes = mNumElements * mElementSize;
+            mNumActiveElements = mNumElements;
+            if (createStorage)
+            {
+                CreateStorage();
+            }
+        }
+        else
+        {
+            // The VertexBuffer constructor that takes only the number of
+            // vertices has been called.  The vertex shader code is maintained
+            // completely in the HLSL.
+            mNumBytes = 0;
+            mNumActiveElements = mNumElements;
         }
     }
     else

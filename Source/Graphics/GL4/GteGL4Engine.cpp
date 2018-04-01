@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2017
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/01)
+// File Version: 3.0.2 (2016/12/09)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteFontArialW400H18.h>
@@ -214,6 +214,18 @@ uint64_t GL4Engine::DrawPrimitive(VertexBuffer const* vbuffer, IndexBuffer const
         break;
     case IPType::IP_TRISTRIP:
         topology = GL_TRIANGLE_STRIP;
+        break;
+    case IPType::IP_POLYSEGMENT_DISJOINT_ADJ:
+        topology = GL_LINES_ADJACENCY;
+        break;
+    case IPType::IP_POLYSEGMENT_CONTIGUOUS_ADJ:
+        topology = GL_LINE_STRIP_ADJACENCY;
+        break;
+    case IPType::IP_TRIMESH_ADJ:
+        topology = GL_TRIANGLES_ADJACENCY;
+        break;
+    case IPType::IP_TRISTRIP_ADJ:
+        topology = GL_TRIANGLE_STRIP_ADJACENCY;
         break;
     default:
         LogError("Unknown primitive topology = " + std::to_string(type));

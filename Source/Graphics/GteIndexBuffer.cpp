@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2017
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/12/09)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteBitHacks.h>
@@ -11,11 +11,9 @@
 using namespace gte;
 
 
-IndexBuffer::IndexBuffer(IPType type, unsigned int numPrimitives,
-    size_t indexSize, bool createStorage)
+IndexBuffer::IndexBuffer(IPType type, uint32_t numPrimitives, size_t indexSize, bool createStorage)
     :
-    Buffer(msIndexCounter[Log2OfPowerOfTwo(type)](numPrimitives),
-        indexSize, createStorage),
+    Buffer(msIndexCounter[Log2OfPowerOfTwo(type)](numPrimitives), indexSize, createStorage),
     mPrimitiveType(type),
     mNumPrimitives(numPrimitives),
     mNumActivePrimitives(numPrimitives),
@@ -25,7 +23,7 @@ IndexBuffer::IndexBuffer(IPType type, unsigned int numPrimitives,
     LogAssert(mNumPrimitives > 0, "Invalid number of primitives.");
 }
 
-IndexBuffer::IndexBuffer(IPType type, unsigned int numPrimitives)
+IndexBuffer::IndexBuffer(IPType type, uint32_t numPrimitives)
     :
     Buffer(msIndexCounter[Log2OfPowerOfTwo(type)](numPrimitives), 0, false),
     mPrimitiveType(type),
@@ -37,7 +35,7 @@ IndexBuffer::IndexBuffer(IPType type, unsigned int numPrimitives)
     LogAssert(mNumPrimitives > 0, "Invalid number of primitives.");
 }
 
-void IndexBuffer::SetNumActivePrimitives(unsigned int numActive)
+void IndexBuffer::SetNumActivePrimitives(uint32_t numActive)
 {
     if (numActive <= mNumPrimitives)
     {
@@ -50,16 +48,15 @@ void IndexBuffer::SetNumActivePrimitives(unsigned int numActive)
     }
 }
 
-unsigned int IndexBuffer::GetNumActiveIndices() const
+uint32_t IndexBuffer::GetNumActiveIndices() const
 {
-    unsigned int i = Log2OfPowerOfTwo(mPrimitiveType);
+    uint32_t i = Log2OfPowerOfTwo(mPrimitiveType);
     return msIndexCounter[i](mNumActivePrimitives);
 }
 
-void IndexBuffer::SetFirstPrimitive(unsigned int first)
+void IndexBuffer::SetFirstPrimitive(uint32_t first)
 {
-    if (0 <= first && first < mNumPrimitives
-    &&  first + mNumActivePrimitives <= mNumPrimitives)
+    if (0 <= first && first < mNumPrimitives && first + mNumActivePrimitives <= mNumPrimitives)
     {
         mFirstPrimitive = first;
         return;
@@ -68,7 +65,7 @@ void IndexBuffer::SetFirstPrimitive(unsigned int first)
     LogError("Invalid first primitive.");
 }
 
-unsigned int IndexBuffer::GetFirstIndex() const
+uint32_t IndexBuffer::GetFirstIndex() const
 {
     if (mFirstPrimitive == 0)
     {
@@ -79,21 +76,21 @@ unsigned int IndexBuffer::GetFirstIndex() const
     return msIndexCounter[i](mFirstPrimitive);
 }
 
-bool IndexBuffer::SetPoint(unsigned int i, unsigned int v)
+bool IndexBuffer::SetPoint(uint32_t i, uint32_t v)
 {
     if (ValidPrimitiveType(IP_HAS_POINTS))
     {
         if (mData && i < mNumPrimitives)
         {
-            if (mElementSize == sizeof(unsigned int))
+            if (mElementSize == sizeof(uint32_t))
             {
-                unsigned int* index = i + Get<unsigned int>();
+                uint32_t* index = i + Get<uint32_t>();
                 *index = v;
             }
             else
             {
-                unsigned short* index = i + Get<unsigned short>();
-                *index = static_cast<unsigned short>(v);
+                uint16_t* index = i + Get<uint16_t>();
+                *index = static_cast<uint16_t>(v);
             }
             return true;
         }
@@ -101,21 +98,21 @@ bool IndexBuffer::SetPoint(unsigned int i, unsigned int v)
     return false;
 }
 
-bool IndexBuffer::GetPoint(unsigned int i, unsigned int& v) const
+bool IndexBuffer::GetPoint(uint32_t i, uint32_t& v) const
 {
     if (ValidPrimitiveType(IP_HAS_POINTS))
     {
         if (mData && i < mNumPrimitives)
         {
-            if (mElementSize == sizeof(unsigned int))
+            if (mElementSize == sizeof(uint32_t))
             {
-                unsigned int const* index = i + Get<unsigned int>();
+                uint32_t const* index = i + Get<uint32_t>();
                 v = *index;
             }
             else
             {
-                unsigned short const* index = i + Get<unsigned short>();
-                v = static_cast<unsigned int>(*index);
+                uint16_t const* index = i + Get<uint16_t>();
+                v = static_cast<uint32_t>(*index);
             }
             return true;
         }
@@ -123,23 +120,23 @@ bool IndexBuffer::GetPoint(unsigned int i, unsigned int& v) const
     return false;
 }
 
-bool IndexBuffer::SetSegment(unsigned int i, unsigned int v0, unsigned int v1)
+bool IndexBuffer::SetSegment(uint32_t i, uint32_t v0, uint32_t v1)
 {
     if (ValidPrimitiveType(IP_HAS_SEGMENTS))
     {
         if (mData && i < mNumPrimitives)
         {
-            if (mElementSize == sizeof(unsigned int))
+            if (mElementSize == sizeof(uint32_t))
             {
                 if (mPrimitiveType == IP_POLYSEGMENT_DISJOINT)
                 {
-                    unsigned int* index = 2 * i + Get<unsigned int>();
+                    uint32_t* index = 2 * i + Get<uint32_t>();
                     *index++ = v0;
                     *index = v1;
                 }
                 else
                 {
-                    unsigned int* index = i + Get<unsigned int>();
+                    uint32_t* index = i + Get<uint32_t>();
                     *index++ = v0;
                     *index = v1;
                 }
@@ -148,15 +145,15 @@ bool IndexBuffer::SetSegment(unsigned int i, unsigned int v0, unsigned int v1)
             {
                 if (mPrimitiveType == IP_POLYSEGMENT_DISJOINT)
                 {
-                    unsigned short* index = 2 * i + Get<unsigned short>();
-                    *index++ = static_cast<unsigned short>(v0);
-                    *index = static_cast<unsigned short>(v1);
+                    uint16_t* index = 2 * i + Get<uint16_t>();
+                    *index++ = static_cast<uint16_t>(v0);
+                    *index = static_cast<uint16_t>(v1);
                 }
                 else
                 {
-                    unsigned short* index = i + Get<unsigned short>();
-                    *index++ = static_cast<unsigned short>(v0);
-                    *index = static_cast<unsigned short>(v1);
+                    uint16_t* index = i + Get<uint16_t>();
+                    *index++ = static_cast<uint16_t>(v0);
+                    *index = static_cast<uint16_t>(v1);
                 }
             }
             return true;
@@ -165,24 +162,23 @@ bool IndexBuffer::SetSegment(unsigned int i, unsigned int v0, unsigned int v1)
     return false;
 }
 
-bool IndexBuffer::GetSegment(unsigned int i, unsigned int& v0,
-    unsigned int& v1) const
+bool IndexBuffer::GetSegment(uint32_t i, uint32_t& v0, uint32_t& v1) const
 {
     if (ValidPrimitiveType(IP_HAS_SEGMENTS))
     {
         if (mData && i < mNumPrimitives)
         {
-            if (mElementSize == sizeof(unsigned int))
+            if (mElementSize == sizeof(uint32_t))
             {
                 if (mPrimitiveType == IP_POLYSEGMENT_DISJOINT)
                 {
-                    unsigned int const* index = 2 * i + Get<unsigned int>();
+                    uint32_t const* index = 2 * i + Get<uint32_t>();
                     v0 = *index++;
                     v1 = *index;
                 }
                 else
                 {
-                    unsigned int const* index = i + Get<unsigned int>();
+                    uint32_t const* index = i + Get<uint32_t>();
                     v0 = *index++;
                     v1 = *index;
                 }
@@ -191,16 +187,15 @@ bool IndexBuffer::GetSegment(unsigned int i, unsigned int& v0,
             {
                 if (mPrimitiveType == IP_POLYSEGMENT_DISJOINT)
                 {
-                    unsigned short const* index =
-                        2 * i + Get<unsigned short>();
-                    v0 = static_cast<unsigned int>(*index++);
-                    v1 = static_cast<unsigned int>(*index);
+                    uint16_t const* index = 2 * i + Get<uint16_t>();
+                    v0 = static_cast<uint32_t>(*index++);
+                    v1 = static_cast<uint32_t>(*index);
                 }
                 else
                 {
-                    unsigned short const* index = i + Get<unsigned short>();
-                    v0 = static_cast<unsigned int>(*index++);
-                    v1 = static_cast<unsigned int>(*index);
+                    uint16_t const* index = i + Get<uint16_t>();
+                    v0 = static_cast<uint32_t>(*index++);
+                    v1 = static_cast<uint32_t>(*index);
                 }
             }
             return true;
@@ -209,25 +204,24 @@ bool IndexBuffer::GetSegment(unsigned int i, unsigned int& v0,
     return false;
 }
 
-bool IndexBuffer::SetTriangle(unsigned int i, unsigned int v0,
-    unsigned int v1, unsigned int v2)
+bool IndexBuffer::SetTriangle(uint32_t i, uint32_t v0, uint32_t v1, uint32_t v2)
 {
     if (ValidPrimitiveType(IP_HAS_TRIANGLES))
     {
         if (mData && i < mNumPrimitives)
         {
-            if (mElementSize == sizeof(unsigned int))
+            if (mElementSize == sizeof(uint32_t))
             {
                 if (mPrimitiveType == IP_TRIMESH)
                 {
-                    unsigned int* index = 3 * i + Get<unsigned int>();
+                    uint32_t* index = 3 * i + Get<uint32_t>();
                     *index++ = v0;
                     *index++ = v1;
                     *index = v2;
                 }
                 else
                 {
-                    unsigned int* index = i + Get<unsigned int>();
+                    uint32_t* index = i + Get<uint32_t>();
                     index[0] = v0;
                     if (i & 1)
                     {
@@ -245,24 +239,24 @@ bool IndexBuffer::SetTriangle(unsigned int i, unsigned int v0,
             {
                 if (mPrimitiveType == IP_TRIMESH)
                 {
-                    unsigned short* index = 3 * i + Get<unsigned short>();
-                    *index++ = static_cast<unsigned short>(v0);
-                    *index++ = static_cast<unsigned short>(v1);
-                    *index = static_cast<unsigned short>(v2);
+                    uint16_t* index = 3 * i + Get<uint16_t>();
+                    *index++ = static_cast<uint16_t>(v0);
+                    *index++ = static_cast<uint16_t>(v1);
+                    *index = static_cast<uint16_t>(v2);
                 }
                 else
                 {
-                    unsigned short* index = i + Get<unsigned short>();
-                    index[0] = static_cast<unsigned short>(v0);
+                    uint16_t* index = i + Get<uint16_t>();
+                    index[0] = static_cast<uint16_t>(v0);
                     if (i & 1)
                     {
-                        index[2] = static_cast<unsigned short>(v1);
-                        index[1] = static_cast<unsigned short>(v2);
+                        index[2] = static_cast<uint16_t>(v1);
+                        index[1] = static_cast<uint16_t>(v2);
                     }
                     else
                     {
-                        index[1] = static_cast<unsigned short>(v1);
-                        index[2] = static_cast<unsigned short>(v2);
+                        index[1] = static_cast<uint16_t>(v1);
+                        index[2] = static_cast<uint16_t>(v2);
                     }
                 }
             }
@@ -272,26 +266,25 @@ bool IndexBuffer::SetTriangle(unsigned int i, unsigned int v0,
     return false;
 }
 
-bool IndexBuffer::GetTriangle(unsigned int i, unsigned int& v0,
-    unsigned int& v1, unsigned int& v2) const
+bool IndexBuffer::GetTriangle(uint32_t i, uint32_t& v0, uint32_t& v1, uint32_t& v2) const
 {
     if (ValidPrimitiveType(IP_HAS_TRIANGLES))
     {
         if (mData && i < mNumPrimitives)
         {
-            if (mElementSize == sizeof(unsigned int))
+            if (mElementSize == sizeof(uint32_t))
             {
                 if (mPrimitiveType == IP_TRIMESH)
                 {
-                    unsigned int const* index = 3 * i + Get<unsigned int>();
+                    uint32_t const* index = 3 * i + Get<uint32_t>();
                     v0 = *index++;
                     v1 = *index++;
                     v2 = *index;
                 }
                 else
                 {
-                    unsigned int const* index = i + Get<unsigned int>();
-                    unsigned int offset = (i & 1);
+                    uint32_t const* index = i + Get<uint32_t>();
+                    uint32_t offset = (i & 1);
                     v0 = index[0];
                     v1 = index[1 + offset];
                     v2 = index[2 - offset];
@@ -301,19 +294,19 @@ bool IndexBuffer::GetTriangle(unsigned int i, unsigned int& v0,
             {
                 if (mPrimitiveType == IP_TRIMESH)
                 {
-                    unsigned short const* index =
-                        3 * i + Get<unsigned short>();
-                    v0 = static_cast<unsigned int>(*index++);
-                    v1 = static_cast<unsigned int>(*index++);
-                    v2 = static_cast<unsigned int>(*index);
+                    uint16_t const* index =
+                        3 * i + Get<uint16_t>();
+                    v0 = static_cast<uint32_t>(*index++);
+                    v1 = static_cast<uint32_t>(*index++);
+                    v2 = static_cast<uint32_t>(*index);
                 }
                 else
                 {
-                    unsigned short const* index = i + Get<unsigned short>();
+                    uint16_t const* index = i + Get<uint16_t>();
                     int offset = (i & 1);
-                    v0 = static_cast<unsigned int>(index[0]);
-                    v1 = static_cast<unsigned int>(index[1 + offset]);
-                    v2 = static_cast<unsigned int>(index[2 - offset]);
+                    v0 = static_cast<uint32_t>(index[0]);
+                    v1 = static_cast<uint32_t>(index[1 + offset]);
+                    v2 = static_cast<uint32_t>(index[2 - offset]);
                 }
             }
             return true;
@@ -322,38 +315,61 @@ bool IndexBuffer::GetTriangle(unsigned int i, unsigned int& v0,
     return false;
 }
 
-unsigned int IndexBuffer::GetPolypointIndexCount(unsigned int numPrimitives)
+uint32_t IndexBuffer::GetPolypointIndexCount(uint32_t numPrimitives)
 {
     // Create one point when numPrimitives is invalid.
     return numPrimitives > 0 ? numPrimitives : 1;
 }
 
-unsigned int IndexBuffer::GetPolysegmentDisjointIndexCount(
-    unsigned int numPrimitives)
+uint32_t IndexBuffer::GetPolysegmentDisjointIndexCount(
+    uint32_t numPrimitives)
 {
     // Create one segment when numPrimitives is invalid.
-    return numPrimitives > 0 ? 2*numPrimitives : 2;
+    return numPrimitives > 0 ? 2 * numPrimitives : 2;
 }
 
-unsigned int IndexBuffer::GetPolysegmentContiguousIndexCount(
-    unsigned int numPrimitives)
+uint32_t IndexBuffer::GetPolysegmentContiguousIndexCount(
+    uint32_t numPrimitives)
 {
     // Create one segment when numPrimitives is invalid.
     return numPrimitives > 0 ? numPrimitives + 1 : 2;
 }
 
-unsigned int IndexBuffer::GetTrimeshIndexCount(unsigned int numPrimitives)
+uint32_t IndexBuffer::GetTrimeshIndexCount(uint32_t numPrimitives)
 {
     // Create one triangle when numPrimitives is invalid.
-    return numPrimitives > 0 ? 3*numPrimitives : 3;
+    return numPrimitives > 0 ? 3 * numPrimitives : 3;
 }
 
-unsigned int IndexBuffer::GetTristripIndexCount(unsigned int numPrimitives)
+uint32_t IndexBuffer::GetTristripIndexCount(uint32_t numPrimitives)
 {
     // Create one triangle when numPrimitives is invalid.
     return numPrimitives > 0 ? numPrimitives + 2 : 3;
 }
 
+uint32_t IndexBuffer::GetPolysegmentDisjointAdjIndexCount(uint32_t numPrimitives)
+{
+    // Create one segment-adj when numPrimitives is invalid.
+    return numPrimitives > 0 ? 4 * numPrimitives : 4;
+}
+
+uint32_t IndexBuffer::GetPolysegmentContiguousAdjIndexCount(uint32_t numPrimitives)
+{
+    // Create one segment-adj when numPrimitives is invalid.
+    return numPrimitives > 0 ? numPrimitives + 3 : 4;
+}
+
+uint32_t IndexBuffer::GetTrimeshAdjIndexCount(uint32_t numPrimitives)
+{
+    // Create one triangle-adj when numPrimitives is invalid.
+    return numPrimitives > 0 ? 6 * numPrimitives : 6;
+}
+
+uint32_t IndexBuffer::GetTristripAdjIndexCount(uint32_t numPrimitives)
+{
+    // Create one triangle-adj when numPrimitives is invalid.
+    return numPrimitives > 0 ? 2 * (numPrimitives + 2) : 6;
+}
 
 IndexBuffer::ICFunction IndexBuffer::msIndexCounter[IP_NUM_TYPES] =
 {
@@ -361,5 +377,9 @@ IndexBuffer::ICFunction IndexBuffer::msIndexCounter[IP_NUM_TYPES] =
     &IndexBuffer::GetPolysegmentDisjointIndexCount,
     &IndexBuffer::GetPolysegmentContiguousIndexCount,
     &IndexBuffer::GetTrimeshIndexCount,
-    &IndexBuffer::GetTristripIndexCount
+    &IndexBuffer::GetTristripIndexCount,
+    &IndexBuffer::GetPolysegmentDisjointAdjIndexCount,
+    &IndexBuffer::GetPolysegmentContiguousAdjIndexCount,
+    &IndexBuffer::GetTrimeshAdjIndexCount,
+    &IndexBuffer::GetTristripAdjIndexCount
 };

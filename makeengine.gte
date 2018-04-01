@@ -13,7 +13,7 @@ endif
 
 ifeq (Dynamic,$(findstring Dynamic,$(CFG)))
 SOVER = 3
-RELVER = $(SOVER).5
+RELVER = $(SOVER).6
 CFLAGS += -fPIC
 AR := $(CC)
 ARFLAGS := $(LDFLAGS) -shared -fPIC -Wl,-soname,libgtengine.so.$(SOVER) -o

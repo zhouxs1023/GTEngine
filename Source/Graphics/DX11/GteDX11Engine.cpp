@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2017
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/16)
+// File Version: 3.0.2 (2016/12/09)
 
 #include <GTEnginePCH.h>
 #include <Graphics/DX11/GteDX11Engine.h>
@@ -798,6 +798,18 @@ uint64_t DX11Engine::DrawPrimitive(VertexBuffer const* vbuffer, IndexBuffer cons
         break;
     case IPType::IP_TRISTRIP:
         mImmediate->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+        break;
+    case IPType::IP_POLYSEGMENT_DISJOINT_ADJ:
+        mImmediate->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ);
+        break;
+    case IPType::IP_POLYSEGMENT_CONTIGUOUS_ADJ:
+        mImmediate->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ);
+        break;
+    case IPType::IP_TRIMESH_ADJ:
+        mImmediate->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST_ADJ);
+        break;
+    case IPType::IP_TRISTRIP_ADJ:
+        mImmediate->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ);
         break;
     default:
         LogError("Unknown primitive topology = " + std::to_string(type));

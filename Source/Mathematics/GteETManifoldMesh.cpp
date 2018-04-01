@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2017
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2017/01/02)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
@@ -52,9 +52,10 @@ ETManifoldMesh::TMap const& ETManifoldMesh::GetTriangles() const
     return mTMap;
 }
 
-void ETManifoldMesh::AssertOnNonmanifoldInsertion(bool doAssert)
+bool ETManifoldMesh::AssertOnNonmanifoldInsertion(bool doAssert)
 {
-    mAssertOnNonmanifoldInsertion = doAssert;
+    std::swap(doAssert, mAssertOnNonmanifoldInsertion);
+    return doAssert;  // return the previous state
 }
 
 std::shared_ptr<ETManifoldMesh::Triangle> ETManifoldMesh::Insert(int v0, int v1, int v2)
@@ -67,9 +68,10 @@ std::shared_ptr<ETManifoldMesh::Triangle> ETManifoldMesh::Insert(int v0, int v1,
         return nullptr;
     }
 
-    // Add the new triangle.
+    // Create the new triangle.  It will be added to mTMap at the end of the
+    // function so that if an assertion is triggered and the function returns
+    // early, the (bad) triangle will not be part of the mesh.
     std::shared_ptr<Triangle> tri = mTCreator(v0, v1, v2);
-    mTMap[tkey] = tri;
 
     // Add the edges to the mesh if they do not already exist.
     for (int i0 = 2, i1 = 0; i1 < 3; i0 = i1++)
@@ -130,6 +132,7 @@ std::shared_ptr<ETManifoldMesh::Triangle> ETManifoldMesh::Insert(int v0, int v1,
         }
     }
 
+    mTMap[tkey] = tri;
     return tri;
 }
 
