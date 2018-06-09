@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/30)
+// File Version: 3.0.2 (2018/03/12)
 
 #pragma once
 
@@ -349,7 +349,7 @@ extern void InitializeWGL();
 
 // Use the prototypes provided by glcorearb.h.
 #define GL_GLEXT_PROTOTYPES
-#if defined(__MSWINDOWS__)
+#if defined(__MSWINDOWS__) && !defined(NOMINMAX)
 // Disable the Windows.h min and max macros.
 #define NOMINMAX
 #endif

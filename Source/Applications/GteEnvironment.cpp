@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/03/12)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
@@ -22,6 +22,10 @@ Environment::Environment()
 
 std::string Environment::GetVariable(std::string const& name)
 {
+#if defined(__LINUX__) || defined(MINGW)
+    char const* variable = getenv(name.c_str());
+    return variable ? std::string(variable) : std::string("");
+#else
 #if defined(__MSWINDOWS__)
     size_t size;
     getenv_s(&size, nullptr, 0, name.c_str());
@@ -37,10 +41,6 @@ std::string Environment::GetVariable(std::string const& name)
         return "";
     }
 #endif
-
-#if defined(__LINUX__)
-    char const* variable = getenv(name.c_str());
-    return variable ? std::string(variable) : std::string("");
 #endif
 }
 

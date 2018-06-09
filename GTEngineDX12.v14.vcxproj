@@ -27,7 +27,6 @@
     <ClInclude Include="Include\Applications\GteWindow3.h" />
     <ClInclude Include="Include\Applications\GteWindowBase.h" />
     <ClInclude Include="Include\Applications\MSW\DX12\GteWindow.h" />
-    <ClInclude Include="Include\Applications\MSW\DX12\GteWindowSystem.h" />
     <ClInclude Include="Include\Applications\MSW\GteMSWWindow.h" />
     <ClInclude Include="Include\Applications\MSW\GteMSWWindowSystem.h" />
     <ClInclude Include="Include\Applications\MSW\GteWICFileIO.h" />
@@ -240,7 +239,6 @@
     <ClInclude Include="Include\Mathematics\GteApprQuery.h" />
     <ClInclude Include="Include\Mathematics\GteApprSphere3.h" />
     <ClInclude Include="Include\Mathematics\GteArc2.h" />
-    <ClInclude Include="Include\Mathematics\GteArithmetic.h" />
     <ClInclude Include="Include\Mathematics\GteASinEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteATanEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteAxisAngle.h" />
@@ -540,6 +538,7 @@
     <ClInclude Include="Include\Mathematics\GteVertexAttribute.h" />
     <ClInclude Include="Include\Mathematics\GteVertexCollapseMesh.h" />
     <ClInclude Include="Include\Mathematics\GteVETManifoldMesh.h" />
+    <ClInclude Include="Include\Mathematics\MSW\GteCPUQueryInstructions.h" />
     <ClInclude Include="Include\Mathematics\MSW\GteIntelSSE.h" />
     <ClInclude Include="Include\Physics\GteBoxManager.h" />
     <ClInclude Include="Include\Physics\GteExtremalQuery3.h" />
@@ -753,6 +752,7 @@
     <ClCompile Include="Source\Mathematics\GteUIntegerAP32.cpp" />
     <ClCompile Include="Source\Mathematics\GteVEManifoldMesh.cpp" />
     <ClCompile Include="Source\Mathematics\GteVETManifoldMesh.cpp" />
+    <ClCompile Include="Source\Mathematics\MSW\GteCPUQueryInstructions.cpp" />
     <ClCompile Include="Source\Mathematics\MSW\GteIntelSSE.cpp" />
     <ClCompile Include="Source\Physics\GteFluid2.cpp" />
     <ClCompile Include="Source\Physics\GteFluid2AdjustVelocity.cpp" />

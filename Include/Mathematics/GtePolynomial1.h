@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/06/07)
 
 #pragma once
 
@@ -57,6 +57,9 @@ public:
 
     // Inversion (invpoly[i] = poly[degree-i] for 0 <= i <= degree).
     Polynomial1 GetInversion() const;
+
+    // Tranlation.  If 'this' is p(t}, return p(t-t0).
+    Polynomial1 GetTranslation(Real t0) const;
 
     // Eliminate any leading zeros in the polynomial, except in the case the
     // degree is 0 and the coefficient is 0.  The elimination is necessary
@@ -283,6 +286,19 @@ Polynomial1<Real> Polynomial1<Real>::GetInversion() const
     for (unsigned int i = 0; i <= degree; ++i)
     {
         result.mCoefficient[i] = mCoefficient[degree - i];
+    }
+    return result;
+}
+
+template <typename Real>
+Polynomial1<Real> Polynomial1<Real>::GetTranslation(Real t0) const
+{
+    Polynomial1<Real> factor{ -t0, (Real)1 };  // f(t) = t - t0
+    unsigned int const degree = GetDegree();
+    Polynomial1 result{ mCoefficient[degree] };
+    for (unsigned int i = 1, j = degree - 1; i <= degree; ++i, --j)
+    {
+        result = mCoefficient[j] + factor * result;
     }
     return result;
 }

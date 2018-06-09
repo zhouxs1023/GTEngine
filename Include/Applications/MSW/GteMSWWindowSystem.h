@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2016/11/12)
+// File Version: 3.0.3 (2018/03/11)
 
 #pragma once
 
@@ -14,14 +14,15 @@
 namespace gte
 {
 
-class GTE_IMPEXP MSWWindowSystem
+class GTE_IMPEXP WindowSystem
 {
 public:
-    // Abstract base class.  The derived classes are instantiable and
-    // singletons.
-    virtual ~MSWWindowSystem();
-protected:
-    MSWWindowSystem();
+    // This class has code that is common to DX11-based and WGL-based window
+    // applications, except for the function CreateEngineAndProgramFactory
+    // that has specialized implementations for each graphics system (in
+    // the Applications/MSW/{DX11,WGL} subfolders).
+    WindowSystem();
+    ~WindowSystem();
 
 public:
     // Create and destroy windows.  Derived classes may extend the inputs
@@ -50,9 +51,13 @@ protected:
     static bool GetWindowRectangle(int xClientSize, int yClientSize,
         DWORD style, RECT& windowRectangle);
 
-    // Window creation and destruction.
+    // Window creation and destruction.  The CreateEngineAndProgramFactory
+    // function has an implementation for DX11 and an implementation for WGL.
+    // It is not possible to have both DX11-based and WGL-based window
+    // creation in the same application, although it is possible to have
+    // DX11-based and WGL-based graphics engines in the same application.
     void CreateFrom(MSWWindow::Parameters& parameters);
-    virtual void CreateEngineAndProgramFactory(MSWWindow::Parameters& parameters) = 0;
+    void CreateEngineAndProgramFactory(MSWWindow::Parameters& parameters);
 
     // Extraction of cursor location, avoiding the extraction in <windows.h>
     // that does not work when you have dual monitors.
@@ -69,7 +74,7 @@ protected:
 
 
 template <typename WindowType>
-std::shared_ptr<WindowType> MSWWindowSystem::Create(typename WindowType::Parameters& parameters)
+std::shared_ptr<WindowType> WindowSystem::Create(typename WindowType::Parameters& parameters)
 {
     CreateFrom(parameters);
     if (parameters.created)
@@ -87,7 +92,7 @@ std::shared_ptr<WindowType> MSWWindowSystem::Create(typename WindowType::Paramet
 }
 
 template <typename WindowType>
-void MSWWindowSystem::Destroy(std::shared_ptr<WindowType>& window)
+void WindowSystem::Destroy(std::shared_ptr<WindowType>& window)
 {
     if (window)
     {
@@ -99,7 +104,7 @@ void MSWWindowSystem::Destroy(std::shared_ptr<WindowType>& window)
 }
 
 template <typename WindowType>
-void MSWWindowSystem::MessagePump(std::shared_ptr<WindowType> const& window, unsigned int flags)
+void WindowSystem::MessagePump(std::shared_ptr<WindowType> const& window, unsigned int flags)
 {
     if (window)
     {
@@ -138,5 +143,7 @@ void MSWWindowSystem::MessagePump(std::shared_ptr<WindowType> const& window, uns
         }
     }
 }
+
+extern GTE_IMPEXP WindowSystem TheWindowSystem;
 
 }

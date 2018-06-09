@@ -739,11 +739,11 @@ GLboolean APIENTRY glIsEnabled(GLenum cap)
     return result;
 }
 
-void APIENTRY glDepthRange(GLdouble near, GLdouble far)
+void APIENTRY glDepthRange(GLdouble n, GLdouble f)
 {
     if (sglDepthRange)
     {
-        sglDepthRange(near, far);
+        sglDepthRange(n, f);
         ReportGLError("glDepthRange");
     }
     else

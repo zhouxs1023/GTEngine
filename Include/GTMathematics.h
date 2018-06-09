@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.13 (2017/11/06)
+// File Version: 3.0.17 (2018/06/07)
 
 #pragma once
 
@@ -99,6 +99,7 @@
 #include <Mathematics/GteVertexCollapseMesh.h>
 
 // Containment
+#include <Mathematics/GteContAlignedBox.h>
 #include <Mathematics/GteContCapsule3.h>
 #include <Mathematics/GteContCircle2.h>
 #include <Mathematics/GteContCylinder3.h>
@@ -243,6 +244,7 @@
 #include <Mathematics/GteIntpAkimaUniform3.h>
 #include <Mathematics/GteIntpBicubic2.h>
 #include <Mathematics/GteIntpBilinear2.h>
+#include <Mathematics/GteIntpBSplineUniform.h>
 #include <Mathematics/GteIntpLinearNonuniform2.h>
 #include <Mathematics/GteIntpLinearNonuniform3.h>
 #include <Mathematics/GteIntpQuadraticNonuniform2.h>
@@ -377,7 +379,8 @@
 #include <Mathematics/GteProjection.h>
 
 // SIMD
-#if defined(__MSWINDOWS__)
+#if defined(__MSWINDOWS__) && !defined(MINGW)
 #include <Mathematics/MSW/GteIntelSSE.h>
+#include <Mathematics/MSW/GteCPUQueryInstructions.h>
 #endif
 

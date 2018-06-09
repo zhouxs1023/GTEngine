@@ -3,24 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/03/11)
 
 #include <GTEnginePCH.h>
+#include <Applications/MSW/GteMSWWindowSystem.h>
 #include <Applications/MSW/DX11/GteWindow.h>
-#include <Applications/MSW/DX11/GteWindowSystem.h>
 #include <Graphics/DX11/GteDX11Engine.h>
 #include <Graphics/DX11/GteHLSLProgramFactory.h>
 using namespace gte;
-
-WindowSystem gte::TheWindowSystem;
-
-WindowSystem::~WindowSystem()
-{
-}
-
-WindowSystem::WindowSystem()
-{
-}
 
 void WindowSystem::CreateEngineAndProgramFactory(MSWWindow::Parameters& parameters)
 {

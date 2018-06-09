@@ -633,9 +633,6 @@
     <ClInclude Include="Include\Mathematics\GteChebyshevRatio.h">
       <Filter>Files\Mathematics\Functions</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteArithmetic.h">
-      <Filter>Files\Mathematics\Arithmetic</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Mathematics\GteAxisAngle.h">
       <Filter>Files\Mathematics\Algebra</Filter>
     </ClInclude>
@@ -1638,9 +1635,6 @@
     <ClInclude Include="Include\Applications\MSW\DX12\GteWindow.h">
       <Filter>Files\Applications\MSW\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\DX12\GteWindowSystem.h">
-      <Filter>Files\Applications\MSW\DX12</Filter>
-    </ClInclude>
     <ClInclude Include="Include\GTWindows.h">
       <Filter>Files</Filter>
     </ClInclude>
@@ -1826,6 +1820,9 @@
     </ClInclude>
     <ClInclude Include="Include\Graphics\DX12\GteDX12DrawTarget.h">
       <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\MSW\GteCPUQueryInstructions.h">
+      <Filter>Files\Mathematics\SIMD\MSW</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2404,6 +2401,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\DX12\GteDX12DrawTarget.cpp">
       <Filter>Files\Graphics\DirectX12\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mathematics\MSW\GteCPUQueryInstructions.cpp">
+      <Filter>Files\Mathematics\SIMD\MSW</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

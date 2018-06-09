@@ -3,15 +3,20 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2018/03/11)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
 #include <Applications/GteEnvironment.h>
 #include <Applications/MSW/GteWICFileIO.h>
 #include <memory>
-// wincodec.h includes windows.h, so we must turn off min/max macros
+
+// The header wincodec.h includes windows.h, so we must turn off min and max
+// macros.  MinGW defines this macro, so we must protect against multiple
+// attempts to define it.
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <wincodec.h>
 using namespace gte;
 
@@ -263,7 +268,7 @@ bool WICFileIO::SaveTo(std::string const& filename,
         VARIANT varValue;
 
         // Default subsampling.
-        option.pstrName = L"InterlaceOption";
+        option.pstrName = const_cast<LPOLESTR>(L"InterlaceOption");
         VariantInit(&varValue);
         varValue.vt = VT_BOOL;
         varValue.boolVal = FALSE;
@@ -275,10 +280,16 @@ bool WICFileIO::SaveTo(std::string const& filename,
         }
 
         // Disable filtering.
-        option.pstrName = L"FilterOption";
+        option.pstrName = const_cast<LPOLESTR>(L"FilterOption");
         VariantInit(&varValue);
         varValue.vt = VT_UI1;
+#if defined(MINGW)
+        // The wincodec.h of MinGW 7.2.0 does not define the
+        // WICPngFilterOption enumerations.
+        varValue.bVal = 1;
+#else
         varValue.bVal = WICPngFilterNone;
+#endif
         hr = wicPropertyBag->Write(1, &option, &varValue);
         if (FAILED(hr))
         {
@@ -293,7 +304,7 @@ bool WICFileIO::SaveTo(std::string const& filename,
         VARIANT varValue;
 
         // Set image quality, a number in [0,1].
-        option.pstrName = L"ImageQuality";
+        option.pstrName = const_cast<LPOLESTR>(L"ImageQuality");
         VariantInit(&varValue);
         varValue.vt = VT_R4;
         varValue.fltVal = imageQuality;
@@ -476,20 +487,23 @@ T* WICFileIO::ComObject<T>::operator->() const
 
 WICFileIO::LoadFormatMap const WICFileIO::msLoadFormatMap[NUM_LOAD_FORMATS] =
 {
-    { DF_B5G6R5_UNORM, &GUID_WICPixelFormat16bppBGR565, nullptr },
-    { DF_B5G5R5A1_UNORM, &GUID_WICPixelFormat16bppBGR555, nullptr },
+#if !defined(MINGW)
+    // The wincodec.h of MinGW 7.2.0 does not support these formats.
     { DF_R10G10B10A2_UNORM, &GUID_WICPixelFormat32bppRGBA1010102, nullptr },
     { DF_R10G10B10_XR_BIAS_A2_UNORM, &GUID_WICPixelFormat32bppRGBA1010102XR, nullptr },
+    { DF_R32_FLOAT, &GUID_WICPixelFormat32bppGrayFloat, nullptr },
+    { DF_R16G16B16A16_UNORM, &GUID_WICPixelFormat64bppBGRA, &GUID_WICPixelFormat64bppRGBA },
+#endif
+    { DF_B5G6R5_UNORM, &GUID_WICPixelFormat16bppBGR565, nullptr },
+    { DF_B5G5R5A1_UNORM, &GUID_WICPixelFormat16bppBGR555, nullptr },
     { DF_R1_UNORM, &GUID_WICPixelFormatBlackWhite, &GUID_WICPixelFormat8bppGray },
     { DF_R8_UNORM, &GUID_WICPixelFormat2bppGray, &GUID_WICPixelFormat8bppGray },
     { DF_R8_UNORM, &GUID_WICPixelFormat4bppGray, &GUID_WICPixelFormat8bppGray },
     { DF_R8_UNORM, &GUID_WICPixelFormat8bppGray, nullptr },
     { DF_R16_UNORM, &GUID_WICPixelFormat16bppGray, nullptr },
-    { DF_R32_FLOAT, &GUID_WICPixelFormat32bppGrayFloat, nullptr },
     { DF_R8G8B8A8_UNORM, &GUID_WICPixelFormat32bppRGBA, nullptr },
     { DF_R8G8B8A8_UNORM, &GUID_WICPixelFormat32bppBGRA, &GUID_WICPixelFormat32bppRGBA },
     { DF_R16G16B16A16_UNORM, &GUID_WICPixelFormat64bppRGBA, nullptr },
-    { DF_R16G16B16A16_UNORM, &GUID_WICPixelFormat64bppBGRA, &GUID_WICPixelFormat64bppRGBA }
 
     // B8G8R8A8 is not supported for Texture2 in DX11.  We convert all
     // unmatched formats to R8G8B8A8.
@@ -498,14 +512,17 @@ WICFileIO::LoadFormatMap const WICFileIO::msLoadFormatMap[NUM_LOAD_FORMATS] =
 
 WICFileIO::SaveFormatMap const WICFileIO::msSaveFormatMap[NUM_SAVE_FORMATS] =
 {
-    { DF_B5G6R5_UNORM, &GUID_WICPixelFormat16bppBGR565 },
-    { DF_B5G5R5A1_UNORM, &GUID_WICPixelFormat16bppBGR555 },
+#if !defined(MINGW)
+    // The wincodec.h of MinGW 7.2.0 does not support these formats.
     { DF_R10G10B10A2_UNORM, &GUID_WICPixelFormat32bppRGBA1010102 },
     { DF_R10G10B10_XR_BIAS_A2_UNORM, &GUID_WICPixelFormat32bppRGBA1010102XR },
+    { DF_R32_FLOAT, &GUID_WICPixelFormat32bppGrayFloat },
+#endif
+    { DF_B5G6R5_UNORM, &GUID_WICPixelFormat16bppBGR565 },
+    { DF_B5G5R5A1_UNORM, &GUID_WICPixelFormat16bppBGR555 },
     { DF_R1_UNORM, &GUID_WICPixelFormatBlackWhite },
     { DF_R8_UNORM, &GUID_WICPixelFormat8bppGray },
     { DF_R16_UNORM, &GUID_WICPixelFormat16bppGray },
-    { DF_R32_FLOAT, &GUID_WICPixelFormat32bppGrayFloat },
     { DF_R8G8B8A8_UNORM, &GUID_WICPixelFormat32bppRGBA },
     { DF_B8G8R8A8_UNORM, &GUID_WICPixelFormat32bppBGRA },
     { DF_R16G16B16A16_UNORM, &GUID_WICPixelFormat64bppRGBA }

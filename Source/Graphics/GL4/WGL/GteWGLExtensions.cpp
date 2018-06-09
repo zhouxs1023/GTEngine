@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/06)
+// File Version: 3.0.2 (2018/03/11)
 
 #include <Graphics/GL4/GteOpenGL.h>
 #include <Graphics/GL4/GL/wglext.h>
@@ -11,7 +11,7 @@
 
 void* GetOpenGLFunctionPointer(char const* name)
 {
-    return wglGetProcAddress(name);
+    return (void*)wglGetProcAddress(name);
 }
 
 template <typename PWGLFunction>
@@ -24,9 +24,9 @@ static void GetWGLFunction(char const* name, PWGLFunction& function)
 static PFNWGLSWAPINTERVALEXTPROC swglSwapIntervalEXT = nullptr;
 static PFNWGLGETSWAPINTERVALEXTPROC swglGetSwapIntervalEXT = nullptr;
 
-int __stdcall wglSwapIntervalEXT(int interval)
+BOOL __stdcall wglSwapIntervalEXT(int interval)
 {
-    int result;
+    BOOL result;
     if (swglSwapIntervalEXT)
     {
         result = swglSwapIntervalEXT(interval);
@@ -34,7 +34,7 @@ int __stdcall wglSwapIntervalEXT(int interval)
     else
     {
         assert(false);
-        result = 0;
+        result = FALSE;
     }
     return result;
 }

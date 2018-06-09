@@ -48,22 +48,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\DX11\GteWindowSystem.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGL4|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGL4|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Include\Applications\MSW\GteMSWWindow.h" />
     <ClInclude Include="Include\Applications\MSW\GteMSWWindowSystem.h" />
     <ClInclude Include="Include\Applications\MSW\GteWICFileIO.h" />
     <ClInclude Include="Include\Applications\MSW\WGL\GteWindow.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\WGL\GteWindowSystem.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -961,6 +949,7 @@
     <ClInclude Include="Include\Mathematics\GteIntpAkimaUniform3.h" />
     <ClInclude Include="Include\Mathematics\GteIntpBicubic2.h" />
     <ClInclude Include="Include\Mathematics\GteIntpBilinear2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntpBSplineUniform.h" />
     <ClInclude Include="Include\Mathematics\GteIntpLinearNonuniform2.h" />
     <ClInclude Include="Include\Mathematics\GteIntpLinearNonuniform3.h" />
     <ClInclude Include="Include\Mathematics\GteIntpQuadraticNonuniform2.h" />
@@ -1145,6 +1134,7 @@
     <ClInclude Include="Include\Mathematics\GteVertexAttribute.h" />
     <ClInclude Include="Include\Mathematics\GteVertexCollapseMesh.h" />
     <ClInclude Include="Include\Mathematics\GteVETManifoldMesh.h" />
+    <ClInclude Include="Include\Mathematics\MSW\GteCPUQueryInstructions.h" />
     <ClInclude Include="Include\Mathematics\MSW\GteIntelSSE.h" />
     <ClInclude Include="Include\Physics\GteBoxManager.h" />
     <ClInclude Include="Include\Physics\GteExtremalQuery3.h" />
@@ -1984,6 +1974,7 @@
     <ClCompile Include="Source\Mathematics\GteUIntegerAP32.cpp" />
     <ClCompile Include="Source\Mathematics\GteVEManifoldMesh.cpp" />
     <ClCompile Include="Source\Mathematics\GteVETManifoldMesh.cpp" />
+    <ClCompile Include="Source\Mathematics\MSW\GteCPUQueryInstructions.cpp" />
     <ClCompile Include="Source\Mathematics\MSW\GteIntelSSE.cpp" />
     <ClCompile Include="Source\Physics\GteFluid2.cpp" />
     <ClCompile Include="Source\Physics\GteFluid2AdjustVelocity.cpp" />

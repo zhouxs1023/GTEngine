@@ -1950,13 +1950,7 @@
     <ClInclude Include="Include\Applications\MSW\DX11\GteWindow.h">
       <Filter>Files\Applications\MSW\DX11</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\DX11\GteWindowSystem.h">
-      <Filter>Files\Applications\MSW\DX11</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Applications\MSW\WGL\GteWindow.h">
-      <Filter>Files\Applications\MSW\WGL</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Applications\MSW\WGL\GteWindowSystem.h">
       <Filter>Files\Applications\MSW\WGL</Filter>
     </ClInclude>
     <ClInclude Include="Include\Applications\MSW\GteMSWWindow.h">
@@ -2039,6 +2033,12 @@
     </ClInclude>
     <ClInclude Include="Include\LowLevel\MSW\GteLogToOutputWindow.h">
       <Filter>Files\LowLevel\Logger\MSW</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\MSW\GteCPUQueryInstructions.h">
+      <Filter>Files\Mathematics\SIMD\MSW</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntpBSplineUniform.h">
+      <Filter>Files\Mathematics\Interpolation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2761,6 +2761,9 @@
     </ClCompile>
     <ClCompile Include="Source\LowLevel\MSW\GteLogToOutputWindow.cpp">
       <Filter>Files\LowLevel\Logger\MSW</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mathematics\MSW\GteCPUQueryInstructions.cpp">
+      <Filter>Files\Mathematics\SIMD\MSW</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

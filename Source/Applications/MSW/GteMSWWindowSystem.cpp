@@ -3,13 +3,16 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/10/12)
+// File Version: 3.0.2 (2018/03/11)
 
 #include <GTEnginePCH.h>
 #include <Applications/MSW/GteMSWWindowSystem.h>
 using namespace gte;
 
-MSWWindowSystem::~MSWWindowSystem()
+// The singleton used to create and destroy windows for applications.
+WindowSystem gte::TheWindowSystem;
+
+WindowSystem::~WindowSystem()
 {
     if (mHandleMap.size() == 0 && mAtom)
     {
@@ -17,7 +20,7 @@ MSWWindowSystem::~MSWWindowSystem()
     }
 }
 
-MSWWindowSystem::MSWWindowSystem()
+WindowSystem::WindowSystem()
     :
     mWindowClassName(L"GTEngineWindow"),
     mAtom(0)
@@ -36,7 +39,7 @@ MSWWindowSystem::MSWWindowSystem()
     mAtom = RegisterClass(&wc);
 }
 
-bool MSWWindowSystem::GetWindowRectangle(int xClientSize, int yClientSize,
+bool WindowSystem::GetWindowRectangle(int xClientSize, int yClientSize,
     DWORD style, RECT& windowRectangle)
 {
     windowRectangle.left = 0;
@@ -46,7 +49,7 @@ bool MSWWindowSystem::GetWindowRectangle(int xClientSize, int yClientSize,
     return AdjustWindowRect(&windowRectangle, style, FALSE) != FALSE;
 }
 
-void MSWWindowSystem::CreateFrom(MSWWindow::Parameters& parameters)
+void WindowSystem::CreateFrom(MSWWindow::Parameters& parameters)
 {
     DWORD style;
     if (parameters.allowResize)
@@ -115,19 +118,19 @@ void MSWWindowSystem::CreateFrom(MSWWindow::Parameters& parameters)
     }
 }
 
-void MSWWindowSystem::Extract(LPARAM lParam, int& x, int& y)
+void WindowSystem::Extract(LPARAM lParam, int& x, int& y)
 {
     x = static_cast<int>(static_cast<short>(lParam & 0xFFFF));
     y = static_cast<int>(static_cast<short>((lParam & 0xFFFF0000) >> 16));
 }
 
-void MSWWindowSystem::Extract(WPARAM wParam, int& x, int& y)
+void WindowSystem::Extract(WPARAM wParam, int& x, int& y)
 {
     x = static_cast<int>(static_cast<short>(wParam & 0xFFFF));
     y = static_cast<int>(static_cast<short>((wParam & 0xFFFF0000) >> 16));
 }
 
-LRESULT CALLBACK MSWWindowSystem::WindowProcedure(HWND handle, UINT message,
+LRESULT CALLBACK WindowSystem::WindowProcedure(HWND handle, UINT message,
     WPARAM wParam, LPARAM lParam)
 {
     auto iter = TheWindowSystem.mHandleMap.find(handle);
