@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.17 (2018/06/07)
+// File Version: 3.0.19 (2018/07/16)
 
 #pragma once
 
@@ -28,6 +28,7 @@
 
 // Approximation
 #include <Mathematics/GteApprCircle2.h>
+#include <Mathematics/GteApprCone3.h>
 #include <Mathematics/GteApprCylinder3.h>
 #include <Mathematics/GteApprEllipseByArcs.h>
 #include <Mathematics/GteApprEllipse2.h>
@@ -51,6 +52,7 @@
 #include <Mathematics/GteApprQuadratic3.h>
 #include <Mathematics/GteApprQuery.h>
 #include <Mathematics/GteApprSphere3.h>
+#include <Mathematics/GteApprTorus3.h>
 
 // Arithmetic
 #include <Mathematics/GteBitHacks.h>
@@ -353,10 +355,13 @@
 #include <Mathematics/GteTIQuery.h>
 
 // NumericalMethods
+#include <Mathematics/GteCholeskyDecomposition.h>
 #include <Mathematics/GteCubicRootsQR.h>
+#include <Mathematics/GteGaussNewtonMinimizer.h>
 #include <Mathematics/GteGaussianElimination.h>
 #include <Mathematics/GteIntegration.h>
 #include <Mathematics/GteLCPSolver.h>
+#include <Mathematics/GteLevenbergMarquardtMinimizer.h>
 #include <Mathematics/GteLinearSystem.h>
 #include <Mathematics/GteMinimize1.h>
 #include <Mathematics/GteMinimizeN.h>

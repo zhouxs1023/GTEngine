@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/30)
+// File Version: 3.0.2 (2018/06/21)
 
 #pragma once
 
@@ -359,3 +359,10 @@ extern void InitializeWGL();
 // driver supports, pass in a file name to which the information will be
 // stored.  For no information, pass in nullptr.
 extern void InitializeOpenGL(int& major, int& minor, char const* infofile);
+
+#if defined(__LINUX__)
+// The function pointer lookup used to use only glXGetProcAddress.  Now it
+// allows eglGetProcAddress for headless rendering.  If you want to use
+// EGL, set gUseEGLGetProcAddress to 'true' before calling InitializeOpenGL.
+extern bool gUseEGLGetProcAddress;
+#endif

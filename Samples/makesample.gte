@@ -14,7 +14,7 @@ SRC := $(notdir $(wildcard *.cpp))
 OBJ := $(SRC:%.cpp=$(CFG)/%.o)
 LIBPATH := -L ../../../lib/$(CFG)
 LDFLAGS := -Wl,--no-as-needed
-LIBS := -lgtengine -lX11 -lXext -lGL -lpng -lpthread -lm 
+LIBS := -lgtengine -lX11 -lXext -lGL -lEGL -lpng -lpthread -lm 
 
 build : createdir compile
 

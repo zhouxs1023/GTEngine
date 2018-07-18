@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/12/09)
+// File Version: 3.0.2 (2018/07/02)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteBitHacks.h>
@@ -219,7 +219,7 @@ bool IndexBuffer::SetTriangle(uint32_t i, uint32_t v0, uint32_t v1, uint32_t v2)
                     *index++ = v1;
                     *index = v2;
                 }
-                else
+                else if (mPrimitiveType == IP_TRISTRIP)
                 {
                     uint32_t* index = i + Get<uint32_t>();
                     index[0] = v0;
@@ -234,6 +234,14 @@ bool IndexBuffer::SetTriangle(uint32_t i, uint32_t v0, uint32_t v1, uint32_t v2)
                         index[2] = v2;
                     }
                 }
+                else if (mPrimitiveType == IP_TRIMESH_ADJ)
+                {
+                    LogError("IP_TRIMESH_ADJ not yet supported.");
+                }
+                else if (mPrimitiveType == IP_TRISTRIP_ADJ)
+                {
+                    LogError("IP_TRISTRIP_ADJ not yet supported.");
+                }
             }
             else
             {
@@ -244,7 +252,7 @@ bool IndexBuffer::SetTriangle(uint32_t i, uint32_t v0, uint32_t v1, uint32_t v2)
                     *index++ = static_cast<uint16_t>(v1);
                     *index = static_cast<uint16_t>(v2);
                 }
-                else
+                else if (mPrimitiveType == IP_TRISTRIP)
                 {
                     uint16_t* index = i + Get<uint16_t>();
                     index[0] = static_cast<uint16_t>(v0);
@@ -258,6 +266,14 @@ bool IndexBuffer::SetTriangle(uint32_t i, uint32_t v0, uint32_t v1, uint32_t v2)
                         index[1] = static_cast<uint16_t>(v1);
                         index[2] = static_cast<uint16_t>(v2);
                     }
+                }
+                else if (mPrimitiveType == IP_TRIMESH_ADJ)
+                {
+                    LogError("IP_TRIMESH_ADJ not yet supported.");
+                }
+                else if (mPrimitiveType == IP_TRISTRIP_ADJ)
+                {
+                    LogError("IP_TRISTRIP_ADJ not yet supported.");
                 }
             }
             return true;
@@ -281,13 +297,24 @@ bool IndexBuffer::GetTriangle(uint32_t i, uint32_t& v0, uint32_t& v1, uint32_t& 
                     v1 = *index++;
                     v2 = *index;
                 }
-                else
+                else if (mPrimitiveType == IP_TRISTRIP)
                 {
                     uint32_t const* index = i + Get<uint32_t>();
                     uint32_t offset = (i & 1);
                     v0 = index[0];
                     v1 = index[1 + offset];
                     v2 = index[2 - offset];
+                }
+                else if (mPrimitiveType == IP_TRIMESH_ADJ)
+                {
+                    uint32_t const* index = 6 * i + Get<uint32_t>();
+                    v0 = index[0];
+                    v1 = index[2];
+                    v2 = index[4];
+                }
+                else if (mPrimitiveType == IP_TRISTRIP_ADJ)
+                {
+                    LogError("IP_TRISTRIP_ADJ not yet supported.");
                 }
             }
             else
@@ -300,13 +327,24 @@ bool IndexBuffer::GetTriangle(uint32_t i, uint32_t& v0, uint32_t& v1, uint32_t& 
                     v1 = static_cast<uint32_t>(*index++);
                     v2 = static_cast<uint32_t>(*index);
                 }
-                else
+                else if (mPrimitiveType == IP_TRISTRIP)
                 {
                     uint16_t const* index = i + Get<uint16_t>();
                     int offset = (i & 1);
                     v0 = static_cast<uint32_t>(index[0]);
                     v1 = static_cast<uint32_t>(index[1 + offset]);
                     v2 = static_cast<uint32_t>(index[2 - offset]);
+                }
+                else if (mPrimitiveType == IP_TRIMESH_ADJ)
+                {
+                    uint16_t const* index = 6 * i + Get<uint16_t>();
+                    v0 = index[0];
+                    v1 = index[2];
+                    v2 = index[4];
+                }
+                else if (mPrimitiveType == IP_TRISTRIP_ADJ)
+                {
+                    LogError("IP_TRISTRIP_ADJ not yet supported.");
                 }
             }
             return true;

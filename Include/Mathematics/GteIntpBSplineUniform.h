@@ -3,11 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.13.0 (2018/06/07)
+// File Version: 3.13.1 (2018/07/16)
 
 #pragma once
 
 #include <Mathematics/GtePolynomial1.h>
+#include <array>
+#include <cmath>
 
 // IntpBSplineUniform is the class for B-spline interpolation of uniformly
 // spaced N-dimensional data.  The algorithm is described in
@@ -149,6 +151,12 @@ namespace gte
         inline int GetCacheMode() const { return mCacheMode; }
 
     protected:
+        // Disallow copying and moving.
+        IntpBSplineUniformShared(IntpBSplineUniformShared const&) = delete;
+        IntpBSplineUniformShared& operator=(IntpBSplineUniformShared const&) = delete;
+        IntpBSplineUniformShared(IntpBSplineUniformShared&&) = delete;
+        IntpBSplineUniformShared& operator=(IntpBSplineUniformShared&&) = delete;
+
         // Verify that the constraints for number of controls and degrees
         // are satisfied.
         bool IsValid(int const* degrees)
@@ -652,6 +660,12 @@ namespace gte
             }
         }
 
+        // Disallow copying and moving.
+        IntpBSplineUniform(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform(IntpBSplineUniform&&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform&&) = delete;
+
         // Evaluate the interpolator.  Each element of 'order' indicates the
         // order of the derivative you want to compute.  For the function
         // value itself, pass in 'order' that has all 0 elements.
@@ -699,6 +713,12 @@ namespace gte
             }
         }
 
+        // Disallow copying and moving.
+        IntpBSplineUniform(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform(IntpBSplineUniform&&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform&&) = delete;
+
         // Evaluate the interpolator.  Each element of 'order' indicates the
         // order of the derivative you want to compute.  For the function
         // value itself, pass in 'order' that has all 0 elements.
@@ -706,8 +726,8 @@ namespace gte
             std::vector<Real> const& t)
         {
             if (this->mValid
-                && order.size() >= this->mNumDimensions
-                && t.size() >= this->mNumDimensions)
+                && static_cast<int>(order.size()) >= this->mNumDimensions
+                && static_cast<int>(t.size()) >= this->mNumDimensions)
             {
                 if (this->mCacheMode == this->NO_CACHING)
                 {
@@ -774,6 +794,12 @@ namespace gte
                 InitializeTensors();
             }
         }
+
+        // Disallow copying and moving.
+        IntpBSplineUniform(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform(IntpBSplineUniform&&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform&&) = delete;
 
         // Member access.
         inline int GetDegree(int) const { return mDegree; }
@@ -963,6 +989,12 @@ namespace gte
                 InitializeTensors();
             }
         }
+
+        // Disallow copying and moving.
+        IntpBSplineUniform(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform(IntpBSplineUniform&&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform&&) = delete;
 
         // Member access.
         inline int GetDegree(int dim) const { return mDegree[dim]; }
@@ -1200,6 +1232,12 @@ namespace gte
             }
 
         }
+
+        // Disallow copying and moving.
+        IntpBSplineUniform(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform const&) = delete;
+        IntpBSplineUniform(IntpBSplineUniform&&) = delete;
+        IntpBSplineUniform& operator=(IntpBSplineUniform&&) = delete;
 
         // Member access.  The input i specifies the dimension (0, 1, 2).
         inline int GetDegree(int dim) const { return mDegree[dim]; }

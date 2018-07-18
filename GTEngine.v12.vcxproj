@@ -802,6 +802,7 @@
     <ClInclude Include="Include\Mathematics\GteACosEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteAlignedBox.h" />
     <ClInclude Include="Include\Mathematics\GteApprCircle2.h" />
+    <ClInclude Include="Include\Mathematics\GteApprCone3.h" />
     <ClInclude Include="Include\Mathematics\GteApprCylinder3.h" />
     <ClInclude Include="Include\Mathematics\GteApprEllipse2.h" />
     <ClInclude Include="Include\Mathematics\GteApprEllipseByArcs.h" />
@@ -825,6 +826,7 @@
     <ClInclude Include="Include\Mathematics\GteApprQuadratic3.h" />
     <ClInclude Include="Include\Mathematics\GteApprQuery.h" />
     <ClInclude Include="Include\Mathematics\GteApprSphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprTorus3.h" />
     <ClInclude Include="Include\Mathematics\GteArc2.h" />
     <ClInclude Include="Include\Mathematics\GteASinEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteATanEstimate.h" />
@@ -843,6 +845,7 @@
     <ClInclude Include="Include\Mathematics\GteBSRational.h" />
     <ClInclude Include="Include\Mathematics\GteCapsule.h" />
     <ClInclude Include="Include\Mathematics\GteChebyshevRatio.h" />
+    <ClInclude Include="Include\Mathematics\GteCholeskyDecomposition.h" />
     <ClInclude Include="Include\Mathematics\GteCircle3.h" />
     <ClInclude Include="Include\Mathematics\GteCone.h" />
     <ClInclude Include="Include\Mathematics\GteConstants.h" />
@@ -933,6 +936,7 @@
     <ClInclude Include="Include\Mathematics\GteFunctionsBSRational.h" />
     <ClInclude Include="Include\Mathematics\GteFunctionsIEEEBinary16.h" />
     <ClInclude Include="Include\Mathematics\GteGaussianElimination.h" />
+    <ClInclude Include="Include\Mathematics\GteGaussNewtonMinimizer.h" />
     <ClInclude Include="Include\Mathematics\GteGenerateMeshUV.h" />
     <ClInclude Include="Include\Mathematics\GteGMatrix.h" />
     <ClInclude Include="Include\Mathematics\GteGVector.h" />
@@ -1050,6 +1054,7 @@
     <ClInclude Include="Include\Mathematics\GteInvSqrtEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteIsPlanarGraph.h" />
     <ClInclude Include="Include\Mathematics\GteLCPSolver.h" />
+    <ClInclude Include="Include\Mathematics\GteLevenbergMarquardtMinimizer.h" />
     <ClInclude Include="Include\Mathematics\GteLine.h" />
     <ClInclude Include="Include\Mathematics\GteLinearSystem.h" />
     <ClInclude Include="Include\Mathematics\GteLog2Estimate.h" />

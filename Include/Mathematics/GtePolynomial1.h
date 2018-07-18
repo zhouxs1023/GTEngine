@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/06/07)
+// File Version: 3.0.2 (2018/07/13)
 
 #pragma once
 
@@ -80,10 +80,24 @@ public:
     void Divide(Polynomial1 const& divisor, Polynomial1& quotient,
         Polynomial1& remainder) const;
 
+    // Scale the polynomial so the highest-degree term has coefficient 1.
+    void MakeMonic();
+
 protected:
     // The class is designed so that mCoefficient.size() >= 1.
     std::vector<Real> mCoefficient;
 };
+
+// Compute the greatest common divisor of two polynomials.  The returned
+// polynomial has leading coefficient 1 (except when zero-valued polynomials
+// are passed to the function.
+template <typename Real>
+Polynomial1<Real> GreatestCommonDivisor(Polynomial1<Real> const& p0, Polynomial1<Real> const& p1);
+
+// Factor f = factor[0]*factor[1]^2*factor[2]^3*...*factor[n-1]^n according to
+// the square-free factorization algorithm https://en.wikipedia.org/wiki/Square-free_polynomial .
+template <typename Real>
+void SquareFreeFactorization(Polynomial1<Real> const& f, std::vector<Polynomial1<Real>>& factors);
 
 // Unary operations.
 template <typename Real>
@@ -350,16 +364,24 @@ void Polynomial1<Real>::Divide(Polynomial1 const& divisor,
         }
 
         // Calculate the correct degree for the remainder.
-        int remainderDegree = divisorDegree - 1;
-        while (remainderDegree > 0 && tmp[remainderDegree] == zero)
+        if (divisorDegree >= 1)
         {
-            --remainderDegree;
-        }
+            int remainderDegree = divisorDegree - 1;
+            while (remainderDegree > 0 && tmp[remainderDegree] == zero)
+            {
+                --remainderDegree;
+            }
 
-        remainder.SetDegree(remainderDegree);
-        for (int i = 0; i <= remainderDegree; ++i)
+            remainder.SetDegree(remainderDegree);
+            for (int i = 0; i <= remainderDegree; ++i)
+            {
+                remainder[i] = tmp[i];
+            }
+        }
+        else
         {
-            remainder[i] = tmp[i];
+            remainder.SetDegree(0);
+            remainder[0] = zero;
         }
     }
     else
@@ -370,6 +392,94 @@ void Polynomial1<Real>::Divide(Polynomial1 const& divisor,
     }
 }
 
+template <typename Real>
+void Polynomial1<Real>::MakeMonic()
+{
+    EliminateLeadingZeros();
+    Real const one(1);
+    if (mCoefficient.back() != one)
+    {
+        unsigned int degree = GetDegree();
+        Real invLeading = one / mCoefficient.back();
+        mCoefficient.back() = one;
+        for (unsigned int i = 0; i < degree; ++i)
+        {
+            mCoefficient[i] *= invLeading;
+        }
+    }
+}
+
+template <typename Real>
+Polynomial1<Real> GreatestCommonDivisor(Polynomial1<Real> const& p0, Polynomial1<Real> const& p1)
+{
+    // The numerator should be the polynomial of larger degree.
+    Polynomial1<Real> a, b;
+    if (p0.GetDegree() >= p1.GetDegree())
+    {
+        a = p0;
+        b = p1;
+    }
+    else
+    {
+        a = p1;
+        b = p0;
+    }
+
+    Polynomial1<Real> const zero{ (Real)0 };
+    if (a == zero || b == zero)
+    {
+        return (a != zero ? a : zero);
+    }
+
+    // Make the polynomials monic to keep the coefficients reasonable size
+    // when computing with floating-point Real.
+    a.MakeMonic();
+    b.MakeMonic();
+
+    Polynomial1<Real> q, r;
+    for (;;)
+    {
+        a.Divide(b, q, r);
+        if (r != zero)
+        {
+            // a = q * b + r, so gcd(a,b) = gcd(b, r)
+            a = b;
+            b = r;
+            b.MakeMonic();
+        }
+        else
+        {
+            b.MakeMonic();
+            break;
+        }
+    }
+
+    return b;
+}
+
+template <typename Real>
+void SquareFreeFactorization(Polynomial1<Real> const& f, std::vector<Polynomial1<Real>>& factors)
+{
+    // In the call to Divide(...), we know that the divisor exactly divides
+    // the numerator, so r = 0 after all such calls.
+    Polynomial1<Real> fder = f.GetDerivative();
+    Polynomial1<Real> a, b, c, d, q, r;
+
+    a = GreatestCommonDivisor(f, fder);
+    f.Divide(a, b, r);  // b = f / a
+    fder.Divide(a, c, r);  // c = fder / a
+    d = c - b.GetDerivative();
+
+    do
+    {
+        a = GreatestCommonDivisor(b, d);
+        factors.emplace_back(a);
+        b.Divide(a, q, r);  // q = b / a
+        b = std::move(q);
+        d.Divide(a, c, r);  // c = d / a
+        d = c - b.GetDerivative();
+    } while (b.GetDegree() > 0);
+}
 
 
 template <typename Real>

@@ -2067,6 +2067,21 @@
     <ClInclude Include="Include\Mathematics\GteIntpBSplineUniform.h">
       <Filter>Files\Mathematics\Interpolation</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteLevenbergMarquardtMinimizer.h">
+      <Filter>Files\Mathematics\NumericalMethods</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteGaussNewtonMinimizer.h">
+      <Filter>Files\Mathematics\NumericalMethods</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteCholeskyDecomposition.h">
+      <Filter>Files\Mathematics\NumericalMethods</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteApprCone3.h">
+      <Filter>Files\Mathematics\Approximation</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteApprTorus3.h">
+      <Filter>Files\Mathematics\Approximation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Applications\GteCommand.cpp">
