@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/07)
 
 #include "CubeMapEffect.h"
 #include <Mathematics/GteVector2.h>
@@ -22,10 +22,6 @@ CubeMapEffect::CubeMapEffect(std::shared_ptr<ProgramFactory> const& factory,
     float reflectivity, bool& created)
     :
     mCubeTexture(texture),
-    mPVWMatrix(nullptr),
-    mWMatrix(nullptr),
-    mCameraWorldPosition(nullptr),
-    mReflectivity(nullptr),
     mDynamicUpdates(false)
 {
     created = false;
@@ -46,21 +42,14 @@ CubeMapEffect::CubeMapEffect(std::shared_ptr<ProgramFactory> const& factory,
     }
 
     // Create the shader constants.
-    mPVWMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
-    mPVWMatrix = mPVWMatrixConstant->Get<Matrix4x4<float>>();
-    *mPVWMatrix = Matrix4x4<float>::Identity();
-
     mWMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
-    mWMatrix = mWMatrixConstant->Get<Matrix4x4<float>>();
-    *mWMatrix = Matrix4x4<float>::Identity();
+    SetWMatrix(Matrix4x4<float>::Identity());
 
     mCameraWorldPositionConstant = std::make_shared<ConstantBuffer>(sizeof(Vector4<float>), true);
-    mCameraWorldPosition = mCameraWorldPositionConstant->Get<Vector4<float>>();
-    *mCameraWorldPosition = Vector4<float>::Unit(3);
+    SetCameraWorldPosition(Vector4<float>::Unit(3));
 
     mReflectivityConstant = std::make_shared<ConstantBuffer>(sizeof(float), true);
-    mReflectivity = mReflectivityConstant->Get<float>();
-    *mReflectivity = reflectivity;
+    SetReflectivity(reflectivity);
 
     // Sample using bilinear filtering.
     mCubeSampler = std::make_shared<SamplerState>();
@@ -102,6 +91,12 @@ void CubeMapEffect::UseDynamicUpdates(float dmin, float dmax)
     mTarget->GetRTTexture(0)->SetCopyType(Resource::COPY_STAGING_TO_CPU);
 
     mDynamicUpdates = true;
+}
+
+void CubeMapEffect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& buffer)
+{
+    VisualEffect::SetPVWMatrixConstant(buffer);
+    mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
 }
 
 void CubeMapEffect::UpdateFaces(std::shared_ptr<GraphicsEngine> const& engine,

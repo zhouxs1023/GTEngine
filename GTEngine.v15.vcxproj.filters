@@ -220,6 +220,9 @@
     <Filter Include="Files\LowLevel\Logger\MSW">
       <UniqueIdentifier>{f457a0c0-5e65-4f89-a4d7-6986f78a3396}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\Physics\CollisionDetection">
+      <UniqueIdentifier>{c7ba2272-a0d4-4a51-9c10-0f92dc89eef9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Applications\GteCommand.h">
@@ -2082,6 +2085,12 @@
     <ClInclude Include="Include\Mathematics\GteApprTorus3.h">
       <Filter>Files\Mathematics\Approximation</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2Circle2.h">
+      <Filter>Files\Mathematics\Intersection\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteTrackcylinder.h">
+      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Applications\GteCommand.cpp">
@@ -2806,6 +2815,9 @@
     </ClCompile>
     <ClCompile Include="Source\Mathematics\MSW\GteCPUQueryInstructions.cpp">
       <Filter>Files\Mathematics\SIMD\MSW</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteTrackcylinder.cpp">
+      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

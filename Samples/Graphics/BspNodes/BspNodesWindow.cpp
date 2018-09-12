@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/08)
 
 #include "BspNodesWindow.h"
 
@@ -40,7 +40,6 @@ BspNodesWindow::BspNodesWindow(Parameters& parameters)
     CreateScene();
     InitializeCamera(60.0f, GetAspectRatio(), 0.1f, 100.0f, 0.001f, 0.001f,
         { 0.0f, -1.0f, 0.1f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f });
-    mPVWMatrices.Update();
     DoCullSort();
 }
 
@@ -50,7 +49,6 @@ void BspNodesWindow::OnIdle()
 
     if (mCameraRig.Move())
     {
-        mPVWMatrices.Update();
         DoCullSort();
     }
 
@@ -74,11 +72,19 @@ void BspNodesWindow::OnIdle()
     mTimer.UpdateFrameCount();
 }
 
+bool BspNodesWindow::OnResize(int xSize, int ySize)
+{
+    if (Window3::OnResize(xSize, ySize))
+    {
+        DoCullSort();
+    }
+    return true;
+}
+
 bool BspNodesWindow::OnMouseMotion(MouseButton button, int x, int y, unsigned int modifiers)
 {
     if (Window3::OnMouseMotion(button, x, y, modifiers))
     {
-        mPVWMatrices.Update();
         DoCullSort();
     }
     return true;
@@ -214,7 +220,6 @@ void BspNodesWindow::CreateScene()
         SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP,
         SamplerState::WRAP);
     mGround->SetEffect(txEffect);
-    mPVWMatrices.Subscribe(mGround->worldTransform, txEffect->GetPVWMatrixConstant());
 
     // Partition the region above the ground into 5 convex pieces.  Each plane
     // is perpendicular to the ground (not required generally).
@@ -274,7 +279,6 @@ void BspNodesWindow::CreateScene()
     center = (v[2] + v[6] + v[7]) / 3.0f;
     mTorus->localTransform.SetTranslation(center[0], center[1], height);
     mBSPNode[3]->AttachPositiveChild(mTorus);
-    mPVWMatrices.Subscribe(mTorus->worldTransform, txEffect->GetPVWMatrixConstant());
 
     // Region 1: Create a sphere mesh.
     mSphere = mf.CreateSphere(32, 16, 1.0f);
@@ -287,7 +291,6 @@ void BspNodesWindow::CreateScene()
     center = (v[0] + v[3] + v[6] + v[7]) / 4.0f;
     mSphere->localTransform.SetTranslation(center[0], center[1], height);
     mBSPNode[3]->AttachNegativeChild(mSphere);
-    mPVWMatrices.Subscribe(mSphere->worldTransform, txEffect->GetPVWMatrixConstant());
 
     // Region 2: Create a tetrahedron.
     mTetrahedron = mf.CreateTetrahedron();
@@ -300,7 +303,6 @@ void BspNodesWindow::CreateScene()
     center = (v[1] + v[2] + v[3]) / 3.0f;
     mTetrahedron->localTransform.SetTranslation(center[0], center[1], height);
     mBSPNode[1]->AttachNegativeChild(mTetrahedron);
-    mPVWMatrices.Subscribe(mTetrahedron->worldTransform, txEffect->GetPVWMatrixConstant());
 
     // Region 3: Create a cube.
     mCube = mf.CreateHexahedron();
@@ -313,7 +315,6 @@ void BspNodesWindow::CreateScene()
     center = (v[1] + v[4] + v[5]) / 3.0f;
     mCube->localTransform.SetTranslation(center[0], center[1], height);
     mBSPNode[2]->AttachPositiveChild(mCube);
-    mPVWMatrices.Subscribe(mCube->worldTransform, txEffect->GetPVWMatrixConstant());
 
     // Region 4: Create an octahedron.
     mOctahedron = mf.CreateOctahedron();
@@ -326,7 +327,6 @@ void BspNodesWindow::CreateScene()
     center = (v[0] + v[4] + v[5] + v[8]) / 4.0f;
     mOctahedron->localTransform.SetTranslation(center[0], center[1], height);
     mBSPNode[2]->AttachNegativeChild(mOctahedron);
-    mPVWMatrices.Subscribe(mOctahedron->worldTransform, txEffect->GetPVWMatrixConstant());
 
     mTrackball.Update();
 }
@@ -334,6 +334,7 @@ void BspNodesWindow::CreateScene()
 void BspNodesWindow::DoCullSort()
 {
     mCuller.ComputeVisibleSet(mCamera, mScene);
+    mPVWMatrices.Update(mCuller.GetVisibleSet());
 
     mVisibleOpaque.clear();
     mVisibleNoCullWire.clear();
@@ -388,7 +389,6 @@ std::shared_ptr<BspNode> BspNodesWindow::CreateNode(int i,
         vertex[j].color = color;
     }
     mRectangle[i]->SetEffect(mVCEffect[i]);
-    mPVWMatrices.Subscribe(mRectangle[i]->worldTransform, mVCEffect[i]->GetPVWMatrixConstant());
 
     // Set the position and orientation for the world-space plane.
     Vector3<float> trn{ 0.5f*(v0[0] + v1[0]), 0.5f*(v0[1] + v1[1]),

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/08)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GtePVWUpdater.h>
@@ -45,9 +45,35 @@ bool PVWUpdater::Subscribe(Matrix4x4<float> const& worldMatrix,
     return false;
 }
 
+bool PVWUpdater::Subscribe(std::shared_ptr<Visual> const& visual,
+    std::string const& pvwMatrixName)
+{
+    if (visual)
+    {
+        auto const& effect = visual->GetEffect();
+        if (effect)
+        {
+            auto const& worldMatrix = visual->worldTransform.GetHMatrix();
+            auto const& cbuffer = effect->GetPVWMatrixConstant();
+            return Subscribe(worldMatrix, cbuffer, pvwMatrixName);
+        }
+    }
+    return false;
+}
+
 bool PVWUpdater::Unsubscribe(Matrix4x4<float> const& worldMatrix)
 {
     return mSubscribers.erase(&worldMatrix) > 0;
+}
+
+bool PVWUpdater::Unsubscribe(std::shared_ptr<Visual> const& visual)
+{
+    if (visual)
+    {
+        auto const& worldMatrix = visual->worldTransform.GetHMatrix();
+        return Unsubscribe(worldMatrix);
+    }
+    return false;
 }
 
 void PVWUpdater::UnsubscribeAll()
@@ -57,23 +83,61 @@ void PVWUpdater::UnsubscribeAll()
 
 void PVWUpdater::Update()
 {
-    // The function is called knowing that mCamera is not null.
-    Matrix4x4<float> pvMatrix = mCamera->GetProjectionViewMatrix();
-    for (auto& element : mSubscribers)
+    if (mCamera)
     {
-        // Compute the new projection-view-world matrix.  The matrix
-        // *element.first is the model-to-world matrix for the associated
-        // object.
+        Matrix4x4<float> pvMatrix = mCamera->GetProjectionViewMatrix();
+        for (auto& element : mSubscribers)
+        {
+            // Compute the new projection-view-world matrix.  The matrix
+            // *element.first is the model-to-world matrix for the associated
+            // object.
+            auto const& wMatrix = *element.first;
 #if defined(GTE_USE_MAT_VEC)
-        Matrix4x4<float> pvwMatrix = pvMatrix * (*element.first);
+            Matrix4x4<float> pvwMatrix = pvMatrix * wMatrix;
 #else
-        Matrix4x4<float> pvwMatrix = (*element.first) * pvMatrix;
+            Matrix4x4<float> pvwMatrix = wMatrix * pvMatrix;
 #endif
-        // Copy the source matrix into the system memory of the constant
-        // buffer.
-        element.second.first->SetMember(element.second.second, pvwMatrix);
+            // Copy the source matrix into the CPU memory of the constant
+            // buffer.
+            auto const& cbuffer = element.second.first;
+            auto const& name = element.second.second;
+            cbuffer->SetMember(name, pvwMatrix);
 
-        // Allow the caller to update GPU memory as desired.
-        mUpdater(element.second.first);
+            // Allow the caller to update GPU memory as desired.
+            mUpdater(cbuffer);
+        }
+    }
+}
+
+void PVWUpdater::Update(std::vector<Visual*> const& updateSet)
+{
+    if (mCamera)
+    {
+        Matrix4x4<float> pvMatrix = mCamera->GetProjectionViewMatrix();
+        for (auto& visual : updateSet)
+        {
+            if (visual)
+            {
+                auto const& effect = visual->GetEffect();
+                if (effect)
+                {
+                    auto const& wMatrix = visual->worldTransform.GetHMatrix();
+                    auto const& cbuffer = effect->GetPVWMatrixConstant();
+
+                    // Compute the new projection-view-world matrix.
+#if defined(GTE_USE_MAT_VEC)
+                    Matrix4x4<float> pvwMatrix = pvMatrix * wMatrix;
+#else
+                    Matrix4x4<float> pvwMatrix = wMatrix * pvMatrix;
+#endif
+                    // Copy the source matrix into the CPU memory of the
+                    // constant buffer.
+                    effect->SetPVWMatrix(pvwMatrix);
+
+                    // Allow the caller to update GPU memory as desired.
+                    mUpdater(cbuffer);
+                }
+            }
+        }
     }
 }

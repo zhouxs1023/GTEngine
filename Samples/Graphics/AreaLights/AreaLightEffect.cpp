@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/07)
 
 #include <Graphics/GteMaterial.h>
 #include "AreaLightEffect.h"
@@ -33,7 +33,6 @@ AreaLightEffect::AreaLightEffect(std::shared_ptr<ProgramFactory> const& factory,
 
     // Create the shader constants.  These must be initialized by the
     // application before the first use of the effect.
-    mPVWMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
     mMaterialConstant = std::make_shared<ConstantBuffer>(sizeof(Material), true);
     mCameraConstant = std::make_shared<ConstantBuffer>(sizeof(Vector4<float>), true);
     mAreaLightConstant = std::make_shared<ConstantBuffer>(sizeof(Parameters), true);
@@ -65,4 +64,10 @@ AreaLightEffect::AreaLightEffect(std::shared_ptr<ProgramFactory> const& factory,
 #endif
 
     created = true;
+}
+
+void AreaLightEffect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& buffer)
+{
+    VisualEffect::SetPVWMatrixConstant(buffer);
+    mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
 }

@@ -3,31 +3,25 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/11/13)
+// File Version: 3.0.2 (2018/09/07)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteVertexColorEffect.h>
 using namespace gte;
 
 VertexColorEffect::VertexColorEffect(std::shared_ptr<ProgramFactory> const& factory)
-    :
-    mPVWMatrix(nullptr)
 {
     int i = factory->GetAPI();
     mProgram = factory->CreateFromSources(*msVSSource[i], *msPSSource[i], "");
     if (mProgram)
     {
-        mPVWMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
-        mPVWMatrix = mPVWMatrixConstant->Get<Matrix4x4<float>>();
-        *mPVWMatrix = Matrix4x4<float>::Identity();
-
         mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
     }
 }
 
-void VertexColorEffect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& pvwMatrix)
+void VertexColorEffect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& buffer)
 {
-    mPVWMatrixConstant = pvwMatrix;
+    VisualEffect::SetPVWMatrixConstant(buffer);
     mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
 }
 

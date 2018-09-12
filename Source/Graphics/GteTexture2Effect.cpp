@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/11/13)
+// File Version: 3.0.2 (2018/09/07)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteTexture2Effect.h>
@@ -13,17 +13,12 @@ Texture2Effect::Texture2Effect(std::shared_ptr<ProgramFactory> const& factory,
     std::shared_ptr<Texture2> const& texture, SamplerState::Filter filter,
     SamplerState::Mode mode0, SamplerState::Mode mode1)
     :
-    mTexture(texture),
-    mPVWMatrix(nullptr)
+    mTexture(texture)
 {
     int api = factory->GetAPI();
     mProgram = factory->CreateFromSources(*msVSSource[api], *msPSSource[api], "");
     if (mProgram)
     {
-        mPVWMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
-        mPVWMatrix = mPVWMatrixConstant->Get<Matrix4x4<float>>();
-        *mPVWMatrix = Matrix4x4<float>::Identity();
-
         mSampler = std::make_shared<SamplerState>();
         mSampler->filter = filter;
         mSampler->mode[0] = mode0;
@@ -39,9 +34,9 @@ Texture2Effect::Texture2Effect(std::shared_ptr<ProgramFactory> const& factory,
     }
 }
 
-void Texture2Effect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& pvwMatrix)
+void Texture2Effect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& buffer)
 {
-    mPVWMatrixConstant = pvwMatrix;
+    VisualEffect::SetPVWMatrixConstant(buffer);
     mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
 }
 

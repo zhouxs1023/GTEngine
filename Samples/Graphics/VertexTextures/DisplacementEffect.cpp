@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/07)
 
 #include "DisplacementEffect.h"
 using namespace gte;
@@ -12,18 +12,12 @@ DisplacementEffect::DisplacementEffect(std::shared_ptr<ProgramFactory> const& fa
     std::shared_ptr<Texture2> const& texture, SamplerState::Filter filter,
     SamplerState::Mode mode0, SamplerState::Mode mode1)
     :
-    mTexture(texture),
-    mPVWMatrix(nullptr)
+    mTexture(texture)
 {
     int api = factory->GetAPI();
     mProgram = factory->CreateFromSources(*msVSSource[api], *msPSSource[api], "");
     if (mProgram)
     {
-        mPVWMatrixConstant = std::make_shared<ConstantBuffer>(
-            sizeof(Matrix4x4<float>), true);
-        mPVWMatrix = mPVWMatrixConstant->Get<Matrix4x4<float>>();
-        *mPVWMatrix = Matrix4x4<float>::Identity();
-
         mSampler = std::make_shared<SamplerState>();
         mSampler->filter = filter;
         mSampler->mode[0] = mode0;
@@ -37,6 +31,12 @@ DisplacementEffect::DisplacementEffect(std::shared_ptr<ProgramFactory> const& fa
 #endif
         mProgram->GetVShader()->Set("displacementSampler", mSampler);
     }
+}
+
+void DisplacementEffect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& buffer)
+{
+    VisualEffect::SetPVWMatrixConstant(buffer);
+    mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
 }
 
 

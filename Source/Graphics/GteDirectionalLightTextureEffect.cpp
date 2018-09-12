@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/07)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteDirectionalLightTextureEffect.h>
@@ -98,7 +98,7 @@ std::string const DirectionalLightTextureEffect::msGLSLVSSource =
 "}\n";
 
 std::string const DirectionalLightTextureEffect::msGLSLPSSource =
-GetShaderSourceLitFunctionGLSL() +
+LightingEffect::GetGLSLLitFunction() +
 "uniform Material\n"
 "{\n"
 "    vec4 materialEmissive;\n"

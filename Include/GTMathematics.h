@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.19 (2018/07/16)
+// File Version: 3.0.20 (2018/07/31)
 
 #pragma once
 
@@ -260,6 +260,7 @@
 // Intersection
 #include <Mathematics/GteFIQuery.h>
 #include <Mathematics/GteIntrAlignedBox2AlignedBox2.h>
+#include <Mathematics/GteIntrAlignedBox2Circle2.h>
 #include <Mathematics/GteIntrAlignedBox2OrientedBox2.h>
 #include <Mathematics/GteIntrAlignedBox3AlignedBox3.h>
 #include <Mathematics/GteIntrAlignedBox3Cone3.h>

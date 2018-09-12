@@ -19,8 +19,8 @@ int main(int, char const*[])
     LogReporter reporter(
         "LogReport.txt",
         Logger::Listener::LISTEN_FOR_ALL,
-        Logger::Listener::LISTEN_FOR_NOTHING,
         Logger::Listener::LISTEN_FOR_ALL,
+        Logger::Listener::LISTEN_FOR_NOTHING,
         Logger::Listener::LISTEN_FOR_ALL);
 #endif
 

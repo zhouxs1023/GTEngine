@@ -12,7 +12,6 @@ using namespace gte;
 BlendedTerrainEffect::BlendedTerrainEffect(std::shared_ptr<ProgramFactory> const& factory,
     Environment const& environment, bool& created)
     :
-    mPVWMatrix(nullptr),
     mFlowDirection(nullptr),
     mPowerFactor(nullptr)
 {
@@ -60,10 +59,6 @@ BlendedTerrainEffect::BlendedTerrainEffect(std::shared_ptr<ProgramFactory> const
     mCloudTexture->AutogenerateMipmaps();
 
     // Create the shader constants.
-    mPVWMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
-    mPVWMatrix = mPVWMatrixConstant->Get<Matrix4x4<float>>();
-    *mPVWMatrix = Matrix4x4<float>::Identity();
-
     mFlowDirectionConstant = std::make_shared<ConstantBuffer>(sizeof(Vector2<float>), true);
     mFlowDirection = mFlowDirectionConstant->Get<Vector2<float>>();
     *mFlowDirection = { 0.0f, 0.0f };
@@ -130,3 +125,8 @@ BlendedTerrainEffect::BlendedTerrainEffect(std::shared_ptr<ProgramFactory> const
     created = true;
 }
 
+void BlendedTerrainEffect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& buffer)
+{
+    VisualEffect::SetPVWMatrixConstant(buffer);
+    mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
+}

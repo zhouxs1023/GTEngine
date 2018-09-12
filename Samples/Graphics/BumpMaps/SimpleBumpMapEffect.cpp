@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/07)
 
 #include <Applications/GteTextureIO.h>
 #include "SimpleBumpMapEffect.h"
@@ -11,8 +11,6 @@ using namespace gte;
 
 SimpleBumpMapEffect::SimpleBumpMapEffect(std::shared_ptr<ProgramFactory> const& factory,
     Environment const& environment, bool& created)
-    :
-    mPVWMatrix(nullptr)
 {
     created = false;
 
@@ -52,12 +50,6 @@ SimpleBumpMapEffect::SimpleBumpMapEffect(std::shared_ptr<ProgramFactory> const& 
     mNormalTexture = WICFileIO::Load(texpath, true);
     mNormalTexture->AutogenerateMipmaps();
 
-    // Create the shader constants.
-    mPVWMatrixConstant =
-        std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
-    mPVWMatrix = mPVWMatrixConstant->Get<Matrix4x4<float>>();
-    *mPVWMatrix = Matrix4x4<float>::Identity();
-
     // Create the texture sampler for mipmapping.
     mCommonSampler = std::make_shared<SamplerState>();
     mCommonSampler->filter = SamplerState::MIN_L_MAG_L_MIP_L;
@@ -80,6 +72,12 @@ SimpleBumpMapEffect::SimpleBumpMapEffect(std::shared_ptr<ProgramFactory> const& 
 #endif
 
     created = true;
+}
+
+void SimpleBumpMapEffect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& buffer)
+{
+    VisualEffect::SetPVWMatrixConstant(buffer);
+    mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
 }
 
 void SimpleBumpMapEffect::ComputeLightVectors(std::shared_ptr<Visual> const& mesh,

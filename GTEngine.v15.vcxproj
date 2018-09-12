@@ -711,6 +711,7 @@
     <ClInclude Include="Include\Graphics\GteTextureRT.h" />
     <ClInclude Include="Include\Graphics\GteTextureSingle.h" />
     <ClInclude Include="Include\Graphics\GteTrackball.h" />
+    <ClInclude Include="Include\Graphics\GteTrackcylinder.h" />
     <ClInclude Include="Include\Graphics\GteTransform.h" />
     <ClInclude Include="Include\Graphics\GteTransformController.h" />
     <ClInclude Include="Include\Graphics\GteTypedBuffer.h" />
@@ -932,6 +933,7 @@
     <ClInclude Include="Include\Mathematics\GteIntpTrilinear3.h" />
     <ClInclude Include="Include\Mathematics\GteIntpVectorField2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2AlignedBox2.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2Circle2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2OrientedBox2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3AlignedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Cone3.h" />
@@ -1884,6 +1886,7 @@
     <ClCompile Include="Source\Graphics\GteTextureRT.cpp" />
     <ClCompile Include="Source\Graphics\GteTextureSingle.cpp" />
     <ClCompile Include="Source\Graphics\GteTrackball.cpp" />
+    <ClCompile Include="Source\Graphics\GteTrackcylinder.cpp" />
     <ClCompile Include="Source\Graphics\GteTransform.cpp" />
     <ClCompile Include="Source\Graphics\GteTransformController.cpp" />
     <ClCompile Include="Source\Graphics\GteTypedBuffer.cpp" />

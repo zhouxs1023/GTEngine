@@ -2055,6 +2055,12 @@
     <ClInclude Include="Include\Mathematics\GteApprTorus3.h">
       <Filter>Files\Mathematics\Approximation</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Graphics\GteTrackcylinder.h">
+      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2Circle2.h">
+      <Filter>Files\Mathematics\Intersection\2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GTEnginePCH.cpp">
@@ -2779,6 +2785,9 @@
     </ClCompile>
     <ClCompile Include="Source\Mathematics\MSW\GteCPUQueryInstructions.cpp">
       <Filter>Files\Mathematics\SIMD\MSW</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteTrackcylinder.cpp">
+      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

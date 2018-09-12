@@ -3,12 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/08)
 
 #pragma once
 
 #include <GTEngine.h>
 using namespace gte;
+
+// In addition to illustrating BSP nodes, this example shows how to use
+// PVWUpdater in conjunction with scene graph culling.
 
 class BspNodesWindow : public Window3
 {
@@ -16,6 +19,11 @@ public:
     BspNodesWindow(Parameters& parameters);
 
     virtual void OnIdle() override;
+
+    // These functions are overridden because the Window3 versions call
+    // mPVWMatriceds.Update().  Because we are dynamically culling, we also
+    // need to call mPVWMatrices.Update(mCuller.GetVisibleSet()).
+    virtual bool OnResize(int xSize, int ySize) override;
     virtual bool OnMouseMotion(MouseButton button, int x, int y, unsigned int modifiers) override;
 
 private:
