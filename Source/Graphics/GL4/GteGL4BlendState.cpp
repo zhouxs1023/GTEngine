@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/27)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
@@ -66,14 +66,14 @@ void GL4BlendState::Enable()
             Target const& target = mTarget[i];
             if (target.enable)
             {
-                glEnable(GL_BLEND);
+                glEnablei(GL_BLEND, i);
                 glBlendFuncSeparatei(i, target.srcColor, target.dstColor,
                     target.srcAlpha, target.dstAlpha);
                 glBlendEquationSeparatei(i, target.opColor, target.opAlpha);
             }
             else
             {
-                glDisable(GL_BLEND);
+                glDisablei(GL_BLEND, i);
             }
             glColorMaski(i, target.rMask, target.gMask, target.bMask, target.aMask);
             glSampleMaski(i, mSampleMask);

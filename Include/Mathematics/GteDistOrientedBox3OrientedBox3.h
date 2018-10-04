@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.5.0 (2016/11/27)
+// File Version: 3.5.1 (2018/09/26)
 
 #pragma once
 
@@ -11,7 +11,6 @@
 #include <Mathematics/GteLCPSolver.h>
 #include <Mathematics/GteOrientedBox.h>
 #include <Mathematics/GteVector3.h>
-#include <Mathematics/GteFunctions.h>
 
 namespace gte
 {

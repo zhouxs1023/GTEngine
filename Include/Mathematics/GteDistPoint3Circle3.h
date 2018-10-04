@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/09/26)
 
 #pragma once
 
 #include <Mathematics/GteDCPQuery.h>
-#include <Mathematics/GteFunctions.h>
 #include <Mathematics/GteCircle3.h>
 
 // The 3D point-circle distance algorithm is described in

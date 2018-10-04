@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/03)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteSkinController.h>
@@ -20,8 +20,8 @@ SkinController::SkinController(int numVertices, int numBones, Updater const& pos
     mNumVertices(numVertices),
     mNumBones(numBones),
     mBones(numBones),
-    mWeights(numBones, numVertices),
-    mOffsets(numBones, numVertices),
+    mWeights(numVertices * numBones),
+    mOffsets(numVertices * numBones),
     mPostUpdate(postUpdate),
     mPosition(nullptr),
     mStride(0),
@@ -51,32 +51,56 @@ bool SkinController::Update(double applicationTime)
         visual->worldTransform = Transform::IDENTITY;
         visual->worldTransformIsCurrent = true;
 
-        // Compute the skin vertex locations.
+        // Package the bone transformations into a std::vector to avoid the
+        // expensive lock() calls in the inner loop of the position updates.
+        std::vector<Matrix4x4<float>> worldTransforms(mNumBones);
+        for (int bone = 0; bone < mNumBones; ++bone)
+        {
+            worldTransforms[bone] = mBones[bone].lock()->worldTransform;
+        }
+
+        // Compute the skin vertex locations.  The typecasting to raw 'float'
+        // pointers increases the frame rate dramatically, both in Debug and
+        // Release builds.  Without this in Debug builds, the lack of inlining
+        // of Vector4, Matrix4, std::array and std::vector operator[]
+        // functions leads to a low frame rate.  Without this in Release
+        // builds, the lack of a highly efficient implementation of operator[]
+        // in std::array and std::vector leads to a low frame rate.  Running
+        // on an Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz, the Debug frame rate
+        // before the typecasting is 16 fps and after the typecasting is
+        // 223 fps.  The Release frame rate before the typecasting is 2390 fps
+        // and after the typecasting is 4170 fps (sync to vertical retrace is
+        // turned off for these experiments).
         char* current = mPosition;
+        float const* weights = mWeights.data();
+        Vector4<float> const* offsets = mOffsets.data();
         for (int vertex = 0; vertex < mNumVertices; ++vertex)
         {
-            Vector4<float> position{ 0.0f, 0.0f, 0.0f, 0.0f };
-            for (int bone = 0; bone < mNumBones; ++bone)
+            Matrix4x4<float> const* worldTransform = worldTransforms.data();
+            float position[3] = { 0.0f, 0.0f, 0.0f };
+            for (int bone = 0; bone < mNumBones; ++bone, ++weights, ++offsets, ++worldTransform)
             {
-                float weight = mWeights[vertex][bone];
+                float weight = *weights;
                 if (weight != 0.0f)
                 {
-                    Vector4<float> offset = mOffsets[vertex][bone];
+                    float const* M = reinterpret_cast<float const*>(worldTransform);
+                    float const* P = reinterpret_cast<float const*>(offsets);
 #if defined (GTE_USE_MAT_VEC)
-                    Vector4<float> worldOffset =
-                        mBones[bone].lock()->worldTransform * offset;
+                    position[0] += weight * (M[0] * P[0] + M[1] * P[1] + M[2] * P[2] + M[3]);
+                    position[1] += weight * (M[4] * P[0] + M[5] * P[1] + M[6] * P[2] + M[7]);
+                    position[2] += weight * (M[8] * P[0] + M[9] * P[1] + M[10] * P[2] + M[11]);
 #else
-                    Vector4<float> worldOffset =
-                        offset * mBones[bone].lock()->worldTransform;
+                    position[0] += weight * (M[0] * P[0] + M[4] * P[1] + M[8] * P[2] + M[12]);
+                    position[1] += weight * (M[1] * P[0] + M[5] * P[1] + M[9] * P[2] + M[13]);
+                    position[2] += weight * (M[2] * P[0] + M[6] * P[1] + M[10] * P[2] + M[14]);
 #endif
-                    position += weight * worldOffset;
                 }
             }
 
-            Vector3<float>* target = reinterpret_cast<Vector3<float>*>(current);
-            (*target)[0] = position[0];
-            (*target)[1] = position[1];
-            (*target)[2] = position[2];
+            float* target = reinterpret_cast<float*>(current);
+            target[0] = position[0];
+            target[1] = position[1];
+            target[2] = position[2];
             current += mStride;
         }
 

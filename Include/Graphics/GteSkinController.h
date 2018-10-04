@@ -3,11 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/03)
 
 #pragma once
 
-#include <LowLevel/GteArray2.h>
 #include <Graphics/GteController.h>
 #include <Graphics/GteVertexBuffer.h>
 #include <Mathematics/GteVector4.h>
@@ -38,8 +37,8 @@ public:
     inline int GetNumVertices() const;
     inline int GetNumBones() const;
     inline std::vector<std::weak_ptr<Node>>& GetBones();
-    inline Array2<float>& GetWeights();
-    inline Array2<Vector4<float>>& GetOffsets();
+    inline std::vector<float>& GetWeights();
+    inline std::vector<Vector4<float>>& GetOffsets();
 
     // The animation update.  The application time is in milliseconds.
     virtual bool Update(double applicationTime);
@@ -54,8 +53,8 @@ protected:
     int mNumVertices;                           // nv
     int mNumBones;                              // nb
     std::vector<std::weak_ptr<Node>> mBones;    // bones[nb]
-    Array2<float> mWeights;                     // weight[nv][nb], index b+nb*v
-    Array2<Vector4<float>> mOffsets;            // offset[nv][nb], index b+nb*v
+    std::vector<float> mWeights;                // weight[nv*nb], index b+nb*v
+    std::vector<Vector4<float>> mOffsets;       // offfset[nv*nv], index b+nb*v
     Updater mPostUpdate;
     char* mPosition;
     unsigned int mStride;
@@ -78,12 +77,12 @@ inline std::vector<std::weak_ptr<Node>>& SkinController::GetBones()
     return mBones;
 }
 
-inline Array2<float>& SkinController::GetWeights()
+inline std::vector<float>& SkinController::GetWeights()
 {
     return mWeights;
 }
 
-inline Array2<Vector4<float>>& SkinController::GetOffsets()
+inline std::vector<Vector4<float>>& SkinController::GetOffsets()
 {
     return mOffsets;
 }

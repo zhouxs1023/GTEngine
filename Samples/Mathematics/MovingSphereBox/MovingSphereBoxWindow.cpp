@@ -1,3 +1,10 @@
+// David Eberly, Geometric Tools, Redmond WA 98052
+// Copyright (c) 1998-2018
+// Distributed under the Boost Software License, Version 1.0.
+// http://www.boost.org/LICENSE_1_0.txt
+// http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
+// File Version: 3.16.0 (2018/10/03)
+
 #include "MovingSphereBoxWindow.h"
 
 int main(int, char const*[])
@@ -21,7 +28,15 @@ int main(int, char const*[])
 MovingSphereBoxWindow::MovingSphereBoxWindow(Parameters& parameters)
     :
     Window3(parameters),
-    mAlpha(0.5f)
+    mAlpha(0.5f),
+    mNumSamples0(128),
+    mNumSamples1(64),
+    mSample0(0),
+    mSample1(0),
+    mDX(0.1f),
+    mDY(0.1f),
+    mDZ(0.1f),
+    mDrawSphereVisual(true)
 {
     mBlendState = std::make_shared<BlendState>();
     mBlendState->target[0].enable = true;
@@ -57,6 +72,18 @@ void MovingSphereBoxWindow::OnIdle()
     // This is not the correct drawing order, but it is close enough for
     // demonstrating the moving sphere-box intersection query.
     mEngine->SetBlendState(mBlendState);
+
+    if (mDrawSphereVisual)
+    {
+        mEngine->Draw(mSphereVisual);
+    }
+    mEngine->Draw(mVelocityVisual);
+    if (mSphereContactVisual->culling != CullingMode::CULL_ALWAYS)
+    {
+        mEngine->Draw(mPointContactVisual);
+        mEngine->Draw(mSphereContactVisual);
+    }
+
     mEngine->Draw(mBoxVisual);
     for (int i = 0; i < 8; ++i)
     {
@@ -70,9 +97,12 @@ void MovingSphereBoxWindow::OnIdle()
     {
         mEngine->Draw(mFaceVisual[i]);
     }
+
     mEngine->SetDefaultBlendState();
 
-    mEngine->Draw(8, mYSize - 8, { 0.0f, 0.0f, 0.0f, 1.0f }, mTimer.GetFPS());
+    std::array<float, 4> const black{ 0.0f, 0.0f, 0.0f, 1.0f };
+    mEngine->Draw(8, mYSize - 8, black, mTimer.GetFPS());
+    mEngine->Draw(8, 24, black, mMessage);
     mEngine->DisplayColorBuffer(0);
 
     mTimer.UpdateFrameCount();
@@ -93,23 +123,108 @@ bool MovingSphereBoxWindow::OnCharPress(unsigned char key, int x, int y)
             mEngine->SetRasterizerState(mNoCullState);
         }
         return true;
+
+    // Manually launch the intersection query.
+    case 'e':
+    case 'E':
+        UpdateSphereCenter();
+        return true;
+
+    // Modify theta in [0,2*pi].
+    case 'a':
+        mSample0 = (mSample0 + mNumSamples0 - 1) % mNumSamples0;
+        UpdateSphereVelocity();
+        return true;
+    case 'A':
+        mSample0 = (mSample0 + 1) % mNumSamples0;
+        UpdateSphereVelocity();
+        return true;
+
+    // Modify phi in [0,pi].
+    case 'b':
+        mSample1 = (mSample1 + mNumSamples1 - 1) % mNumSamples1;
+        UpdateSphereVelocity();
+        return true;
+    case 'B':
+        mSample1 = (mSample1 + 1) % mNumSamples1;
+        UpdateSphereVelocity();
+        return true;
+
+    // Translate the sphere.
+    case 'x':
+        mSphere.center[0] -= mDX;
+        UpdateSphereCenter();
+        return true;
+    case 'X':
+        mSphere.center[0] += mDX;
+        UpdateSphereCenter();
+        return true;
+    case 'y':
+        mSphere.center[1] -= mDY;
+        UpdateSphereCenter();
+        return true;
+    case 'Y':
+        mSphere.center[1] += mDY;
+        UpdateSphereCenter();
+        return true;
+    case 'z':
+        mSphere.center[2] -= mDZ;
+        UpdateSphereCenter();
+        return true;
+    case 'Z':
+        mSphere.center[2] += mDZ;
+        UpdateSphereCenter();
+        return true;
+
+    // Toggle the drawing of the moving sphere.
+    case 's':
+    case 'S':
+        mDrawSphereVisual = !mDrawSphereVisual;
+        return true;
     }
+
     return Window3::OnCharPress(key, x, y);
 }
 
 void MovingSphereBoxWindow::CreateScene()
 {
+    mBoxRoot = std::make_shared<Node>();
+    mTrackball.Attach(mBoxRoot);
+
+#if defined(APP_USE_OBB)
+    mBox.center = { 1.0f, 0.0f, 0.0f };
+    mBox.axis[0] = { 1.0f, 1.0f, 1.0f };
+    Normalize(mBox.axis[0]);
+    mBox.axis[1] = { 1.0f, -1.0f, 0.0f };
+    Normalize(mBox.axis[1]);
+    mBox.axis[2] = Cross(mBox.axis[0], mBox.axis[1]);
+    mBox.extent = { 3.0f, 2.0f, 1.0f };
+    Matrix3x3<float> rotate;
+    rotate.SetCol(0, mBox.axis[0]);
+    rotate.SetCol(1, mBox.axis[1]);
+    rotate.SetCol(2, mBox.axis[2]);
+    mBoxRoot->localTransform.SetTranslation(mBox.center);
+    mBoxRoot->localTransform.SetRotation(rotate);
+#else
+    mBox.min = { -3.0f, -2.0f, -1.0f };
+    mBox.max = { +3.0f, +2.0f, +1.0f };
+#endif
+    mSphere.center = { 5.0f, 5.0f, 5.0f };
+    mSphere.radius = 1.0f;
+    mBoxVelocity = { 0.0f, 0.0f, 0.0f };
+
     CreateRoundedBoxVertices();
     CreateRoundedBoxEdges();
     CreateRoundedBoxFaces();
     CreateBox();
+    CreateSpheres();
+    CreateMotionCylinder();
+    UpdateSphereVelocity();
 }
 
 void MovingSphereBoxWindow::CreateRoundedBoxVertices()
 {
-    mSphere.center = { 0.0f, 0.0f, 0.0f };
-    mSphere.radius = 1.0f;
-
+    // Create the octants of a sphere by using NURBS.
     float sqrt2 = sqrt(2.0f), sqrt3 = sqrt(3.0f);
     float a0 = (sqrt3 - 1.0f) / sqrt3;
     float a1 = (sqrt3 + 1.0f) / (2.0f * sqrt3);
@@ -123,35 +238,35 @@ void MovingSphereBoxWindow::CreateRoundedBoxVertices()
     float weight[5][5];
     std::function<float(float, float, float)> bernstein[5][5];
 
-    control[0][0] = { 0.0f, 0.0f, 1.0f };  // P004
-    control[0][1] = { 0.0f, a0,   1.0f };  // P013
-    control[0][2] = { 0.0f, a1,   a1 };  // P022
-    control[0][3] = { 0.0f, 1.0f, a0 };  // P031
-    control[0][4] = { 0.0f, 1.0f, 0.0f };  // P040
+    control[0][0] = { 0.0f, 0.0f, 1.0f };   // P004
+    control[0][1] = { 0.0f, a0,   1.0f };   // P013
+    control[0][2] = { 0.0f, a1,   a1 };     // P022
+    control[0][3] = { 0.0f, 1.0f, a0 };     // P031
+    control[0][4] = { 0.0f, 1.0f, 0.0f };   // P040
 
-    control[1][0] = { a0,   0.0f, 1.0f };  // P103
-    control[1][1] = { a2,   a2,   1.0f };  // P112
-    control[1][2] = { a2,   1.0f, a2 };  // P121
-    control[1][3] = { a0,   1.0f, 0.0f };  // P130
-    control[1][4] = { 0.0f, 0.0f, 0.0f };  // unused
+    control[1][0] = { a0,   0.0f, 1.0f };   // P103
+    control[1][1] = { a2,   a2,   1.0f };   // P112
+    control[1][2] = { a2,   1.0f, a2 };     // P121
+    control[1][3] = { a0,   1.0f, 0.0f };   // P130
+    control[1][4] = { 0.0f, 0.0f, 0.0f };   // unused
 
-    control[2][0] = { a1,   0.0f, a1 };  // P202
-    control[2][1] = { 1.0f, a2,   a2 };  // P211
-    control[2][2] = { a1,   a1,   0.0f };  // P220
-    control[2][3] = { 0.0f, 0.0f, 0.0f };  // unused
-    control[2][4] = { 0.0f, 0.0f, 0.0f };  // unused
+    control[2][0] = { a1,   0.0f, a1 };     // P202
+    control[2][1] = { 1.0f, a2,   a2 };     // P211
+    control[2][2] = { a1,   a1,   0.0f };   // P220
+    control[2][3] = { 0.0f, 0.0f, 0.0f };   // unused
+    control[2][4] = { 0.0f, 0.0f, 0.0f };   // unused
 
-    control[3][0] = { 1.0f, 0.0f, a0 };  // P301
-    control[3][1] = { 1.0f, a0,   0.0f };  // P310
-    control[3][2] = { 0.0f, 0.0f, 0.0f };  // unused
-    control[3][3] = { 0.0f, 0.0f, 0.0f };  // unused
-    control[3][4] = { 0.0f, 0.0f, 0.0f };  // unused
+    control[3][0] = { 1.0f, 0.0f, a0 };     // P301
+    control[3][1] = { 1.0f, a0,   0.0f };   // P310
+    control[3][2] = { 0.0f, 0.0f, 0.0f };   // unused
+    control[3][3] = { 0.0f, 0.0f, 0.0f };   // unused
+    control[3][4] = { 0.0f, 0.0f, 0.0f };   // unused
 
-    control[4][0] = { 1.0f, 0.0f, 0.0f };  // P400
-    control[4][1] = { 0.0f, 0.0f, 0.0f };  // unused
-    control[4][2] = { 0.0f, 0.0f, 0.0f };  // unused
-    control[4][3] = { 0.0f, 0.0f, 0.0f };  // unused
-    control[4][4] = { 0.0f, 0.0f, 0.0f };  // unused
+    control[4][0] = { 1.0f, 0.0f, 0.0f };   // P400
+    control[4][1] = { 0.0f, 0.0f, 0.0f };   // unused
+    control[4][2] = { 0.0f, 0.0f, 0.0f };   // unused
+    control[4][3] = { 0.0f, 0.0f, 0.0f };   // unused
+    control[4][4] = { 0.0f, 0.0f, 0.0f };   // unused
 
     weight[0][0] = b0;    // w004
     weight[0][1] = b1;    // w013
@@ -260,10 +375,6 @@ void MovingSphereBoxWindow::CreateRoundedBoxVertices()
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(int));
     memcpy(ibuffer->GetData(), indices.data(), indices.size() * sizeof(int));
 
-    float e0 = 3.0f, e1 = 2.0f, e2 = 1.0f;
-    mBox.min = { -e0, -e1, -e2 };
-    mBox.max = { +e0, +e1, +e2 };
-
     Vector4<float> color[8] =
     {
         Vector4<float>{ 0.0f, 0.5f, 0.0f, mAlpha },
@@ -276,17 +387,31 @@ void MovingSphereBoxWindow::CreateRoundedBoxVertices()
         Vector4<float>{ 0.0f, 1.0f, 0.0f, mAlpha }
     };
 
+#if defined(APP_USE_OBB)
     Vector3<float> center[8] =
     {
-        Vector3<float>{ -e0, -e1, -e2 },
-        Vector3<float>{ +e0, -e1, -e2 },
-        Vector3<float>{ -e0, +e1, -e2 },
-        Vector3<float>{ +e0, +e1, -e2 },
-        Vector3<float>{ -e0, -e1, +e2 },
-        Vector3<float>{ +e0, -e1, +e2 },
-        Vector3<float>{ -e0, +e1, +e2 },
-        Vector3<float>{ +e0, +e1, +e2 }
+        Vector3<float>{ -mBox.extent[0], -mBox.extent[1], -mBox.extent[2] },
+        Vector3<float>{ +mBox.extent[0], -mBox.extent[1], -mBox.extent[2] },
+        Vector3<float>{ -mBox.extent[0], +mBox.extent[1], -mBox.extent[2] },
+        Vector3<float>{ +mBox.extent[0], +mBox.extent[1], -mBox.extent[2] },
+        Vector3<float>{ -mBox.extent[0], -mBox.extent[1], +mBox.extent[2] },
+        Vector3<float>{ +mBox.extent[0], -mBox.extent[1], +mBox.extent[2] },
+        Vector3<float>{ -mBox.extent[0], +mBox.extent[1], +mBox.extent[2] },
+        Vector3<float>{ +mBox.extent[0], +mBox.extent[1], +mBox.extent[2] }
     };
+#else
+    Vector3<float> center[8] =
+    {
+        Vector3<float>{ mBox.min[0], mBox.min[1], mBox.min[2] },
+        Vector3<float>{ mBox.max[0], mBox.min[1], mBox.min[2] },
+        Vector3<float>{ mBox.min[0], mBox.max[1], mBox.min[2] },
+        Vector3<float>{ mBox.max[0], mBox.max[1], mBox.min[2] },
+        Vector3<float>{ mBox.min[0], mBox.min[1], mBox.max[2] },
+        Vector3<float>{ mBox.max[0], mBox.min[1], mBox.max[2] },
+        Vector3<float>{ mBox.min[0], mBox.max[1], mBox.max[2] },
+        Vector3<float>{ mBox.max[0], mBox.max[1], mBox.max[2] }
+    };
+#endif
 
     float sqrtHalf = sqrt(0.5f);
     Quaternion<float> orient[8] =
@@ -317,7 +442,8 @@ void MovingSphereBoxWindow::CreateRoundedBoxVertices()
         mVertexVisual[i]->localTransform.SetTranslation(center[i]);
         mVertexVisual[i]->localTransform.SetRotation(orient[i]);
         mPVWMatrices.Subscribe(mVertexVisual[i]->worldTransform, effect->GetPVWMatrixConstant());
-        mTrackball.Attach(mVertexVisual[i]);
+
+        mBoxRoot->AttachChild(mVertexVisual[i]);
     }
 }
 
@@ -333,7 +459,6 @@ void MovingSphereBoxWindow::CreateRoundedBoxEdges()
     Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
     for (int row = 0; row < DENSITY; ++row)
     {
-        //float z = mBox.min[2] + (mBox.max[2] - mBox.min[2]) * (float)row / (float)(DENSITY - 1);
         float z = -1.0f + 2.0f * (float)row / (float)(DENSITY - 1);
         for (int col = 0; col < DENSITY; ++col)
         {
@@ -345,20 +470,53 @@ void MovingSphereBoxWindow::CreateRoundedBoxEdges()
 
     Vector4<float> color[12] =
     {
-        Vector4<float>{ 0.5f, 0.0f, 0.0f, mAlpha },
-        Vector4<float>{ 0.5f, 0.0f, 0.0f, mAlpha },
-        Vector4<float>{ 0.5f, 0.0f, 0.0f, mAlpha },
-        Vector4<float>{ 0.5f, 0.0f, 0.0f, mAlpha },
         Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
         Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
         Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
         Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
-        Vector4<float>{ 0.0f, 0.25f, 0.5f, mAlpha },
-        Vector4<float>{ 0.0f, 0.25f, 0.5f, mAlpha },
-        Vector4<float>{ 0.0f, 0.25f, 0.5f, mAlpha },
-        Vector4<float>{ 0.0f, 0.25f, 0.5f, mAlpha }
+        Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
+        Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
+        Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
+        Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
+        Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
+        Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
+        Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha },
+        Vector4<float>{ 1.0f, 0.5f, 0.0f, mAlpha }
     };
 
+#if defined(APP_USE_OBB)
+    Vector3<float> center[12] =
+    {
+        Vector3<float>{ -mBox.extent[0], -mBox.extent[1], 0.0f },
+        Vector3<float>{ +mBox.extent[0], -mBox.extent[1], 0.0f },
+        Vector3<float>{ -mBox.extent[0], +mBox.extent[1], 0.0f },
+        Vector3<float>{ +mBox.extent[0], +mBox.extent[1], 0.0f },
+        Vector3<float>{ -mBox.extent[0], 0.0f, -mBox.extent[2] },
+        Vector3<float>{ +mBox.extent[0], 0.0f, -mBox.extent[2] },
+        Vector3<float>{ -mBox.extent[0], 0.0f, +mBox.extent[2] },
+        Vector3<float>{ +mBox.extent[0], 0.0f, +mBox.extent[2] },
+        Vector3<float>{ 0.0f, -mBox.extent[1], -mBox.extent[2] },
+        Vector3<float>{ 0.0f, +mBox.extent[1], -mBox.extent[2] },
+        Vector3<float>{ 0.0f, -mBox.extent[1], +mBox.extent[2] },
+        Vector3<float>{ 0.0f, +mBox.extent[1], +mBox.extent[2] }
+    };
+
+    Vector3<float> scale[12] =
+    {
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[2] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[2] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[2] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[2] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[1] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[1] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[1] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[1] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[0] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[0] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[0] },
+        Vector3<float>{ 1.0f, 1.0f, mBox.extent[0] }
+    };
+#else
     Vector3<float> center[12] =
     {
         Vector3<float>{ -mBox.max[0], -mBox.max[1], 0.0f },
@@ -390,6 +548,7 @@ void MovingSphereBoxWindow::CreateRoundedBoxEdges()
         Vector3<float>{ 1.0f, 1.0f, mBox.max[0] },
         Vector3<float>{ 1.0f, 1.0f, mBox.max[0] }
     };
+#endif
 
     float sqrtHalf = sqrt(0.5f);
     Quaternion<float> orient[12] =
@@ -431,7 +590,8 @@ void MovingSphereBoxWindow::CreateRoundedBoxEdges()
         mEdgeVisual[i]->localTransform.SetRotation(orient[i]);
         mEdgeVisual[i]->localTransform.SetScale(scale[i]);
         mPVWMatrices.Subscribe(mEdgeVisual[i]->worldTransform, effect->GetPVWMatrixConstant());
-        mTrackball.Attach(mEdgeVisual[i]);
+
+        mBoxRoot->AttachChild(mEdgeVisual[i]);
     }
 }
 
@@ -455,6 +615,27 @@ void MovingSphereBoxWindow::CreateRoundedBoxFaces()
         Vector4<float>{ 0.5f, 0.0f, 0.5f, mAlpha }
     };
 
+#if defined(APP_USE_OBB)
+    Vector3<float> center[6] =
+    {
+        Vector3<float>{ 0.0f, 0.0f, -mBox.extent[2] - mSphere.radius },
+        Vector3<float>{ 0.0f, 0.0f, +mBox.extent[2] + mSphere.radius },
+        Vector3<float>{ 0.0f, -mBox.extent[1] - mSphere.radius, 0.0f },
+        Vector3<float>{ 0.0f, +mBox.extent[1] + mSphere.radius, 0.0f },
+        Vector3<float>{ -mBox.extent[0] - mSphere.radius, 0.0f, 0.0f },
+        Vector3<float>{ +mBox.extent[0] + mSphere.radius, 0.0f, 0.0f }
+    };
+
+    Vector3<float> scale[6] =
+    {
+        Vector3<float>{ mBox.extent[0], mBox.extent[1], 1.0f },
+        Vector3<float>{ mBox.extent[0], mBox.extent[1], 1.0f },
+        Vector3<float>{ mBox.extent[0], 1.0f, mBox.extent[2] },
+        Vector3<float>{ mBox.extent[0], 1.0f, mBox.extent[2] },
+        Vector3<float>{ 1.0f, mBox.extent[1], mBox.extent[2] },
+        Vector3<float>{ 1.0f, mBox.extent[1], mBox.extent[2] }
+    };
+#else
     Vector3<float> center[6] =
     {
         Vector3<float>{ 0.0f, 0.0f, -mBox.max[2] - mSphere.radius },
@@ -474,6 +655,7 @@ void MovingSphereBoxWindow::CreateRoundedBoxFaces()
         Vector3<float>{ 1.0f, mBox.max[1], mBox.max[2] },
         Vector3<float>{ 1.0f, mBox.max[1], mBox.max[2] }
     };
+#endif
 
     AxisAngle<3, float> aa;
     aa.axis = { 0.0f, 1.0f, 0.0f };
@@ -507,7 +689,8 @@ void MovingSphereBoxWindow::CreateRoundedBoxFaces()
         mFaceVisual[i]->localTransform.SetRotation(orient[i]);
         mFaceVisual[i]->localTransform.SetScale(scale[i]);
         mPVWMatrices.Subscribe(mFaceVisual[i]->worldTransform, effect->GetPVWMatrixConstant());
-        mTrackball.Attach(mFaceVisual[i]);
+
+        mBoxRoot->AttachChild(mFaceVisual[i]);
     }
 }
 
@@ -517,10 +700,123 @@ void MovingSphereBoxWindow::CreateBox()
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     MeshFactory mf;
     mf.SetVertexFormat(vformat);
-    mBoxVisual = mf.CreateBox(mBox.max[0], mBox.max[1], mBox.max[2]);
+#if defined(APP_USE_OBB)
+    mBoxVisual = mf.CreateBox(mBox.extent[0], mBox.extent[1], mBox.extent[2]);
+#else
+    Vector3<float> extent = 0.5f * (mBox.max - mBox.min);
+    mBoxVisual = mf.CreateBox(extent[0], extent[1], extent[2]);
+#endif
     Vector4<float> color{ 0.5f, 0.5f, 0.5f, mAlpha };
     auto effect = std::make_shared<ConstantColorEffect>(mProgramFactory, color);
     mBoxVisual->SetEffect(effect);
     mPVWMatrices.Subscribe(mBoxVisual->worldTransform, effect->GetPVWMatrixConstant());
-    mTrackball.Attach(mBoxVisual);
+
+    mBoxRoot->AttachChild(mBoxVisual);
+}
+
+void MovingSphereBoxWindow::CreateSpheres()
+{
+    VertexFormat vformat;
+    vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
+    MeshFactory mf;
+    mf.SetVertexFormat(vformat);
+    mSphereVisual = mf.CreateSphere(16, 16, mSphere.radius);
+    Vector4<float> color{ 0.75f, 0.75f, 0.75f, mAlpha };
+    auto effect = std::make_shared<ConstantColorEffect>(mProgramFactory, color);
+    mSphereVisual->SetEffect(effect);
+    mSphereVisual->localTransform.SetTranslation(mSphere.center);
+    mPVWMatrices.Subscribe(mSphereVisual->worldTransform, effect->GetPVWMatrixConstant());
+    mTrackball.Attach(mSphereVisual);
+
+    mSphereContactVisual = mf.CreateSphere(16, 16, mSphere.radius);
+    color = { 0.25f, 0.25f, 0.25f, mAlpha };
+    mSphereContactVisual->culling = CullingMode::CULL_ALWAYS;
+    effect = std::make_shared<ConstantColorEffect>(mProgramFactory, color);
+    mSphereContactVisual->SetEffect(effect);
+    mSphereContactVisual->localTransform.SetTranslation(mSphere.center);
+    mPVWMatrices.Subscribe(mSphereContactVisual->worldTransform, effect->GetPVWMatrixConstant());
+    mTrackball.Attach(mSphereContactVisual);
+
+    mPointContactVisual = mf.CreateSphere(8, 8, mSphere.radius / 8.0f);
+    color = { 1.0f, 0.0f, 0.0f, mAlpha };
+    effect = std::make_shared<ConstantColorEffect>(mProgramFactory, color);
+    mPointContactVisual->SetEffect(effect);
+    mPointContactVisual->localTransform.SetTranslation(mSphere.center);
+    mPVWMatrices.Subscribe(mPointContactVisual->worldTransform, effect->GetPVWMatrixConstant());
+    mTrackball.Attach(mPointContactVisual);
+}
+
+void MovingSphereBoxWindow::CreateMotionCylinder()
+{
+    VertexFormat vformat;
+    vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 2);
+    auto vertices = vbuffer->Get<Vector3<float>>();
+    vertices[0] = { 0.0f, 0.0f, 0.0f };
+    vertices[1] = { 0.0f, 0.0f, 1000.0f };
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYSEGMENT_DISJOINT, 1);
+    Vector4<float> color{ 0.0f, 1.0f, 0.0f, mAlpha };
+    auto effect = std::make_shared<ConstantColorEffect>(mProgramFactory, color);
+    mVelocityVisual = std::make_shared<Visual>(vbuffer, ibuffer, effect);
+    mPVWMatrices.Subscribe(mVelocityVisual->worldTransform, effect->GetPVWMatrixConstant());
+    mTrackball.Attach(mVelocityVisual);
+}
+
+void MovingSphereBoxWindow::UpdateSphereVelocity()
+{
+    float angle0 = mSample0 * (float)GTE_C_TWO_PI / mNumSamples0;
+    float angle1 = mSample1 * (float)GTE_C_PI / mNumSamples1;
+    float cs0 = cos(angle0), sn0 = sin(angle0);
+    float cs1 = cos(angle1), sn1 = sin(angle1);
+    mSphereVelocity = { cs0 * sn1, sn0 * sn1, cs1 };
+
+    Vector3<float> basis[3];
+    basis[0] = mSphereVelocity;
+    ComputeOrthogonalComplement(1, basis);
+    Matrix3x3<float> rotate;
+    rotate.SetCol(0, basis[1]);
+    rotate.SetCol(1, basis[2]);
+    rotate.SetCol(2, basis[0]);
+    mVelocityVisual->localTransform.SetRotation(rotate);
+    mVelocityVisual->localTransform.SetTranslation(mSphere.center);
+    mVelocityVisual->Update();
+
+    auto result = mQuery(mBox, mBoxVelocity, mSphere, mSphereVelocity);
+    bool intersect = (result.intersectionType != 0);
+    if (intersect)
+    {
+        mSphereContactVisual->culling = CullingMode::CULL_DYNAMIC;
+        mSphereContactVisual->localTransform.SetTranslation(
+            mSphere.center + result.contactTime * mSphereVelocity);
+        mSphereContactVisual->Update();
+        mPointContactVisual->localTransform.SetTranslation(result.contactPoint);
+        mPointContactVisual->Update();
+
+        // Transform the contact point to box coordinates for debugging.
+#if defined(APP_USE_OBB)
+        Vector3<float> temp = result.contactPoint - mBox.center;
+        Vector3<float> P{ Dot(temp, mBox.axis[0]), Dot(temp, mBox.axis[1]), Dot(temp, mBox.axis[2]) };
+#else
+        Vector3<float> P = result.contactPoint;
+#endif
+        mMessage = "(" +
+            std::to_string(P[0]) + ", " +
+            std::to_string(P[1]) + ", " +
+            std::to_string(P[2]) + ")";
+    }
+    else
+    {
+        mSphereContactVisual->culling = CullingMode::CULL_ALWAYS;
+        mMessage = "";
+    }
+
+    mPVWMatrices.Update();
+    mTrackball.Update();
+}
+
+void MovingSphereBoxWindow::UpdateSphereCenter()
+{
+    mSphereVisual->localTransform.SetTranslation(mSphere.center);
+    mSphereVisual->Update();
+    UpdateSphereVelocity();
 }

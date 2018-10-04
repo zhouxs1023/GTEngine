@@ -3,11 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.15.1 (2018/08/01)
+// File Version: 3.15.2 (2018/10/03)
 
 #pragma once
 
-#include <Mathematics/GteFunctions.h>
 #include <Mathematics/GteVector2.h>
 #include <Mathematics/GteHypersphere.h>
 #include <Mathematics/GteDistPointAlignedBox.h>
@@ -26,7 +25,7 @@ namespace gte
         // The intersection query considers the box and circle to be solids;
         // that is, the circle object includes the region inside the circular
         // boundary and the box object includes the region inside the
-        // rectangular boundary.  If the circle object and rectangle object
+        // rectangular boundary.  If the circle object and box object
         // overlap, the objects intersect.
         struct Result
         {
@@ -52,10 +51,11 @@ namespace gte
         struct Result
         {
             // The cases are
-            // 1. Objects initially overlapping.  The contactPoint is invalid.
+            // 1. Objects initially overlapping.  The contactPoint is only one
+            //    of infinitely many points in the overlap.
             //      intersectionType = -1
             //      contactTime = 0
-            //      contactPoint = (0,0) (TODO: Set to point in intersection?)
+            //      contactPoint = circle.center
             // 2. Objects initially separated but do not intersect later.  The
             //      contactTime and contactPoint are invalid.
             //      intersectionType = 0
@@ -72,20 +72,21 @@ namespace gte
             // TODO: To support arbitrary precision for the contactTime,
             // return q0, q1 and q2 where contactTime = (q0 - sqrt(q1)) / q2.
             // The caller can compute contactTime to desired number of digits
-            // of precision.  These are valid in the case when intersectionType
-            // is +1 but are set to zero (invalid) in the other cases.  Do the
-            // same for the contactPoint.
+            // of precision.  These are valid when intersectionType is +1 but
+            // are set to zero (invalid) in the other cases.  Do the same for
+            // the contactPoint.
         };
 
         Result operator()(AlignedBox2<Real> const& box, Vector2<Real> const& boxVelocity,
             Circle2<Real> const& circle, Vector2<Real> const& circleVelocity)
         {
+            Result result = { 0, (Real)0, { (Real)0, (Real)0 } };
+
             // Translate the circle and box so that the box center becomes
             // the origin.  Compute the velocity of the circle relative to
             // the box.
-            Real const zero(0), one(1), minusOne(-1), half(0.5);
-            Vector2<Real> boxCenter = (box.max + box.min) * half;
-            Vector2<Real> extent = (box.max - box.min) * half;
+            Vector2<Real> boxCenter = (box.max + box.min) * (Real)0.5;
+            Vector2<Real> extent = (box.max - box.min) * (Real)0.5;
             Vector2<Real> C = circle.center - boxCenter;
             Vector2<Real> V = circleVelocity - boxVelocity;
 
@@ -94,19 +95,18 @@ namespace gte
             Real sign[2];
             for (int i = 0; i < 2; ++i)
             {
-                if (C[i] >= zero)
+                if (C[i] >= (Real)0)
                 {
-                    sign[i] = one;
+                    sign[i] = (Real)1;
                 }
                 else
                 {
                     C[i] = -C[i];
                     V[i] = -V[i];
-                    sign[i] = minusOne;
+                    sign[i] = (Real)-1;
                 }
             }
 
-            Result result = { 0, zero, { zero, zero } };
             DoQuery(extent, C, circle.radius, V, result);
 
             if (result.intersectionType != 0)
@@ -114,7 +114,7 @@ namespace gte
                 // Translate back to the original coordinate system.
                 for (int i = 0; i < 2; ++i)
                 {
-                    if (sign[i] < zero)
+                    if (sign[i] < (Real)0)
                     {
                         result.contactPoint[i] = -result.contactPoint[i];
                     }
@@ -129,40 +129,37 @@ namespace gte
         void DoQuery(Vector2<Real> const& K, Vector2<Real> const& C,
             Real radius, Vector2<Real> const& V, Result& result)
         {
-            Real const zero(0);
             Vector2<Real> delta = C - K;
             if (delta[1] <= radius)
             {
                 if (delta[0] <= radius)
                 {
-                    if (delta[1] <= zero)
+                    if (delta[1] <= (Real)0)
                     {
-                        if (delta[0] <= zero)
+                        if (delta[0] <= (Real)0)
                         {
-                            InRegionInteriorOverlap(C, result);
+                            InteriorOverlap(C, result);
                         }
                         else
                         {
-                            InRegionEdgeOverlap(0, 1, C, delta, radius, result);
+                            EdgeOverlap(0, 1, K, C, delta, radius, result);
                         }
                     }
                     else
                     {
-                        if (delta[0] <= zero)
+                        if (delta[0] <= (Real)0)
                         {
-                            InRegionEdgeOverlap(1, 0, C, delta, radius, result);
+                            EdgeOverlap(1, 0, K, C, delta, radius, result);
                         }
                         else
                         {
-                            Real sqrRadius = radius * radius;
-                            Real sqrDistance = delta[0] * delta[0] + delta[1] * delta[1];
-                            if (sqrDistance <= sqrRadius)
+                            if (Dot(delta, delta) <= radius * radius)
                             {
-                                InRegionVertexOverlap(K, delta, radius, result);
+                                VertexOverlap(K, delta, radius, result);
                             }
                             else
                             {
-                                InRegionVertexSeparated(K, delta, V, radius, result);
+                                VertexSeparated(K, delta, V, radius, result);
                             }
                         }
 
@@ -170,77 +167,72 @@ namespace gte
                 }
                 else
                 {
-                    InRegionEdgeUnbounded(0, 1, K, C, radius, delta, V, result);
+                    EdgeUnbounded(0, 1, K, C, radius, delta, V, result);
                 }
             }
             else
             {
                 if (delta[0] <= radius)
                 {
-                    InRegionEdgeUnbounded(1, 0, K, C, radius, delta, V, result);
+                    EdgeUnbounded(1, 0, K, C, radius, delta, V, result);
                 }
                 else
                 {
-                    InRegionVertexUnbounded(K, C, radius, delta, V, result);
+                    VertexUnbounded(K, C, radius, delta, V, result);
                 }
             }
         }
 
     private:
-        void InRegionInteriorOverlap(Vector2<Real> const& C, Result& result)
+        void InteriorOverlap(Vector2<Real> const& C, Result& result)
         {
-            Real const zero(0);
             result.intersectionType = -1;
-            result.contactTime = zero;
+            result.contactTime = (Real)0;
             result.contactPoint = C;
         }
 
-        void InRegionEdgeOverlap(int i0, int i1, Vector2<Real> const& C,
+        void EdgeOverlap(int i0, int i1, Vector2<Real> const& K, Vector2<Real> const& C,
             Vector2<Real> const& delta, Real radius, Result& result)
         {
-            Real const zero(0);
             result.intersectionType = (delta[i0] < radius ? -1 : 1);
-            result.contactTime = zero;
-            result.contactPoint[i0] = C[i0] - delta[i0];
+            result.contactTime = (Real)0;
+            result.contactPoint[i0] = K[i0];
             result.contactPoint[i1] = C[i1];
         }
 
-        void InRegionVertexOverlap(Vector2<Real> const& K0, Vector2<Real> const& delta,
+        void VertexOverlap(Vector2<Real> const& K0, Vector2<Real> const& delta,
             Real radius, Result& result)
         {
-            Real const zero(0);
             Real sqrDistance = delta[0] * delta[0] + delta[1] * delta[1];
             Real sqrRadius = radius * radius;
             result.intersectionType = (sqrDistance < sqrRadius ? -1 : 1);
-            result.contactTime = zero;
+            result.contactTime = (Real)0;
             result.contactPoint = K0;
         }
 
-        void InRegionVertexSeparated(Vector2<Real> const& K0, Vector2<Real> const& delta0,
+        void VertexSeparated(Vector2<Real> const& K0, Vector2<Real> const& delta0,
             Vector2<Real> const& V, Real radius, Result& result)
         {
-            Real const zero(0);
             Real q0 = -Dot(V, delta0);
-            if (q0 > zero)
+            if (q0 > (Real)0)
             {
                 Real dotVPerpD0 = Dot(V, Perp(delta0));
                 Real q2 = Dot(V, V);
                 Real q1 = radius * radius * q2 - dotVPerpD0 * dotVPerpD0;
-                if (q1 >= zero)
+                if (q1 >= (Real)0)
                 {
                     IntersectsVertex(0, 1, K0, q0, q1, q2, result);
                 }
             }
         }
 
-        void InRegionEdgeUnbounded(int i0, int i1, Vector2<Real> const& K0, Vector2<Real> const& C,
+        void EdgeUnbounded(int i0, int i1, Vector2<Real> const& K0, Vector2<Real> const& C,
             Real radius, Vector2<Real> const& delta0, Vector2<Real> const& V, Result& result)
         {
-            const Real zero(0);
-            if (V[i0] < zero)
+            if (V[i0] < (Real)0)
             {
                 Real dotVPerpD0 = V[i0] * delta0[i1] - V[i1] * delta0[i0];
-                if (radius * V[1] + dotVPerpD0 >= zero)
+                if (radius * V[i1] + dotVPerpD0 >= (Real)0)
                 {
                     Vector2<Real> K1, delta1;
                     K1[i0] = K0[i0];
@@ -248,7 +240,7 @@ namespace gte
                     delta1[i0] = C[i0] - K1[i0];
                     delta1[i1] = C[i1] - K1[i1];
                     Real dotVPerpD1 = V[i0] * delta1[i1] - V[i1] * delta1[i0];
-                    if (radius * V[1] + dotVPerpD1 <= zero)
+                    if (radius * V[i1] + dotVPerpD1 <= (Real)0)
                     {
                         IntersectsEdge(i0, i1, K0, C, radius, V, result);
                     }
@@ -256,7 +248,7 @@ namespace gte
                     {
                         Real q2 = Dot(V, V);
                         Real q1 = radius * radius * q2 - dotVPerpD1 * dotVPerpD1;
-                        if (q1 >= zero)
+                        if (q1 >= (Real)0)
                         {
                             Real q0 = -(V[i0] * delta1[i0] + V[i1] * delta1[i1]);
                             IntersectsVertex(i0, i1, K1, q0, q1, q2, result);
@@ -267,7 +259,7 @@ namespace gte
                 {
                     Real q2 = Dot(V, V);
                     Real q1 = radius * radius * q2 - dotVPerpD0 * dotVPerpD0;
-                    if (q1 >= zero)
+                    if (q1 >= (Real)0)
                     {
                         Real q0 = -(V[i0] * delta0[i0] + V[i1] * delta0[i1]);
                         IntersectsVertex(i0, i1, K0, q0, q1, q2, result);
@@ -276,16 +268,15 @@ namespace gte
             }
         }
 
-        void InRegionVertexUnbounded(Vector2<Real> const& K0, Vector2<Real> const& C, Real radius,
+        void VertexUnbounded(Vector2<Real> const& K0, Vector2<Real> const& C, Real radius,
             Vector2<Real> const& delta0, Vector2<Real> const& V, Result& result)
         {
-            Real const zero(0);
-            if (V[0] < zero && V[1] < zero)
+            if (V[0] < (Real)0 && V[1] < (Real)0)
             {
                 Real dotVPerpD0 = Dot(V, Perp(delta0));
-                if (radius * V[0] - dotVPerpD0 <= zero)
+                if (radius * V[0] - dotVPerpD0 <= (Real)0)
                 {
-                    if (-radius * V[1] - dotVPerpD0 >= zero)
+                    if (-radius * V[1] - dotVPerpD0 >= (Real)0)
                     {
                         Real q2 = Dot(V, V);
                         Real q1 = radius * radius * q2 - dotVPerpD0 * dotVPerpD0;
@@ -297,7 +288,7 @@ namespace gte
                         Vector2<Real> K1{ K0[0], -K0[1] };
                         Vector2<Real> delta1 = C - K1;
                         Real dotVPerpD1 = Dot(V, Perp(delta1));
-                        if (-radius * V[1] - dotVPerpD1 >= zero)
+                        if (-radius * V[1] - dotVPerpD1 >= (Real)0)
                         {
                             IntersectsEdge(0, 1, K0, C, radius, V, result);
                         }
@@ -305,7 +296,7 @@ namespace gte
                         {
                             Real q2 = Dot(V, V);
                             Real q1 = radius * radius * q2 - dotVPerpD1 * dotVPerpD1;
-                            if (q1 >= zero)
+                            if (q1 >= (Real)0)
                             {
                                 Real q0 = -Dot(V, delta1);
                                 IntersectsVertex(0, 1, K1, q0, q1, q2, result);
@@ -318,7 +309,7 @@ namespace gte
                     Vector2<Real> K2{ -K0[0], K0[1] };
                     Vector2<Real> delta2 = C - K2;
                     Real dotVPerpD2 = Dot(V, Perp(delta2));
-                    if (radius * V[0] - dotVPerpD2 <= zero)
+                    if (radius * V[0] - dotVPerpD2 <= (Real)0)
                     {
                         IntersectsEdge(1, 0, K0, C, radius, V, result);
                     }
@@ -326,7 +317,7 @@ namespace gte
                     {
                         Real q2 = Dot(V, V);
                         Real q1 = radius * radius * q2 - dotVPerpD2 * dotVPerpD2;
-                        if (q1 >= zero)
+                        if (q1 >= (Real)0)
                         {
                             Real q0 = -Dot(V, delta2);
                             IntersectsVertex(1, 0, K2, q0, q1, q2, result);

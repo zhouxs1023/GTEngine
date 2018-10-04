@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2016/08/29)
+// File Version: 3.0.4 (2018/09/27)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteMeshFactory.h>
@@ -586,7 +586,7 @@ std::shared_ptr<Visual> MeshFactory::CreateSphere(unsigned int numZSamples,
     }
     basis[0] = nor;
     ComputeOrthogonalComplement(1, basis);
-    tcd = { 0.5f, 0.5f };
+    tcd = { 0.5f, 0.0f };
     SetPosition(i, pos);
     SetNormal(i, nor);
     SetTangent(i, basis[1]);

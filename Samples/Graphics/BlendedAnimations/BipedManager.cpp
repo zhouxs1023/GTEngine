@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/03)
 
 #include "BipedManager.h"
 #include <Applications/GteTextureIO.h>
@@ -456,16 +456,15 @@ std::shared_ptr<BipedManager::PreSkin> BipedManager::LoadSkinController(
         preSkin->BoneNames.push_back(std::string(text.data()));
     }
 
-    Array2<float>& weights = ctrl->GetWeights();
-    Array2<Vector4<float>>& offsets = ctrl->GetOffsets();
-
+    float* weights = ctrl->GetWeights().data();
+    Vector4<float>* offsets = ctrl->GetOffsets().data();
     for (v = 0; v < numVertices; ++v)
     {
         for (b = 0; b < numBones; ++b)
         {
             float weight;
             input.read((char*)&weight, sizeof(weight));
-            weights[v][b] = weight;
+            *weights++ = weight;
         }
     }
 
@@ -475,7 +474,7 @@ std::shared_ptr<BipedManager::PreSkin> BipedManager::LoadSkinController(
         for (b = 0; b < numBones; ++b)
         {
             input.read((char*)&offset[0], 3 * sizeof(offset[0]));
-            offsets[v][b] = offset;
+            *offsets++ = offset;
         }
     }
 
