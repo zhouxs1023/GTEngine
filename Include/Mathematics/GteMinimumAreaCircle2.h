@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -133,7 +133,7 @@ bool MinimumAreaCircle2<InputType, ComputeType>::operator()(int numPoints,
             minimal.center[j] = static_cast<InputType>(ctMinimal.center[j]);
         }
         minimal.radius = static_cast<InputType>(ctMinimal.radius);
-        minimal.radius = sqrt(minimal.radius);
+        minimal.radius = std::sqrt(minimal.radius);
 
         for (int i = 0; i < mNumSupport; ++i)
         {

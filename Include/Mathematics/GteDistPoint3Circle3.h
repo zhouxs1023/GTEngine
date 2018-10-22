@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/26)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -68,7 +68,7 @@ DCPQuery<Real, Vector3<Real>, Circle3<Real>>::operator()(
 
     Vector3<Real> diff = point - result.circleClosest;
     result.sqrDistance = Dot(diff, diff);
-    result.distance = Function<Real>::Sqrt(result.sqrDistance);
+    result.distance = std::sqrt(result.sqrDistance);
     return result;
 }
 

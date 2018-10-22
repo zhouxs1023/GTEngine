@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -125,7 +125,7 @@ void FIQuery<Real, Line3<Real>, Capsule3<Real>>::DoQuery(
             // The line intersects the hemispherical caps.
             result.intersect = true;
             result.numIntersections = 2;
-            Real zOffset = sqrt(radialSqrDist) + segExtent;
+            Real zOffset = std::sqrt(radialSqrDist) + segExtent;
             if (dz > (Real)0)
             {
                 result.parameter[0] = -P[2] - zOffset;
@@ -164,7 +164,7 @@ void FIQuery<Real, Line3<Real>, Capsule3<Real>>::DoQuery(
     if (discr >(Real)0)
     {
         // The line intersects the infinite cylinder in two places.
-        root = sqrt(discr);
+        root = std::sqrt(discr);
         inv = ((Real)1) / a2;
         tValue = (-a1 - root) * inv;
         zValue = P[2] + tValue * D[2];
@@ -216,7 +216,7 @@ void FIQuery<Real, Line3<Real>, Capsule3<Real>>::DoQuery(
     discr = a1 * a1 - a0;
     if (discr > (Real)0)
     {
-        root = sqrt(discr);
+        root = std::sqrt(discr);
         tValue = -a1 - root;
         zValue = P[2] + tValue * D[2];
         if (zValue <= -segExtent)
@@ -278,7 +278,7 @@ void FIQuery<Real, Line3<Real>, Capsule3<Real>>::DoQuery(
     discr = a1 * a1 - a0;
     if (discr > (Real)0)
     {
-        root = sqrt(discr);
+        root = std::sqrt(discr);
         tValue = -a1 - root;
         zValue = P[2] + tValue * D[2];
         if (zValue >= segExtent)

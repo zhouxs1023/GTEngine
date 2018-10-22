@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/07)
+// File Version: 3.0.2 (2018/10/04)
 
 #include <Applications/GteTextureIO.h>
 #include "SimpleBumpMapEffect.h"
@@ -217,11 +217,11 @@ bool SimpleBumpMapEffect::ComputeTangent(
     // direction of edge P1-P0.
     float du1 = tcoord1[0] - tcoord0[0];
     float dv1 = tcoord1[1] - tcoord0[1];
-    if (fabs(dv1) <= epsilon)
+    if (std::abs(dv1) <= epsilon)
     {
         // The triangle effectively has no variation in the v texture
         // coordinate.
-        if (fabs(du1) <= epsilon)
+        if (std::abs(du1) <= epsilon)
         {
             // The triangle effectively has no variation in the u coordinate.
             // Since the texture coordinates do not vary on this triangle,
@@ -240,7 +240,7 @@ bool SimpleBumpMapEffect::ComputeTangent(
     float du2 = tcoord2[0] - tcoord0[0];
     float dv2 = tcoord2[1] - tcoord0[1];
     float det = dv1 * du2 - dv2 * du1;
-    if (fabs(det) <= epsilon)
+    if (std::abs(det) <= epsilon)
     {
         // The triangle vertices are collinear in parameter space, so treat
         // this as a degenerate parametric surface.

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.0 (2016/06/28)
+// File Version: 3.1.2 (2018/10/05)
 
 #include "PhysicsModule.h"
 
@@ -28,8 +28,8 @@ void PhysicsModule::Initialize(float time, float deltaTime, float theta,
 {
     mTime = time;
 
-    float cosPhi = cos(phi), sinPhi = sin(phi);
-    float cosPsi = cos(psi), sinPsi = sin(psi);
+    float cosPhi = std::cos(phi), sinPhi = std::sin(phi);
+    float cosPsi = std::cos(psi), sinPsi = std::sin(psi);
 
     // State variables.
     mState[0] = theta;
@@ -48,13 +48,13 @@ void PhysicsModule::Initialize(float time, float deltaTime, float theta,
         =
         [this](float, Vector3<float> const& input) -> Vector3<float>
         {
-            float cs = cos(input[1]);
-            float invSin = 1.0f / sin(input[1]);
+            float cs = std::cos(input[1]);
+            float invSin = 1.0f / std::sin(input[1]);
             float numer = mAux[3] - mAux[2] * cs;
             float fraction = numer * invSin;
             float arg = mAux[1] - 2.0f * mAux[0] * cs - fraction * fraction;
             float thetaDotFunction = fraction * invSin;
-            float phiDotFunction = sqrt(fabs(arg));
+            float phiDotFunction = std::sqrt(std::abs(arg));
             float psiDotFunction = mAux[4] - cs * thetaDotFunction;
             return Vector3<float>{thetaDotFunction, phiDotFunction, psiDotFunction};
         };
@@ -64,12 +64,12 @@ void PhysicsModule::Initialize(float time, float deltaTime, float theta,
 
 Matrix4x4<float> PhysicsModule::GetBodyAxes() const
 {
-    float cosTheta = cos(mState[0]);
-    float sinTheta = sin(mState[0]);
-    float cosPhi = cos(mState[1]);
-    float sinPhi = sin(mState[1]);
-    float cosPsi = cos(mState[2]);
-    float sinPsi = sin(mState[2]);
+    float cosTheta = std::cos(mState[0]);
+    float sinTheta = std::sin(mState[0]);
+    float cosPhi = std::cos(mState[1]);
+    float sinPhi = std::sin(mState[1]);
+    float cosPsi = std::cos(mState[2]);
+    float sinPsi = std::sin(mState[2]);
 
     Vector3<float> N{ cosTheta, sinTheta, 0.0f };
     Vector3<float> axis3{ sinTheta * sinPhi, -cosTheta * sinPhi, cosPhi };

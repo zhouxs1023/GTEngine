@@ -3,12 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/08/29)
+// File Version: 3.3.1 (2018/10/05)
 
 #pragma once
 
 #include <LowLevel/GteLogger.h>
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteVector2.h>
 #include <Mathematics/GteVector3.h>
 #include <Mathematics/GteMatrix.h>

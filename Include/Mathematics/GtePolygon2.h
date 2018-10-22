@@ -207,7 +207,7 @@ Real Polygon2<Real>::ComputeArea() const
         }
         area *= (Real)0.5;
     }
-    return fabs(area);
+    return std::abs(area);
 }
 
 template <typename Real>

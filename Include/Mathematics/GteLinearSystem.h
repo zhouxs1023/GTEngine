@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -257,9 +257,9 @@ unsigned int LinearSystem<Real>::SolveSymmetricCG(int N, Real const* A,
     unsigned int iteration;
     for (iteration = 1; iteration <= maxIterations; ++iteration)
     {
-        Real root0 = sqrt(rho1);
+        Real root0 = std::sqrt(rho1);
         Real norm = Dot(N, B, B);
-        Real root1 = sqrt(norm);
+        Real root1 = std::sqrt(norm);
         if (root0 <= tolerance*root1)
         {
             break;
@@ -302,9 +302,9 @@ unsigned int LinearSystem<Real>::SolveSymmetricCG(int N,
     unsigned int iteration;
     for (iteration = 1; iteration <= maxIterations; ++iteration)
     {
-        Real root0 = sqrt(rho1);
+        Real root0 = std::sqrt(rho1);
         Real norm = Dot(N, B, B);
-        Real root1 = sqrt(norm);
+        Real root1 = std::sqrt(norm);
         if (root0 <= tolerance*root1)
         {
             break;

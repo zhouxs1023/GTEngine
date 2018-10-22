@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.15.0 (2018/07/31)
+// File Version: 3.15.1 (2018/10/05)
 
 #include "MovingCircleRectangleWindow.h"
 
@@ -244,7 +244,7 @@ void MovingCircleRectangleWindow::ModifyRectangle(double direction)
 {
     // Rotate the box by one degree.
     double const angle = direction * GTE_C_DEG_TO_RAD;
-    double cs = cos(angle), sn = sin(angle);
+    double cs = std::cos(angle), sn = std::sin(angle);
     Vector2<double> temp0 = mBox.axis[0];
     Vector2<double> temp1 = mBox.axis[1];
     mBox.axis[0] = cs * temp0 - sn * temp1;

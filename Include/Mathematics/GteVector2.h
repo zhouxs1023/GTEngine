@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/08)
+// File Version: 3.0.2 (2018/10/04)
 
 #pragma once
 
@@ -249,7 +249,7 @@ IntrinsicsVector2<Real>::IntrinsicsVector2(int numVectors,
             Real distance = Dot(direction[1], diff);
             Real sign = (distance >(Real)0 ? (Real)1 :
                 (distance < (Real)0 ? (Real)-1 : (Real)0));
-            distance = fabs(distance);
+            distance = std::abs(distance);
             if (distance > maxDistance)
             {
                 maxDistance = distance;

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.16.0 (2018/10/03)
+// File Version: 3.16.1 (2018/10/05)
 
 #include "MovingSphereBoxWindow.h"
 
@@ -225,7 +225,7 @@ void MovingSphereBoxWindow::CreateScene()
 void MovingSphereBoxWindow::CreateRoundedBoxVertices()
 {
     // Create the octants of a sphere by using NURBS.
-    float sqrt2 = sqrt(2.0f), sqrt3 = sqrt(3.0f);
+    float sqrt2 = std::sqrt(2.0f), sqrt3 = std::sqrt(3.0f);
     float a0 = (sqrt3 - 1.0f) / sqrt3;
     float a1 = (sqrt3 + 1.0f) / (2.0f * sqrt3);
     float a2 = 1.0f - (5.0f - sqrt2) * (7.0f - sqrt3) / 46.0f;
@@ -413,7 +413,7 @@ void MovingSphereBoxWindow::CreateRoundedBoxVertices()
     };
 #endif
 
-    float sqrtHalf = sqrt(0.5f);
+    float sqrtHalf = std::sqrt(0.5f);
     Quaternion<float> orient[8] =
     {
         Quaternion<float>{ sqrtHalf, 0.0f, -sqrtHalf, 0.0f },
@@ -463,7 +463,7 @@ void MovingSphereBoxWindow::CreateRoundedBoxEdges()
         for (int col = 0; col < DENSITY; ++col)
         {
             float angle = (float)GTE_C_HALF_PI * (float)col / (float)(DENSITY - 1);
-            float cs = cos(angle), sn = sin(angle);
+            float cs = std::cos(angle), sn = std::sin(angle);
             *vertices++ = Vector3<float>{ mSphere.radius * cs, mSphere.radius * sn, z };
         }
     }
@@ -550,7 +550,7 @@ void MovingSphereBoxWindow::CreateRoundedBoxEdges()
     };
 #endif
 
-    float sqrtHalf = sqrt(0.5f);
+    float sqrtHalf = std::sqrt(0.5f);
     Quaternion<float> orient[12] =
     {
         Quaternion<float>{ 0.0f, 0.0f, 1.0f, 0.0f },
@@ -663,7 +663,7 @@ void MovingSphereBoxWindow::CreateRoundedBoxFaces()
     Quaternion<float> q = Rotation<3, float>(aa);
     (void)q;
 
-    float sqrtHalf = sqrt(0.5f); (void)sqrtHalf;
+    float sqrtHalf = std::sqrt(0.5f);
     Quaternion<float> orient[6] =
     {
         Quaternion<float>{ 1.0f, 0.0f, 0.0f, 0.0f },  // done
@@ -766,8 +766,8 @@ void MovingSphereBoxWindow::UpdateSphereVelocity()
 {
     float angle0 = mSample0 * (float)GTE_C_TWO_PI / mNumSamples0;
     float angle1 = mSample1 * (float)GTE_C_PI / mNumSamples1;
-    float cs0 = cos(angle0), sn0 = sin(angle0);
-    float cs1 = cos(angle1), sn1 = sin(angle1);
+    float cs0 = std::cos(angle0), sn0 = std::sin(angle0);
+    float cs1 = std::cos(angle1), sn1 = std::sin(angle1);
     mSphereVelocity = { cs0 * sn1, sn0 * sn1, cs1 };
 
     Vector3<float> basis[3];

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -304,19 +304,19 @@ void SurfaceExtractor<Real>::ComputeNormals(std::vector<Vector3<Real>> const& ve
 template <typename Real>
 Vector3<Real> SurfaceExtractor<Real>::GetGradient(Vector3<Real> position) const
 {
-    int x = static_cast<int>(floor(position[0]));
+    int x = static_cast<int>(std::floor(position[0]));
     if (x < 0 || x >= mImage.GetDimension(0) - 1)
     {
         return Vector3<Real>::Zero();
     }
 
-    int y = static_cast<int>(floor(position[1]));
+    int y = static_cast<int>(std::floor(position[1]));
     if (y < 0 || y >= mImage.GetDimension(1) - 1)
     {
         return Vector3<Real>::Zero();
     }
 
-    int z = static_cast<int>(floor(position[2]));
+    int z = static_cast<int>(std::floor(position[2]));
     if (z < 0 || z >= mImage.GetDimension(2) - 1)
     {
         return Vector3<Real>::Zero();

@@ -3,12 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
 #include <Physics/GteExtremalQuery3.h>
-#include <Mathematics/GteFunctions.h>
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteVETManifoldMesh.h>
 #include <LowLevel/GteLogger.h>
 #include <LowLevel/GteRangeIteration.h>
@@ -132,7 +132,7 @@ void ExtremalQuery3BSP<Real>::GetExtremeVertices(Vector3<Real> const& direction,
     while (current >= 0)
     {
         SphericalArc& node = mNodes[current];
-        int sign = Function<Real>::ISign(Dot(direction, node.normal));
+        int sign = gte::isign(Dot(direction, node.normal));
         if (sign >= 0)
         {
             current = node.posChild;
@@ -159,7 +159,7 @@ void ExtremalQuery3BSP<Real>::GetExtremeVertices(Vector3<Real> const& direction,
     while (current >= 0)
     {
         SphericalArc& node = mNodes[current];
-        int sign = Function<Real>::ISign(Dot(direction, node.normal));
+        int sign = gte::isign(Dot(direction, node.normal));
         if (sign <= 0)
         {
             current = node.posChild;
@@ -343,7 +343,7 @@ void ExtremalQuery3BSP<Real>::InsertArc(SphericalArc const& arc)
             else
             {
                 Real dot = Dot(this->mFaceNormals[arc.nIndex[0]], node->normal);
-                sign0 = Function<Real>::ISign(dot);
+                sign0 = gte::isign(dot);
             }
 
             int sign1;
@@ -354,7 +354,7 @@ void ExtremalQuery3BSP<Real>::InsertArc(SphericalArc const& arc)
             else
             {
                 Real dot = Dot(this->mFaceNormals[arc.nIndex[1]], node->normal);
-                sign1 = Function<Real>::ISign(dot);
+                sign1 = gte::isign(dot);
             }
 
             int doTest = 0;

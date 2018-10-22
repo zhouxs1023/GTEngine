@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2016/10/05)
 
 #include "IntersectBoxConeWindow.h"
 
@@ -160,7 +160,7 @@ void IntersectBoxConeWindow::CreateScene()
     mCone.SetAngle(0.25f);
     mCone.height = 16.0f;
 
-    float const radius = mCone.height * tan(mCone.angle);
+    float const radius = mCone.height * std::tan(mCone.angle);
     mConeMesh = mf.CreateDisk(16, 16, radius);
     std::shared_ptr<VertexBuffer> vbuffer = mConeMesh->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
@@ -169,7 +169,7 @@ void IntersectBoxConeWindow::CreateScene()
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         Vector3<float>& P = vertex[i];
-        P[2] = cotAngle * sqrt(P[0] * P[0] + P[1] * P[1]);
+        P[2] = cotAngle * std::sqrt(P[0] * P[0] + P[1] * P[1]);
     }
 
     std::shared_ptr<ConstantColorEffect> effect =

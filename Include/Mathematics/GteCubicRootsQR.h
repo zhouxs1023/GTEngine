@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -151,7 +151,7 @@ std::array<Real, N> CubicRootsQR<Real>::House(std::array<Real, N> const & X)
     {
         length += X[i] * X[i];
     }
-    length = sqrt(length);
+    length = std::sqrt(length);
     if (length != (Real)0)
     {
         Real sign = (X[0] >= (Real)0 ? (Real)1 : (Real)-1);
@@ -232,7 +232,7 @@ void CubicRootsQR<Real>::GetQuadraticRoots(int i0, int i1, Matrix const& A,
     if (discriminant >= (Real)0)
     {
         Real sign = (trace >= (Real)0 ? (Real)1 : (Real)-1);
-        Real root = halfTrace + sign * sqrt(discriminant);
+        Real root = halfTrace + sign * std::sqrt(discriminant);
         roots[numRoots++] = root;
         roots[numRoots++] = trace - root;
     }

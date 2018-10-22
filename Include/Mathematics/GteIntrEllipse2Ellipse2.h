@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/09/26)
+// File Version: 3.0.4 (2018/10/05)
 
 #pragma once
 
@@ -369,7 +369,7 @@ void TIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::GetRoots(Real d0, Real c0,
 {
     // f(s) = d0*c0/(d0*s-1)^2 - 1
     Real const one = (Real)1;
-    Real temp = sqrt(d0*c0);
+    Real temp = std::sqrt(d0*c0);
     Real inv = one / d0;
     numRoots = 2;
     roots[0] = (one - temp) * inv;
@@ -387,7 +387,7 @@ void TIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::GetRoots(Real d0, Real d1,
     Real d0c0 = d0 * c0;
     Real d1c1 = d1 * c1;
     Real sum = d0c0 + d1c1;
-    Real sqrtsum = sqrt(sum);
+    Real sqrtsum = std::sqrt(sum);
 
     std::function<Real(Real)> F = [&one, d0, d1, d0c0, d1c1](Real s)
     {
@@ -449,7 +449,7 @@ void TIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::GetRoots(Real d0, Real d1,
     // infinite values.  If F(r) < 0, F(s) has two roots in the interval.
     // If F(r) = 0, F(s) has only one root in the interval.
     Real const oneThird = (Real)(1.0 / 3.0);
-    Real rho = pow(d0 * d0c0 / (d1 * d1c1), oneThird);
+    Real rho = std::pow(d0 * d0c0 / (d1 * d1c1), oneThird);
     Real smid = (one + rho) / (d0 + rho * d1);
     Real fmid = F(smid);
     if (fmid <= zero)
@@ -744,7 +744,7 @@ void FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::D4NotZeroEBarZero(
     if (ncbar >= mZero)
     {
         translate = mA2Div2 + xbar * mA4Div2;
-        w = Function<Real>::Sqrt(ncbar);
+        w = std::sqrt(ncbar);
         y = w - translate;
         result.points[result.numPoints] = { xbar, y };
         if (w > mZero)
@@ -865,7 +865,7 @@ void FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::D4ZeroD2Zero(
             //        = (c0 - c2*f0) + (c1 - c2*f1)*x
             //        = g0 + g1*x
             // We need g0 + g1*x <= 0.
-            Real sqrtDiscr = Function<Real>::Sqrt(discr);
+            Real sqrtDiscr = std::sqrt(discr);
             std::array<Real, 2> g =
             {
                 mC[0] - mC[2] * f[0],
@@ -1008,7 +1008,7 @@ void FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::SpecialIntersection(
             nc = mZero;
         }
 
-        Real w = Function<Real>::Sqrt(nc);
+        Real w = std::sqrt(nc);
         Real y = w - translate;
         result.points[result.numPoints] = { x, y };
         result.isTransverse[result.numPoints++] = true;
@@ -1069,8 +1069,8 @@ FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::AreaOfIntersection(
     E0.axis = { axis0[0], axis0[1] };
     E0.extent =
     {
-        Function<Real>::Sqrt(sqrExtent0[0]),
-        Function<Real>::Sqrt(sqrExtent0[1])
+        std::sqrt(sqrExtent0[0]),
+        std::sqrt(sqrExtent0[1])
     };
     E0.sqrExtent = sqrExtent0;
     FinishEllipseInfo(E0);
@@ -1080,8 +1080,8 @@ FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::AreaOfIntersection(
     E1.axis = { axis1[0], axis1[1] };
     E1.extent =
     {
-        Function<Real>::Sqrt(sqrExtent1[0]),
-        Function<Real>::Sqrt(sqrExtent1[1])
+        std::sqrt(sqrExtent1[0]),
+        std::sqrt(sqrExtent1[1])
     };
     E1.sqrExtent = sqrExtent1;
     FinishEllipseInfo(E1);
@@ -1259,7 +1259,7 @@ void FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::Area4(
         Vector2<Real> PmC = ar.findResult.points[i] - E0.center;
         Real x = Dot(E0.axis[0], PmC);
         Real y = Dot(E0.axis[1], PmC);
-        Real theta = Function<Real>::ATan2(y, x);
+        Real theta = std::atan2(y, x);
         ordering.insert(std::make_pair(theta, i));
     }
 
@@ -1275,7 +1275,7 @@ void FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::Area4(
         ar.findResult.points[permute[2]] - ar.findResult.points[permute[0]];
     Vector2<Real> diag31 =
         ar.findResult.points[permute[3]] - ar.findResult.points[permute[1]];
-    ar.area = Function<Real>::FAbs(DotPerp(diag20, diag31)) / mTwo;
+    ar.area = std::abs(DotPerp(diag20, diag31)) / mTwo;
 
     // Visit each pair of consecutive points.  The selection of ellipse for
     // the chord-region area calculation uses the "most counterclockwise"
@@ -1314,10 +1314,10 @@ Real FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::ComputeAreaChordRegion(
     // Compute polar coordinates for P0 and P1 on the ellipse.
     Real x0 = Dot(E.axis[0], P0mC);
     Real y0 = Dot(E.axis[1], P0mC);
-    Real theta0 = Function<Real>::ATan2(y0, x0);
+    Real theta0 = std::atan2(y0, x0);
     Real x1 = Dot(E.axis[0], P1mC);
     Real y1 = Dot(E.axis[1], P1mC);
-    Real theta1 = Function<Real>::ATan2(y1, x1);
+    Real theta1 = std::atan2(y1, x1);
 
     // The arc straddles the atan2 discontinuity on the negative x-axis.  Wrap
     // the second angle to be larger than the first angle.
@@ -1327,7 +1327,7 @@ Real FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::ComputeAreaChordRegion(
     }
 
     // Compute the area portion of the sector due to the triangle.
-    Real triArea = Function<Real>::FAbs(DotPerp(P0mC, P1mC)) / mTwo;
+    Real triArea = std::abs(DotPerp(P0mC, P1mC)) / mTwo;
 
     // Compute the chord region area.
     Real dtheta = theta1 - theta0;
@@ -1359,10 +1359,10 @@ Real FIQuery<Real, Ellipse2<Real>, Ellipse2<Real>>::ComputeIntegral(
     EllipseInfo const& E, Real const& theta)
 {
     Real twoTheta = mTwo * theta;
-    Real sn = Function<Real>::Sin(twoTheta);
-    Real cs = Function<Real>::Cos(twoTheta);
+    Real sn = std::sin(twoTheta);
+    Real cs = std::cos(twoTheta);
     Real arg = E.BmA * sn / (E.BpA + E.BmA * cs);
-    return E.halfAB * (theta - Function<Real>::ATan(arg));
+    return E.halfAB * (theta - std::atan(arg));
 }
 
 

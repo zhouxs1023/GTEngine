@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -134,7 +134,7 @@ void FIQuery<Real, Line3<Real>, Cylinder3<Real>>::DoQuery(
                 // The line intersects the cylinder in two places.
                 result.intersect = true;
                 result.numIntersections = 2;
-                root = sqrt(discr);
+                root = std::sqrt(discr);
                 inv = ((Real)1) / a2;
                 result.parameter[0] = (-a1 - root) * inv;
                 result.parameter[1] = (-a1 + root) * inv;
@@ -184,7 +184,7 @@ void FIQuery<Real, Line3<Real>, Cylinder3<Real>>::DoQuery(
         discr = a1 * a1 - a0 * a2;
         if (discr >(Real)0)
         {
-            root = sqrt(discr);
+            root = std::sqrt(discr);
             inv = ((Real)1) / a2;
             tValue = (-a1 - root) * inv;
             if (t0 <= t1)

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.13.1 (2018/07/16)
+// File Version: 3.13.2 (2018/10/05)
 
 #pragma once
 
@@ -315,7 +315,7 @@ namespace gte
                 if (t < tmax)
                 {
                     Real smd = dsdt * (t - tmin);
-                    index = static_cast<uint32_t>(floor(smd));
+                    index = static_cast<uint32_t>(std::floor(smd));
                     u = smd - static_cast<float>(index);
                 }
                 else

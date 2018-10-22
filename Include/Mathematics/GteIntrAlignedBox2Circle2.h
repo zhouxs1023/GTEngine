@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.15.2 (2018/10/03)
+// File Version: 3.15.3 (2018/10/05)
 
 #pragma once
 
@@ -331,7 +331,7 @@ namespace gte
             Real q0, Real q1, Real q2, Result& result)
         {
             result.intersectionType = +1;
-            result.contactTime = (q0 - Function<Real>::Sqrt(q1)) / q2;
+            result.contactTime = (q0 - std::sqrt(q1)) / q2;
             result.contactPoint[i0] = K[i0];
             result.contactPoint[i1] = K[i1];
         }

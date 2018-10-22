@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/08)
+// File Version: 3.0.3 (2018/10/05)
 
 #pragma once
 
@@ -464,10 +464,10 @@ Real Length(Vector<N, Real> const& v, bool robust)
 {
     if (robust)
     {
-        Real maxAbsComp = fabs(v[0]);
+        Real maxAbsComp = std::abs(v[0]);
         for (int i = 1; i < N; ++i)
         {
-            Real absComp = fabs(v[i]);
+            Real absComp = std::abs(v[i]);
             if (absComp > maxAbsComp)
             {
                 maxAbsComp = absComp;
@@ -478,7 +478,7 @@ Real Length(Vector<N, Real> const& v, bool robust)
         if (maxAbsComp > (Real)0)
         {
             Vector<N, Real> scaled = v / maxAbsComp;
-            length = maxAbsComp * sqrt(Dot(scaled, scaled));
+            length = maxAbsComp * std::sqrt(Dot(scaled, scaled));
         }
         else
         {
@@ -488,7 +488,7 @@ Real Length(Vector<N, Real> const& v, bool robust)
     }
     else
     {
-        return sqrt(Dot(v, v));
+        return std::sqrt(Dot(v, v));
     }
 }
 
@@ -497,10 +497,10 @@ Real Normalize(Vector<N, Real>& v, bool robust)
 {
     if (robust)
     {
-        Real maxAbsComp = fabs(v[0]);
+        Real maxAbsComp = std::abs(v[0]);
         for (int i = 1; i < N; ++i)
         {
-            Real absComp = fabs(v[i]);
+            Real absComp = std::abs(v[i]);
             if (absComp > maxAbsComp)
             {
                 maxAbsComp = absComp;
@@ -511,7 +511,7 @@ Real Normalize(Vector<N, Real>& v, bool robust)
         if (maxAbsComp > (Real)0)
         {
             v /= maxAbsComp;
-            length = sqrt(Dot(v, v));
+            length = std::sqrt(Dot(v, v));
             v /= length;
             length *= maxAbsComp;
         }
@@ -527,7 +527,7 @@ Real Normalize(Vector<N, Real>& v, bool robust)
     }
     else
     {
-        Real length = sqrt(Dot(v, v));
+        Real length = std::sqrt(Dot(v, v));
         if (length > (Real)0)
         {
             v /= length;
@@ -594,9 +594,8 @@ Vector<N, Real> GetOrthogonal(Vector<N, Real> const& v, bool unitLength)
     result[inext] = -v[imax];
     if (unitLength)
     {
-        Real sqrDistance =
-            result[imax] * result[imax] + result[inext] * result[inext];
-        Real invLength = ((Real)1) / sqrt(sqrDistance);
+        Real sqrDistance = result[imax] * result[imax] + result[inext] * result[inext];
+        Real invLength = ((Real)1) / std::sqrt(sqrDistance);
         result[imax] *= invLength;
         result[inext] *= invLength;
     }

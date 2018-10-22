@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/08/20)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -257,7 +257,7 @@ bool Hyperellipsoid<N, Real>::FromCoefficients(Matrix<N, N, Real> const& A,
             return false;
         }
 
-        extent[d] = ((Real)1) / sqrt(diagonal[d]);
+        extent[d] = ((Real)1) / std::sqrt(diagonal[d]);
         axis[d] = rotation.GetCol(d);
     }
 

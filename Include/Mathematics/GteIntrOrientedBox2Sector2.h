@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/04)
 
 #pragma once
 
@@ -40,7 +40,7 @@ TIQuery<Real, OrientedBox2<Real>, Sector2<Real>>::operator()(
     // Determine whether the vertex is inside the box.
     Vector2<Real> CmV = box.center - sector.vertex;
     Vector2<Real> P{ Dot(box.axis[0], CmV), Dot(box.axis[1], CmV) };
-    if (fabs(P[0]) <= box.extent[0] && fabs(P[1]) <= box.extent[1])
+    if (std::abs(P[0]) <= box.extent[0] && std::abs(P[1]) <= box.extent[1])
     {
         // The vertex is inside the box.
         result.intersect = true;
@@ -55,8 +55,8 @@ TIQuery<Real, OrientedBox2<Real>, Sector2<Real>>::operator()(
     };
     Vector2<Real> N0 = Perp(U0);
     Real prjcen0 = Dot(N0, CmV);
-    Real radius0 = box.extent[0] * fabs(Dot(N0, box.axis[0]))
-        + box.extent[1] * fabs(Dot(N0, box.axis[1]));
+    Real radius0 = box.extent[0] * std::abs(Dot(N0, box.axis[0]))
+        + box.extent[1] * std::abs(Dot(N0, box.axis[1]));
     if (prjcen0 > radius0)
     {
         result.intersect = false;
@@ -72,8 +72,8 @@ TIQuery<Real, OrientedBox2<Real>, Sector2<Real>>::operator()(
     };
     Vector2<Real> N1 = -Perp(U1);
     Real prjcen1 = Dot(N1, CmV);
-    Real radius1 = box.extent[0] * fabs(Dot(N1, box.axis[0]))
-        + box.extent[1] * fabs(Dot(N1, box.axis[1]));
+    Real radius1 = box.extent[0] * std::abs(Dot(N1, box.axis[0]))
+        + box.extent[1] * std::abs(Dot(N1, box.axis[1]));
     if (prjcen1 > radius1)
     {
         result.intersect = false;

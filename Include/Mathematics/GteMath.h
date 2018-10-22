@@ -3,15 +3,35 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.17.0 (2018/10/05)
 
 #pragma once
 
-#include <GTEngineDEF.h>
+// This file extends the <cmath> support to include convenient constants and
+// functions.  The shared constants for CPU, Intel SSE and GPU lead to
+// correctly rounded approximations of the constants when using 'float' or
+// 'double'.
 
-// This file is for sharing of constants among the CPU, SSE2, and GPU.  The
-// hard-coded numbers lead to correctly rounded approximations of the
-// constants when using 'float' or 'double'.
+#include <GTEngineDEF.h>
+#include <cmath>
+#include <limits>
+
+// Maximum number of iterations for bisection before a subinterval
+// degenerates to a single point. TODO: Verify these.  I used the formula:
+// 3 + std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent.
+//   IEEEBinary16:  digits = 11, min_exponent = -13
+//   float:         digits = 27, min_exponent = -125
+//   double:        digits = 53, min_exponent = -1021
+// BSNumber and BSRational use std::numeric_limits<unsigned int>::max(),
+// but maybe these should be set to a large number or be user configurable.
+// The MAX_BISECTIONS_GENERIC is an arbitrary choice for now and is used
+// in template code where Real is the template parameter.
+#define GTE_C_MAX_BISECTIONS_FLOAT16    27u
+#define GTE_C_MAX_BISECTIONS_FLOAT32    155u
+#define GTE_C_MAX_BISECTIONS_FLOAT64    1077u
+#define GTE_C_MAX_BISECTIONS_BSNUMBER   0xFFFFFFFFu
+#define GTE_C_MAX_BISECTIONS_BSRATIONAL 0xFFFFFFFFu
+#define GTE_C_MAX_BISECTIONS_GENERIC    2048u
 
 // Constants involving pi.
 #define GTE_C_PI 3.1415926535897931
@@ -474,3 +494,120 @@
 #define GTE_C_LOG2_DEG8_C7 +5.1421382871922106e-02
 #define GTE_C_LOG2_DEG8_C8 -9.1364020499895560e-03
 #define GTE_C_LOG2_DEG8_MAX_ERROR 4.8796219218050219e-8
+
+// These functions are convenient for some applications.  The classes
+// BSNumber, BSRational and IEEEBinary16 have implementations that
+// (for now) use typecasting to call the 'float' or 'double' versions.
+namespace gte
+{
+    inline float atandivpi(float x)
+    {
+        return std::atan(x) * (float)GTE_C_INV_PI;
+    }
+
+    inline float atan2divpi(float y, float x)
+    {
+        return std::atan2(y, x) * (float)GTE_C_INV_PI;
+    }
+
+    inline float clamp(float x, float xmin, float xmax)
+    {
+        return (x <= xmin ? xmin : (x >= xmax ? xmax : x));
+    }
+
+    inline float cospi(float x)
+    {
+        return std::cos(x * (float)GTE_C_PI);
+    }
+
+    inline float exp10(float x)
+    {
+        return std::exp(x * (float)GTE_C_LN_10);
+    }
+
+    inline float invsqrt(float x)
+    {
+        return 1.0f / std::sqrt(x);
+    }
+
+    inline int isign(float x)
+    {
+        return (x > 0.0f ? 1 : (x < 0.0f ? -1 : 0));
+    }
+
+    inline float saturate(float x)
+    {
+        return (x <= 0.0f ? 0.0f : (x >= 1.0f ? 1.0f : x));
+    }
+
+    inline float sign(float x)
+    {
+        return (x > 0.0f ? 1.0f : (x < 0.0f ? -1.0f : 0.0f));
+    }
+
+    inline float sinpi(float x)
+    {
+        return std::sin(x * (float)GTE_C_PI);
+    }
+
+    inline float sqr(float x)
+    {
+        return x * x;
+    }
+
+
+    inline double atandivpi(double x)
+    {
+        return std::atan(x) * GTE_C_INV_PI;
+    }
+
+    inline double atan2divpi(double y, double x)
+    {
+        return std::atan2(y, x) * GTE_C_INV_PI;
+    }
+
+    inline double clamp(double x, double xmin, double xmax)
+    {
+        return (x <= xmin ? xmin : (x >= xmax ? xmax : x));
+    }
+
+    inline double cospi(double x)
+    {
+        return std::cos(x * GTE_C_PI);
+    }
+
+    inline double exp10(double x)
+    {
+        return std::exp(x * GTE_C_LN_10);
+    }
+
+    inline double invsqrt(double x)
+    {
+        return 1.0 / std::sqrt(x);
+    }
+
+    inline double sign(double x)
+    {
+        return (x > 0.0 ? 1.0 : (x < 0.0 ? -1.0 : 0.0f));
+    }
+
+    inline int isign(double x)
+    {
+        return (x > 0.0 ? 1 : (x < 0.0 ? -1 : 0));
+    }
+
+    inline double saturate(double x)
+    {
+        return (x <= 0.0 ? 0.0 : (x >= 1.0 ? 1.0 : x));
+    }
+
+    inline double sinpi(double x)
+    {
+        return std::sin(x * GTE_C_PI);
+    }
+
+    inline double sqr(double x)
+    {
+        return x * x;
+    }
+}

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include "BSplineCurveFitterWindow.h"
 
@@ -152,8 +152,8 @@ void BSplineCurveFitterWindow::CreateScene()
         float t = -1.0f + multiplier * i;
         float angle = 2.0f * (float)GTE_C_TWO_PI * t;
         float amplitude = 1.0f - t * t;
-        mSamples[i][0] = amplitude * cos(angle);
-        mSamples[i][1] = amplitude * sin(angle);
+        mSamples[i][0] = amplitude * std::cos(angle);
+        mSamples[i][1] = amplitude * std::sin(angle);
         mSamples[i][2] = t;
         Normalize(mSamples[i]);
     }
@@ -234,12 +234,12 @@ void BSplineCurveFitterWindow::CreateBSplinePolyline()
         Vector3<float> diff = mSamples[i] - vertex[i].position;
         float sqrLength = Dot(diff, diff);
         mRmsError += sqrLength;
-        float length = sqrt(sqrLength);
+        float length = std::sqrt(sqrLength);
         mAvrError += length;
     }
     mAvrError /= (float)numSamples;
     mRmsError /= (float)numSamples;
-    mRmsError = sqrt(mRmsError);
+    mRmsError = std::sqrt(mRmsError);
 
     mTrackball.Attach(mPolyline);
     mTrackball.Update();

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -23,7 +23,7 @@
 #include <Mathematics/GteRotation.h>
 #include <Mathematics/GteContOrientedBox3.h>
 #include <Mathematics/GteDistPointHyperellipsoid.h>
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteMinimizeN.h>
 
 namespace gte
@@ -157,8 +157,8 @@ void ApprEllipsoid3<Real>::MatrixToAngles(Matrix3x3<Real> const& rotate,
     {
         if (aa.axis[2] < one)
         {
-            angle[0] = atan2(aa.axis[1], aa.axis[0]);
-            angle[1] = acos(aa.axis[2]);
+            angle[0] = std::atan2(aa.axis[1], aa.axis[0]);
+            angle[1] = std::acos(aa.axis[2]);
         }
         else
         {
@@ -180,10 +180,10 @@ void ApprEllipsoid3<Real>::AnglesToMatrix(Real const angle[3],
     // rotation axis = (cos(a0)sin(a1),sin(a0)sin(a1),cos(a1))
     // a0 in [-pi,pi], a1 in [0,pi], a2 in [0,pi]
 
-    Real cs0 = cos(angle[0]);
-    Real sn0 = sin(angle[0]);
-    Real cs1 = cos(angle[1]);
-    Real sn1 = sin(angle[1]);
+    Real cs0 = std::cos(angle[0]);
+    Real sn0 = std::sin(angle[0]);
+    Real cs1 = std::cos(angle[1]);
+    Real sn1 = std::sin(angle[1]);
     AxisAngle<3, Real> aa;
     aa.axis = { cs0*sn1, sn0*sn1, cs1 };
     aa.angle = angle[2];

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -46,7 +46,7 @@ double FitASin::F(double x) const
 {
     if (x < 1.0)
     {
-        return (GTE_C_HALF_PI - asin(x)) / sqrt(1.0 - x);
+        return (GTE_C_HALF_PI - std::asin(x)) / std::sqrt(1.0 - x);
     }
     else
     {
@@ -58,11 +58,11 @@ double FitASin::FDer(double x) const
 {
     if (x < 1.0)
     {
-        return (-1.0 / sqrt(1.0 + x) + 0.5 * F(x)) / (1.0 - x);
+        return (-1.0 / std::sqrt(1.0 + x) + 0.5 * F(x)) / (1.0 - x);
     }
     else
     {
-        return -pow(2.0, -1.5) / 3.0;
+        return -std::pow(2.0, -1.5) / 3.0;
     }
 }
 

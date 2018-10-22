@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -422,7 +422,7 @@ DCPQuery<Real, Vector3<Real>, Frustum3<Real>>::operator()(
         closest[2] * frustum.dVector;
 
     result.sqrDistance = Dot(diff, diff);
-    result.distance = sqrt(result.sqrDistance);
+    result.distance = std::sqrt(result.sqrDistance);
     return result;
 }
 

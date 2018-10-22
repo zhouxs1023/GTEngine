@@ -3,11 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.15.0 (2018/07/25)
+// File Version: 3.15.1 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
-#include <Mathematics/GteFunctions.h>
+#include <Mathematics/GteMath.h>
 #include <Graphics/GteTrackcylinder.h>
 using namespace gte;
 
@@ -116,7 +116,7 @@ void Trackcylinder::SetFinalPoint(int x, int y)
             mYaw = mInitialYaw + angle;
             angle = -dy * pi / mYSize;
             mPitch = mInitialPitch + angle;
-            mPitch = Function<float>::Clamp(mPitch, -halfPi, halfPi);
+            mPitch = gte::clamp(mPitch, -halfPi, halfPi);
 
             // The angle order depends on camera {D=0, U=1, R=2}.
 #if defined(GTE_USE_MAT_VEC)

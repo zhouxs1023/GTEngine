@@ -3,8 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.14.0 (2018/06/28)
-// UNFINISHED PRE-RELEASE CODE, DO NOT REDISTRIBUTE.
+// File Version: 3.14.1 (2018/10/05)
 
 #pragma once
 
@@ -42,7 +41,7 @@ namespace gte
                 {
                     return false;
                 }
-                A(c, c) = sqrt(A(c, c));
+                A(c, c) = std::sqrt(A(c, c));
 
                 for (int r = c + 1; r < N; ++r)
                 {
@@ -124,7 +123,7 @@ namespace gte
                     {
                         return false;
                     }
-                    A(c, c) = sqrt(A(c, c));
+                    A(c, c) = std::sqrt(A(c, c));
 
                     for (int r = c + 1; r < N; ++r)
                     {

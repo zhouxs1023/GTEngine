@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/02/17)
+// File Version: 3.0.2 (2018/10/05)
 
 #include "TriangulationCDTWindow.h"
 #include <iostream>
@@ -70,10 +70,10 @@ void TriangulationCDTWindow::DrawTriangulation()
 
     Vector2<float> pmin{ 0.0f, 0.0f }, pmax{ 0.0f, 0.0f };
     ComputeExtremes(static_cast<int>(mPoints.size()), &mPoints[0], pmin, pmax);
-    int xmin = static_cast<int>(floor(pmin[0]));
-    int ymin = static_cast<int>(floor(pmin[1]));
-    int xmax = static_cast<int>(ceil(pmax[0]));
-    int ymax = static_cast<int>(ceil(pmax[1]));
+    int xmin = static_cast<int>(std::floor(pmin[0]));
+    int ymin = static_cast<int>(std::floor(pmin[1]));
+    int xmax = static_cast<int>(std::ceil(pmax[0]));
+    int ymax = static_cast<int>(std::ceil(pmax[1]));
 
     int tStart = 0;
     for (int y = ymin; y <= ymax; ++y)

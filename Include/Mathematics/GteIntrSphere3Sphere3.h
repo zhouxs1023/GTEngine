@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -136,7 +136,7 @@ FIQuery<Real, Sphere3<Real>, Sphere3<Real>>::operator()(
 
     // Compute the center and radius of the circle of intersection.
     result.circle.center = sphere0.center + t * C1mC0;
-    result.circle.radius = sqrt(std::max(r0*r0 - t*t*sqrLen, (Real)0));
+    result.circle.radius = std::sqrt(std::max(r0*r0 - t*t*sqrLen, (Real)0));
 
     // Compute the normal for the plane of the circle.
     Normalize(C1mC0);

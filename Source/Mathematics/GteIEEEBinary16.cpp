@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/01/22)
+// File Version: 3.0.2 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteBitHacks.h>
@@ -18,20 +18,20 @@ IEEEBinary16::~IEEEBinary16()
 
 IEEEBinary16::IEEEBinary16()
     :
-    IEEEBinary<_Float16, uint16_t, 16, 11>()
+    IEEEBinary<int16_t, uint16_t, 16, 11>()
 {
     // uninitialized
 }
 
 IEEEBinary16::IEEEBinary16(IEEEBinary16 const& object)
     :
-    IEEEBinary<_Float16, uint16_t, 16, 11>(object)
+    IEEEBinary<int16_t, uint16_t, 16, 11>(object)
 {
 }
 
 IEEEBinary16::IEEEBinary16(float number)
     :
-    IEEEBinary<_Float16, uint16_t, 16, 11>()
+    IEEEBinary<int16_t, uint16_t, 16, 11>()
 {
     union { float n; uint32_t e; } temp = { number };
     encoding = Convert32To16(temp.e);
@@ -39,7 +39,7 @@ IEEEBinary16::IEEEBinary16(float number)
 
 IEEEBinary16::IEEEBinary16(double number)
     :
-    IEEEBinary<_Float16, uint16_t, 16, 11>()
+    IEEEBinary<int16_t, uint16_t, 16, 11>()
 {
     union { float n; uint32_t e; } temp;
     temp.n = (float)number;
@@ -48,7 +48,7 @@ IEEEBinary16::IEEEBinary16(double number)
 
 IEEEBinary16::IEEEBinary16(uint16_t encoding)
     :
-    IEEEBinary<_Float16, uint16_t, 16, 11>(encoding)
+    IEEEBinary<int16_t, uint16_t, 16, 11>(encoding)
 {
 }
 
@@ -66,7 +66,7 @@ IEEEBinary16::operator double() const
 
 IEEEBinary16& IEEEBinary16::operator= (IEEEBinary16 const& object)
 {
-    IEEEBinary<_Float16, uint16_t, 16, 11>::operator=(object);
+    IEEEBinary<int16_t, uint16_t, 16, 11>::operator=(object);
     return *this;
 }
 

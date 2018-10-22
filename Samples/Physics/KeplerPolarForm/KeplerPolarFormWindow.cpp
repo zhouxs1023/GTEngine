@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include "KeplerPolarFormWindow.h"
 
@@ -46,8 +46,8 @@ KeplerPolarFormWindow::KeplerPolarFormWindow(Parameters& parameters)
     mPositions.resize(imax);
     for (int i = 0; i < imax; ++i)
     {
-        float x = 0.5f * mSize + 10.0f * radius * cos(theta);
-        float y = 0.5f * mSize + 10.0f * radius * sin(theta);
+        float x = 0.5f * mSize + 10.0f * radius * std::cos(theta);
+        float y = 0.5f * mSize + 10.0f * radius * std::sin(theta);
         mPositions[i] = { x, y };
         mModule.Update();
         theta = mModule.GetTheta();

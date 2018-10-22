@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteCamera.h>
@@ -136,7 +136,7 @@ void Culler::PushViewFrustumPlanes(std::shared_ptr<Camera> const& camera)
     mPlane[Camera::VF_DMAX].Set(-D, c);
 
     // Compute the bottom plane
-    invLength = 1.0f / sqrt(dMin2 + uMin2);
+    invLength = 1.0f / std::sqrt(dMin2 + uMin2);
     a0 = -uMin*invLength;  // D component
     a1 = +dMin*invLength;  // U component
     N = a0*D + a1*U;
@@ -144,7 +144,7 @@ void Culler::PushViewFrustumPlanes(std::shared_ptr<Camera> const& camera)
     mPlane[Camera::VF_UMIN].Set(N, c);
 
     // Compute the top plane.
-    invLength = 1.0f / sqrt(dMin2 + uMax2);
+    invLength = 1.0f / std::sqrt(dMin2 + uMax2);
     a0 = +uMax*invLength;  // D component
     a1 = -dMin*invLength;  // U component
     N = a0*D + a1*U;
@@ -152,7 +152,7 @@ void Culler::PushViewFrustumPlanes(std::shared_ptr<Camera> const& camera)
     mPlane[Camera::VF_UMAX].Set(N, c);
 
     // Compute the left plane.
-    invLength = 1.0f / sqrt(dMin2 + rMin2);
+    invLength = 1.0f / std::sqrt(dMin2 + rMin2);
     a0 = -rMin*invLength;  // D component
     a1 = +dMin*invLength;  // R component
     N = a0*D + a1*R;
@@ -160,7 +160,7 @@ void Culler::PushViewFrustumPlanes(std::shared_ptr<Camera> const& camera)
     mPlane[Camera::VF_RMIN].Set(N, c);
 
     // Compute the right plane.
-    invLength = 1.0f / sqrt(dMin2 + rMax2);
+    invLength = 1.0f / std::sqrt(dMin2 + rMax2);
     a0 = +rMax*invLength;  // D component
     a1 = -dMin*invLength;  // R component
     N = a0*D + a1*R;

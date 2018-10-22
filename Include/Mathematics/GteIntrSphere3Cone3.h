@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/03)
 
 #pragma once
 
@@ -133,7 +133,7 @@ FIQuery<Real, Sphere3<Real>, Cone3<Real>>::operator()(
     // is true (the sphere contains V).  This is already ruled out in the
     // first block of code in this function.
 
-    Real uLen = sqrt(std::max(lenSqr - dotSqr, (Real)0));
+    Real uLen = std::sqrt(std::max(lenSqr - dotSqr, (Real)0));
     Real test = cone.cosAngle * dot + cone.sinAngle * uLen;
     Real discr = test * test - lenSqr + rSqr;
 
@@ -141,7 +141,7 @@ FIQuery<Real, Sphere3<Real>, Cone3<Real>>::operator()(
     {
         // Compute the point of intersection closest to the cone vertex.
         result.intersect = true;
-        Real t = test - sqrt(std::max(discr, (Real)0));
+        Real t = test - std::sqrt(std::max(discr, (Real)0));
         Vector3<Real> B = diff - dot * cone.ray.direction;
         Real tmp = cone.sinAngle / uLen;
         result.point = t * (cone.cosAngle * cone.ray.direction + tmp * B);

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2018/10/05)
 
 #include "DeformableBall.h"
 #include <Imagics/GteSurfaceExtractor.h>
@@ -88,13 +88,13 @@ void DeformableBall::CreateBall(std::shared_ptr<Texture2Effect> const& effect)
         vertex[i].position[1] = -1.1f + 2.2f * invBoundM1 * surfacePosition[1];
         vertex[i].position[2] = -0.1f + 2.2f * invBoundM1 * surfacePosition[2];
 
-        float absLevel = fabs(Dot(vertex[i].position, vertex[i].position) - 2.0f * position[2]);
+        float absLevel = std::abs(Dot(vertex[i].position, vertex[i].position) - 2.0f * position[2]);
         if (absLevel > maxAbsLevel)
         {
             maxAbsLevel = absLevel;
         }
 
-        float temp = atan2(vertex[i].position[1], vertex[i].position[2]) / (float)GTE_C_PI;
+        float temp = std::atan2(vertex[i].position[1], vertex[i].position[2]) / (float)GTE_C_PI;
         float width = 0.5f * (1.0f + temp);  // in [0,1)
         if (width < 0.0f)
         {
@@ -209,7 +209,7 @@ void DeformableBall::Update(float time)
 
 bool DeformableBall::DoSimulationStep(float realTime)
 {
-    float time = fmod(realTime, mPeriod);
+    float time = std::fmod(realTime, mPeriod);
 
     if (mMinActive < time && time < mMaxActive)
     {
@@ -283,14 +283,14 @@ float DeformableBall::GetNormalWeight(unsigned int i, float time, Vector3<float>
         float function;
         Vector3<float> gradient;
         ComputeFunction(evalPosition, time, function, gradient);
-        if (fabs(function) < mErrorTolerance)
+        if (std::abs(function) < mErrorTolerance)
         {
             return s;
         }
 
         // Get directional derivative Dot(dir,Grad(F)(pos,time)).
         float derFunction = Dot(mNormal[i], gradient);
-        if (fabs(derFunction) < mErrorTolerance)
+        if (std::abs(derFunction) < mErrorTolerance)
         {
             // Derivative too close to zero, no change.
             return 0.0f;

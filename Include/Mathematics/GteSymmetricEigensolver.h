@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/08/20)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -568,7 +568,7 @@ void SymmetricEigensolver<Real>::Tridiagonalize()
             length += vr * vr;
         }
         Real vdv = (Real)1;
-        length = sqrt(length);
+        length = std::sqrt(length);
         if (length >(Real)0)
         {
             Real& v1 = mVVector[ip1];
@@ -655,13 +655,13 @@ void SymmetricEigensolver<Real>::GetSinCos(Real x, Real y, Real& cs, Real& sn)
         if (std::abs(y) > std::abs(x))
         {
             tau = -x / y;
-            sn = ((Real)1) / sqrt(((Real)1) + tau*tau);
+            sn = ((Real)1) / std::sqrt(((Real)1) + tau*tau);
             cs = sn * tau;
         }
         else
         {
             tau = -y / x;
-            cs = ((Real)1) / sqrt(((Real)1) + tau*tau);
+            cs = ((Real)1) / std::sqrt(((Real)1) + tau*tau);
             sn = cs * tau;
         }
     }
@@ -683,7 +683,7 @@ void SymmetricEigensolver<Real>::DoQRImplicitShift(int imin, int imax)
     Real dif = (a00 - a11) * (Real)0.5;
     Real sgn = (dif >= (Real)0 ? (Real)1 : (Real)-1);
     Real a01sqr = a01 * a01;
-    Real u = a11 - a01sqr / (dif + sgn*sqrt(dif*dif + a01sqr));
+    Real u = a11 - a01sqr / (dif + sgn * std::sqrt(dif*dif + a01sqr));
     Real x = mDiagonal[imin] - u;
     Real y = mSuperdiagonal[imin];
 

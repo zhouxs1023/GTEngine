@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -46,7 +46,7 @@ double FitSin::G(double x, int const order, double const* p) const
     {
         result = xsqr*result + p[i];
     }
-    result = sin(x) - x * result;
+    result = std::sin(x) - x * result;
     return result;
 }
 
@@ -59,7 +59,7 @@ double FitSin::GDer(double x, int const order, double const* p) const
     {
         result = xsqr*result + (2 * i + 1)*p[i];
     }
-    result = cos(x) - result;
+    result = std::cos(x) - result;
     return result;
 }
 
@@ -103,7 +103,7 @@ void FitSin::Generate(std::vector<double>& poly, double& error) const
         {
             A(r, c) = xsqr * A(r, c - 1);
         }
-        B[r] = sin(x);
+        B[r] = std::sin(x);
     }
     Vector<Order + 1, double> p = Inverse(A) * B;
 
@@ -170,7 +170,7 @@ void FitSin::Generate(std::vector<double>& poly, double& error) const
                 A(r, c) = xsqr * A(r, c - 1);
             }
             A(r, Order) = sign;
-            B[r] = sin(x) - x;
+            B[r] = std::sin(x) - x;
         }
         double x = GTE_C_HALF_PI, xsqr = x * x;
         A(Order, 0) = xsqr * x;
@@ -179,7 +179,7 @@ void FitSin::Generate(std::vector<double>& poly, double& error) const
             A(Order, c) = xsqr * A(Order, c - 1);
         }
         A(Order, Order) = 0.0;
-        B[Order] = sin(x) - x;
+        B[Order] = std::sin(x) - x;
 
         Vector<Order + 1, double> X = Inverse(A)*B;
         for (int i = 0; i < Order; ++i)

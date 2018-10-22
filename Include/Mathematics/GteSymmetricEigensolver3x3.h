@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2017/08/03)
+// File Version: 3.0.5 (2018/10/09)
 
 #pragma once
 
@@ -148,7 +148,7 @@ int SymmetricEigensolver3x3<Real>::operator()(Real a00, Real a01, Real a02,
         {
             // Compute the Givens reflection.
             GetCosSin(half * (b00 - b11), b01, c2, s2);
-            s = sqrt(half * (one - c2));  // >= 1/sqrt(2)
+            s = std::sqrt(half * (one - c2));  // >= 1/sqrt(2)
             c = half * s2 / s;
 
             // Update Q by the Givens reflection.
@@ -174,7 +174,7 @@ int SymmetricEigensolver3x3<Real>::operator()(Real a00, Real a01, Real a02,
             {
                 // Compute the Householder reflection.
                 GetCosSin(half * (b00 - b11), b01, c2, s2);
-                s = sqrt(half * (one - c2));
+                s = std::sqrt(half * (one - c2));
                 c = half * s2 / s;  // >= 1/sqrt(2)
 
                 // Update Q by the Householder reflection.
@@ -202,7 +202,7 @@ int SymmetricEigensolver3x3<Real>::operator()(Real a00, Real a01, Real a02,
         {
             // Compute the Givens reflection.
             GetCosSin(half * (b22 - b11), b12, c2, s2);
-            s = sqrt(half * (one - c2));  // >= 1/sqrt(2)
+            s = std::sqrt(half * (one - c2));  // >= 1/sqrt(2)
             c = half * s2 / s;
 
             // Update Q by the Givens reflection.
@@ -228,7 +228,7 @@ int SymmetricEigensolver3x3<Real>::operator()(Real a00, Real a01, Real a02,
             {
                 // Compute the Householder reflection.
                 GetCosSin(half * (b11 - b22), b12, c2, s2);
-                s = sqrt(half * (one - c2));
+                s = std::sqrt(half * (one - c2));
                 c = half * s2 / s;  // >= 1/sqrt(2)
 
                 // Update Q by the Householder reflection.
@@ -368,7 +368,7 @@ void SymmetricEigensolver3x3<Real>::GetCosSin(Real u, Real v, Real& cs,
     {
         u /= maxAbsComp;  // in [-1,1]
         v /= maxAbsComp;  // in [-1,1]
-        Real length = sqrt(u * u + v * v);
+        Real length = std::sqrt(u * u + v * v);
         cs = u / length;
         sn = v / length;
         if (cs > (Real)0)
@@ -446,9 +446,9 @@ void NISymmetricEigensolver3x3<Real>::operator() (Real a00, Real a01, Real a02,
     // Precondition the matrix by factoring out the maximum absolute value
     // of the components.  This guards against floating-point overflow when
     // computing the eigenvalues.
-    Real max0 = std::max(fabs(a00), fabs(a01));
-    Real max1 = std::max(fabs(a02), fabs(a11));
-    Real max2 = std::max(fabs(a12), fabs(a22));
+    Real max0 = std::max(std::abs(a00), std::abs(a01));
+    Real max1 = std::max(std::abs(a02), std::abs(a11));
+    Real max2 = std::max(std::abs(a12), std::abs(a22));
     Real maxAbsElement = std::max(std::max(max0, max1), max2);
     if (maxAbsElement == (Real)0)
     {
@@ -473,35 +473,57 @@ void NISymmetricEigensolver3x3<Real>::operator() (Real a00, Real a01, Real a02,
     Real norm = a01 * a01 + a02 * a02 + a12 * a12;
     if (norm > (Real)0)
     {
-        // Compute the eigenvalues of A.  The acos(z) function requires |z| <= 1,
-        // but will fail silently and return NaN if the input is larger than 1 in
-        // magnitude.  To avoid this condition due to rounding errors, the halfDet
-        // value is clamped to [-1,1].
-        Real traceDiv3 = (a00 + a11 + a22) / (Real)3;
-        Real b00 = a00 - traceDiv3;
-        Real b11 = a11 - traceDiv3;
-        Real b22 = a22 - traceDiv3;
-        Real denom = sqrt((b00 * b00 + b11 * b11 + b22 * b22 + norm * (Real)2) / (Real)6);
+        // Compute the eigenvalues of A.
+
+        // In the PDF mentioned previously, B = (A - q*I)/p, where q = tr(A)/3 
+        // with tr(A) the trace of A (sum of the diagonal entries of A) and where
+        // p = sqrt(tr((A - q*I)^2)/6).
+        Real q = (a00 + a11 + a22) / (Real)3;
+
+        // The matrix A - q*I is represented by the following, where b00, b11 and
+        // b22 are computed after these comments,
+        //   +-           -+
+        //   | b00 a01 a02 |
+        //   | a01 b11 a12 |
+        //   | a02 a12 b22 |
+        //   +-           -+
+        Real b00 = a00 - q;
+        Real b11 = a11 - q;
+        Real b22 = a22 - q;
+
+        // The is the variable p mentioned in the PDF.
+        Real p = std::sqrt((b00 * b00 + b11 * b11 + b22 * b22 + norm * (Real)2) / (Real)6);
+
+        // We need det(B) = det((A - q*I)/p) = det(A - q*I)/p^3.  The value
+        // det(A - q*I) is computed using a cofactor expansion by the first
+        // row of A - q*I.  The cofactors are c00, c01 and c02 and the
+        // determinant is b00*c00 - a01*c01 + a02*c02.  The det(B) is then
+        // computed finally by the division with p^3.
         Real c00 = b11 * b22 - a12 * a12;
         Real c01 = a01 * b22 - a12 * a02;
         Real c02 = a01 * a12 - b11 * a02;
-        Real det = (b00 * c00 - a01 * c01 + a02 * c02) / (denom * denom * denom);
+        Real det = (b00 * c00 - a01 * c01 + a02 * c02) / (p * p * p);
+
+        // The halfDet value is cos(3*theta) mentioned in the PDF. The acos(z)
+        // function requires |z| <= 1, but will fail silently and return NaN
+        // if the input is larger than 1 in magnitude.  To avoid this problem
+        // due to rounding errors, the halfDet/ value is clamped to [-1,1].
         Real halfDet = det * (Real)0.5;
         halfDet = std::min(std::max(halfDet, (Real)-1), (Real)1);
 
         // The eigenvalues of B are ordered as beta0 <= beta1 <= beta2.  The
         // number of digits in twoThirdsPi is chosen so that, whether float or
         // double, the floating-point number is the closest to theoretical 2*pi/3.
-        Real angle = acos(halfDet) / (Real)3;
+        Real angle = std::acos(halfDet) / (Real)3;
         Real const twoThirdsPi = (Real)2.09439510239319549;
-        Real beta2 = cos(angle) * (Real)2;
-        Real beta0 = cos(angle + twoThirdsPi) * (Real)2;
+        Real beta2 = std::cos(angle) * (Real)2;
+        Real beta0 = std::cos(angle + twoThirdsPi) * (Real)2;
         Real beta1 = -(beta0 + beta2);
 
         // The eigenvalues of A are ordered as alpha0 <= alpha1 <= alpha2.
-        eval[0] = traceDiv3 + denom * beta0;
-        eval[1] = traceDiv3 + denom * beta1;
-        eval[2] = traceDiv3 + denom * beta2;
+        eval[0] = q + p * beta0;
+        eval[1] = q + p * beta1;
+        eval[2] = q + p * beta2;
 
         // Compute the eigenvectors so that the set {evec[0], evec[1], evec[2]}
         // is right handed and orthonormal.
@@ -590,16 +612,16 @@ void NISymmetricEigensolver3x3<Real>::ComputeOrthogonalComplement(
     // vector W is guaranteed to be unit-length, in which case there is no
     // need to worry about a division by zero when computing invLength.
     Real invLength;
-    if (fabs(W[0]) > fabs(W[1]))
+    if (std::abs(W[0]) > std::abs(W[1]))
     {
         // The component of maximum absolute value is either W[0] or W[2].
-        invLength = (Real)1 / sqrt(W[0] * W[0] + W[2] * W[2]);
+        invLength = (Real)1 / std::sqrt(W[0] * W[0] + W[2] * W[2]);
         U = { -W[2] * invLength, (Real)0, +W[0] * invLength };
     }
     else
     {
         // The component of maximum absolute value is either W[1] or W[2].
-        invLength = (Real)1 / sqrt(W[1] * W[1] + W[2] * W[2]);
+        invLength = (Real)1 / std::sqrt(W[1] * W[1] + W[2] * W[2]);
         U = { (Real)0, +W[2] * invLength, -W[1] * invLength };
     }
     V = Cross(W, U);
@@ -637,15 +659,15 @@ void NISymmetricEigensolver3x3<Real>::ComputeEigenvector0(Real a00, Real a01,
 
     if (imax == 0)
     {
-        evec0 = Divide(r0xr1, sqrt(d0));
+        evec0 = Divide(r0xr1, std::sqrt(d0));
     }
     else if (imax == 1)
     {
-        evec0 = Divide(r0xr2, sqrt(d1));
+        evec0 = Divide(r0xr2, std::sqrt(d1));
     }
     else
     {
-        evec0 = Divide(r1xr2, sqrt(d2));
+        evec0 = Divide(r1xr2, std::sqrt(d2));
     }
 }
 
@@ -698,9 +720,9 @@ void NISymmetricEigensolver3x3<Real>::ComputeEigenvector1(Real a00, Real a01,
     // assignments to eigenvector[1] lies on a circle, and U and V are
     // unit length and perpendicular, so eigenvector[1] is unit length
     // (within numerical tolerance).
-    Real absM00 = fabs(m00);
-    Real absM01 = fabs(m01);
-    Real absM11 = fabs(m11);
+    Real absM00 = std::abs(m00);
+    Real absM01 = std::abs(m01);
+    Real absM11 = std::abs(m11);
     Real maxAbsComp;
     if (absM00 >= absM11)
     {
@@ -710,13 +732,13 @@ void NISymmetricEigensolver3x3<Real>::ComputeEigenvector1(Real a00, Real a01,
             if (absM00 >= absM01)
             {
                 m01 /= m00;
-                m00 = (Real)1 / sqrt((Real)1 + m01 * m01);
+                m00 = (Real)1 / std::sqrt((Real)1 + m01 * m01);
                 m01 *= m00;
             }
             else
             {
                 m00 /= m01;
-                m01 = (Real)1 / sqrt((Real)1 + m00 * m00);
+                m01 = (Real)1 / std::sqrt((Real)1 + m00 * m00);
                 m00 *= m01;
             }
             evec1 = Subtract(Multiply(m01, U), Multiply(m00, V));
@@ -734,13 +756,13 @@ void NISymmetricEigensolver3x3<Real>::ComputeEigenvector1(Real a00, Real a01,
             if (absM11 >= absM01)
             {
                 m01 /= m11;
-                m11 = (Real)1 / sqrt((Real)1 + m01 * m01);
+                m11 = (Real)1 / std::sqrt((Real)1 + m01 * m01);
                 m01 *= m11;
             }
             else
             {
                 m11 /= m01;
-                m01 = (Real)1 / sqrt((Real)1 + m11 * m11);
+                m01 = (Real)1 / std::sqrt((Real)1 + m11 * m11);
                 m11 *= m01;
             }
             evec1 = Subtract(Multiply(m11, U), Multiply(m01, V));

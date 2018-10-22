@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/04)
 
 #pragma once
 
@@ -148,9 +148,9 @@ void TIQuery<Real, Triangle3<Real>, OrientedBox3<Real>>::GetProjection(
 {
     Real origin = Dot(axis, box.center);
     Real maximumExtent =
-        fabs(box.extent[0] * Dot(axis, box.axis[0])) +
-        fabs(box.extent[1] * Dot(axis, box.axis[1])) +
-        fabs(box.extent[2] * Dot(axis, box.axis[2]));
+        std::abs(box.extent[0] * Dot(axis, box.axis[0])) +
+        std::abs(box.extent[1] * Dot(axis, box.axis[1])) +
+        std::abs(box.extent[2] * Dot(axis, box.axis[2]));
 
     imin = origin - maximumExtent;
     imax = origin + maximumExtent;

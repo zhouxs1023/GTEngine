@@ -32,7 +32,7 @@ int64_t Timer::GetNanoseconds() const
 {
     int64_t ticks = GetTicks();
     double seconds = mInvFrequency * static_cast<double>(ticks);
-    int64_t nanoseconds = static_cast<int64_t>(ceil(1000000000.0 * seconds));
+    int64_t nanoseconds = static_cast<int64_t>(std::ceil(1000000000.0 * seconds));
     return nanoseconds;
 }
 
@@ -40,7 +40,7 @@ int64_t Timer::GetMicroseconds() const
 {
     int64_t ticks = GetTicks();
     double seconds = mInvFrequency * static_cast<double>(ticks);
-    int64_t microseconds = static_cast<int64_t>(ceil(1000000.0 * seconds));
+    int64_t microseconds = static_cast<int64_t>(std::ceil(1000000.0 * seconds));
     return microseconds;
 }
 
@@ -48,7 +48,7 @@ int64_t Timer::GetMilliseconds() const
 {
     int64_t ticks = GetTicks();
     double seconds = mInvFrequency * static_cast<double>(ticks);
-    int64_t milliseconds = static_cast<int64_t>(ceil(1000.0 * seconds));
+    int64_t milliseconds = static_cast<int64_t>(std::ceil(1000.0 * seconds));
     return milliseconds;
 }
 

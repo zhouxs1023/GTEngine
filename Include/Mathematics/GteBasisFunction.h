@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/04/28)
+// File Version: 3.0.3 (2018/10/05)
 
 #pragma once
 
@@ -557,7 +557,7 @@ int BasisFunction<Real>::GetIndex(Real& t) const
     if (mPeriodic)
     {
         // Wrap to [tmin,tmax].
-        Real r = fmod(t - mTMin, mTLength);
+        Real r = std::fmod(t - mTMin, mTLength);
         if (r < (Real)0)
         {
             r += mTLength;

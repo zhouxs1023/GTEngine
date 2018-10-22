@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.0 (2016/06/28)
+// File Version: 3.1.1 (2018/10/05)
 
 #include "FreeTopFixedTipWindow.h"
 
@@ -42,7 +42,7 @@ FreeTopFixedTipWindow::FreeTopFixedTipWindow(Parameters& parameters)
 
     CreateScene();
     float angle = static_cast<float>(0.1 * GTE_C_PI);
-    float cs = cos(angle), sn = sin(angle);
+    float cs = std::cos(angle), sn = std::sin(angle);
     InitializeCamera(60.0f, GetAspectRatio(), 0.1f, 100.0f, 0.001f, 0.001f,
         { 4.0f, 0.0f, 2.0f }, { -cs, 0.0f, -sn }, { -sn, 0.0f, cs });
     mPVWMatrices.Update();
@@ -143,7 +143,7 @@ void FreeTopFixedTipWindow::InitializeModule()
     float angVel2 = 0.0f;
     float angVel3 = 10.0f;
     mModule.Initialize(time, deltaTime, theta, phi, psi, angVel1, angVel2, angVel3);
-    mMaxPhi = static_cast<float>(GTE_C_HALF_PI - atan(2.0 / 3.0));
+    mMaxPhi = static_cast<float>(GTE_C_HALF_PI - std::atan(2.0 / 3.0));
 }
 
 void FreeTopFixedTipWindow::CreateScene()
@@ -235,7 +235,7 @@ void FreeTopFixedTipWindow::CreateTop()
         Vector3<float>& pos = vertices[i].position;
         float z = pos[2] + 1.0f;
         float r = 0.75f * (z >= 1.5f ? 4.0f - 2.0f * z : z / 1.5f);
-        float multiplier = r / sqrt(pos[0] * pos[0] + pos[1] * pos[1]);
+        float multiplier = r / std::sqrt(pos[0] * pos[0] + pos[1] * pos[1]);
         pos[0] *= multiplier;
         pos[1] *= multiplier;
         vertices[i].tcoord *= 4.0f;

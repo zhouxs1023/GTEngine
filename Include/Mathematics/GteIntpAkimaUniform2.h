@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/04)
 
 #pragma once
 
@@ -418,8 +418,8 @@ Real IntpAkimaUniform2<Real>::ComputeDerivative(Real const* slope) const
         {
             if (slope[2] != slope[3])
             {
-                Real ad0 = fabs(slope[3] - slope[2]);
-                Real ad1 = fabs(slope[0] - slope[1]);
+                Real ad0 = std::abs(slope[3] - slope[2]);
+                Real ad1 = std::abs(slope[0] - slope[1]);
                 return (ad0 * slope[1] + ad1 * slope[2]) / (ad0 + ad1);
             }
             else

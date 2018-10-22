@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/29)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -83,7 +83,7 @@ Real FrenetFrame2<Real>::GetCurvature(Real t) const
     if (speedSqr > (Real)0)
     {
         Real numer = DotPerp(values[1], values[2]);
-        Real denom = pow(speedSqr, (Real)1.5);
+        Real denom = std::pow(speedSqr, (Real)1.5);
         return numer / denom;
     }
     else
@@ -127,7 +127,7 @@ Real FrenetFrame3<Real>::GetCurvature(Real t) const
     if (speedSqr > (Real)0)
     {
         Real numer = Length(Cross(values[1], values[2]));
-        Real denom = pow(speedSqr, (Real)1.5);
+        Real denom = std::pow(speedSqr, (Real)1.5);
         return numer / denom;
     }
     else

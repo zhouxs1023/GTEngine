@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -88,7 +88,7 @@ void DCPQuery<Real, Vector3<Real>, Cylinder3<Real>>::DoQueryInfiniteCylinder(
     if (sqrDistance >= sqrRadius)
     {
         // The point is outside the cylinder or on the cylinder wall.
-        Real distance = sqrt(sqrDistance);
+        Real distance = std::sqrt(sqrDistance);
         result.distance = distance - radius;
         Real temp = radius / distance;
         result.cylinderClosest[0] = P[0] * temp;

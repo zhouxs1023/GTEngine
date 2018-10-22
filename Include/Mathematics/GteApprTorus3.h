@@ -3,15 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.14.0 (2018/07/16)
+// File Version: 3.14.2 (2018/10/19)
 
 #pragma once
 
-#include <Mathematics/GteFunctions.h>
 #include <Mathematics/GteApprOrthogonalPlane3.h>
-#include <Mathematics/GteRootsPolynomial.h>
-#include <Mathematics/GteBSRational.h>
 #include <Mathematics/GteUIntegerAP32.h>
+#include <Mathematics/GteBSRational.h>
+#include <Mathematics/GteRootsPolynomial.h>
 #include <Mathematics/GteGaussNewtonMinimizer.h>
 #include <Mathematics/GteLevenbergMarquardtMinimizer.h>
 
@@ -79,10 +78,10 @@ namespace gte
             //   (|D|^2 + v)^2 - 4*u*(|D|^2 - Dot(N,D)^2)
             mFFunction = [this](GVector<Real> const& P, GVector<Real>& F)
             {
-                Real csTheta = Function<Real>::Cos(P[3]);
-                Real snTheta = Function<Real>::Sin(P[3]);
-                Real csPhi = Function<Real>::Cos(P[4]);
-                Real snPhi = Function<Real>::Sin(P[4]);
+                Real csTheta = std::cos(P[3]);
+                Real snTheta = std::sin(P[3]);
+                Real csPhi = std::cos(P[4]);
+                Real snPhi = std::sin(P[4]);
                 Vector<3, Real> C = { P[0], P[1], P[2] };
                 Vector<3, Real> N = { csTheta * snPhi, snTheta * snPhi, csPhi };
                 Real u = P[5];
@@ -104,10 +103,10 @@ namespace gte
             mJFunction = [this](GVector<Real> const& P, GMatrix<Real>& J)
             {
                 Real const r2(2), r4(4), r8(8);
-                Real csTheta = Function<Real>::Cos(P[3]);
-                Real snTheta = Function<Real>::Sin(P[3]);
-                Real csPhi = Function<Real>::Cos(P[4]);
-                Real snPhi = Function<Real>::Sin(P[4]);
+                Real csTheta = std::cos(P[3]);
+                Real snTheta = std::sin(P[3]);
+                Real csPhi = std::cos(P[4]);
+                Real snPhi = std::sin(P[4]);
                 Vector<3, Real> C = { P[0], P[1], P[2] };
                 Vector<3, Real> N = { csTheta * snPhi, snTheta * snPhi, csPhi };
                 Real u = P[5];
@@ -227,8 +226,8 @@ namespace gte
                 return std::make_pair(false, std::numeric_limits<Real>::max());
             }
 
-            r0 = Function<Real>::Sqrt(umin);
-            r1 = Function<Real>::Sqrt(umin - vmin);
+            r0 = std::sqrt(umin);
+            r1 = std::sqrt(umin - vmin);
             return std::make_pair(true, hmin);
         }
 
@@ -255,10 +254,10 @@ namespace gte
 
             // The initial guess for the plane normal.  The angles must be
             // extracted for spherical coordinates.
-            if (Function<Real>::FAbs(N[2]) < (Real)1)
+            if (std::abs(N[2]) < (Real)1)
             {
-                initial[3] = Function<Real>::ATan2(N[1], N[0]);
-                initial[4] = Function<Real>::ACos(N[2]);
+                initial[3] = std::atan2(N[1], N[0]);
+                initial[4] = std::acos(N[2]);
             }
             else
             {
@@ -282,18 +281,18 @@ namespace gte
 
             Real theta = result.minLocation[3];
             Real phi = result.minLocation[4];
-            Real csTheta = Function<Real>::Cos(theta);
-            Real snTheta = Function<Real>::Sin(theta);
-            Real csPhi = Function<Real>::Cos(phi);
-            Real snPhi = Function<Real>::Sin(phi);
+            Real csTheta = std::cos(theta);
+            Real snTheta = std::sin(theta);
+            Real csPhi = std::cos(phi);
+            Real snPhi = std::sin(phi);
             N[0] = csTheta * snPhi;
             N[1] = snTheta * snPhi;
             N[2] = csPhi;
 
             Real u = result.minLocation[5];
             Real v = result.minLocation[6];
-            r0 = Function<Real>::Sqrt(u);
-            r1 = Function<Real>::Sqrt(u - v);
+            r0 = std::sqrt(u);
+            r1 = std::sqrt(u - v);
 
             mNumPoints = 0;
             mPoints = nullptr;
@@ -324,10 +323,10 @@ namespace gte
 
             // The initial guess for the plane normal.  The angles must be
             // extracted for spherical coordinates.
-            if (Function<Real>::FAbs(N[2]) < (Real)1)
+            if (std::abs(N[2]) < (Real)1)
             {
-                initial[3] = Function<Real>::ATan2(N[1], N[0]);
-                initial[4] = Function<Real>::ACos(N[2]);
+                initial[3] = std::atan2(N[1], N[0]);
+                initial[4] = std::acos(N[2]);
             }
             else
             {
@@ -351,18 +350,18 @@ namespace gte
 
             Real theta = result.minLocation[3];
             Real phi = result.minLocation[4];
-            Real csTheta = Function<Real>::Cos(theta);
-            Real snTheta = Function<Real>::Sin(theta);
-            Real csPhi = Function<Real>::Cos(phi);
-            Real snPhi = Function<Real>::Sin(phi);
+            Real csTheta = std::cos(theta);
+            Real snTheta = std::sin(theta);
+            Real csPhi = std::cos(phi);
+            Real snPhi = std::sin(phi);
             N[0] = csTheta * snPhi;
             N[1] = snTheta * snPhi;
             N[2] = csPhi;
 
             Real u = result.minLocation[5];
             Real v = result.minLocation[6];
-            r0 = Function<Real>::Sqrt(u);
-            r1 = Function<Real>::Sqrt(u - v);
+            r0 = std::sqrt(u);
+            r1 = std::sqrt(u - v);
 
             mNumPoints = 0;
             mPoints = nullptr;

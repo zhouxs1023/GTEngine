@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.1 (2017/04/01)
+// File Version: 3.3.2 (2018/10/05)
 
 #include "FitCylinderWindow.h"
 #include <Mathematics/GteApprCylinder3.h>
@@ -133,8 +133,8 @@ void FitCylinderWindow::CreateScene()
     for (unsigned int j = 0; j < 64; ++j)
     {
         double theta = GTE_C_TWO_PI * j / 64.0;
-        double cstheta = cos(theta);
-        double sntheta = sin(theta);
+        double cstheta = std::cos(theta);
+        double sntheta = std::sin(theta);
         for (unsigned int i = 0; i <= 64; ++i)
         {
             double t = -2.0 + 4.0 * i / 64.0;
@@ -149,8 +149,8 @@ void FitCylinderWindow::CreateScene()
     for (unsigned int j = 0; j < 64; ++j)
     {
         double theta = GTE_C_TWO_PI * j / 64.0;
-        double cstheta = cos(theta);
-        double sntheta = sin(theta);
+        double cstheta = std::cos(theta);
+        double sntheta = std::sin(theta);
         for (unsigned int i = 0; i <= 64; ++i)
         {
             double t = -b + cstheta + 2.0 * b * i / 64.0;

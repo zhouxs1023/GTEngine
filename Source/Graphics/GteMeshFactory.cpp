@@ -3,11 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.4 (2018/09/27)
+// File Version: 3.0.5 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteMeshFactory.h>
-#include <Mathematics/GteFunctions.h>
 #include <Mathematics/GteRectangleMesh.h>
 using namespace gte;
 
@@ -186,8 +185,8 @@ std::shared_ptr<Visual> MeshFactory::CreateDisk(unsigned int numShellSamples,
     for (unsigned int r = 0; r < numRadialSamples; ++r)
     {
         float angle = invRS*r*(float)GTE_C_TWO_PI;
-        float cs = cos(angle);
-        float sn = sin(angle);
+        float cs = std::cos(angle);
+        float sn = std::sin(angle);
         Vector3<float> radial{ cs, sn, 0.0f };
 
         for (unsigned int s = 1; s < numShellSamples; ++s)
@@ -357,8 +356,8 @@ std::shared_ptr<Visual> MeshFactory::CreateCylinderOpen(
     for (unsigned int r = 0; r < numRadialSamples; ++r)
     {
         float angle = invRS*r*(float)GTE_C_TWO_PI;
-        cs[r] = cos(angle);
-        sn[r] = sin(angle);
+        cs[r] = std::cos(angle);
+        sn[r] = std::sin(angle);
     }
     cs[numRadialSamples] = cs[0];
     sn[numRadialSamples] = sn[0];
@@ -429,7 +428,7 @@ std::shared_ptr<Visual> MeshFactory::CreateCylinderOpen(
         // The duplication of vertices at the seam causes the automatically
         // generated bounding volume to be slightly off center.  Reset the
         // bound to use the true information.
-        float maxDist = sqrt(radius*radius + height*height);
+        float maxDist = std::sqrt(radius * radius + height * height);
         visual->modelBound.SetCenter({ 0.0f, 0.0f, 0.0f, 1.0f });
         visual->modelBound.SetRadius(maxDist);
     }
@@ -473,7 +472,7 @@ std::shared_ptr<Visual> MeshFactory::CreateCylinderClosed(
     {
         pos = Position(i);
         pos[2] = hDiv2*(-1.0f + tmp1*(pos[2] - tmp0));
-        float adjust = radius/sqrt(pos[0]*pos[0] + pos[1]*pos[1]);
+        float adjust = radius / std::sqrt(pos[0]*pos[0] + pos[1]*pos[1]);
         pos[0] *= adjust;
         pos[1] *= adjust;
         SetPosition(i, pos);
@@ -495,7 +494,7 @@ std::shared_ptr<Visual> MeshFactory::CreateCylinderClosed(
     // The duplication of vertices at the seam causes the automatically
     // generated bounding volume to be slightly off center.  Reset the bound
     // to use the true information.
-    float maxDist = sqrt(radius*radius + height*height);
+    float maxDist = std::sqrt(radius*radius + height*height);
     visual->modelBound.SetCenter({ 0.0f, 0.0f, 0.0f, 1.0f });
     visual->modelBound.SetRadius(maxDist);
     return visual;
@@ -530,8 +529,8 @@ std::shared_ptr<Visual> MeshFactory::CreateSphere(unsigned int numZSamples,
     for (unsigned int r = 0; r < numRadialSamples; ++r)
     {
         float angle = invRS*r*(float)GTE_C_TWO_PI;
-        cs[r] = cos(angle);
-        sn[r] = sin(angle);
+        cs[r] = std::cos(angle);
+        sn[r] = std::sin(angle);
     }
     cs[numRadialSamples] = cs[0];
     sn[numRadialSamples] = sn[0];
@@ -547,7 +546,7 @@ std::shared_ptr<Visual> MeshFactory::CreateSphere(unsigned int numZSamples,
         Vector3<float> sliceCenter{ 0.0f, 0.0f, zValue };
 
         // Compute radius of slice.
-        float sliceRadius = sqrt(std::abs(radius*radius - zValue*zValue));
+        float sliceRadius = std::sqrt(std::abs(radius*radius - zValue*zValue));
 
         // Compute slice vertices with duplication at endpoint.
         for (unsigned int r = 0; r <= numRadialSamples; ++r, ++i)
@@ -695,8 +694,8 @@ std::shared_ptr<Visual> MeshFactory::CreateTorus(
         // Compute center point on torus circle at specified angle.
         float circleFraction = static_cast<float>(c)*invCS;  // in [0,1)
         float theta = circleFraction*(float)GTE_C_TWO_PI;
-        float cosTheta = cos(theta);
-        float sinTheta = sin(theta);
+        float cosTheta = std::cos(theta);
+        float sinTheta = std::sin(theta);
         Vector3<float> radial{ cosTheta, sinTheta, 0.0f };
         Vector3<float> torusMiddle = outerRadius*radial;
 
@@ -705,8 +704,8 @@ std::shared_ptr<Visual> MeshFactory::CreateTorus(
         {
             float radialFraction = static_cast<float>(r)*invRS;  // in [0,1)
             float phi = radialFraction*(float)GTE_C_TWO_PI;
-            float cosPhi = cos(phi);
-            float sinPhi = sin(phi);
+            float cosPhi = std::cos(phi);
+            float sinPhi = std::sin(phi);
             nor = cosPhi*radial + sinPhi*Vector3<float>::Unit(2);
             pos = torusMiddle + innerRadius*nor;
             if (!mOutside)
@@ -794,8 +793,8 @@ std::shared_ptr<Visual> MeshFactory::CreateTorus(
 
 std::shared_ptr<Visual> MeshFactory::CreateTetrahedron()
 {
-    float const sqrt2Div3 = sqrt(2.0f)/3.0f;
-    float const sqrt6Div3 = sqrt(6.0f)/3.0f;
+    float const sqrt2Div3 = std::sqrt(2.0f)/3.0f;
+    float const sqrt6Div3 = std::sqrt(6.0f)/3.0f;
     float const oneThird = 1.0f/3.0f;
     unsigned int const numVertices = 4;
     unsigned int const numTriangles = 4;
@@ -854,7 +853,7 @@ std::shared_ptr<Visual> MeshFactory::CreateTetrahedron()
 
 std::shared_ptr<Visual> MeshFactory::CreateHexahedron()
 {
-    float const sqrtThird = sqrt(1.0f/3.0f);
+    float const sqrtThird = std::sqrt(1.0f/3.0f);
     unsigned int const numVertices = 8;
     unsigned int const numTriangles = 12;
 
@@ -987,9 +986,9 @@ std::shared_ptr<Visual> MeshFactory::CreateOctahedron()
 
 std::shared_ptr<Visual> MeshFactory::CreateDodecahedron()
 {
-    float const a = 1.0f/sqrt(3.0f);
-    float const b = sqrt((3.0f - sqrt(5.0f))/6.0f);
-    float const c = sqrt((3.0f + sqrt(5.0f))/6.0f);
+    float const a = 1.0f/ std::sqrt(3.0f);
+    float const b = std::sqrt((3.0f - std::sqrt(5.0f))/6.0f);
+    float const c = std::sqrt((3.0f + std::sqrt(5.0f))/6.0f);
     unsigned int const numVertices = 20;
     unsigned int const numTriangles = 36;
 
@@ -1095,8 +1094,8 @@ std::shared_ptr<Visual> MeshFactory::CreateDodecahedron()
 
 std::shared_ptr<Visual> MeshFactory::CreateIcosahedron()
 {
-    float const goldenRatio = 0.5f*(1.0f + sqrt(5.0f));
-    float const invRoot = 1.0f/sqrt(1.0f + goldenRatio*goldenRatio);
+    float const goldenRatio = 0.5f*(1.0f + std::sqrt(5.0f));
+    float const invRoot = 1.0f / std::sqrt(1.0f + goldenRatio*goldenRatio);
     float const u = goldenRatio*invRoot;
     float const v = invRoot;
     unsigned int const numVertices = 12;
@@ -1299,15 +1298,14 @@ void MeshFactory::SetPlatonicTCoord(unsigned int i, Vector3<float> const& pos)
     Vector2<float> tcd;
     if (std::abs(pos[2]) < 1.0f)
     {
-        tcd[0] = 0.5f*(1.0f +
-            Function<float>::ATan2(pos[1], pos[0])* (float)GTE_C_INV_PI );
+        tcd[0] = 0.5f*(1.0f + std::atan2(pos[1], pos[0])* (float)GTE_C_INV_PI );
     }
     else
     {
         tcd[0] = 0.5f;
     }
 
-    tcd[1] = Function<float>::ACos(pos[2]) * (float)GTE_C_INV_PI;
+    tcd[1] = std::acos(pos[2]) * (float)GTE_C_INV_PI;
 
     for (int unit = 0; unit < VA_MAX_TCOORD_UNITS; ++unit)
     {

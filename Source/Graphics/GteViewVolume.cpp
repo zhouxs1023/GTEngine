@@ -3,11 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteViewVolume.h>
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 using namespace gte;
 
 ViewVolume::~ViewVolume()
@@ -54,7 +54,7 @@ void ViewVolume::SetAxes(Vector4<float> const& dVector,
 
     float const epsilon = 0.01f;
     float det = DotCross(mDVector, mUVector, mRVector);
-    if (fabs(1.0f - det) > epsilon)
+    if (std::abs(1.0f - det) > epsilon)
     {
 #if defined(GTE_VALIDATE_COORDINATE_FRAME_ONCE)
         if (mValidateCoordinateFrame)
@@ -67,12 +67,12 @@ void ViewVolume::SetAxes(Vector4<float> const& dVector,
             float dotDU = Dot(mDVector, mUVector);
             float dotDR = Dot(mDVector, mRVector);
             float dotUR = Dot(mUVector, mRVector);
-            if (fabs(1.0f - lenD) > epsilon
-                || fabs(1.0f - lenU) > epsilon
-                || fabs(1.0f - lenR) > epsilon
-                || fabs(dotDU) > epsilon
-                || fabs(dotDR) > epsilon
-                || fabs(dotUR) > epsilon)
+            if (std::abs(1.0f - lenD) > epsilon
+                || std::abs(1.0f - lenU) > epsilon
+                || std::abs(1.0f - lenR) > epsilon
+                || std::abs(dotDU) > epsilon
+                || std::abs(dotDR) > epsilon
+                || std::abs(dotUR) > epsilon)
             {
                 LogError("Coordinate frame is not orthonormal.");
             }
@@ -139,7 +139,7 @@ void ViewVolume::SetFrustum(float const* frustum)
 void ViewVolume::SetFrustum(float upFovDegrees, float aspectRatio, float dMin, float dMax)
 {
     float halfAngleRadians = 0.5f * upFovDegrees * (float)GTE_C_DEG_TO_RAD;
-    mFrustum[VF_UMAX] = dMin*tan(halfAngleRadians);
+    mFrustum[VF_UMAX] = dMin * std::tan(halfAngleRadians);
     mFrustum[VF_RMAX] = aspectRatio*mFrustum[VF_UMAX];
     mFrustum[VF_UMIN] = -mFrustum[VF_UMAX];
     mFrustum[VF_RMIN] = -mFrustum[VF_RMAX];
@@ -164,7 +164,7 @@ bool ViewVolume::GetFrustum(float& upFovDegrees, float& aspectRatio, float& dMin
         && mFrustum[VF_UMIN] == -mFrustum[VF_UMAX])
     {
         float tmp = mFrustum[VF_UMAX] / mFrustum[VF_DMIN];
-        upFovDegrees = 2.0f * atan(tmp) * (float)GTE_C_RAD_TO_DEG;
+        upFovDegrees = 2.0f * std::atan(tmp) * (float)GTE_C_RAD_TO_DEG;
         aspectRatio = mFrustum[VF_RMAX] / mFrustum[VF_UMAX];
         dMin = mFrustum[VF_DMIN];
         dMax = mFrustum[VF_DMAX];

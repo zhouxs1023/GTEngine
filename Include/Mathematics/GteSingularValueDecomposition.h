@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -313,7 +313,7 @@ unsigned int SingularValueDecomposition<Real>::Solve(Real const* input,
                 Real ratio = input[i] * invMaxAbsComp;
                 norm += ratio * ratio;
             }
-            norm = maxAbsComp*sqrt(norm);
+            norm = maxAbsComp * std::sqrt(norm);
         }
 
         Real const multiplier = (Real)8;  // TODO: Expose to caller.
@@ -796,7 +796,7 @@ void SingularValueDecomposition<Real>::Bidiagonalize()
             length += ur * ur;
         }
         Real udu = (Real)1;
-        length = sqrt(length);
+        length = std::sqrt(length);
         if (length >(Real)0)
         {
             Real& u1 = mUVector[i];
@@ -844,7 +844,7 @@ void SingularValueDecomposition<Real>::Bidiagonalize()
                 length += vc * vc;
             }
             Real vdv = (Real)1;
-            length = sqrt(length);
+            length = std::sqrt(length);
             if (length >(Real)0)
             {
                 Real& v1 = mVVector[ip1];
@@ -917,13 +917,13 @@ void SingularValueDecomposition<Real>::GetSinCos(Real x, Real y, Real& cs,
         if (std::abs(y) > std::abs(x))
         {
             tau = -x / y;
-            sn = ((Real)1) / sqrt(((Real)1) + tau*tau);
+            sn = ((Real)1) / std::sqrt(((Real)1) + tau*tau);
             cs = sn * tau;
         }
         else
         {
             tau = -y / x;
-            cs = ((Real)1) / sqrt(((Real)1) + tau*tau);
+            cs = ((Real)1) / std::sqrt(((Real)1) + tau*tau);
             sn = cs * tau;
         }
     }
@@ -981,7 +981,7 @@ void SingularValueDecomposition<Real>::DoGolubKahanStep(int imin, int imax)
     Real dif = (a00 - a11) * (Real)0.5;
     Real sgn = (dif >= (Real)0 ? (Real)1 : (Real)-1);
     Real a01sqr = a01 * a01;
-    Real u = a11 - a01sqr / (dif + sgn*sqrt(dif*dif + a01sqr));
+    Real u = a11 - a01sqr / (dif + sgn * std::sqrt(dif*dif + a01sqr));
     Real x = mDiagonal[imin] * mDiagonal[imin] - u;
     Real y = mDiagonal[imin] * mSuperdiagonal[imin];
 

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.20 (2018/07/31)
+// File Version: 3.0.21 (2018/10/05)
 
 #pragma once
 
@@ -61,6 +61,7 @@
 #include <Mathematics/GteBSRational.h>
 #include <Mathematics/GteIEEEBinary.h>
 #include <Mathematics/GteIEEEBinary16.h>
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteUIntegerALU32.h>
 #include <Mathematics/GteUIntegerAP32.h>
 #include <Mathematics/GteUIntegerFP32.h>
@@ -196,14 +197,9 @@
 #include <Mathematics/GteASinEstimate.h>
 #include <Mathematics/GteATanEstimate.h>
 #include <Mathematics/GteChebyshevRatio.h>
-#include <Mathematics/GteConstants.h>
 #include <Mathematics/GteCosEstimate.h>
 #include <Mathematics/GteExp2Estimate.h>
 #include <Mathematics/GteExpEstimate.h>
-#include <Mathematics/GteFunctions.h>
-#include <Mathematics/GteFunctionsBSNumber.h>
-#include <Mathematics/GteFunctionsBSRational.h>
-#include <Mathematics/GteFunctionsIEEEBinary16.h>
 #include <Mathematics/GteInvSqrtEstimate.h>
 #include <Mathematics/GteLog2Estimate.h>
 #include <Mathematics/GteLogEstimate.h>

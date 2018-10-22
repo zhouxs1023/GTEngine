@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/08/20)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -157,7 +157,7 @@ void FIQuery<Real, Line3<Real>, Cone3<Real>>::DoQuery(
             // The quadratic has two distinct real-valued roots.  However, one
             // or both of them might intersect the negative cone.  We are
             // interested only in those intersections with the positive cone.
-            Real root = sqrt(discr);
+            Real root = std::sqrt(discr);
             Real invC2 = ((Real)1) / c2;
             int numParameters = 0;
 

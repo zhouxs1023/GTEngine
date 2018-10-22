@@ -3,13 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteRay.h>
-#include <limits>
 
 // An acute cone is Dot(A,X-V) = |X-V| cos(t) where V is the vertex, A is the
 // unit-length direction of the axis of the cone, and T is the cone angle with
@@ -98,8 +97,8 @@ Cone<N, Real>::Cone(Ray<N, Real> const& inRay, Real inAngle)
     ray(inRay),
     angle(inAngle),
     height(std::numeric_limits<Real>::max()),
-    cosAngle(cos(angle)),
-    sinAngle(sin(angle)),
+    cosAngle(std::cos(angle)),
+    sinAngle(std::sin(angle)),
     cosAngleSqr(cosAngle * cosAngle)
 {
 }
@@ -110,8 +109,8 @@ Cone<N, Real>::Cone(Ray<N, Real> const& inRay, Real inAngle, Real inHeight)
     ray(inRay),
     angle(inAngle),
     height(inHeight),
-    cosAngle(cos(angle)),
-    sinAngle(sin(angle)),
+    cosAngle(std::cos(angle)),
+    sinAngle(std::sin(angle)),
     cosAngleSqr(cosAngle * cosAngle)
 {
 }
@@ -120,8 +119,8 @@ template <int N, typename Real>
 void Cone<N, Real>::SetAngle(Real inAngle)
 {
     angle = inAngle;
-    cosAngle = cos(angle);
-    sinAngle = sin(angle);
+    cosAngle = std::cos(angle);
+    sinAngle = std::sin(angle);
     cosAngleSqr = cosAngle * cosAngle;
 }
 

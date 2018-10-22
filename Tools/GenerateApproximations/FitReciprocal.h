@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -155,14 +155,14 @@ void FitReciprocal::Generate(std::vector<double>& poly, double& error) const
                 A(r, c) = g1root[r] * A(r, c - 1);
             }
             A(r, Degree) = sign;
-            B[r] = sqrt(1.0 + g1root[r]) - 1.0;
+            B[r] = std::sqrt(1.0 + g1root[r]) - 1.0;
         }
         for (int c = 0; c < Degree; ++c)
         {
             A(Degree, c) = 1.0;
         }
         A(Degree, Degree) = 0.0;
-        B[Degree] = sqrt(2.0) - 1.0;
+        B[Degree] = std::sqrt(2.0) - 1.0;
 
         Vector<Degree + 1, double> X = Inverse(A)*B;
         for (int i = 0; i < Degree; ++i)

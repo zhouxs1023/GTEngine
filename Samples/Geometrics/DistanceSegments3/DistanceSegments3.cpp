@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2017/06/29)
+// File Version: 3.0.3 (2018/10/05)
 
 #include <GTEngine.h>
 #if defined(__LINUX__)
@@ -184,7 +184,7 @@ void CPUAccuracyTest(bool compareUsingExact, bool testNonparallel)
             Vector3<double> closest0[2];
             dist3D_Segment_to_Segment(P0, P1, Q0, Q1, sqrDistance0,
                 s0, t0, closest0);
-            double distance0 = sqrt(sqrDistance0);
+            double distance0 = std::sqrt(sqrDistance0);
 
             // robust query
             RobustQuery query1;
@@ -200,7 +200,7 @@ void CPUAccuracyTest(bool compareUsingExact, bool testNonparallel)
                 Vector3<Rational> RQ1{ Q1[0], Q1[1], Q1[2] };
                 RationalQuery query2;
                 auto result2 = query2(RP0, RP1, RQ0, RQ1);
-                double distance2 = sqrt((double)result2.sqrDistance);
+                double distance2 = std::sqrt((double)result2.sqrDistance);
 
                 error = std::abs(distance0 - distance2);
                 if (error > maxError02)
@@ -447,7 +447,7 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
                         Vector3<double> P1 = HProject(segment[sx].p[1]);
 
                         Result result0 = gpuResult[c + blockSize * r];
-                        double distance0 = sqrt(result0.sqrDistance);
+                        double distance0 = std::sqrt(result0.sqrDistance);
 
                         RobustQuery query1;
                         auto result1 = query1(P0, P1, Q0, Q1);
@@ -504,7 +504,7 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
                         Vector3<double> P1 = HProject(segment[sx].p[1]);
 
                         Result result0 = gpuResult[c + blockSize * r];
-                        double distance0 = sqrt(result0.sqrDistance);
+                        double distance0 = std::sqrt(result0.sqrDistance);
 
                         RobustQuery query1;
                         auto result1 = query1(P0, P1, Q0, Q1);
@@ -770,7 +770,7 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
                         Vector3<double> P1 = segment[sx].p[1];
 
                         Result result0 = gpuResult[c + blockSize * r];
-                        double distance0 = sqrt(result0.sqrDistance);
+                        double distance0 = std::sqrt(result0.sqrDistance);
 
                         RobustQuery query1;
                         auto result1 = query1(P0, P1, Q0, Q1);
@@ -827,7 +827,7 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
                         Vector3<double> P1 = segment[sx].p[1];
 
                         Result result0 = gpuResult[c + blockSize * r];
-                        double distance0 = sqrt(result0.sqrDistance);
+                        double distance0 = std::sqrt(result0.sqrDistance);
 
                         RobustQuery query1;
                         auto result1 = query1(P0, P1, Q0, Q1);

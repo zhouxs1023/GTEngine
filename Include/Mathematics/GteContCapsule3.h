@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -75,7 +75,7 @@ bool GetContainer(int numPoints, Vector3<Real> const* points,
         Real vDotDiff = Dot(diff, basis[2]);
         Real wDotDiff = Dot(diff, basis[0]);
         Real discr = maxRadiusSqr - (uDotDiff*uDotDiff + vDotDiff*vDotDiff);
-        Real radical = sqrt(std::max(discr, (Real)0));
+        Real radical = std::sqrt(std::max(discr, (Real)0));
 
         Real test = wDotDiff + radical;
         if (test < minValue)
@@ -106,7 +106,7 @@ bool GetContainer(int numPoints, Vector3<Real> const* points,
     }
 
     capsule.segment = Segment3<Real>(center, line.direction, extent);
-    capsule.radius = sqrt(maxRadiusSqr);
+    capsule.radius = std::sqrt(maxRadiusSqr);
     return true;
 }
 
@@ -209,7 +209,7 @@ bool MergeContainers(Capsule3<Real> const& capsule0,
     Real k0 = Dot(diff, diff) - rDiffSqr;
     Real k1 = Dot(diff, line.direction);
     Real discr = k1*k1 - k0;  // assert:  k1*k1-k0 >= 0, guard against anyway
-    Real root = sqrt(std::max(discr, (Real)0));
+    Real root = std::sqrt(std::max(discr, (Real)0));
     Real tPos = -k1 - root;
     Real tNeg = -k1 + root;
 
@@ -218,7 +218,7 @@ bool MergeContainers(Capsule3<Real> const& capsule0,
     k0 = Dot(diff, diff) - rDiffSqr;
     k1 = Dot(diff, line.direction);
     discr = k1*k1 - k0;  // assert:  k1*k1-k0 >= 0, guard against anyway
-    root = sqrt(std::max(discr, (Real)0));
+    root = std::sqrt(std::max(discr, (Real)0));
     tmp = -k1 - root;
     if (tmp > tPos)
     {
@@ -237,7 +237,7 @@ bool MergeContainers(Capsule3<Real> const& capsule0,
     k0 = Dot(diff, diff) - rDiffSqr;
     k1 = Dot(diff, line.direction);
     discr = k1*k1 - k0;  // assert:  k1*k1-k0 >= 0, guard against anyway
-    root = sqrt(std::max(discr, (Real)0));
+    root = std::sqrt(std::max(discr, (Real)0));
     tmp = -k1 - root;
     if (tmp > tPos)
     {
@@ -254,7 +254,7 @@ bool MergeContainers(Capsule3<Real> const& capsule0,
     k0 = Dot(diff, diff) - rDiffSqr;
     k1 = Dot(diff, line.direction);
     discr = k1*k1 - k0;  // assert:  k1*k1-k0 >= 0, guard against anyway
-    root = sqrt(std::max(discr, (Real)0));
+    root = std::sqrt(std::max(discr, (Real)0));
     tmp = -k1 - root;
     if (tmp > tPos)
     {

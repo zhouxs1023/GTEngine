@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include "BouncingBallWindow.h"
 
@@ -55,7 +55,7 @@ BouncingBallWindow::BouncingBallWindow(Parameters& parameters)
     PhysicsTick();
 
     float angle = static_cast<float>(0.1 * GTE_C_PI);
-    float cs = cos(angle), sn = sin(angle);
+    float cs = std::cos(angle), sn = std::sin(angle);
     InitializeCamera(60.0f, GetAspectRatio(), 1.0f, 1000.0f, 0.1f, 0.01f,
         { 6.75f, 0.0f, 2.3f }, { -cs, 0.0f, -sn }, { -sn, 0.0f, cs });
     mPVWMatrices.Update();
@@ -243,7 +243,7 @@ void BouncingBallWindow::PhysicsTick()
     // Translate the ball.
     float const yMax = 2.5f, zMax = 0.75f;
     float yTrn, zTrn, ratio, amp;
-    float time = fmod(mSimTime, 2.0f * period);
+    float time = std::fmod(mSimTime, 2.0f * period);
     if (time < tMin)
     {
         ratio = time / tMin;
@@ -256,7 +256,7 @@ void BouncingBallWindow::PhysicsTick()
         amp = mBall->GetAmplitude(time);
         if (amp <= 0.999f)
         {
-            zTrn = -(1.0f - sqrt(1.0f - amp + amp * amp)) / (1.0f - amp);
+            zTrn = -(1.0f - std::sqrt(1.0f - amp + amp * amp)) / (1.0f - amp);
         }
         else
         {
@@ -274,7 +274,7 @@ void BouncingBallWindow::PhysicsTick()
         amp = mBall->GetAmplitude(time - period);
         if (amp <= 0.999f)
         {
-            zTrn = -(1.0f - sqrt(1.0f - amp + amp*amp)) / (1.0f - amp);
+            zTrn = -(1.0f - std::sqrt(1.0f - amp + amp*amp)) / (1.0f - amp);
         }
         else
         {

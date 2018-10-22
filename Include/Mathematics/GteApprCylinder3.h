@@ -3,14 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.3 (2017/08/10)
+// File Version: 3.3.4 (2018/10/05)
 
 #pragma once
 
 #include <Mathematics/GteCylinder3.h>
 #include <Mathematics/GteMatrix3x3.h>
 #include <Mathematics/GteSymmetricEigensolver3x3.h>
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 #include <algorithm>
 #include <vector>
 #include <thread>
@@ -240,7 +240,7 @@ Real ApprCylinder3<Real>::operator()(unsigned int numPoints, Vector3<Real> const
     cylinder.axis.direction = minW;
 
     // Compute the cylinder radius.
-    cylinder.radius = sqrt(minRSqr);
+    cylinder.radius = std::sqrt(minRSqr);
 
     // Project the points onto the cylinder axis and choose the cylinder
     // center and cylinder height as described in the comments at the top of
@@ -296,13 +296,13 @@ Real ApprCylinder3<Real>::ComputeSingleThreaded(Vector3<Real>& minPC, Vector3<Re
     for (unsigned int j = 1; j <= mNumPhiSamples; ++j)
     {
         Real phi = jMultiplier * static_cast<Real>(j);  // in [0,pi/2]
-        Real csphi = cos(phi);
-        Real snphi = sin(phi);
+        Real csphi = std::cos(phi);
+        Real snphi = std::sin(phi);
         for (unsigned int i = 0; i < mNumThetaSamples; ++i)
         {
             Real theta = iMultiplier * static_cast<Real>(i);  // in [0,2*pi)
-            Real cstheta = cos(theta);
-            Real sntheta = sin(theta);
+            Real cstheta = std::cos(theta);
+            Real sntheta = std::sin(theta);
             Vector3<Real> W{ cstheta * snphi, sntheta * snphi, csphi };
             Vector3<Real> PC;
             Real rsqr;
@@ -363,13 +363,13 @@ Real ApprCylinder3<Real>::ComputeMultiThreaded(Vector3<Real>& minPC, Vector3<Rea
             for (unsigned int j = local[t].jmin; j < local[t].jmax; ++j)
             {
                 Real phi = jMultiplier * static_cast<Real>(j);  // in [0,pi/2]
-                Real csphi = cos(phi);
-                Real snphi = sin(phi);
+                Real csphi = std::cos(phi);
+                Real snphi = std::sin(phi);
                 for (unsigned int i = 0; i < mNumThetaSamples; ++i)
                 {
                     Real theta = iMultiplier * static_cast<Real>(i);  // in [0,2*pi)
-                    Real cstheta = cos(theta);
-                    Real sntheta = sin(theta);
+                    Real cstheta = std::cos(theta);
+                    Real sntheta = std::sin(theta);
                     Vector3<Real> W{ cstheta * snphi, sntheta * snphi, csphi };
                     Vector3<Real> PC;
                     Real rsqr;

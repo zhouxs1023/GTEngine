@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include "MinimumAreaBox2DWindow.h"
 
@@ -53,8 +53,8 @@ MinimumAreaBox2DWindow::MinimumAreaBox2DWindow(Parameters& parameters)
         // The casting is to avoid an incorrect compiler warning by g++
         // on Fedora 21 Linux.
         float u[2];
-        u[0] = extent[0] * static_cast<float>(cos(angle));
-        u[1] = extent[1] * static_cast<float>(sin(angle));
+        u[0] = extent[0] * static_cast<float>(std::cos(angle));
+        u[1] = extent[1] * static_cast<float>(std::sin(angle));
         v = center + radius * (u[0] * axis[0] + u[1] * axis[1]);
     }
 

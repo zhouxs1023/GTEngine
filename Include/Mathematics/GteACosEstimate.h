@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
-#include <Mathematics/GteConstants.h>
-#include <cmath>
+#include <Mathematics/GteMath.h>
 
 // Approximations to acos(x) of the form f(x) = sqrt(1-x)*p(x)
 // where the polynomial p(x) of degree D minimizes the quantity
@@ -56,7 +55,7 @@ inline Real ACosEstimate<Real>::Evaluate(degree<1>, Real x)
     Real poly;
     poly = (Real)GTE_C_ACOS_DEG1_C1;
     poly = (Real)GTE_C_ACOS_DEG1_C0 + poly * x;
-    poly = poly * sqrt((Real)1 - x);
+    poly = poly * std::sqrt((Real)1 - x);
     return poly;
 }
 
@@ -67,7 +66,7 @@ inline Real ACosEstimate<Real>::Evaluate(degree<2>, Real x)
     poly = (Real)GTE_C_ACOS_DEG2_C2;
     poly = (Real)GTE_C_ACOS_DEG2_C1 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG2_C0 + poly * x;
-    poly = poly * sqrt((Real)1 - x);
+    poly = poly * std::sqrt((Real)1 - x);
     return poly;
 }
 
@@ -79,7 +78,7 @@ inline Real ACosEstimate<Real>::Evaluate(degree<3>, Real x)
     poly = (Real)GTE_C_ACOS_DEG3_C2 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG3_C1 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG3_C0 + poly * x;
-    poly = poly * sqrt((Real)1 - x);
+    poly = poly * std::sqrt((Real)1 - x);
     return poly;
 }
 
@@ -92,7 +91,7 @@ inline Real ACosEstimate<Real>::Evaluate(degree<4>, Real x)
     poly = (Real)GTE_C_ACOS_DEG4_C2 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG4_C1 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG4_C0 + poly * x;
-    poly = poly * sqrt((Real)1 - x);
+    poly = poly * std::sqrt((Real)1 - x);
     return poly;
 }
 
@@ -106,7 +105,7 @@ inline Real ACosEstimate<Real>::Evaluate(degree<5>, Real x)
     poly = (Real)GTE_C_ACOS_DEG5_C2 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG5_C1 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG5_C0 + poly * x;
-    poly = poly * sqrt((Real)1 - x);
+    poly = poly * std::sqrt((Real)1 - x);
     return poly;
 }
 
@@ -121,7 +120,7 @@ inline Real ACosEstimate<Real>::Evaluate(degree<6>, Real x)
     poly = (Real)GTE_C_ACOS_DEG6_C2 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG6_C1 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG6_C0 + poly * x;
-    poly = poly * sqrt((Real)1 - x);
+    poly = poly * std::sqrt((Real)1 - x);
     return poly;
 }
 
@@ -137,7 +136,7 @@ inline Real ACosEstimate<Real>::Evaluate(degree<7>, Real x)
     poly = (Real)GTE_C_ACOS_DEG7_C2 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG7_C1 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG7_C0 + poly * x;
-    poly = poly * sqrt((Real)1 - x);
+    poly = poly * std::sqrt((Real)1 - x);
     return poly;
 }
 
@@ -154,7 +153,7 @@ inline Real ACosEstimate<Real>::Evaluate(degree<8>, Real x)
     poly = (Real)GTE_C_ACOS_DEG8_C2 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG8_C1 + poly * x;
     poly = (Real)GTE_C_ACOS_DEG8_C0 + poly * x;
-    poly = poly * sqrt((Real)1 - x);
+    poly = poly * std::sqrt((Real)1 - x);
     return poly;
 }
 

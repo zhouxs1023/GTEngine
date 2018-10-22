@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -78,9 +78,9 @@ bool ApproximateEllipseByArcs(Real a, Real b, int numArcs,
         Real curv = weight0 * curv0 + weight1 * curv1;
 
         // Compute point having this curvature.
-        Real tmp = pow(ab / curv, (Real)2 / (Real)3);
-        points[i][0] = a * sqrt(fabs((tmp - a2) * invB2mA2));
-        points[i][1] = b * sqrt(fabs((tmp - b2) * invB2mA2));
+        Real tmp = std::pow(ab / curv, (Real)2 / (Real)3);
+        points[i][0] = a * std::sqrt(std::abs((tmp - a2) * invB2mA2));
+        points[i][1] = b * std::sqrt(std::abs((tmp - b2) * invB2mA2));
     }
 
     // Compute the arc at (a,0).

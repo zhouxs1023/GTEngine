@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteBillboardNode.h>
 #include <Mathematics/GteRotation.h>
-#include <Mathematics/GteFunctions.h>
 using namespace gte;
 
 
@@ -40,10 +39,10 @@ void BillboardNode::UpdateWorldData(double applicationTime)
         // To align the billboard, the projection of the camera to the
         // xz-plane of the billboard's model space determines the angle of
         // rotation about the billboard's model y-axis.  If the projected
-        // camera is on the model axis (x = 0 and z = 0), ATan2 returns zero
+        // camera is on the model axis (x = 0 and z = 0), atan2 returns zero
         // (rather than NaN), so there is no need to trap this degenerate
         // case and handle it separately.
-        float angle = Function<float>::ATan2(modelPos[0], modelPos[2]);
+        float angle = std::atan2(modelPos[0], modelPos[2]);
         Matrix4x4<float> orient = Rotation<4, float>(AxisAngle<4, float>(
             Vector4<float>::Unit(1), angle));
 #if defined(GTE_USE_MAT_VEC)

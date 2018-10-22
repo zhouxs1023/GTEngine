@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include "PhysicsModule.h"
 
@@ -24,8 +24,8 @@ PhysicsModule::PhysicsModule ()
 void PhysicsModule::Evaluate()
 {
     float angle = mFrequency*mTime;
-    float sn = sin(angle);
-    float cs = cos(angle);
+    float sn = std::sin(angle);
+    float cs = std::cos(angle);
     mPosition = cs * mInitialPosition + sn * mVelDivFreq;
     mVelocity = (mVelDivFreq * cs - mInitialPosition * sn) * mFrequency;
 }
@@ -36,7 +36,7 @@ void PhysicsModule::Initialize(float time, float deltaTime,
     mTime = time;
     mDeltaTime = deltaTime;
     mInitialPosition = initialPosition;
-    mFrequency = sqrt(springConstant / mass);
+    mFrequency = std::sqrt(springConstant / mass);
     mVelDivFreq = initialVelocity / mFrequency;
     Evaluate();
 }

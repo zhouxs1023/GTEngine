@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.0 (2016/06/25)
+// File Version: 3.1.2 (2018/10/05)
 
 #include "PhysicsModule.h"
 
@@ -33,8 +33,8 @@ void PhysicsModule::Initialize(float time, float deltaTime, float theta,
     mState[3] = phiDot;
 
     // Auxiliary variables.
-    mAux[0] = angularSpeed * sin(latitude);
-    mAux[1] = angularSpeed * cos(latitude);
+    mAux[0] = angularSpeed * std::sin(latitude);
+    mAux[1] = angularSpeed * std::cos(latitude);
     mAux[2] = gDivL;
 
     // RK4 differential equation solver.
@@ -42,16 +42,16 @@ void PhysicsModule::Initialize(float time, float deltaTime, float theta,
         =
         [this](float, Vector4<float> const& input) -> Vector4<float>
         {
-            float sinTheta = sin(input[0]);
-            float sinPhi = sin(input[2]);
-            float cosPhi = cos(input[2]);
+            float sinTheta = std::sin(input[0]);
+            float sinPhi = std::sin(input[2]);
+            float cosPhi = std::cos(input[2]);
 
             // This function has a removable discontinuity at phi = 0.  When
             // sin(phi) is nearly zero, switch to the function that is
             // defined at phi = 0.
             float const epsilon = 1e-06f;
             float theta1DotFunction;
-            if (fabs(sinPhi) < epsilon)
+            if (std::abs(sinPhi) < epsilon)
             {
                 theta1DotFunction = (2.0f / 3.0f) * mAux[1] * input[3] * sinTheta;
             }
@@ -73,10 +73,10 @@ void PhysicsModule::Initialize(float time, float deltaTime, float theta,
 
 Matrix4x4<float> PhysicsModule::GetOrientation() const
 {
-    float cosTheta = cos(mState[0]);
-    float sinTheta = sin(mState[0]);
-    float sinPhi = sin(mState[2]);
-    float cosPhi = cos(mState[2]);
+    float cosTheta = std::cos(mState[0]);
+    float sinTheta = std::sin(mState[0]);
+    float cosPhi = std::cos(mState[2]);
+    float sinPhi = std::sin(mState[2]);
     float oneMinusCosPhi = 1.0f - cosPhi;
 
     Matrix4x4<float> rot;

@@ -42,12 +42,12 @@ FitLog2::FitLog2()
 
 double FitLog2::F(double x) const
 {
-    return log(1.0 + x) / log(2.0);
+    return std::log(1.0 + x) / std::log(2.0);
 }
 
 double FitLog2::FDer(double x) const
 {
-    return 1.0 / (log(2.0)*(1.0 + x));
+    return 1.0 / (std::log(2.0) * (1.0 + x));
 }
 
 double FitLog2::G(double x, int const degree, double const* p) const

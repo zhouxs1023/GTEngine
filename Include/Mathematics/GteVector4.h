@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/08)
+// File Version: 3.0.2 (2018/10/04)
 
 #pragma once
 
@@ -94,10 +94,10 @@ Real ComputeOrthogonalComplement(int numInputs, Vector4<Real>* v, bool robust)
     if (numInputs == 1)
     {
         int maxIndex = 0;
-        Real maxAbsValue = fabs(v[0][0]);
+        Real maxAbsValue = std::abs(v[0][0]);
         for (int i = 1; i < 4; ++i)
         {
-            Real absValue = fabs(v[0][i]);
+            Real absValue = std::abs(v[0][i]);
             if (absValue > maxAbsValue)
             {
                 maxIndex = i;
@@ -147,10 +147,10 @@ Real ComputeOrthogonalComplement(int numInputs, Vector4<Real>* v, bool robust)
         };
 
         int maxIndex = 0;
-        Real maxAbsValue = fabs(det[0]);
+        Real maxAbsValue = std::abs(det[0]);
         for (int i = 1; i < 6; ++i)
         {
-            Real absValue = fabs(det[i]);
+            Real absValue = std::abs(det[i]);
             if (absValue > maxAbsValue)
             {
                 maxIndex = i;

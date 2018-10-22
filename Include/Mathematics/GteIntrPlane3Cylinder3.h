@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -76,7 +76,7 @@ TIQuery<Real, Plane3<Real>, Cylinder3<Real>>::operator()(
     DCPQuery<Real, Vector3<Real>, Plane3<Real>> vpQuery;
     Real distance = vpQuery(cylinder.axis.origin, plane).distance;
     Real absNdW = std::abs(Dot(plane.normal, cylinder.axis.direction));
-    Real root = sqrt(std::max((Real)1 - absNdW*absNdW, (Real)0));
+    Real root = std::sqrt(std::max((Real)1 - absNdW*absNdW, (Real)0));
     Real term = cylinder.radius*root + ((Real)0.5)*cylinder.height*absNdW;
 
     // Intersection occurs if and only if 0 is in the interval [min,max].
@@ -137,8 +137,7 @@ FIQuery<Real, Plane3<Real>, Cylinder3<Real>>::operator()(
 
             Vector3<Real> offset = Cross(cylinder.axis.direction,
                 plane.normal);
-            Real extent = sqrt(cylinder.radius*cylinder.radius -
-                sdistance*sdistance);
+            Real extent = std::sqrt(cylinder.radius*cylinder.radius - sdistance*sdistance);
 
             result.line[0].origin = center - extent*offset;
             result.line[0].direction = cylinder.axis.direction;

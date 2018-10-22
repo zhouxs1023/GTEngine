@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.5.0 (2016/11/25)
+// File Version: 3.5.1 (2018/10/05)
 
 #pragma once
 
@@ -166,7 +166,7 @@ DCPQuery<Real, Vector3<Real>, ConvexPolyhedron3<Real>>::operator()(
 
         Vector3<Real> diff = result.closestPoint[1] - result.closestPoint[0];
         result.sqrDistance = Dot(diff, diff);
-        result.distance = Function<Real>::Sqrt(result.sqrDistance);
+        result.distance = std::sqrt(result.sqrDistance);
     }
     else
     {

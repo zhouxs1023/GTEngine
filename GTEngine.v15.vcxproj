@@ -813,7 +813,6 @@
     <ClInclude Include="Include\Mathematics\GteCholeskyDecomposition.h" />
     <ClInclude Include="Include\Mathematics\GteCircle3.h" />
     <ClInclude Include="Include\Mathematics\GteCone.h" />
-    <ClInclude Include="Include\Mathematics\GteConstants.h" />
     <ClInclude Include="Include\Mathematics\GteConstrainedDelaunay2.h" />
     <ClInclude Include="Include\Mathematics\GteContCapsule3.h" />
     <ClInclude Include="Include\Mathematics\GteContCircle2.h" />
@@ -898,10 +897,6 @@
     <ClInclude Include="Include\Mathematics\GteFIQuery.h" />
     <ClInclude Include="Include\Mathematics\GteFrenetFrame.h" />
     <ClInclude Include="Include\Mathematics\GteFrustum3.h" />
-    <ClInclude Include="Include\Mathematics\GteFunctions.h" />
-    <ClInclude Include="Include\Mathematics\GteFunctionsBSNumber.h" />
-    <ClInclude Include="Include\Mathematics\GteFunctionsBSRational.h" />
-    <ClInclude Include="Include\Mathematics\GteFunctionsIEEEBinary16.h" />
     <ClInclude Include="Include\Mathematics\GteGaussianElimination.h" />
     <ClInclude Include="Include\Mathematics\GteGaussNewtonMinimizer.h" />
     <ClInclude Include="Include\Mathematics\GteGenerateMeshUV.h" />
@@ -1034,6 +1029,7 @@
     <ClInclude Include="Include\Mathematics\GteLinearSystem.h" />
     <ClInclude Include="Include\Mathematics\GteLog2Estimate.h" />
     <ClInclude Include="Include\Mathematics\GteLogEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteMath.h" />
     <ClInclude Include="Include\Mathematics\GteMatrix.h" />
     <ClInclude Include="Include\Mathematics\GteMatrix2x2.h" />
     <ClInclude Include="Include\Mathematics\GteMatrix3x3.h" />
@@ -2089,7 +2085,7 @@
       <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm256 /permissive- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2105,7 +2101,7 @@
       <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm256 /permissive- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2121,7 +2117,7 @@
       <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm256 /permissive- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2137,7 +2133,7 @@
       <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm256 /permissive- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2155,7 +2151,7 @@
       <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm256 /permissive- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2175,7 +2171,7 @@
       <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm256 /permissive- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2195,7 +2191,7 @@
       <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm256 /permissive- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -2215,7 +2211,7 @@
       <AdditionalIncludeDirectories>Include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <PrecompiledHeaderFile>GTEnginePCH.h</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zm256 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zm256 /permissive- %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

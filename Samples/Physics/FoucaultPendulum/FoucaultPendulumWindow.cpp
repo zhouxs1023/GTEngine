@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.0 (2016/06/25)
+// File Version: 3.1.1 (2018/10/05)
 
 #include "FoucaultPendulumWindow.h"
 
@@ -44,8 +44,8 @@ FoucaultPendulumWindow::FoucaultPendulumWindow(Parameters& parameters)
     CreateScene();
 
     float angle = static_cast<float>(0.1 * GTE_C_PI);
-    float cs = cos(angle);
-    float sn = sin(angle);
+    float cs = std::cos(angle);
+    float sn = std::sin(angle);
     InitializeCamera(60.0f, GetAspectRatio(), 0.1f, 100.0f, 0.01f, 0.001f,
         { 23.0f, 0.0f, 8.0f }, { -cs, 0.0f, -sn }, { -sn, 0.0f, cs });
     mPVWMatrices.Update();
@@ -219,7 +219,7 @@ void FoucaultPendulumWindow::CreatePendulum()
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         Vector3<float>& position = vertices[i].position;
-        float r = sqrt(position[0] * position[0] + position[1] * position[1]);
+        float r = std::sqrt(position[0] * position[0] + position[1] * position[1]);
         float z = (position[2] + 2.0f >= 2.0f ? 4.0f - r : r);
         position[2] = z - 16.0f;
     }

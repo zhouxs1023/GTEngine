@@ -158,7 +158,7 @@ IntpThinPlateSpline3<Real>::IntpThinPlateSpline3(int numPoints, Real const* X,
                 Real dx = mX[row] - mX[col];
                 Real dy = mY[row] - mY[col];
                 Real dz = mZ[row] - mZ[col];
-                Real t = sqrt(dx * dx + dy * dy + dz * dz);
+                Real t = std::sqrt(dx * dx + dy * dy + dz * dz);
                 AMat(row, col) = Kernel(t);
             }
         }
@@ -262,7 +262,7 @@ Real IntpThinPlateSpline3<Real>::operator()(Real x, Real y, Real z) const
             Real dx = x - mX[i];
             Real dy = y - mY[i];
             Real dz = z - mZ[i];
-            Real t = sqrt(dx*dx + dy*dy + dz*dz);
+            Real t = std::sqrt(dx*dx + dy*dy + dz*dz);
             result += mA[i] * Kernel(t);
         }
         return result;
@@ -288,7 +288,7 @@ Real IntpThinPlateSpline3<Real>::ComputeFunctional() const
                 Real dx = mX[row] - mX[col];
                 Real dy = mY[row] - mY[col];
                 Real dz = mZ[row] - mZ[col];
-                Real t = sqrt(dx * dx + dy * dy + dz * dz);
+                Real t = std::sqrt(dx * dx + dy * dy + dz * dz);
                 functional += Kernel(t) * mA[row] * mA[col];
             }
         }

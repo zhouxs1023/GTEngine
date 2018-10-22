@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -11,7 +11,7 @@
 #include <Mathematics/GteEulerAngles.h>
 #include <Mathematics/GteMatrix.h>
 #include <Mathematics/GteQuaternion.h>
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 
 namespace gte
 {
@@ -364,7 +364,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
         if (dif10 <= (Real)0)  // x^2 >= y^2
         {
             Real fourXSqr = omr22 - dif10;
-            Real inv4x = ((Real)0.5) / sqrt(fourXSqr);
+            Real inv4x = ((Real)0.5) / std::sqrt(fourXSqr);
             q[0] = fourXSqr*inv4x;
             q[1] = (r(0, 1) + r(1, 0))*inv4x;
             q[2] = (r(0, 2) + r(2, 0))*inv4x;
@@ -377,7 +377,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
         else  // y^2 >= x^2
         {
             Real fourYSqr = omr22 + dif10;
-            Real inv4y = ((Real)0.5) / sqrt(fourYSqr);
+            Real inv4y = ((Real)0.5) / std::sqrt(fourYSqr);
             q[0] = (r(0, 1) + r(1, 0))*inv4y;
             q[1] = fourYSqr*inv4y;
             q[2] = (r(1, 2) + r(2, 1))*inv4y;
@@ -395,7 +395,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
         if (sum10 <= (Real)0)  // z^2 >= w^2
         {
             Real fourZSqr = opr22 - sum10;
-            Real inv4z = ((Real)0.5) / sqrt(fourZSqr);
+            Real inv4z = ((Real)0.5) / std::sqrt(fourZSqr);
             q[0] = (r(0, 2) + r(2, 0))*inv4z;
             q[1] = (r(1, 2) + r(2, 1))*inv4z;
             q[2] = fourZSqr*inv4z;
@@ -408,7 +408,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
         else  // w^2 >= z^2
         {
             Real fourWSqr = opr22 + sum10;
-            Real inv4w = ((Real)0.5) / sqrt(fourWSqr);
+            Real inv4w = ((Real)0.5) / std::sqrt(fourWSqr);
 #if defined(GTE_USE_MAT_VEC)
             q[0] = (r(2, 1) - r(1, 2))*inv4w;
             q[1] = (r(0, 2) - r(2, 0))*inv4w;
@@ -476,7 +476,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
     Real half = (Real)0.5;
     Real cs = half*(trace - (Real)1);
     cs = std::max(std::min(cs, (Real)1), (Real)-1);
-    a.angle = acos(cs);  // The angle is in [0,pi].
+    a.angle = std::acos(cs);  // The angle is in [0,pi].
     a.axis.MakeZero();
 
     if (a.angle > (Real)0)
@@ -558,8 +558,8 @@ void Rotation<N, Real>::Convert(AxisAngle<N, Real> const& a,
 
     r.MakeIdentity();
 
-    Real cs = cos(a.angle);
-    Real sn = sin(a.angle);
+    Real cs = std::cos(a.angle);
+    Real sn = std::sin(a.angle);
     Real oneMinusCos = ((Real)1) - cs;
     Real x0sqr = a.axis[0] * a.axis[0];
     Real x1sqr = a.axis[1] * a.axis[1];
@@ -618,10 +618,10 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
             {
                 if (r(e.axis[2], e.axis[0]) > (Real)-1)
                 {
-                    e.angle[2] = atan2(sgn*r(e.axis[1], e.axis[0]),
+                    e.angle[2] = std::atan2(sgn*r(e.axis[1], e.axis[0]),
                         r(e.axis[0], e.axis[0]));
-                    e.angle[1] = asin(-sgn*r(e.axis[2], e.axis[0]));
-                    e.angle[0] = atan2(sgn*r(e.axis[2], e.axis[1]),
+                    e.angle[1] = std::asin(-sgn*r(e.axis[2], e.axis[0]));
+                    e.angle[0] = std::atan2(sgn*r(e.axis[2], e.axis[1]),
                         r(e.axis[2], e.axis[2]));
                     e.result = ER_UNIQUE;
                 }
@@ -629,7 +629,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
                 {
                     e.angle[2] = (Real)0;
                     e.angle[1] = sgn*(Real)GTE_C_HALF_PI;
-                    e.angle[0] = atan2(-sgn*r(e.axis[1], e.axis[2]),
+                    e.angle[0] = std::atan2(-sgn*r(e.axis[1], e.axis[2]),
                         r(e.axis[1], e.axis[1]));
                     e.result = ER_NOT_UNIQUE_DIF;
                 }
@@ -638,7 +638,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
             {
                 e.angle[2] = (Real)0;
                 e.angle[1] = -sgn*(Real)GTE_C_HALF_PI;
-                e.angle[0] = atan2(-sgn*r(e.axis[1], e.axis[2]),
+                e.angle[0] = std::atan2(-sgn*r(e.axis[1], e.axis[2]),
                     r(e.axis[1], e.axis[1]));
                 e.result = ER_NOT_UNIQUE_SUM;
             }
@@ -652,10 +652,10 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
             {
                 if (r(e.axis[0], e.axis[2]) > (Real)-1)
                 {
-                    e.angle[0] = atan2(sgn*r(e.axis[1], e.axis[2]),
+                    e.angle[0] = std::atan2(sgn*r(e.axis[1], e.axis[2]),
                         r(e.axis[2], e.axis[2]));
-                    e.angle[1] = asin(-sgn*r(e.axis[0], e.axis[2]));
-                    e.angle[2] = atan2(sgn*r(e.axis[0], e.axis[1]),
+                    e.angle[1] = std::asin(-sgn*r(e.axis[0], e.axis[2]));
+                    e.angle[2] = std::atan2(sgn*r(e.axis[0], e.axis[1]),
                         r(e.axis[0], e.axis[0]));
                     e.result = ER_UNIQUE;
                 }
@@ -663,7 +663,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
                 {
                     e.angle[0] = (Real)0;
                     e.angle[1] = sgn*(Real)GTE_C_HALF_PI;
-                    e.angle[2] = atan2(-sgn*r(e.axis[1], e.axis[0]),
+                    e.angle[2] = std::atan2(-sgn*r(e.axis[1], e.axis[0]),
                         r(e.axis[1], e.axis[1]));
                     e.result = ER_NOT_UNIQUE_DIF;
                 }
@@ -672,7 +672,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
             {
                 e.angle[0] = (Real)0;
                 e.angle[1] = -sgn*(Real)GTE_C_HALF_PI;
-                e.angle[2] = atan2(-sgn*r(e.axis[1], e.axis[0]),
+                e.angle[2] = std::atan2(-sgn*r(e.axis[1], e.axis[0]),
                     r(e.axis[1], e.axis[1]));
                 e.result = ER_NOT_UNIQUE_SUM;
             }
@@ -691,10 +691,10 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
             {
                 if (r(e.axis[2], e.axis[2]) > (Real)-1)
                 {
-                    e.angle[2] = atan2(r(e.axis[1], e.axis[2]),
+                    e.angle[2] = std::atan2(r(e.axis[1], e.axis[2]),
                         sgn*r(b0, e.axis[2]));
-                    e.angle[1] = acos(r(e.axis[2], e.axis[2]));
-                    e.angle[0] = atan2(r(e.axis[2], e.axis[1]),
+                    e.angle[1] = std::acos(r(e.axis[2], e.axis[2]));
+                    e.angle[0] = std::atan2(r(e.axis[2], e.axis[1]),
                         -sgn*r(e.axis[2], b0));
                     e.result = ER_UNIQUE;
                 }
@@ -702,7 +702,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
                 {
                     e.angle[2] = (Real)0;
                     e.angle[1] = (Real)GTE_C_PI;
-                    e.angle[0] = atan2(sgn*r(e.axis[1], b0),
+                    e.angle[0] = std::atan2(sgn*r(e.axis[1], b0),
                         r(e.axis[1], e.axis[1]));
                     e.result = ER_NOT_UNIQUE_DIF;
                 }
@@ -711,7 +711,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
             {
                 e.angle[2] = (Real)0;
                 e.angle[1] = (Real)0;
-                e.angle[0] = atan2(sgn*r(e.axis[1], b0),
+                e.angle[0] = std::atan2(sgn*r(e.axis[1], b0),
                     r(e.axis[1], e.axis[1]));
                 e.result = ER_NOT_UNIQUE_SUM;
             }
@@ -726,10 +726,10 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
             {
                 if (r(e.axis[0], e.axis[0]) > (Real)-1)
                 {
-                    e.angle[0] = atan2(r(e.axis[1], e.axis[0]),
+                    e.angle[0] = std::atan2(r(e.axis[1], e.axis[0]),
                         sgn*r(b2, e.axis[0]));
-                    e.angle[1] = acos(r(e.axis[0], e.axis[0]));
-                    e.angle[2] = atan2(r(e.axis[0], e.axis[1]),
+                    e.angle[1] = std::acos(r(e.axis[0], e.axis[0]));
+                    e.angle[2] = std::atan2(r(e.axis[0], e.axis[1]),
                         -sgn*r(e.axis[0], b2));
                     e.result = ER_UNIQUE;
                 }
@@ -737,7 +737,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
                 {
                     e.angle[0] = (Real)0;
                     e.angle[1] = (Real)GTE_C_PI;
-                    e.angle[2] = atan2(sgn*r(e.axis[1], b2),
+                    e.angle[2] = std::atan2(sgn*r(e.axis[1], b2),
                         r(e.axis[1], e.axis[1]));
                     e.result = ER_NOT_UNIQUE_DIF;
                 }
@@ -746,7 +746,7 @@ void Rotation<N, Real>::Convert(Matrix<N, N, Real> const& r,
             {
                 e.angle[0] = (Real)0;
                 e.angle[1] = (Real)0;
-                e.angle[2] = atan2(sgn*r(e.axis[1], b2),
+                e.angle[2] = std::atan2(sgn*r(e.axis[1], b2),
                     r(e.axis[1], e.axis[1]));
                 e.result = ER_NOT_UNIQUE_SUM;
             }
@@ -807,15 +807,15 @@ void Rotation<N, Real>::Convert(Quaternion<Real> const& q,
     if (axisSqrLen > (Real)0)
     {
 #if defined(GTE_USE_MAT_VEC)
-        Real adjust = ((Real)1) / sqrt(axisSqrLen);
+        Real adjust = ((Real)1) / std::sqrt(axisSqrLen);
 #else
-        Real adjust = ((Real)-1) / sqrt(axisSqrLen);
+        Real adjust = ((Real)-1) / std::sqrt(axisSqrLen);
 #endif
         a.axis[0] = q[0] * adjust;
         a.axis[1] = q[1] * adjust;
         a.axis[2] = q[2] * adjust;
         Real cs = std::max(std::min(q[3], (Real)1), (Real)-1);
-        a.angle = ((Real)2)*acos(cs);
+        a.angle = (Real)2 * std::acos(cs);
     }
     else
     {
@@ -837,11 +837,11 @@ void Rotation<N, Real>::Convert(AxisAngle<N, Real> const& a,
 #else
     Real halfAngle = ((Real)-0.5)*a.angle;
 #endif
-    Real sn = sin(halfAngle);
+    Real sn = std::sin(halfAngle);
     q[0] = sn*a.axis[0];
     q[1] = sn*a.axis[1];
     q[2] = sn*a.axis[2];
-    q[3] = cos(halfAngle);
+    q[3] = std::cos(halfAngle);
 }
 
 template <int N, typename Real>

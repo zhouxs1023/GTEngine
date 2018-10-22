@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/09/10)
+// File Version: 3.3.1 (2018/10/05)
 
 #include "NURBSCurveExampleWindow.h"
 
@@ -145,7 +145,7 @@ void NURBSCurveExampleWindow::DoSimulation1()
     {
         if (i == 2 || i == 10)
         {
-            float s = pow(t, 1.5f);
+            float s = std::pow(t, 1.5f);
             float oneMinusS = 1.0f - s;
             mSpline->SetControl(i, oneMinusS * mControls[i] + s * mTargets[i]);
         }

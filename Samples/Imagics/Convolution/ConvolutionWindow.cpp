@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include "ConvolutionWindow.h"
 
@@ -383,7 +383,7 @@ std::shared_ptr<ConstantBuffer> ConvolutionWindow::GetKernel1(int radius)
     for (int x = -radius, i = 0; x <= radius; ++x, ++i)
     {
         float fx = x / sigma;
-        float value = exp(-0.5f * fx * fx);
+        float value = std::exp(-0.5f * fx * fx);
         weight[i] = value;
         totalWeight += value;
     }
@@ -424,7 +424,7 @@ std::shared_ptr<ConstantBuffer> ConvolutionWindow::GetKernel2(int radius)
         for (int x = -radius; x <= radius; ++x, ++i)
         {
             float fx = x / sigma;
-            float value = exp(-0.5f*(fx*fx + fy*fy));
+            float value = std::exp(-0.5f*(fx*fx + fy*fy));
             weight[i] = value;
             totalWeight += value;
         }

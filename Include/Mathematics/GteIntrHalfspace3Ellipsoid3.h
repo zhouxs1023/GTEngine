@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -44,7 +44,7 @@ TIQuery<Real, Halfspace3<Real>, Ellipsoid3<Real>>::operator()(
     Matrix3x3<Real> MInverse;
     ellipsoid.GetMInverse(MInverse);
     Real discr = Dot(halfspace.normal, MInverse * halfspace.normal);
-    Real extent = sqrt(std::max(discr, (Real)0));
+    Real extent = std::sqrt(std::max(discr, (Real)0));
     Real center = Dot(halfspace.normal, ellipsoid.center) - halfspace.constant;
     Real tmax = center + extent;
 

@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/26)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteVector.h>
 #include <Mathematics/GteDCPQuery.h>
 #include <Mathematics/GteHyperellipsoid.h>
@@ -113,7 +114,7 @@ DCPQuery<Real, Vector<N, Real>, Hyperellipsoid<N, Real>>::operator()(
     // coordinate system.
     Vector<N, Real> x;
     result.sqrDistance = SqrDistance(hyperellipsoid.extent, y, x);
-    result.distance = sqrt(result.sqrDistance);
+    result.distance = std::sqrt(result.sqrDistance);
 
     // Convert back to the original coordinate system.
     result.closest = hyperellipsoid.center;
@@ -132,7 +133,7 @@ DCPQuery<Real, Vector<N, Real>, Hyperellipsoid<N, Real>>::operator()(
 {
     Result result;
     result.sqrDistance = SqrDistance(extent, point, result.closest);
-    result.distance = sqrt(result.sqrDistance);
+    result.distance = std::sqrt(result.sqrDistance);
     return result;
 }
 
@@ -260,7 +261,7 @@ SqrDistanceSpecial(Vector<N, Real> const& e, Vector<N, Real> const& y,
                     Real diff = xPos[i] - yPos[i];
                     sqrDistance += diff*diff;
                 }
-                x[N - 1] = e[N - 1] * sqrt(discr);
+                x[N - 1] = e[N - 1] * std::sqrt(discr);
                 sqrDistance += x[N - 1] * x[N - 1];
                 inSubHyperellipsoid = true;
             }
@@ -337,7 +338,7 @@ Real DCPQuery<Real, Vector<N, Real>, Hyperellipsoid<N, Real>>::Bisector(
     // The use of 'double' is intentional in case Real is a BSNumber or
     // BSRational type.  We want the bisections to terminate in a reasonable
     // amount of time.
-    unsigned int const jmax = Function<double>::GetMaxBisections();
+    unsigned int const jmax = GTE_C_MAX_BISECTIONS_GENERIC;
     for (unsigned int j = 0; j < jmax; ++j)
     {
         s = (smin + smax) * (Real)0.5;

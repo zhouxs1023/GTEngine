@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/09/05)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -306,7 +306,7 @@ void TIQuery<Real, Ellipsoid3<Real>, Ellipsoid3<Real>>::GetRoots(Real d0,
 {
     // f(s) = d0*c0/(d0*s-1)^2 - 1
     Real const one = (Real)1;
-    Real temp = sqrt(d0*c0);
+    Real temp = std::sqrt(d0*c0);
     Real inv = one / d0;
     numRoots = 2;
     roots[0] = (one - temp) * inv;
@@ -352,10 +352,10 @@ void TIQuery<Real, Ellipsoid3<Real>, Ellipsoid3<Real>>::GetRoots(Real d0,
 
     // TODO: What role does epsilon play?
     Real const epsilon = (Real)0.001;
-    Real multiplier0 = sqrt(two / (one - epsilon));
-    Real multiplier1 = sqrt(one / (one + epsilon));
-    Real sqrtd0c0 = sqrt(d0c0);
-    Real sqrtd1c1 = sqrt(d1c1);
+    Real multiplier0 = std::sqrt(two / (one - epsilon));
+    Real multiplier1 = std::sqrt(one / (one + epsilon));
+    Real sqrtd0c0 = std::sqrt(d0c0);
+    Real sqrtd1c1 = std::sqrt(d1c1);
     Real invD0 = one / d0;
     Real invD1 = one / d1;
     Real temp0, temp1, smin, smax, s;
@@ -454,11 +454,11 @@ void TIQuery<Real, Ellipsoid3<Real>, Ellipsoid3<Real>>::GetRoots(Real d0,
 
     // TODO: What role does epsilon play?
     Real epsilon = (Real)0.001;
-    Real multiplier0 = sqrt(three / (one - epsilon));
-    Real multiplier1 = sqrt(one / (one + epsilon));
-    Real sqrtd0c0 = sqrt(d0c0);
-    Real sqrtd1c1 = sqrt(d1c1);
-    Real sqrtd2c2 = sqrt(d2c2);
+    Real multiplier0 = std::sqrt(three / (one - epsilon));
+    Real multiplier1 = std::sqrt(one / (one + epsilon));
+    Real sqrtd0c0 = std::sqrt(d0c0);
+    Real sqrtd1c1 = std::sqrt(d1c1);
+    Real sqrtd2c2 = std::sqrt(d2c2);
     Real invD0 = one / d0;
     Real invD1 = one / d1;
     Real invD2 = one / d2;

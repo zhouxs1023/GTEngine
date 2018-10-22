@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2018/10/03)
+// File Version: 3.0.4 (2018/10/05)
 
 #pragma once
 
@@ -426,7 +426,7 @@ namespace gte
                     // The ray intersects the rounded vertex, so the sphere-box
                     // contact point is the vertex.
                     result.intersectionType = 1;
-                    result.contactTime = -(a1 + Function<Real>::Sqrt(adiscr)) / a2;
+                    result.contactTime = -(a1 + std::sqrt(adiscr)) / a2;
                     result.contactPoint = K;
                 }
             }
@@ -445,7 +445,7 @@ namespace gte
                 Real bdiscr = b1 * b1 - b2 * b0;
                 if (bdiscr >= (Real)0)
                 {
-                    Real T = -(b1 + Function<Real>::Sqrt(bdiscr)) / b2;
+                    Real T = -(b1 + std::sqrt(bdiscr)) / b2;
                     Real p2 = C[i2] + T * V[i2];
                     if (-K[i2] <= p2)
                     {

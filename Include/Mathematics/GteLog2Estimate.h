@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
-#include <Mathematics/GteConstants.h>
-#include <cmath>
+#include <Mathematics/GteMath.h>
 
 // Minimax polynomial approximations to log2(x).  The polynomial p(x) of
 // degree D minimizes the quantity maximum{|log2(x) - p(x)| : x in [1,2]}
@@ -63,7 +62,7 @@ template <int D>
 inline Real Log2Estimate<Real>::DegreeRR(Real x)
 {
     int p;
-    Real y = frexp(x, &p);  // y in [1/2,1)
+    Real y = std::frexp(x, &p);  // y in [1/2,1)
     y = ((Real)2)*y;  // y in [1,2)
     --p;
     Real poly = Degree<D>(y);

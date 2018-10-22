@@ -3,11 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteVector2.h>
 
 namespace gte
@@ -83,8 +83,8 @@ template <typename Real>
 void Sector2<Real>::SetAngle(Real inAngle)
 {
     angle = inAngle;
-    cosAngle = cos(angle);
-    sinAngle = sin(angle);
+    cosAngle = std::cos(angle);
+    sinAngle = std::sin(angle);
 }
 
 template <typename Real>

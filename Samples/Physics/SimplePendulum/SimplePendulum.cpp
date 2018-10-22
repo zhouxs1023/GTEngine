@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/07/14)
+// File Version: 3.3.1 (2018/10/05)
 
 #include <GTEngine.h>
 using namespace gte;
@@ -30,7 +30,7 @@ void ExplicitEuler(float x0, float y0, float h)
     for (int i = 0; i < gSize; ++i)
     {
         float x1 = x0 + h * y0;
-        float y1 = y0 - h * gPendulumConstant * sin(x0);
+        float y1 = y0 - h * gPendulumConstant * std::sin(x0);
 
         gOutput[i] = x1;
         x0 = x1;
@@ -48,11 +48,11 @@ void ImplicitEuler(float x0, float y0, float h)
         int const maxIteration = 32;
         for (int j = 0; j < maxIteration; ++j)
         {
-            float g = x1 + k0 * sin(x1) - k1;
-            float gDer = 1.0f + k0 * cos(x1);
+            float g = x1 + k0 * std::sin(x1) - k1;
+            float gDer = 1.0f + k0 * std::cos(x1);
             x1 -= g / gDer;
         }
-        float y1 = y0 - h * gPendulumConstant* sin(x1);
+        float y1 = y0 - h * gPendulumConstant* std::sin(x1);
 
         gOutput[i] = x1;
         x0 = x1;
@@ -65,19 +65,19 @@ void RungeKutta(float x0, float y0, float h)
     for (int i = 0; i < gSize; ++i)
     {
         float k1X = h * y0;
-        float k1Y = -h * gPendulumConstant * sin(x0);
+        float k1Y = -h * gPendulumConstant * std::sin(x0);
         float x1 = x0 + 0.5f * k1X;
         float y1 = y0 + 0.5f * k1Y;
         float k2X = h * y1;
-        float k2Y = -h * gPendulumConstant * sin(x1);
+        float k2Y = -h * gPendulumConstant * std::sin(x1);
         x1 = x0 + 0.5f * k2X;
         y1 = y0 + 0.5f * k2Y;
         float k3X = h * y1;
-        float k3Y = -h * gPendulumConstant * sin(x1);
+        float k3Y = -h * gPendulumConstant * std::sin(x1);
         x1 = x0 + k3X;
         y1 = y0 + k3Y;
         float k4X = h * y1;
-        float k4Y = -h * gPendulumConstant * sin(x1);
+        float k4Y = -h * gPendulumConstant * std::sin(x1);
         x1 = x0 + (k1X + 2.0f * k2X + 2.0f * k3X + k4X) / 6.0f;
         y1 = y0 + (k1Y + 2.0f * k2Y + 2.0f * k3Y + k4Y) / 6.0f;
 
@@ -91,13 +91,13 @@ void LeapFrog(float x0, float y0, float h)
 {
     // Generate first iterate with Euler's to start up the process.
     float x1 = x0 + h * y0;
-    float y1 = y0 - h * gPendulumConstant * sin(x0);
+    float y1 = y0 - h * gPendulumConstant * std::sin(x0);
     gOutput[0] = x1;
 
     for (int i = 1; i < gSize; ++i)
     {
         float x2 = x0 + 2.0f * h * y1;
-        float y2 = y0 - 2.0f * h * gPendulumConstant * sin(x1);
+        float y2 = y0 - 2.0f * h * gPendulumConstant * std::sin(x1);
 
         gOutput[i] = x2;
         x0 = x1;
@@ -138,7 +138,7 @@ void SolveODE(SolverFunction solver, std::string const& outImage, std::string co
 void Stiff1()
 {
     int const maxIterations = 1024 + 256;
-    float const cSqr = 2.0f, c = sqrt(2.0f);
+    float const cSqr = 2.0f, c = std::sqrt(2.0f);
 
     float h = 0.01f;
     float x0 = 1.0f, x0Save = x0;
@@ -185,7 +185,7 @@ void Stiff1()
     for (i = 1; i < gSize; ++i)
     {
         int j = (maxIterations - 1) * i / (gSize - 1);
-        y = 256.0f * (x0Save * exp(-c * j * h) + 3.0f) / 6.0f;
+        y = 256.0f * (x0Save * std::exp(-c * j * h) + 3.0f) / 6.0f;
         int iY1 = gSize - 1 - static_cast<int>(y);
         ImageUtility2::DrawLine(i - 1, iY0, i, iY1, DrawPixel);
         iY0 = iY1;
@@ -209,12 +209,12 @@ void Stiff1()
 
 float F0(float t, float x, float y)
 {
-    return 9.0f * x + 24.0f * y + 5.0f * cos(t) - sin(t) / 3.0f;
+    return 9.0f * x + 24.0f * y + 5.0f * std::cos(t) - std::sin(t) / 3.0f;
 }
 
 float F1(float t, float x, float y)
 {
-    return -24.0f * x - 51.0f * y - 9.0f * cos(t) + sin(t) / 3.0f;
+    return -24.0f * x - 51.0f * y - 9.0f * std::cos(t) + std::sin(t) / 3.0f;
 }
 
 void Stiff2TrueSolution()
@@ -228,9 +228,9 @@ void Stiff2TrueSolution()
     int const maxIterations = 20;
     for (int i = 0; i <= maxIterations; ++i, t0 += h)
     {
-        float e0 = exp(-3.0f*t0);
-        float e1 = exp(-39.0f*t0);
-        float cDiv3 = cos(t0) / 3.0f;
+        float e0 = std::exp(-3.0f*t0);
+        float e1 = std::exp(-39.0f*t0);
+        float cDiv3 = std::cos(t0) / 3.0f;
         x0 = 2.0f * e0 - e1 + cDiv3;
         y0 = -e0 + 2.0f * e1 - cDiv3;
         if (i >= 2 && ((i % 2) == 0))

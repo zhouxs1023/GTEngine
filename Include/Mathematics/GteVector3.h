@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/07/08)
+// File Version: 3.0.2 (2018/10/04)
 
 #pragma once
 
@@ -150,7 +150,7 @@ Real ComputeOrthogonalComplement(int numInputs, Vector3<Real>* v, bool robust)
 {
     if (numInputs == 1)
     {
-        if (fabs(v[0][0]) > fabs(v[0][1]))
+        if (std::abs(v[0][0]) > std::abs(v[0][1]))
         {
             v[1] = { -v[0][2], (Real)0, +v[0][0] };
         }
@@ -287,7 +287,7 @@ IntrinsicsVector3<Real>::IntrinsicsVector3(int numVectors,
         // direction[0].
         direction[0] = v[extreme[1]] - origin;
         Normalize(direction[0], false);
-        if (fabs(direction[0][0]) > fabs(direction[0][1]))
+        if (std::abs(direction[0][0]) > std::abs(direction[0][1]))
         {
             direction[1][0] = -direction[0][2];
             direction[1][1] = (Real)0;
@@ -355,7 +355,7 @@ IntrinsicsVector3<Real>::IntrinsicsVector3(int numVectors,
             distance = Dot(direction[2], diff);
             Real sign = (distance >(Real)0 ? (Real)1 :
                 (distance < (Real)0 ? (Real)-1 : (Real)0));
-            distance = fabs(distance);
+            distance = std::abs(distance);
             if (distance > maxDistance)
             {
                 maxDistance = distance;

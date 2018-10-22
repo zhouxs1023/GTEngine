@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.5.1 (2018/09/26)
+// File Version: 3.5.2 (2018/10/05)
 
 #pragma once
 
@@ -72,7 +72,7 @@ DCPQuery<Real, AlignedBox<N, Real>, AlignedBox<N, Real>>::operator()(
             }
         }
     }
-    result.distance = Function<Real>::Sqrt(result.sqrDistance);
+    result.distance = std::sqrt(result.sqrDistance);
     return result;
 }
 

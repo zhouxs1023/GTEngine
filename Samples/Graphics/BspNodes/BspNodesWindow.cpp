@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/08)
+// File Version: 3.0.2 (2018/10/05)
 
 #include "BspNodesWindow.h"
 
@@ -395,7 +395,7 @@ std::shared_ptr<BspNode> BspNodesWindow::CreateNode(int i,
         yExtent + 0.001f };
 
     Matrix4x4<float> zRotate = Rotation<4, float>(AxisAngle<4, float>(
-        Vector4<float>::Unit(2), atan2(dir[1], dir[0])));
+        Vector4<float>::Unit(2), std::atan2(dir[1], dir[0])));
 
     Matrix4x4<float> xRotate = Rotation<4, float>(AxisAngle<4, float>(
         Vector4<float>::Unit(0), (float)GTE_C_HALF_PI));

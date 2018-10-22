@@ -3,13 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2016/07/12)
+// File Version: 3.0.4 (2018/10/05)
 
 #pragma once
 
 #include <Mathematics/GteMesh.h>
 #include <Mathematics/GteParametricCurve.h>
-#include <Mathematics/GteConstants.h>
 #include <memory>
 
 namespace gte
@@ -92,8 +91,8 @@ RevolutionMesh<Real>::RevolutionMesh(MeshDescription const& description,
     for (unsigned int c = 0; c < this->mDescription.numCols; ++c)
     {
         Real angle = c * invRadialSamples * (Real)GTE_C_TWO_PI;
-        mCosAngle[c] = cos(angle);
-        mSinAngle[c] = sin(angle);
+        mCosAngle[c] = std::cos(angle);
+        mSinAngle[c] = std::sin(angle);
     }
     mCosAngle[this->mDescription.numCols] = mCosAngle[0];
     mSinAngle[this->mDescription.numCols] = mSinAngle[0];
@@ -226,7 +225,7 @@ void RevolutionMesh<Real>::InitializeTCoords()
             for (unsigned int c = 0; c <= this->mDescription.numCols; ++c, ++i)
             {
                 Real angle = (Real)GTE_C_TWO_PI * (Real)c / (Real)this->mDescription.numCols;
-                this->TCoord(i) = { radius * (float)cos(angle), radius * (float)sin(angle) };
+                this->TCoord(i) = { radius * std::cos(angle), radius * std::sin(angle) };
             }
         }
         this->TCoord(i) = origin;

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2018/10/05)
 
 #include "PhysicsModule.h"
 
@@ -44,8 +44,8 @@ void PhysicsModule::Initialize (float time, float deltaTime, float theta, float 
     float v0 = -gm / radius;
     float dv0 = gm2 * radiusDot / alpha;
     float v0Plus = v0 + g2m4da2;
-    float sinTheta0 = sin(theta);
-    float cosTheta0 = cos(theta);
+    float sinTheta0 = std::sin(theta);
+    float cosTheta0 = std::cos(theta);
     float c0 = v0Plus * sinTheta0 + dv0 * cosTheta0;
     float c1 = v0Plus * cosTheta0 - dv0 * sinTheta0;
 
@@ -56,23 +56,23 @@ void PhysicsModule::Initialize (float time, float deltaTime, float theta, float 
     mAux[3] = alpha /(gm * gm2);
 
     // Ellipse parameters.
-    float gamma0 = radiusSqr * fabs(thetaDot);
+    float gamma0 = radiusSqr * std::abs(thetaDot);
     float tmp0 = radiusSqr * radius * thetaDot * thetaDot - gm;
     float tmp1 = radiusSqr * radiusDot * thetaDot;
-    float gamma1 = sqrt(tmp0 * tmp0 + tmp1 * tmp1);
+    float gamma1 = std::sqrt(tmp0 * tmp0 + tmp1 * tmp1);
     mEccentricity = gamma1 / gm;
     mRho = gamma0 * gamma0 / gamma1;
     float tmp2 = 1.0f - mEccentricity * mEccentricity;  // > 0
     mMajorAxis = mRho * mEccentricity / tmp2;
-    mMinorAxis = mMajorAxis * sqrt(tmp2);
+    mMinorAxis = mMajorAxis * std::sqrt(tmp2);
 
     // RK4 differential equation solver.
     std::function<float(float, float const&)> odeFunction
         =
         [this](float, float const& input) -> float
     {
-        float sn = sin(input);
-        float cs = cos(input);
+        float sn = std::sin(input);
+        float cs = std::cos(input);
         float v = mAux[0] * sn + mAux[1] * cs - mAux[2];
         float thetaDotFunction = mAux[3] * v * v;
         return thetaDotFunction;
@@ -83,8 +83,8 @@ void PhysicsModule::Initialize (float time, float deltaTime, float theta, float 
 
 float PhysicsModule::GetPeriod() const
 {
-    float powValue = pow(mMajorAxis, 1.5f);
-    float sqrtValue = sqrt(gravity * mass);
+    float powValue = std::pow(mMajorAxis, 1.5f);
+    float sqrtValue = std::sqrt(gravity * mass);
     return static_cast<float>(GTE_C_TWO_PI) * powValue / sqrtValue;
 }
 
@@ -96,8 +96,8 @@ void PhysicsModule::Update()
         mSolver->Update(mTime, mState[0], mTime, mState[0]);
 
         // Compute dot(theta) for application access.
-        float sn = sin(mState[0]);
-        float cs = cos(mState[0]);
+        float sn = std::sin(mState[0]);
+        float cs = std::cos(mState[0]);
         float v = mAux[0] * sn + mAux[1] * cs - mAux[2];
         mState[1] = mAux[3] * v * v;
 

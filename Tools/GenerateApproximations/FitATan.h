@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -103,7 +103,7 @@ void FitATan::Generate(std::vector<double>& poly, double& error) const
         {
             A(r, c) = xsqr * A(r, c - 1);
         }
-        B[r] = atan(x);
+        B[r] = std::atan(x);
     }
     Vector<Order + 1, double> p = Inverse(A) * B;
 
@@ -170,7 +170,7 @@ void FitATan::Generate(std::vector<double>& poly, double& error) const
                 A(r, c) = xsqr * A(r, c - 1);
             }
             A(r, Order) = sign;
-            B[r] = atan(x) - x;
+            B[r] = std::atan(x) - x;
         }
         double x = 1.0, xsqr = x * x;
         A(Order, 0) = xsqr * x;
@@ -179,7 +179,7 @@ void FitATan::Generate(std::vector<double>& poly, double& error) const
             A(Order, c) = xsqr * A(Order, c - 1);
         }
         A(Order, Order) = 0.0;
-        B[Order] = atan(x) - x;
+        B[Order] = std::atan(x) - x;
 
         Vector<Order + 1, double> X = Inverse(A)*B;
         for (int i = 0; i < Order; ++i)

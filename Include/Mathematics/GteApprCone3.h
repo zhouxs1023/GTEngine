@@ -3,11 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.14.0 (2018/07/16)
+// File Version: 3.14.1 (2018/10/05)
 
 #pragma once
 
-#include <Mathematics/GteFunctions.h>
 #include <Mathematics/GteGaussNewtonMinimizer.h>
 #include <Mathematics/GteLevenbergMarquardtMinimizer.h>
 
@@ -94,7 +93,7 @@ namespace gte
 
             // The initial guess for the weighted cone axis.
             Normalize(coneAxis);
-            coneAxis /= Function<Real>::Cos(coneAngle);
+            coneAxis /= std::cos(coneAngle);
             initial[3] = coneAxis[0];
             initial[4] = coneAxis[1];
             initial[5] = coneAxis[2];
@@ -111,7 +110,7 @@ namespace gte
                 coneAxis[i] = result.minLocation[i + 3];
             }
             Real cosConeAngle = std::min((Real)1 / Normalize(coneAxis), (Real)1);
-            coneAngle = Function<Real>::ACos(cosConeAngle);
+            coneAngle = std::acos(cosConeAngle);
 
             mNumPoints = 0;
             mPoints = nullptr;
@@ -141,7 +140,7 @@ namespace gte
 
             // The initial guess for the weighted cone axis.
             Normalize(coneAxis);
-            coneAxis /= Function<Real>::Cos(coneAngle);
+            coneAxis /= std::cos(coneAngle);
             initial[3] = coneAxis[0];
             initial[4] = coneAxis[1];
             initial[5] = coneAxis[2];
@@ -158,7 +157,7 @@ namespace gte
                 coneAxis[i] = result.minLocation[i + 3];
             }
             Real cosConeAngle = std::min((Real)1 / Normalize(coneAxis), (Real)1);
-            coneAngle = Function<Real>::ACos(cosConeAngle);
+            coneAngle = std::acos(cosConeAngle);
 
             mNumPoints = 0;
             mPoints = nullptr;

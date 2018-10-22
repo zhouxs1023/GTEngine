@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteBlendTransformController.h>
@@ -84,10 +84,10 @@ bool BlendTransformController::Update(double applicationTime)
             {
                 float sign0 = (s0 > 0.0f ? 1.0f : -1.0f);
                 float sign1 = (s1 > 0.0f ? 1.0f : -1.0f);
-                s0 = fabs(s0);
-                s1 = fabs(s1);
-                float pow0 = pow(s0, oneMinusWeight);
-                float pow1 = pow(s1, mWeight);
+                s0 = std::abs(s0);
+                s1 = std::abs(s1);
+                float pow0 = std::pow(s0, oneMinusWeight);
+                float pow1 = std::pow(s1, mWeight);
                 blendSca[i] = sign0 * sign1 * pow0 * pow1;
             }
             else

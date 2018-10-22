@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #define GTE_COMPUTE_MODEL_ALLOW_GPGPU
 #include "GenerateMeshUVsWindow.h"
@@ -132,7 +132,7 @@ void GenerateMeshUVsWindow::CreateMeshOriginal()
     mf.SetVertexFormat(vformat);
     mMeshOriginal = mf.CreateDisk(16, 16, 1.0f);
     float height = 0.25f;
-    float radius = sqrt(1.0f - height*height);
+    float radius = std::sqrt(1.0f - height*height);
     std::shared_ptr<VertexBuffer> vbuffer = mMeshOriginal->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
     Vertex* vertices = vbuffer->Get<Vertex>();
@@ -141,7 +141,7 @@ void GenerateMeshUVsWindow::CreateMeshOriginal()
         // Start with a hemisphere.
         float x = radius * vertices[i].position[0];
         float y = radius * vertices[i].position[1];
-        float z = sqrt(std::max(1.0f - x*x - y*y, 0.0f));
+        float z = std::sqrt(std::max(1.0f - x*x - y*y, 0.0f));
 
         // Perturb points along rays, which preserves non-self-intersection.
         float r = 1.0f + 0.125f*rnd(mte);

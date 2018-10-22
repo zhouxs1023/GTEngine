@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
-#include <Mathematics/GteConstants.h>
-#include <cmath>
+#include <Mathematics/GteMath.h>
 
 // Minimax polynomial approximations to tan(x).  The polynomial p(x) of
 // degree D has only odd-power terms, is required to have linear term x,
@@ -171,7 +170,7 @@ template <typename Real>
 inline void TanEstimate<Real>::Reduce(Real x, Real& y)
 {
     // Map x to y in [-pi,pi], x = pi*quotient + remainder.
-    y = fmod(x, (Real)GTE_C_PI);
+    y = std::fmod(x, (Real)GTE_C_PI);
 
     // Map y to [-pi/2,pi/2] with tan(y) = tan(x).
     if (y > (Real)GTE_C_HALF_PI)

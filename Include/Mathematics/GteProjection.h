@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -40,7 +40,7 @@ void Project(Ellipse2<Real> const& ellipse, Line2<Real> const& line,
         ellipse.extent[1] * Dot(line.direction, ellipse.axis[1])
     };
     Real rSqr = tmp[0] * tmp[0] + tmp[1] * tmp[1];
-    Real radius = sqrt(rSqr);
+    Real radius = std::sqrt(rSqr);
 
     smin = center - radius;
     smax = center + radius;
@@ -61,7 +61,7 @@ void Project(Ellipsoid3<Real> const& ellipsoid, Line3<Real> const& line,
         ellipsoid.extent[2] * Dot(line.direction, ellipsoid.axis[2])
     };
     Real rSqr = tmp[0] * tmp[0] + tmp[1] * tmp[1] + tmp[2] * tmp[2];
-    Real radius = sqrt(rSqr);
+    Real radius = std::sqrt(rSqr);
 
     smin = center - radius;
     smax = center + radius;

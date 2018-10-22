@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/08/29)
+// File Version: 3.3.1 (2018/10/05)
 
 #include "MassPulleySpringSystemWindow.h"
 
@@ -45,7 +45,7 @@ MassPulleySpringSystemWindow::MassPulleySpringSystemWindow(Parameters& parameter
     CreateScene();
 
     float angle = static_cast<float>(0.1 * GTE_C_PI);
-    float cs = cos(angle), sn = sin(angle);
+    float cs = std::cos(angle), sn = std::sin(angle);
     InitializeCamera(60.0f, GetAspectRatio(), 1.0f, 1000.0f, 0.1f, 0.001f,
         { 0.0f, 48.0f, 326.0f }, { 0.0f, sn, -cs }, { 0.0f, -cs, -sn });
     mPVWMatrices.Update();
@@ -140,7 +140,7 @@ void MassPulleySpringSystemWindow::InitializeModule()
     mModule.mass2 = 2.0f;
     mModule.mass3 = 3.0f;
     mModule.radius = 32.0f;
-    mModule.inertia = pow(mModule.radius, 4.0f) * (float)GTE_C_HALF_PI;
+    mModule.inertia = std::pow(mModule.radius, 4.0f) * (float)GTE_C_HALF_PI;
     mModule.wireLength = 375.0f + mModule.radius * (float)GTE_C_PI;
     mModule.springLength = 100.0f;
     mModule.springConstant = 10.0f;
@@ -496,8 +496,8 @@ void MassPulleySpringSystemWindow::UpdateCable()
     {
         t = -1.0f + mult * static_cast<float>(i - imin);
         float angle = t * (float)GTE_C_PI;
-        ctrl[0] = cos(angle) * mModule.radius;
-        ctrl[1] = mModule.GetCurrentY3() + sin(angle) * mModule.radius;
+        ctrl[0] = std::cos(angle) * mModule.radius;
+        ctrl[1] = mModule.GetCurrentY3() + std::sin(angle) * mModule.radius;
         mCableSpline->SetControl(i, ctrl);
     }
 
@@ -543,8 +543,8 @@ void MassPulleySpringSystemWindow::UpdateHelix()
     {
         float t = delta * static_cast<float>(i);
         float angle = t * (float)GTE_C_TWO_PI;
-        float cs = cos(angle);
-        float sn = sin(angle);
+        float cs = std::cos(angle);
+        float sn = std::sin(angle);
         Vector3<float> ctrl{ radius * cs, -mModule.radius - 4.0f - yMult*t, radius * sn };
         mHelixSpline->SetControl(i, ctrl);
     }

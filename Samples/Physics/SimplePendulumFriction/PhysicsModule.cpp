@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/07/16)
+// File Version: 3.3.1 (2018/10/05)
 
 #include "PhysicsModule.h"
 
@@ -38,7 +38,7 @@ void PhysicsModule::Initialize(float time, float deltaTime, float theta, float t
         [this](float, Vector2<float> const& input) -> Vector2<float>
     {
         float thetaFunction = input[1];
-        float thetaDotFunction = -(mAux[0] * sin(input[0]) + mAux[1] * input[1]);
+        float thetaDotFunction = -(mAux[0] * std::sin(input[0]) + mAux[1] * input[1]);
         return Vector2<float>{ thetaFunction, thetaDotFunction };
     };
 

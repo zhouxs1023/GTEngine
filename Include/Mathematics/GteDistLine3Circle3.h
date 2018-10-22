@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/26)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteDCPQuery.h>
 #include <Mathematics/GteCircle3.h>
 #include <Mathematics/GteLine.h>
@@ -163,7 +164,7 @@ DCPQuery<Real, Line3<Real>, Circle3<Real>>::operator()(
                 if (discr > zero)
                 {
                     result.numClosestPairs = 2;
-                    Real rootDiscr = Function<Real>::Sqrt(discr);
+                    Real rootDiscr = std::sqrt(discr);
                     t = -v + rootDiscr;
                     GetPair(line, circle, D, t, result.lineClosest[0],
                         result.circleClosest[0]);
@@ -222,7 +223,7 @@ DCPQuery<Real, Line3<Real>, Circle3<Real>>::operator()(
 
     Vector3<Real> diff = result.lineClosest[0] - result.circleClosest[0];
     result.sqrDistance = Dot(diff, diff);
-    result.distance = Function<Real>::Sqrt(result.sqrDistance);
+    result.distance = std::sqrt(result.sqrDistance);
     return result;
 }
 
@@ -252,7 +253,7 @@ DCPQuery<Real, Line3<Real>, Circle3<Real>>::Robust(
         // The line direction M and the plane normal N are not parallel.  Move
         // the line origin B = (b0,b1,b2) to B' = B + lambda*line.direction =
         // (0,b1',b2').
-        Real m0 = Function<Real>::Sqrt(m0sqr);
+        Real m0 = std::sqrt(m0sqr);
         Real rm0 = circle.radius * m0;
         Real lambda = -Dot(MxN, DxN) / m0sqr;
         Vector3<Real> oldD = D;
@@ -264,15 +265,13 @@ DCPQuery<Real, Line3<Real>, Circle3<Real>>::Robust(
         {
             // B' = (0,b1',b2') where b1' != 0.  See Sections 1.1.2 and 1.2.2
             // of the PDF documentation.
-            Real b1 = Function<Real>::Sqrt(b1sqr);
+            Real b1 = std::sqrt(b1sqr);
             Real rm0sqr = circle.radius * m0sqr;
             if (rm0sqr > b1)
             {
                 Real const twoThirds = (Real)2 / (Real)3;
-                Real sHat = Function<Real>::Sqrt(Function<Real>::Pow(
-                    rm0sqr * b1sqr, twoThirds) - b1sqr) / m0;
-                Real gHat = rm0sqr * sHat / Function<Real>::Sqrt(
-                    m0sqr * sHat * sHat + b1sqr);
+                Real sHat = std::sqrt(std::pow(rm0sqr * b1sqr, twoThirds) - b1sqr) / m0;
+                Real gHat = rm0sqr * sHat / std::sqrt(m0sqr * sHat * sHat + b1sqr);
                 Real cutoff = gHat - sHat;
                 if (m2b2 <= -cutoff)
                 {
@@ -422,7 +421,7 @@ DCPQuery<Real, Line3<Real>, Circle3<Real>>::Robust(
 
     Vector3<Real> diff = result.lineClosest[0] - result.circleClosest[0];
     result.sqrDistance = Dot(diff, diff);
-    result.distance = Function<Real>::Sqrt(result.sqrDistance);
+    result.distance = std::sqrt(result.sqrDistance);
     return result;
 }
 
@@ -445,7 +444,7 @@ Real DCPQuery<Real, Line3<Real>, Circle3<Real>>::Bisect(Real m2b2,
 {
     std::function<Real(Real)> G = [&, m2b2, rm0sqr, m0sqr, b1sqr](Real s)
     {
-        return s + m2b2 - rm0sqr*s / Function<Real>::Sqrt(m0sqr*s*s + b1sqr);
+        return s + m2b2 - rm0sqr*s / std::sqrt(m0sqr*s*s + b1sqr);
     };
 
     // The function is known to be increasing, so we can specify -1 and +1
@@ -453,7 +452,7 @@ Real DCPQuery<Real, Line3<Real>, Circle3<Real>>::Bisect(Real m2b2,
     // of 'double' is intentional in case Real is a BSNumber or BSRational
     // type.  We want the bisections to terminate in a reasonable amount of
     // time.
-    unsigned int const maxIterations = Function<double>::GetMaxBisections();
+    unsigned int const maxIterations = GTE_C_MAX_BISECTIONS_GENERIC;
     Real root;
     RootsBisection<Real>::Find(G, smin, smax, (Real)-1, (Real)+1,
         maxIterations, root);

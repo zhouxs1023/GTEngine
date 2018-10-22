@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -140,7 +140,7 @@ IntpThinPlateSpline2<Real>::IntpThinPlateSpline2(int numPoints, Real const* X,
             {
                 Real dx = mX[row] - mX[col];
                 Real dy = mY[row] - mY[col];
-                Real t = sqrt(dx*dx + dy*dy);
+                Real t = std::sqrt(dx*dx + dy*dy);
                 AMat(row, col) = Kernel(t);
             }
         }
@@ -241,7 +241,7 @@ Real IntpThinPlateSpline2<Real>::operator()(Real x, Real y) const
         {
             Real dx = x - mX[i];
             Real dy = y - mY[i];
-            Real t = sqrt(dx*dx + dy*dy);
+            Real t = std::sqrt(dx*dx + dy*dy);
             result += mA[i] * Kernel(t);
         }
         return result;
@@ -266,7 +266,7 @@ Real IntpThinPlateSpline2<Real>::ComputeFunctional() const
             {
                 Real dx = mX[row] - mX[col];
                 Real dy = mY[row] - mY[col];
-                Real t = sqrt(dx * dx + dy * dy);
+                Real t = std::sqrt(dx * dx + dy * dy);
                 functional += Kernel(t) * mA[row] * mA[col];
             }
         }
@@ -286,7 +286,7 @@ Real IntpThinPlateSpline2<Real>::Kernel(Real t)
     if (t > (Real)0)
     {
         Real t2 = t * t;
-        return t2 * log(t2);
+        return t2 * std::log(t2);
     }
     return (Real)0;
 }

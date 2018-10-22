@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -91,10 +91,10 @@ void ChebyshevRatio<Real>::Get(Real t, Real cosA, Real& f0, Real& f1)
     if (cosA < (Real)1)
     {
         // The angle A is in (0,pi/2].
-        Real A = acos(cosA);
-        Real invSinA = ((Real)1) / sin(A);
-        f0 = sin(((Real)1 - t) * A) * invSinA;
-        f1 = sin(t * A) * invSinA;
+        Real A = std::acos(cosA);
+        Real invSinA = ((Real)1) / std::sin(A);
+        f0 = std::sin(((Real)1 - t) * A) * invSinA;
+        f1 = std::sin(t * A) * invSinA;
     }
     else
     {

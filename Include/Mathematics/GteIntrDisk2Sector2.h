@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -58,7 +58,7 @@ TIQuery<Real, Circle2<Real>, Sector2<Real>>::operator()(
     // Test whether the disk and the disk of the sector overlap.
     Vector2<Real> CmV = disk.center - sector.vertex;
     Real sqrLengthCmV = Dot(CmV, CmV);
-    Real lengthCmV = sqrt(sqrLengthCmV);
+    Real lengthCmV = std::sqrt(sqrLengthCmV);
     if (lengthCmV > disk.radius + sector.radius)
     {
         // The disk is outside the disk of the sector.
@@ -117,7 +117,7 @@ TIQuery<Real, Circle2<Real>, Sector2<Real>>::operator()(
         // segment contained by the ray overlaps the disk.  The quadratic
         // root tmin generates the ray-disk point of intersection closest to
         // the sector vertex.
-        Real tmin = dp0 - sqrt(discr0);
+        Real tmin = dp0 - std::sqrt(discr0);
         if (sector.radius >= tmin)
         {
             // The segment overlaps the disk.
@@ -155,7 +155,7 @@ TIQuery<Real, Circle2<Real>, Sector2<Real>>::operator()(
         // segment contained by the ray overlaps the disk.  The quadratic
         // root tmin generates the ray-disk point of intersection closest to
         // the sector vertex.
-        Real tmin = dp1 - sqrt(discr1);
+        Real tmin = dp1 - std::sqrt(discr1);
         if (sector.radius >= tmin)
         {
             result.intersect = true;

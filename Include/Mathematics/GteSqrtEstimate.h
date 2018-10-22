@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
-#include <Mathematics/GteConstants.h>
-#include <cmath>
+#include <Mathematics/GteMath.h>
 
 // Minimax polynomial approximations to sqrt(x).  The polynomial p(x) of
 // degree D minimizes the quantity maximum{|sqrt(x) - p(x)| : x in [1,2]}
@@ -177,7 +176,7 @@ inline Real SqrtEstimate<Real>::Evaluate(degree<8>, Real t)
 template <typename Real>
 inline void SqrtEstimate<Real>::Reduce(Real x, Real& adj, Real& y, int& p)
 {
-    y = frexp(x, &p);  // y in [1/2,1)
+    y = std::frexp(x, &p);  // y in [1/2,1)
     y = ((Real)2)*y;   // y in [1,2)
     --p;
     adj = (1 & p)*(Real)GTE_C_SQRT_2 + (1 & ~p)*(Real)1;
@@ -187,7 +186,7 @@ inline void SqrtEstimate<Real>::Reduce(Real x, Real& adj, Real& y, int& p)
 template <typename Real>
 inline Real SqrtEstimate<Real>::Combine(Real adj, Real y, int p)
 {
-    return adj*ldexp(y, p);
+    return adj * std::ldexp(y, p);
 }
 
 

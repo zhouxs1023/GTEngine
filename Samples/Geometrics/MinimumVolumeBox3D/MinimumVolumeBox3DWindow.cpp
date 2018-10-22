@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include "MinimumVolumeBox3DWindow.h"
 #include <iostream>
@@ -82,9 +82,9 @@ void MinimumVolumeBox3DWindow::CreateScene()
         float theta = rnd(mte) * (float)GTE_C_TWO_PI;
         float phi = rnd(mte) * (float)GTE_C_PI;
         float radius = 0.5f * (rnd(mte) + 1.0f);
-        float x = extent[0] * cos(theta) * sin(phi);
-        float y = extent[1] * sin(theta) * sin(phi);
-        float z = extent[2] * cos(phi);
+        float x = extent[0] * std::cos(theta) * std::sin(phi);
+        float y = extent[1] * std::sin(theta) * std::sin(phi);
+        float z = extent[2] * std::cos(phi);
         v = center + radius * (x * axis[0] + y * axis[1] + z * axis[2]);
     }
 

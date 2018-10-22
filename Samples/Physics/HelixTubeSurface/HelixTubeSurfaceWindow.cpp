@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.1 (2017/06/18)
+// File Version: 3.3.2 (2018/10/05)
 
 #include "HelixTubeSurfaceWindow.h"
 
@@ -197,13 +197,13 @@ void HelixTubeSurfaceWindow::CreateCurve()
     {
         t = i * fourPi * invNumSegmentsP1;
         times[i] = t;
-        points[i] = { (float)cos(t), (float)sin(t), t };
+        points[i] = { std::cos(t), std::sin(t), t };
     }
     for (/**/; i < numSegments; ++i)
     {
         t = i * fourPi * invNumSegments;
         times[i] = t;
-        points[i] = { 2.0f - (float)cos(t), (float)sin(t), fourPi - t };
+        points[i] = { 2.0f - std::cos(t), std::sin(t), fourPi - t };
     }
 
     times[numSegments] = fourPi;

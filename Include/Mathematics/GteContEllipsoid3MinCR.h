@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -84,7 +84,7 @@ void ContEllipsoid3MinCR<Real>::FindEdgeMax(std::vector<Vector3<Real>>& A,
     {
         Real invA2 = ((Real)1) / a2;
         Real discr = a1*a1 - ((Real)4)*a0*a2;
-        discr = sqrt(std::max(discr, (Real)0));
+        discr = std::sqrt(std::max(discr, (Real)0));
         tFinal = -((Real)0.5)*(a1 + discr)*invA2;
         if (a1 + ((Real)2)*a2*tFinal > (Real)0)
         {

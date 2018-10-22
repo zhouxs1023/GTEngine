@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/05/19)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -113,7 +113,7 @@ void Torus3<Real>::Evaluate(Real u, Real v, unsigned int maxOrder,
     Vector3<Real> values[6]) const
 {
     // Compute position.
-    Real csu = cos(u), snu = sin(u), csv = cos(v), snv = sin(v);
+    Real csu = std::cos(u), snu = std::sin(u), csv = std::cos(v), snv = std::sin(v);
     Real r1csv = radius1 * csv;
     Real r1snv = radius1 * snv;
     Real r0pr1csv = radius0 + r1csv;
@@ -155,9 +155,9 @@ void Torus3<Real>::GetParameters(Vector3<Real> const& X, Real& u, Real& v) const
     Real dot0 = Dot(direction0, delta);  // (r0 + r1*cos(v))*cos(u)
     Real dot1 = Dot(direction1, delta);  // (r0 + r1*cos(v))*sin(u)
     Real dot2 = Dot(normal, delta);      // r1*sin(v)
-    Real r1csv = sqrt(dot0 * dot0 + dot1 * dot1) - radius0;  // r1*cos(v)
-    u = atan2(dot1, dot0);
-    v = atan2(dot2, r1csv);
+    Real r1csv = std::sqrt(dot0 * dot0 + dot1 * dot1) - radius0;  // r1*cos(v)
+    u = std::atan2(dot1, dot0);
+    v = std::atan2(dot2, r1csv);
 }
 
 template <typename Real>

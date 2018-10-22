@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/02/17)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -12,7 +12,7 @@
 #include <Mathematics/GteVector2.h>
 #include <Mathematics/GteVector3.h>
 #include <Mathematics/GteETManifoldMesh.h>
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 #if defined(GTE_COMPUTE_MODEL_ALLOW_GPGPU)
 #include <Graphics/GteConstantBuffer.h>
 #include <Graphics/GteStructuredBuffer.h>
@@ -513,8 +513,8 @@ void GenerateMeshUV<Real>::AssignBoundaryTextureCoordinatesDisk()
     {
         int v1 = mVertexInfo[v0];
         Real angle = multiplier * distance[i - 1];
-        mTCoords[v1][0] = (cos(angle) + (Real)1) * (Real)0.5;
-        mTCoords[v1][1] = (sin(angle) + (Real)1) * (Real)0.5;
+        mTCoords[v1][0] = (std::cos(angle) + (Real)1) * (Real)0.5;
+        mTCoords[v1][1] = (std::sin(angle) + (Real)1) * (Real)0.5;
         v0 = v1;
     }
 }
@@ -555,8 +555,8 @@ void GenerateMeshUV<Real>::ComputeMeanValueWeights()
                             {
                                 Real dot = Dot(X2mX0, X1mX0);
                                 Real cs = std::min(std::max(dot, (Real)-1), (Real)1);
-                                Real angle = acos(cs);
-                                weight += tan(angle * (Real)0.5);
+                                Real angle = std::acos(cs);
+                                weight += std::tan(angle * (Real)0.5);
                             }
                             else
                             {
@@ -778,8 +778,8 @@ void GenerateMeshUV<Real>::SolveSystemGPU(unsigned int numIterations)
 
     // Compute the number of thread groups.
     int numInputs = mNumVertices - mNumBoundaryEdges;
-    Real factor0 = ceil(sqrt((Real)numInputs));
-    Real factor1 = ceil((Real)numInputs / factor0);
+    Real factor0 = std::ceil(std::sqrt((Real)numInputs));
+    Real factor1 = std::ceil((Real)numInputs / factor0);
     int xElements = static_cast<int>(factor0);
     int yElements = static_cast<int>(factor1);
     int xRem = (xElements % 8);

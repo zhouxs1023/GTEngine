@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteBoundingSphere.h>
@@ -82,14 +82,14 @@ void BoundingSphere::GrowToContain(BoundingSphere const& sphere)
         return;
     }
 
-    float length = sqrt(lengthSqr);
+    float length = std::sqrt(lengthSqr);
     if (length > 0.0f)
     {
-        float coeff = (length + radiusDiff) / (2.0f*length);
+        float coeff = (length + radiusDiff) / (2.0f * length);
         SetCenter(center0 + coeff*centerDiff);
     }
 
-    SetRadius(0.5f*(length + radius0 + radius1));
+    SetRadius(0.5f * (length + radius0 + radius1));
 }
 
 void BoundingSphere::TransformBy(Transform const& transform,
@@ -139,7 +139,7 @@ void BoundingSphere::ComputeFromData(int numVertices, int vertexSize,
         }
     }
 
-    mTuple[3] = sqrt(mTuple[3]);
+    mTuple[3] = std::sqrt(mTuple[3]);
 }
 
 bool BoundingSphere::TestIntersection(Vector4<float> const& origin,
@@ -225,7 +225,7 @@ bool BoundingSphere::TestIntersection(Vector4<float> const& origin,
     // See "3D Game Engine Design (2nd edition)", Section 15.4.3 for the
     // details of the test-intersection query for a segment and a sphere.
     // In the book, 'qval' is the same as '(segment.e - |a1|)^2 - discr'.
-    float absA1 = fabs(a1);
+    float absA1 = std::abs(a1);
     float tmp = segExtent - absA1;
     return tmp * tmp <= discr || segExtent >= absA1;
 }

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -47,7 +47,7 @@ void SymmetricEigensolver2x2<Real>::operator()(Real a00, Real a01, Real a11,
     {
         c2 /= maxAbsComp;  // in [-1,1]
         s2 /= maxAbsComp;  // in [-1,1]
-        Real length = sqrt(c2 * c2 + s2 * s2);
+        Real length = std::sqrt(c2 * c2 + s2 * s2);
         c2 /= length;
         s2 /= length;
         if (c2 > zero)
@@ -62,7 +62,7 @@ void SymmetricEigensolver2x2<Real>::operator()(Real a00, Real a01, Real a11,
         s2 = zero;
     }
 
-    Real s = sqrt(half * (one - c2));  // >= 1/sqrt(2)
+    Real s = std::sqrt(half * (one - c2));  // >= 1/sqrt(2)
     Real c = half * s2 / s;
 
     Real diagonal[2];

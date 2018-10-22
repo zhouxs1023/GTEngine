@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/04)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteTransform.h>
@@ -191,9 +191,9 @@ float Transform::GetNorm() const
     if (mIsRSMatrix)
     {
         // A RS matrix (GTE_USE_MAT_VEC) or an SR matrix (GTE_USE_VEC_MAT).
-        r0 = fabs(mScale[0]);
-        r1 = fabs(mScale[1]);
-        r2 = fabs(mScale[2]);
+        r0 = std::abs(mScale[0]);
+        r1 = std::abs(mScale[1]);
+        r2 = std::abs(mScale[2]);
     }
     else
     {
@@ -203,14 +203,14 @@ float Transform::GetNorm() const
 
 #if defined(GTE_USE_MAT_VEC)
         // Use the max-row-sum matrix norm.
-        r0 = fabs(mMatrix(0, 0)) + fabs(mMatrix(0, 1)) + fabs(mMatrix(0, 2));
-        r1 = fabs(mMatrix(1, 0)) + fabs(mMatrix(1, 1)) + fabs(mMatrix(1, 2));
-        r2 = fabs(mMatrix(2, 0)) + fabs(mMatrix(2, 1)) + fabs(mMatrix(2, 2));
+        r0 = std::abs(mMatrix(0, 0)) + std::abs(mMatrix(0, 1)) + std::abs(mMatrix(0, 2));
+        r1 = std::abs(mMatrix(1, 0)) + std::abs(mMatrix(1, 1)) + std::abs(mMatrix(1, 2));
+        r2 = std::abs(mMatrix(2, 0)) + std::abs(mMatrix(2, 1)) + std::abs(mMatrix(2, 2));
 #else
         // Use the max-col-sum matrix norm.
-        r0 = fabs(mMatrix(0, 0)) + fabs(mMatrix(1, 0)) + fabs(mMatrix(2, 0));
-        r1 = fabs(mMatrix(0, 1)) + fabs(mMatrix(1, 1)) + fabs(mMatrix(2, 1));
-        r2 = fabs(mMatrix(0, 2)) + fabs(mMatrix(1, 2)) + fabs(mMatrix(2, 2));
+        r0 = std::abs(mMatrix(0, 0)) + std::abs(mMatrix(1, 0)) + std::abs(mMatrix(2, 0));
+        r1 = std::abs(mMatrix(0, 1)) + std::abs(mMatrix(1, 1)) + std::abs(mMatrix(2, 1));
+        r2 = std::abs(mMatrix(0, 2)) + std::abs(mMatrix(1, 2)) + std::abs(mMatrix(2, 2));
 #endif
     }
 

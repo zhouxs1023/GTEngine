@@ -3,10 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/07/13)
+// File Version: 3.3.1 (2018/10/05)
 
 #include "PhysicsModule.h"
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 #include <cmath>
 
 PhysicsModule::PhysicsModule ()
@@ -23,7 +23,7 @@ void PhysicsModule::Initialize(float time, float deltaTime, float y1, float dy1,
     mBeta = mass1 - mass2;
     mGamma = mass1 + mass2 + inertia / (radius * radius);
     float tmp = springConstant * mGamma / (mAlpha * mGamma - mBeta * mBeta);
-    mOmega = sqrt(tmp);
+    mOmega = std::sqrt(tmp);
     float omegaSqr = mOmega * mOmega;
     mGDivOmegaSqr = gravity / omegaSqr;
     mDelta = mBeta * omegaSqr / mGamma;
@@ -69,8 +69,8 @@ void PhysicsModule::Update()
     mTime += mDeltaTime;
 
     float scaledTime = mOmega * mTime;
-    float sn = sin(scaledTime);
-    float cs = cos(scaledTime);
+    float sn = std::sin(scaledTime);
+    float cs = std::cos(scaledTime);
     float combo = mK1 * sn + mK2 * cs;
 
     mY3Curr = combo + mLPlusGDivOmegaSqr;

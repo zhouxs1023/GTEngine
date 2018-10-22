@@ -993,9 +993,6 @@
     <ClInclude Include="Include\Mathematics\GteContSphere3.h">
       <Filter>Files\Mathematics\Containment</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteConstants.h">
-      <Filter>Files\Mathematics\Functions</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Mathematics\GteDCPQuery.h">
       <Filter>Files\Mathematics\Distance</Filter>
     </ClInclude>
@@ -1466,9 +1463,6 @@
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteConvertCoordinates.h">
       <Filter>Files\Mathematics\Algebra</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteFunctions.h">
-      <Filter>Files\Mathematics\Functions</Filter>
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteEulerAngles.h">
       <Filter>Files\Mathematics\Algebra</Filter>
@@ -2016,15 +2010,6 @@
     <ClInclude Include="Include\Mathematics\GteDistOrientedBox3OrientedBox3.h">
       <Filter>Files\Mathematics\Distance\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteFunctionsBSRational.h">
-      <Filter>Files\Mathematics\Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteFunctionsBSNumber.h">
-      <Filter>Files\Mathematics\Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteFunctionsIEEEBinary16.h">
-      <Filter>Files\Mathematics\Functions</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Mathematics\GteOBBTreeOfPoints.h">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
     </ClInclude>
@@ -2060,6 +2045,9 @@
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2Circle2.h">
       <Filter>Files\Mathematics\Intersection\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteMath.h">
+      <Filter>Files\Mathematics\Arithmetic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

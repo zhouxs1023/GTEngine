@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2018/10/05)
 
 #include "CastleWindow.h"
 
@@ -922,9 +922,9 @@ void CastleWindow::FixedHeightRig::SetPicker(std::shared_ptr<Node> const& scene,
     {
         double unit = multiplier * i - 1.0;  // in [-1,1]
         float angle = static_cast<float>(GTE_C_HALF_PI + unit * GTE_C_QUARTER_PI);
-        mCos[i] = cos(angle);
-        mSin[i] = sin(angle);
-        mTolerance[i] = static_cast<float>(2.0 - 1.5 * fabs(unit));  // in [1/2,1]
+        mCos[i] = std::cos(angle);
+        mSin[i] = std::sin(angle);
+        mTolerance[i] = static_cast<float>(2.0 - 1.5 * std::abs(unit));  // in [1/2,1]
     }
 }
 

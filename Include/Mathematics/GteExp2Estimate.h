@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
-#include <Mathematics/GteConstants.h>
-#include <cmath>
+#include <Mathematics/GteMath.h>
 
 // Minimax polynomial approximations to 2^x.  The polynomial p(x) of
 // degree D minimizes the quantity maximum{|2^x - p(x)| : x in [0,1]}
@@ -60,10 +59,10 @@ template <typename Real>
 template <int D>
 inline Real Exp2Estimate<Real>::DegreeRR(Real x)
 {
-    Real p = floor(x);
+    Real p = std::floor(x);
     Real y = x - p;
     Real poly = Degree<D>(y);
-    Real result = ldexp(poly, (int)p);
+    Real result = std::ldexp(poly, (int)p);
     return result;
 }
 

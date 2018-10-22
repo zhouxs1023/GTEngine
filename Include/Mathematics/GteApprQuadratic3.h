@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -273,8 +273,7 @@ Real ApprQuadraticSphere3<Real>::operator()(int numPoints,
     sphere.center[0] = ((Real)-0.5) * coefficients[1];
     sphere.center[1] = ((Real)-0.5) * coefficients[2];
     sphere.center[2] = ((Real)-0.5) * coefficients[3];
-    sphere.radius = sqrt(std::abs(Dot(sphere.center, sphere.center) -
-        coefficients[0]));
+    sphere.radius = std::sqrt(std::abs(Dot(sphere.center, sphere.center) - coefficients[0]));
 
     // For an exact fit, numeric round-off errors might make the minimum
     // eigenvalue just slightly negative.  Return the absolute value since

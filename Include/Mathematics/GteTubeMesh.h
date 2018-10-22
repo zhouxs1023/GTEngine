@@ -3,13 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.5 (2016/08/29)
+// File Version: 3.0.6 (2018/10/05)
 
 #pragma once
 
 #include <Mathematics/GteMesh.h>
 #include <Mathematics/GteFrenetFrame.h>
-#include <Mathematics/GteConstants.h>
 #include <functional>
 #include <memory>
 
@@ -92,8 +91,8 @@ TubeMesh<Real>::TubeMesh(MeshDescription const& description,
     for (unsigned int i = 0; i < this->mDescription.numCols - 1; ++i)
     {
         Real angle = i * invRadialSamples * (Real)GTE_C_TWO_PI;
-        mCosAngle[i] = cos(angle);
-        mSinAngle[i] = sin(angle);
+        mCosAngle[i] = std::cos(angle);
+        mSinAngle[i] = std::sin(angle);
     }
     mCosAngle[this->mDescription.numCols - 1] = mCosAngle[0];
     mSinAngle[this->mDescription.numCols - 1] = mSinAngle[0];

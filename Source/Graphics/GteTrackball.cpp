@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteTrackball.h>
@@ -115,7 +115,7 @@ void Trackball::UpdateOrientation()
 {
     // Get the first vector on the sphere.
     float sqrLength0 = mX0 * mX0 + mY0 * mY0;
-    float length0 = sqrt(sqrLength0), invLength0 = 0.0f, z0, z1;
+    float length0 = std::sqrt(sqrLength0), invLength0 = 0.0f, z0, z1;
     if (length0 > 1.0f)
     {
         // Outside the unit disk, project onto it.
@@ -128,7 +128,7 @@ void Trackball::UpdateOrientation()
     {
         // Compute point (mX0,mY0,z0) on negative unit hemisphere.
         z0 = 1.0f - sqrLength0;
-        z0 = (z0 <= 0.0f ? 0.0f : sqrt(z0));
+        z0 = (z0 <= 0.0f ? 0.0f : std::sqrt(z0));
     }
     z0 *= -1.0f;
 
@@ -137,7 +137,7 @@ void Trackball::UpdateOrientation()
 
     // Get the second vector on the sphere.
     float sqrLength1 = mX1 * mX1 + mY1 * mY1;
-    float length1 = sqrt(sqrLength1), invLength1 = 0.0f;
+    float length1 = std::sqrt(sqrLength1), invLength1 = 0.0f;
     if (length1 > 1.0f)
     {
         // Outside unit disk, project onto it.
@@ -150,7 +150,7 @@ void Trackball::UpdateOrientation()
     {
         // Compute point (mX1,mY1,z1) on negative unit hemisphere.
         z1 = 1.0f - sqrLength1;
-        z1 = (z1 <= 0.0f ? 0.0f : sqrt(z1));
+        z1 = (z1 <= 0.0f ? 0.0f : std::sqrt(z1));
     }
     z1 *= -1.0f;
 
@@ -164,7 +164,7 @@ void Trackball::UpdateOrientation()
     float angle;
     if (Normalize(axis) > 0.0f)
     {
-        angle = acos(std::min(std::max(dot, -1.0f), 1.0f));
+        angle = std::acos(std::min(std::max(dot, -1.0f), 1.0f));
     }
     else  // Vectors are parallel.
     {

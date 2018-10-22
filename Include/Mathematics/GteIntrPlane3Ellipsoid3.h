@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -38,7 +38,7 @@ TIQuery<Real, Plane3<Real>, Ellipsoid3<Real>>::operator()(
     Matrix3x3<Real> MInverse;
     ellipsoid.GetMInverse(MInverse);
     Real discr = Dot(plane.normal, MInverse * plane.normal);
-    Real root = sqrt(std::max(discr, (Real)0));
+    Real root = std::sqrt(std::max(discr, (Real)0));
     DCPQuery<Real, Vector3<Real>, Plane3<Real>> vpQuery;
     Real distance = vpQuery(ellipsoid.center, plane).distance;
     result.intersect = (distance <= root);

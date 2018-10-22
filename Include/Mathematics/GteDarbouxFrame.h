@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/06/29)
+// File Version: 3.0.2 (2018/10/05)
 
 #pragma once
 
@@ -122,7 +122,7 @@ void DarbouxFrame3<Real>::GetPrincipalInformation(Real u, Real v, Real& curvatur
     Real c2 = Determinant(metricTensor);
 
     // Principal curvatures are roots of characteristic polynomial.
-    Real temp = sqrt(std::abs(c1 * c1 - ((Real)4) * c0 * c2));
+    Real temp = std::sqrt(std::abs(c1 * c1 - ((Real)4) * c0 * c2));
     Real mult = ((Real)0.5) / c2;
     curvature0 = -mult * (c1 + temp);
     curvature1 = -mult * (c1 - temp);
@@ -131,7 +131,7 @@ void DarbouxFrame3<Real>::GetPrincipalInformation(Real u, Real v, Real& curvatur
     // w1 = (b12-k1*g12,-(b11-k1*g11)) OR (b22-k1*g22,-(b12-k1*g12)).
     Real a0 = curvatureTensor(0, 1) - curvature0 * metricTensor(0, 1);
     Real a1 = curvature0 * metricTensor(0, 0) - curvatureTensor(0, 0);
-    Real length = sqrt(a0 * a0 + a1 * a1);
+    Real length = std::sqrt(a0 * a0 + a1 * a1);
     if (length > (Real)0)
     {
         direction0 = a0 * derU + a1 * derV;
@@ -140,7 +140,7 @@ void DarbouxFrame3<Real>::GetPrincipalInformation(Real u, Real v, Real& curvatur
     {
         a0 = curvatureTensor(1, 1) - curvature0 * metricTensor(1, 1);
         a1 = curvature0 * metricTensor(0, 1) - curvatureTensor(0, 1);
-        length = sqrt(a0 * a0 + a1 * a1);
+        length = std::sqrt(a0 * a0 + a1 * a1);
         if (length > (Real)0)
         {
             direction0 = a0*derU + a1*derV;

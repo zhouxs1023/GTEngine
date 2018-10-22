@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/04)
 
 #pragma once
 
@@ -324,14 +324,14 @@ FIQuery<Real, std::vector<Vector3<Real>>, Plane3<Real>>::operator()(
             // Read the preamble comments about why the plane normal and
             // heights are processed this way.
             int imax = 0;
-            Real cmax = fabs(plane.normal[0]);
-            Real cvalue = fabs(plane.normal[1]);
+            Real cmax = std::abs(plane.normal[0]);
+            Real cvalue = std::abs(plane.normal[1]);
             if (cvalue > cmax)
             {
                 cmax = cvalue;
                 imax = 1;
             }
-            cvalue = fabs(plane.normal[2]);
+            cvalue = std::abs(plane.normal[2]);
             if (cvalue > cmax)
             {
                 cmax = cvalue;

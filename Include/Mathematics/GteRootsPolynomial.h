@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -408,7 +408,7 @@ void RootsPolynomial<Real>::SolveDepressedQuadratic(Rational const& c0,
     if (c0 < zero)
     {
         // Two simple roots.
-        Rational root1 = (Rational)sqrt(-(double)c0);
+        Rational root1 = (Rational)std::sqrt(-(double)c0);
         Rational root0 = -root1;
         rmMap.insert(std::make_pair(root0, 1));
         rmMap.insert(std::make_pair(root1, 1));
@@ -466,12 +466,12 @@ void RootsPolynomial<Real>::SolveDepressedCubic(Rational const& c0,
         Rational root0;
         if (c0 > zero)
         {
-            root0 = (Rational)-pow((double)c0, oneThird);
+            root0 = (Rational)-std::pow((double)c0, oneThird);
             GTE_ROOTS_LOW_DEGREE_BLOCK(5);
         }
         else
         {
-            root0 = (Rational)pow(-(double)c0, oneThird);
+            root0 = (Rational)std::pow(-(double)c0, oneThird);
             GTE_ROOTS_LOW_DEGREE_BLOCK(6);
         }
         rmMap.insert(std::make_pair(root0, 1));
@@ -490,16 +490,16 @@ void RootsPolynomial<Real>::SolveDepressedCubic(Rational const& c0,
         // Three simple roots.
         Rational deltaDiv108 = delta / rat108;
         Rational betaRe = -c0 / rat2;
-        Rational betaIm = (Rational)sqrt((double)deltaDiv108);
-        Rational theta = (Rational)atan2((double)betaIm, (double)betaRe);
+        Rational betaIm = std::sqrt(deltaDiv108);
+        Rational theta = std::atan2(betaIm, betaRe);
         Rational thetaDiv3 = theta / rat3;
         double angle = (double)thetaDiv3;
-        Rational cs = (Rational)cos(angle);
-        Rational sn = (Rational)sin(angle);
+        Rational cs = (Rational)std::cos(angle);
+        Rational sn = (Rational)std::sin(angle);
         Rational rhoSqr = betaRe * betaRe + betaIm * betaIm;
-        Rational rhoPowThird = (Rational)pow((double)rhoSqr, 1.0 / 6.0);
+        Rational rhoPowThird = (Rational)std::pow((double)rhoSqr, 1.0 / 6.0);
         Rational temp0 = rhoPowThird * cs;
-        Rational temp1 = rhoPowThird * sn * (Rational)sqrt(3.0);
+        Rational temp1 = rhoPowThird * sn * (Rational)std::sqrt(3.0);
         Rational root0 = rat2 * temp0;
         Rational root1 = -temp0 - temp1;
         Rational root2 = -temp0 + temp1;
@@ -513,27 +513,27 @@ void RootsPolynomial<Real>::SolveDepressedCubic(Rational const& c0,
         // One simple root.
         Rational deltaDiv108 = delta / rat108;
         Rational temp0 = -c0 / rat2;
-        Rational temp1 = (Rational)sqrt(-(double)deltaDiv108);
+        Rational temp1 = (Rational)std::sqrt(-(double)deltaDiv108);
         Rational temp2 = temp0 - temp1;
         Rational temp3 = temp0 + temp1;
         if (temp2 >= zero)
         {
-            temp2 = (Rational)pow((double)temp2, oneThird);
+            temp2 = (Rational)std::pow((double)temp2, oneThird);
             GTE_ROOTS_LOW_DEGREE_BLOCK(8);
         }
         else
         {
-            temp2 = (Rational)-pow(-(double)temp2, oneThird);
+            temp2 = (Rational)-std::pow(-(double)temp2, oneThird);
             GTE_ROOTS_LOW_DEGREE_BLOCK(9);
         }
         if (temp3 >= zero)
         {
-            temp3 = (Rational)pow((double)temp3, oneThird);
+            temp3 = (Rational)std::pow((double)temp3, oneThird);
             GTE_ROOTS_LOW_DEGREE_BLOCK(10);
         }
         else
         {
-            temp3 = (Rational)-pow(-(double)temp3, oneThird);
+            temp3 = (Rational)-std::pow(-(double)temp3, oneThird);
             GTE_ROOTS_LOW_DEGREE_BLOCK(11);
         }
         Rational root0 = temp2 + temp3;
@@ -612,7 +612,7 @@ void RootsPolynomial<Real>::SolveDepressedQuartic(Rational const& c0,
                 rmCubicMap);
             Rational t = (Rational)rmCubicMap.rbegin()->first;
             Rational alphaSqr = rat2 * t - c2;
-            Rational alpha = (Rational)sqrt((double)alphaSqr);
+            Rational alpha = (Rational)std::sqrt((double)alphaSqr);
             double sgnC1;
             if (c1 > zero)
             {
@@ -625,11 +625,11 @@ void RootsPolynomial<Real>::SolveDepressedQuartic(Rational const& c0,
                 GTE_ROOTS_LOW_DEGREE_BLOCK(16);
             }
             Rational arg = t * t - c0;
-            Rational beta = (Rational)(sgnC1 * sqrt(std::max((double)arg, 0.0)));
+            Rational beta = (Rational)(sgnC1 * std::sqrt(std::max((double)arg, 0.0)));
             Rational D0 = alphaSqr - rat4 * (t + beta);
-            Rational sqrtD0 = (Rational)sqrt(std::max((double)D0, 0.0));
+            Rational sqrtD0 = (Rational)std::sqrt(std::max((double)D0, 0.0));
             Rational D1 = alphaSqr - rat4 * (t - beta);
-            Rational sqrtD1 = (Rational)sqrt(std::max((double)D1, 0.0));
+            Rational sqrtD1 = (Rational)std::sqrt(std::max((double)D1, 0.0));
             Rational root0 = (alpha - sqrtD0) / rat2;
             Rational root1 = (alpha + sqrtD0) / rat2;
             Rational root2 = (-alpha - sqrtD1) / rat2;
@@ -658,7 +658,7 @@ void RootsPolynomial<Real>::SolveDepressedQuartic(Rational const& c0,
             rmCubicMap);
         Rational t = (Rational)rmCubicMap.rbegin()->first;
         Rational alphaSqr = rat2 * t - c2;
-        Rational alpha = (Rational)sqrt(std::max((double)alphaSqr, 0.0));
+        Rational alpha = (Rational)std::sqrt(std::max((double)alphaSqr, 0.0));
         double sgnC1;
         if (c1 > zero)
         {
@@ -669,12 +669,12 @@ void RootsPolynomial<Real>::SolveDepressedQuartic(Rational const& c0,
             sgnC1 = -1.0;  // Leads to BLOCK(19)
         }
         Rational arg = t * t - c0;
-        Rational beta = (Rational)(sgnC1 * sqrt(std::max((double)arg, 0.0)));
+        Rational beta = (Rational)(sgnC1 * std::sqrt(std::max((double)arg, 0.0)));
         Rational root0, root1;
         if (sgnC1 > 0.0)
         {
             Rational D1 = alphaSqr - rat4 * (t - beta);
-            Rational sqrtD1 = (Rational)sqrt(std::max((double)D1, 0.0));
+            Rational sqrtD1 = (Rational)std::sqrt(std::max((double)D1, 0.0));
             root0 = (-alpha - sqrtD1) / rat2;
             root1 = (-alpha + sqrtD1) / rat2;
 
@@ -686,7 +686,7 @@ void RootsPolynomial<Real>::SolveDepressedQuartic(Rational const& c0,
         else
         {
             Rational D0 = alphaSqr - rat4 * (t + beta);
-            Rational sqrtD0 = (Rational)sqrt(std::max((double)D0, 0.0));
+            Rational sqrtD0 = (Rational)std::sqrt(std::max((double)D0, 0.0));
             root0 = (alpha - sqrtD0) / rat2;
             root1 = (alpha + sqrtD0) / rat2;
 
@@ -723,7 +723,7 @@ void RootsPolynomial<Real>::SolveDepressedQuartic(Rational const& c0,
                 Rational alpha = rat2 * root0;
                 Rational beta = c2 + rat3 * root0 * root0;
                 Rational discr = alpha * alpha - rat4 * beta;
-                Rational temp1 = (Rational)sqrt((double)discr);
+                Rational temp1 = (Rational)std::sqrt((double)discr);
                 Rational root1 = (-alpha - temp1) / rat2;
                 Rational root2 = (-alpha + temp1) / rat2;
                 rmMap.insert(std::make_pair(root0, 2));
@@ -765,12 +765,12 @@ void RootsPolynomial<Real>::SolveBiquadratic(Rational const& c0,
             if (a1 < zero)
             {
                 // Four simple roots.
-                Rational temp0 = (Rational)sqrt(-(double)a1);
+                Rational temp0 = (Rational)std::sqrt(-(double)a1);
                 Rational temp1 = -c2Half - temp0;
                 Rational temp2 = -c2Half + temp0;
-                Rational root1 = (Rational)sqrt((double)temp1);
+                Rational root1 = (Rational)std::sqrt((double)temp1);
                 Rational root0 = -root1;
-                Rational root2 = (Rational)sqrt((double)temp2);
+                Rational root2 = (Rational)std::sqrt((double)temp2);
                 Rational root3 = -root2;
                 rmMap.insert(std::make_pair(root0, 1));
                 rmMap.insert(std::make_pair(root1, 1));
@@ -804,9 +804,9 @@ void RootsPolynomial<Real>::SolveBiquadratic(Rational const& c0,
     else if (delta < zero)
     {
         // Two simple real roots.
-        Rational temp0 = (Rational)sqrt(-(double)a1);
+        Rational temp0 = (Rational)std::sqrt(-(double)a1);
         Rational temp1 = -c2Half + temp0;
-        Rational root1 = (Rational)sqrt((double)temp1);
+        Rational root1 = (Rational)std::sqrt((double)temp1);
         Rational root0 = -root1;
         rmMap.insert(std::make_pair(root0, 1));
         rmMap.insert(std::make_pair(root1, 1));
@@ -821,7 +821,7 @@ void RootsPolynomial<Real>::SolveBiquadratic(Rational const& c0,
         if (c2 < zero)
         {
             // Two double real roots.
-            Rational root1 = (Rational)sqrt(-(double)c2Half);
+            Rational root1 = (Rational)std::sqrt(-(double)c2Half);
             Rational root0 = -root1;
             rmMap.insert(std::make_pair(root0, 2));
             rmMap.insert(std::make_pair(root1, 2));

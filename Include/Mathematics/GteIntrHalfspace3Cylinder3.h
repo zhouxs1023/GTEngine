@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
@@ -46,7 +46,7 @@ TIQuery<Real, Halfspace3<Real>, Cylinder3<Real>>::operator()(
     Real center = Dot(halfspace.normal, cylinder.axis.origin) -
         halfspace.constant;
     Real absNdW = std::abs(Dot(halfspace.normal, cylinder.axis.direction));
-    Real root = sqrt(std::max((Real)1, (Real)1 - absNdW * absNdW));
+    Real root = std::sqrt(std::max((Real)1, (Real)1 - absNdW * absNdW));
     Real tmax = center + cylinder.radius*root +
         ((Real)0.5)*cylinder.height*absNdW;
 

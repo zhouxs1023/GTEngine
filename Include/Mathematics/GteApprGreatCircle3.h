@@ -3,12 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/05)
 
 #pragma once
 
 #include <Mathematics/GteMatrix3x3.h>
-#include <Mathematics/GteConstants.h>
+#include <Mathematics/GteMath.h>
 #include <Mathematics/GteSymmetricEigensolver3x3.h>
 
 namespace gte
@@ -104,7 +104,7 @@ void ApprGreatArc3<Real>::operator()(int numPoints,
     {
         items[i][0] = Dot(basis[1], points[i]);
         items[i][1] = Dot(basis[2], points[i]);
-        items[i][2] = atan2(items[i][1], items[i][0]);
+        items[i][2] = std::atan2(items[i][1], items[i][0]);
     }
     std::sort(items.begin(), items.end(),
         [](std::array<Real, 3> const& item0, std::array<Real, 3> const& item1)

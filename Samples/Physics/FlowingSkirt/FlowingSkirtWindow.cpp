@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/08/25)
+// File Version: 3.0.3 (2018/10/05)
 
 #include "FlowingSkirtWindow.h"
 
@@ -161,9 +161,9 @@ void FlowingSkirtWindow::CreateScene()
     {
         float ratio = static_cast<float>(i) / static_cast<float>(mNumCtrl);
         float angle = ratio * static_cast<float>(GTE_C_TWO_PI);
-        float sn = sin(angle);
-        float cs = cos(angle);
-        float v = 1.0f - fabs(2.0f * ratio - 1.0f);
+        float sn = std::sin(angle);
+        float cs = std::cos(angle);
+        float v = 1.0f - std::abs(2.0f * ratio - 1.0f);
 
         // Set a vertex for the skirt top.
         positions[i] = { mATop * cs, 4.0f, mBTop * sn };
@@ -262,10 +262,10 @@ void FlowingSkirtWindow::ModifyCurves()
     {
         float ratio = static_cast<float>(i) / static_cast<float>(mNumCtrl);
         float angle = ratio * static_cast<float>(GTE_C_TWO_PI);
-        float sn = sin(angle);
-        float cs = cos(angle);
+        float sn = std::sin(angle);
+        float cs = std::cos(angle);
 
-        float amplitude = 1.0f + 0.25f * cos(mFrequencies[i] * time);
+        float amplitude = 1.0f + 0.25f * std::cos(mFrequencies[i] * time);
         Vector3<float> ctrl{ amplitude * mABottom * cs, 0.0f, amplitude * mBBottom * sn };
         mSkirtBottom->SetControl(i, ctrl);
     }
