@@ -3,9 +3,29 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.21 (2018/10/05)
+// File Version: 3.0.24 (2018/10/30)
 
 #pragma once
+
+// I used to have these sections ordered alphabetically by the names in
+// the comments.  Two phase name lookups for template matching by the
+// MSVS 2017 compiler had no problems with the ordering, but the Linux
+// g++ compiler does.  This occurred when trying to match std::sqrt(...)
+// and other math functions when the inputs are based on BSNumber or
+// BSRational.  The "Arithmetic" section has been moved before all other
+// headers, and the UInteger* files have been moved before the BS* files.
+
+// Arithmetic
+#include <Mathematics/GteBitHacks.h>
+#include <Mathematics/GteUIntegerALU32.h>
+#include <Mathematics/GteUIntegerAP32.h>
+#include <Mathematics/GteUIntegerFP32.h>
+#include <Mathematics/GteBSNumber.h>
+#include <Mathematics/GteBSRational.h>
+#include <Mathematics/GteBSPrecision.h>
+#include <Mathematics/GteIEEEBinary.h>
+#include <Mathematics/GteIEEEBinary16.h>
+#include <Mathematics/GteMath.h>
 
 // Algebra
 #include <Mathematics/GteAxisAngle.h>
@@ -53,18 +73,6 @@
 #include <Mathematics/GteApprQuery.h>
 #include <Mathematics/GteApprSphere3.h>
 #include <Mathematics/GteApprTorus3.h>
-
-// Arithmetic
-#include <Mathematics/GteBitHacks.h>
-#include <Mathematics/GteBSNumber.h>
-#include <Mathematics/GteBSPrecision.h>
-#include <Mathematics/GteBSRational.h>
-#include <Mathematics/GteIEEEBinary.h>
-#include <Mathematics/GteIEEEBinary16.h>
-#include <Mathematics/GteMath.h>
-#include <Mathematics/GteUIntegerALU32.h>
-#include <Mathematics/GteUIntegerAP32.h>
-#include <Mathematics/GteUIntegerFP32.h>
 
 // ComputationalGeometry
 #include <Mathematics/GteConstrainedDelaunay2.h>
@@ -131,8 +139,10 @@
 #include <Mathematics/GteIndexAttribute.h>
 #include <Mathematics/GteMesh.h>
 #include <Mathematics/GteNaturalSplineCurve.h>
+#include <Mathematics/GteNURBSCircle.h>
 #include <Mathematics/GteNURBSCurve.h>
 #include <Mathematics/GteNURBSSurface.h>
+#include <Mathematics/GteNURBSSphere.h>
 #include <Mathematics/GteNURBSVolume.h>
 #include <Mathematics/GteParametricCurve.h>
 #include <Mathematics/GteParametricSurface.h>

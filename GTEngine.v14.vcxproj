@@ -1044,7 +1044,9 @@
     <ClInclude Include="Include\Mathematics\GteMinimumVolumeSphere3.h" />
     <ClInclude Include="Include\Mathematics\GteNaturalSplineCurve.h" />
     <ClInclude Include="Include\Mathematics\GteNearestNeighborQuery.h" />
+    <ClInclude Include="Include\Mathematics\GteNURBSCircle.h" />
     <ClInclude Include="Include\Mathematics\GteNURBSCurve.h" />
+    <ClInclude Include="Include\Mathematics\GteNURBSSphere.h" />
     <ClInclude Include="Include\Mathematics\GteNURBSSurface.h" />
     <ClInclude Include="Include\Mathematics\GteNURBSVolume.h" />
     <ClInclude Include="Include\Mathematics\GteOBBTreeOfPoints.h" />

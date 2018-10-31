@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/30)
 
 #include <windows.h>
 #include <string>
@@ -36,7 +36,7 @@ bool CreateHeaderFile(std::wstring const& fontName, int weight, int size, DWORD 
 
     wchar_t const* cn = className.c_str();
     fwprintf(output, L"// David Eberly, Geometric Tools, Redmond WA 98052\n");
-    fwprintf(output, L"// Copyright (c) 1998-2016\n");
+    fwprintf(output, L"// Copyright (c) 1998-2018\n");
     fwprintf(output, L"// Distributed under the Boost Software License, Version 1.0.\n");
     fwprintf(output, L"// http://www.boost.org/LICENSE_1_0.txt\n");
     fwprintf(output, L"// http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt\n");

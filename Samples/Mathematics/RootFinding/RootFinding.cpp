@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/02/17)
+// File Version: 3.0.3 (2018/10/20)
 
 #include <GTEngine.h>
 #if defined(__LINUX__)
@@ -78,7 +78,7 @@ void FindRootsGPU(std::set<float>& roots)
     GLSLProgramFactory factory;
     path = env.GetPath("RootFinder.glsl");
 #else
-    DX11Engine engine(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, D3D_FEATURE_LEVEL_11_0);
+    DX11Engine engine(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0);
     HLSLProgramFactory factory;
     path = env.GetPath("RootFinder.hlsl");
 #endif

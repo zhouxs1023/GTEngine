@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/06/29)
+// File Version: 3.0.2 (2018/10/20)
 
 #include <GTEngine.h>
 #if defined(__LINUX__)
@@ -47,7 +47,7 @@ void TestPartialSums()
     }
 
     // Create an engine for compute shaders.
-    DX11Engine engine(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, D3D_FEATURE_LEVEL_11_0);
+    DX11Engine engine(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0);
     HLSLProgramFactory factory;
 #endif
 

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/03/11)
+// File Version: 3.0.2 (2018/10/20)
 
 #include <GTEnginePCH.h>
 #include <Applications/MSW/GteMSWWindowSystem.h>
@@ -18,7 +18,7 @@ void WindowSystem::CreateEngineAndProgramFactory(MSWWindow::Parameters& paramete
 
     auto engine = std::make_shared<DX11Engine>(nullptr, p.handle, p.xSize,
         p.ySize, p.useDepth24Stencil8, D3D_DRIVER_TYPE_HARDWARE, nullptr,
-        p.deviceCreationFlags, p.featureLevel);
+        p.deviceCreationFlags);
 
     if (engine->GetDevice())
     {

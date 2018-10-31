@@ -1,9 +1,9 @@
 // Geometric Tools LLC, Redmond WA 98052
-// Copyright (c) 1998-2016
+// Copyright (c) 1998-2018
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.14.2 (2018/10/19)
+// File Version: 3.14.3 (2018/10/30)
 
 #pragma once
 
@@ -231,19 +231,28 @@ namespace gte
             return std::make_pair(true, hmin);
         }
 
-        // The parameters C, N, r0 and r1 are in/out variables.  The caller
-        // must provide initial guesses for these with N[2] >= 0, r0 > 0 and
-        // r1 > 0.  Te function estimates the parameters and returns them.
-        // See GteGaussNewtonMinimizer.h for a description of the
-        // least-squares algorithm and the parameters that it requires.
+        // If you want to specify that C, N, r0 and r1 are the initial guesses
+        // for the minimizer, set the parameter useTorusInputAsInitialGuess to
+        // 'true'.  If you want the function to compute initial guesses, set
+        // useTorusInputAsInitialGuess to 'false'.  A Gauss-Newton minimizer
+        // is used to fit a torus using nonlinear least-squares.  The fitted
+        // torus is returned in C, N, r0 and r1. See GteGaussNewtonMinimizer.h
+        // for a description of the least-squares algorithm and the parameters
+        // that it requires.
         typename GaussNewtonMinimizer<Real>::Result
         operator()(int numPoints, Vector<3, Real> const* points,
             size_t maxIterations, Real updateLengthTolerance, Real errorDifferenceTolerance,
+            bool useTorusInputAsInitialGuess,
             Vector<3, Real>& C, Vector<3, Real>& N, Real& r0, Real& r1)
         {
             mNumPoints = numPoints;
             mPoints = points;
             GaussNewtonMinimizer<Real> minimizer(7, mNumPoints, mFFunction, mJFunction);
+
+            if (!useTorusInputAsInitialGuess)
+            {
+                operator()(numPoints, points, C, N, r0, r1);
+            }
 
             GVector<Real> initial(7);
 
@@ -299,20 +308,29 @@ namespace gte
             return result;
         }
 
-        // The parameters C, N, r0 and r1 are in/out variables.  The caller
-        // must provide initial guesses for these with N[2] >= 0, r0 > 0 and
-        // r1 > 0.  Te function estimates the parameters and returns them.
-        // See GteGaussNewtonMinimizer.h for a description of the
-        // least-squares algorithm and the parameters that it requires.
+        // If you want to specify that C, N, r0 and r1 are the initial guesses
+        // for the minimizer, set the parameter useTorusInputAsInitialGuess to
+        // 'true'.  If you want the function to compute initial guesses, set
+        // useTorusInputAsInitialGuess to 'false'.  A Gauss-Newton minimizer
+        // is used to fit a torus using nonlinear least-squares.  The fitted
+        // torus is returned in C, N, r0 and r1. See GteGaussNewtonMinimizer.h
+        // for a description of the least-squares algorithm and the parameters
+        // that it requires.
         typename LevenbergMarquardtMinimizer<Real>::Result
         operator()(int numPoints, Vector<3, Real> const* points,
             size_t maxIterations, Real updateLengthTolerance, Real errorDifferenceTolerance,
             Real lambdaFactor, Real lambdaAdjust, size_t maxAdjustments,
+            bool useTorusInputAsInitialGuess,
             Vector<3, Real>& C, Vector<3, Real>& N, Real& r0, Real& r1)
         {
             mNumPoints = numPoints;
             mPoints = points;
             LevenbergMarquardtMinimizer<Real> minimizer(7, mNumPoints, mFFunction, mJFunction);
+
+            if (!useTorusInputAsInitialGuess)
+            {
+                operator()(numPoints, points, C, N, r0, r1);
+            }
 
             GVector<Real> initial(7);
 

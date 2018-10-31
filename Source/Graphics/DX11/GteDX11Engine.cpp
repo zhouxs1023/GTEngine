@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2016/12/09)
+// File Version: 3.0.3 (2018/10/20)
 
 #include <GTEnginePCH.h>
 #include <Graphics/DX11/GteDX11Engine.h>
@@ -91,22 +91,22 @@ DX11Engine::~DX11Engine()
     DestroyDevice();
 }
 
-DX11Engine::DX11Engine(D3D_FEATURE_LEVEL minFeatureLevel)
+DX11Engine::DX11Engine()
 {
-    Initialize(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, minFeatureLevel, false);
+    Initialize(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, false);
     CreateDevice();
 }
 
 DX11Engine::DX11Engine(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType,
-    HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel)
+    HMODULE softwareModule, UINT flags)
 {
-    Initialize(adapter, driverType, softwareModule, flags, minFeatureLevel, false);
+    Initialize(adapter, driverType, softwareModule, flags, false);
     CreateDevice();
 }
 
-DX11Engine::DX11Engine(HWND handle, UINT xSize, UINT ySize, bool useDepth24Stencil8, D3D_FEATURE_LEVEL minFeatureLevel)
+DX11Engine::DX11Engine(HWND handle, UINT xSize, UINT ySize, bool useDepth24Stencil8)
 {
-    Initialize(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, minFeatureLevel, useDepth24Stencil8);
+    Initialize(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, useDepth24Stencil8);
 
     if (CreateDevice() && CreateSwapChain(handle, xSize, ySize) && CreateBackBuffer(xSize, ySize))
     {
@@ -123,9 +123,9 @@ DX11Engine::DX11Engine(HWND handle, UINT xSize, UINT ySize, bool useDepth24Stenc
 
 DX11Engine::DX11Engine(IDXGIAdapter* adapter, HWND handle, UINT xSize,
     UINT ySize, bool useDepth24Stencil8, D3D_DRIVER_TYPE driverType,
-    HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel)
+    HMODULE softwareModule, UINT flags)
 {
-    Initialize(adapter, driverType, softwareModule, flags, minFeatureLevel, useDepth24Stencil8);
+    Initialize(adapter, driverType, softwareModule, flags, useDepth24Stencil8);
 
     if (CreateDevice() && CreateSwapChain(handle, xSize, ySize) && CreateBackBuffer(xSize, ySize))
     {
@@ -337,15 +337,13 @@ void DX11Engine::EndTimer(DX11PerformanceCounter& counter)
 // Private interface specific to DX11.
 //----------------------------------------------------------------------------
 void DX11Engine::Initialize(IDXGIAdapter* adapter, D3D_DRIVER_TYPE driverType,
-    HMODULE softwareModule, UINT flags, D3D_FEATURE_LEVEL minFeatureLevel,
-    bool useDepth24Stencil8)
+    HMODULE softwareModule, UINT flags, bool useDepth24Stencil8)
 {
     // Initialization of DX11Engine members.
     mAdapter = adapter;
     mDriverType = driverType;
     mSoftwareModule = softwareModule;
     mFlags = flags;
-    mMinFeatureLevel = minFeatureLevel;
     mDevice = nullptr;
     mImmediate = nullptr;
     mFeatureLevel = D3D_FEATURE_LEVEL_9_1;
@@ -485,8 +483,8 @@ bool DX11Engine::CreateDevice()
 bool DX11Engine::CreateBestMatchingDevice()
 {
     // Determine the subarray for creating the device.
-    UINT const maxFeatureLevels = 7;
-    D3D_FEATURE_LEVEL const featureLevels[maxFeatureLevels] =
+    UINT const numFeatureLevels = 7;
+    D3D_FEATURE_LEVEL const featureLevels[numFeatureLevels] =
     {
         D3D_FEATURE_LEVEL_11_1,
         D3D_FEATURE_LEVEL_11_0,
@@ -496,21 +494,6 @@ bool DX11Engine::CreateBestMatchingDevice()
         D3D_FEATURE_LEVEL_9_2,
         D3D_FEATURE_LEVEL_9_1
     };
-
-    UINT numFeatureLevels = 0;
-    for (UINT i = 0; i < maxFeatureLevels; ++i)
-    {
-        if (mMinFeatureLevel == featureLevels[i])
-        {
-            numFeatureLevels = i + 1;
-            break;
-        }
-    }
-    if (numFeatureLevels == 0)
-    {
-        LogError("Unsupported minimum feature level.");
-        return false;
-    }
 
     for (UINT i = 0; i < numFeatureLevels; ++i)
     {

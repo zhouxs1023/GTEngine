@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2018/10/22)
 
 #include <GTEnginePCH.h>
 #include <Applications/GteWindow2.h>
@@ -13,6 +13,8 @@ using namespace gte;
 Window2::Window2(Parameters& parameters)
     :
     Window(parameters),
+    mPixelColor(0),
+    mThick(0),
     mClampToWindow(true),
     mDoFlip(false),
     mScreenTextureNeedsUpdate(false)
@@ -38,9 +40,18 @@ Window2::Window2(Parameters& parameters)
     mNoDepthStencilState->stencilEnable = false;
     mEngine->SetDepthStencilState(mNoDepthStencilState);
 
-    // Callback function for ImageUtility2 functions.
+    // Callback functions for ImageUtility2 functions.
     mDrawPixel = [this](int x, int y) { SetPixel(x, y, mPixelColor); };
-    mPixelColor = 0;
+    mDrawThickPixel = [this](int x, int y)
+    {
+        for (int dy = -mThick; dy <= mThick; ++dy)
+        {
+            for (int dx = -mThick; dx <= mThick; ++dx)
+            {
+                SetPixel(x + dx, y + dy, mPixelColor);
+            }
+        }
+    };
 }
 
 bool Window2::OnResize(int, int)
@@ -125,10 +136,24 @@ void Window2::DrawLine(int x0, int y0, int x1, int y1, unsigned int color)
     ImageUtility2::DrawLine(x0, y0, x1, y1, mDrawPixel);
 }
 
+void Window2::DrawThickLine(int x0, int y0, int x1, int y1, int thick, unsigned int color)
+{
+    mPixelColor = color;
+    mThick = thick;
+    ImageUtility2::DrawLine(x0, y0, x1, y1, mDrawThickPixel);
+}
+
 void Window2::DrawRectangle(int xMin, int yMin, int xMax, int yMax, unsigned int color, bool solid)
 {
     mPixelColor = color;
     ImageUtility2::DrawRectangle(xMin, yMin, xMax, yMax, solid, mDrawPixel);
+}
+
+void Window2::DrawThickRectangle(int xMin, int yMin, int xMax, int yMax, int thick, unsigned int color, bool solid)
+{
+    mPixelColor = color;
+    mThick = thick;
+    ImageUtility2::DrawRectangle(xMin, yMin, xMax, yMax, solid, mDrawThickPixel);
 }
 
 void Window2::DrawCircle(int xCenter, int yCenter, int radius, unsigned int color, bool solid)
@@ -137,10 +162,24 @@ void Window2::DrawCircle(int xCenter, int yCenter, int radius, unsigned int colo
     ImageUtility2::DrawCircle(xCenter, yCenter, radius, solid, mDrawPixel);
 }
 
+void Window2::DrawThickCircle(int xCenter, int yCenter, int radius, int thick, unsigned int color, bool solid)
+{
+    mPixelColor = color;
+    mThick = thick;
+    ImageUtility2::DrawCircle(xCenter, yCenter, radius, solid, mDrawThickPixel);
+}
+
 void Window2::DrawEllipse(int xCenter, int yCenter, int xExtent, int yExtent, unsigned int color)
 {
     mPixelColor = color;
     ImageUtility2::DrawEllipse(xCenter, yCenter, xExtent, yExtent, mDrawPixel);
+}
+
+void Window2::DrawThickEllipse(int xCenter, int yCenter, int xExtent, int yExtent, int thick, unsigned int color)
+{
+    mPixelColor = color;
+    mThick = thick;
+    ImageUtility2::DrawEllipse(xCenter, yCenter, xExtent, yExtent, mDrawThickPixel);
 }
 
 void Window2::DrawFloodFill4(int x, int y, unsigned int foreColor, unsigned int backColor)
