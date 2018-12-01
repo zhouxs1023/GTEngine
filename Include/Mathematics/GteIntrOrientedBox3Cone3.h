@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/07/25)
+// File Version: 3.0.2 (2018/11/29)
 
 #pragma once
 
@@ -11,108 +11,69 @@
 #include <Mathematics/GteOrientedBox.h>
 #include <Mathematics/GteIntrAlignedBox3Cone3.h>
 
-// Test for intersection of a box and a cone.  The cone can be finite or
-// infinite.  The algorithm is described in
+// Test for intersection of a box and a cone.  The cone can be infinite
+//   0 <= minHeight < maxHeight = std::numeric_limits<Real>::max()
+// or finite (cone frustum)
+//   0 <= minHeight < maxHeight < std::numeric_limits<Real>::max().
+// The algorithm is described in
 //   http://www.geometrictools.com/Documentation/IntersectionBoxCone.pdf
-// and assumes that the intersection set must have positive volume.  For
-// example, let the box be outside the cone.  If the box is below the support
-// plane at the cone vertex and just touches the cone vertex, nointersection
-// is reported.  If the box is above the plane of the disk capping a finite
-// cone, no intersection is reported.  However, if the box straddles the
-// support plane and just touches the cone vertex, an intersection is
-// reported.  This is a consequence of wanting a fast test for culling boxes
-// against a cone.  It is possible to add more logic to change the behavior.
+// and reports an intersection only when th intersection set has positive
+// volume.  For example, let the box be outside the cone.  If the box is
+// below the minHeight plane at the cone vertex and just touches the cone
+// vertex, no intersection is reported.  If the box is above the maxHeight
+// plane and just touches the disk capping the cone, either at a single
+// point, a line segment of points or a polygon of points, no intersection
+// is reported.  However, if the box straddles the minHeight plane (part of
+// the box strictly above the plane and part of the box strictly below the
+// plane) and just touches the cone vertex, an intersection is reported.
 
 namespace gte
 {
-
-template <typename Real>
-class TIQuery<Real, OrientedBox<3, Real>, Cone<3, Real>>
-    :
-    public TIQuery<Real, AlignedBox<3, Real>, Cone<3, Real>>
-{
-public:
-    struct Result
+    template <typename Real>
+    class TIQuery<Real, OrientedBox<3, Real>, Cone<3, Real>>
         :
-        public TIQuery<Real, AlignedBox<3, Real>, Cone<3, Real>>::Result
+        public TIQuery<Real, AlignedBox<3, Real>, Cone<3, Real>>
     {
-        // No additional information to compute.
-    };
-
-    Result operator()(OrientedBox<3, Real> const& box, Cone<3, Real> const& cone);
-};
-
-// Template alias for convenience.
-template <typename Real>
-using TIOrientedBox3Cone3 =
-TIQuery<Real, OrientedBox<3, Real>, Cone<3, Real>>;
-
-
-template <typename Real>
-typename TIQuery<Real, OrientedBox<3, Real>, Cone<3, Real>>::Result
-    TIQuery<Real, OrientedBox<3, Real>, Cone<3, Real>>::operator()(
-    OrientedBox<3, Real> const& box, Cone<3, Real> const& cone)
-{
-    Result result;
-
-    // Quick-rejection test for boxes below the supporting plane of the cone.
-    Vector<3, Real> CmV = box.center - cone.ray.origin;
-    Vector<3, Real> DdU{
-        Dot(cone.ray.direction, box.axis[0]),
-        Dot(cone.ray.direction, box.axis[1]),
-        Dot(cone.ray.direction, box.axis[2]) };
-    Real DdCmV = Dot(cone.ray.direction, CmV);  // interval center
-    Real radius =  // interval half-length
-        box.extent[0] * std::abs(DdU[0]) +
-        box.extent[1] * std::abs(DdU[1]) +
-        box.extent[2] * std::abs(DdU[2]);
-    if (DdCmV + radius <= (Real)0)
-    {
-        // The box is in the halfspace below the supporting plane of the cone.
-        result.intersect = false;
-        return result;
-    }
-
-    // Quick-rejection test for boxes outside the plane determined by the
-    // height of the cone.
-    if (cone.height < std::numeric_limits<Real>::max())
-    {
-        if (DdCmV - radius >= cone.height)
+    public:
+        struct Result
+            :
+            public TIQuery<Real, AlignedBox<3, Real>, Cone<3, Real>>::Result
         {
-            // The box is outside the plane determined by the height of the
-            // cone.
-            result.intersect = false;
+            // No additional information to compute.
+        };
+
+        Result operator()(OrientedBox<3, Real> const& box, Cone<3, Real> const& cone)
+        {
+            // Transform the cone and box so that the cone vertex is at the
+            // origin and the box is axis aligned.  This allows us to call the
+            // base class operator()(...).
+            Vector<3, Real> diff = box.center - cone.ray.origin;
+            Vector<3, Real> xfrmBoxCenter
+            {
+                Dot(box.axis[0], diff),
+                Dot(box.axis[1], diff),
+                Dot(box.axis[2], diff)
+            };
+            AlignedBox<3, Real> xfrmBox;
+            xfrmBox.min = xfrmBoxCenter - box.extent;
+            xfrmBox.max = xfrmBoxCenter + box.extent;
+
+            Cone<3, Real> xfrmCone = cone;
+            for (int i = 0; i < 3; ++i)
+            {
+                xfrmCone.ray.origin[i] = (Real)0;
+                xfrmCone.ray.direction[i] = Dot(box.axis[i], cone.ray.direction);
+            }
+
+            // Test for intersection between the aligned box and the cone.
+            auto bcResult = TIQuery<Real, AlignedBox<3, Real>, Cone<3, Real>>::operator()(xfrmBox, xfrmCone);
+            Result result;
+            result.intersect = bcResult.intersect;
             return result;
         }
-    }
-
-    // Determine the box faces that are visible to the cone vertex.  The
-    // box center has been translated (C-V) so that the cone vertex is at
-    // the origin.  Compute the coordinates of the origin relative to the
-    // translated box.
-    Vector<3, Real> UdCmV{
-        Dot(box.axis[0], CmV),
-        Dot(box.axis[1], CmV),
-        Dot(box.axis[2], CmV) };
-    int index[3] = {
-        (UdCmV[0] < -box.extent[0] ? 2 : (UdCmV[0] > box.extent[0] ? 0 : 1)),
-        (UdCmV[1] < -box.extent[1] ? 2 : (UdCmV[1] > box.extent[1] ? 0 : 1)),
-        (UdCmV[2] < -box.extent[2] ? 2 : (UdCmV[2] > box.extent[2] ? 0 : 1))
     };
-    int lookup = index[0] + 3 * index[1] + 9 * index[2];
-    if (lookup == 13)
-    {
-        // The cone vertex is in the box.
-        result.intersect = true;
-        return result;
-    }
 
-    auto const& polygon = this->mPolygon[lookup];
-
-    this->DoQuery(box.extent, cone.cosAngleSqr, DdU, UdCmV, DdCmV, polygon,
-        result);
-    return result;
-}
-
-
+    // Template alias for convenience.
+    template <typename Real>
+    using TIOrientedBox3Cone3 = TIQuery<Real, OrientedBox<3, Real>, Cone<3, Real>>;
 }

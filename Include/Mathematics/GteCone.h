@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2018/11/29)
 
 #pragma once
 
+#include <LowLevel/GteLogger.h>
 #include <Mathematics/GteMath.h>
 #include <Mathematics/GteRay.h>
 
@@ -26,159 +27,148 @@
 
 namespace gte
 {
-
-template <int N, typename Real>
-class Cone
-{
-public:
-    // Construction and destruction.  The default constructor sets center to
-    // (0,...,0), axis to (0,...,0,1), cosAngle and sinAngle to 1/sqrt(2)
-    // [angle is pi/4], and height to 1.
-    Cone();
-
-    // The axis direction must be unit-length and the angle must be in
-    // (0,pi/2).  The height is set to std::numeric_limits<float>::max().
-    Cone(Ray<N, Real> const& inRay, Real inAngle);
-
-    // The axis direction must be unit-length and the angle must be in
-    // (0,pi/2).  The height must be positive.
-    // std::numeric_limits<float>::max().
-    Cone(Ray<N, Real> const& inRay, Real inAngle, Real inHeight);
-
-    // The angle must be in (0,pi/2).  The function sets 'angle' and computes
-    // 'cosAngle' and 'sinAngle'.
-    void SetAngle(Real inAngle);
-
-    // The cone vertex is the ray origin and the cone axis direction is the
-    // ray direction.  The direction must be unit length.  The angle must be
-    // in (0,pi/2).  The height must be in (0,+infinity), where +infinity is
-    // std::numeric_limits<Real>::max().
-    Ray<N, Real> ray;
-    Real angle;
-    Real height;
-
-    // Members derived from 'angle', to avoid calling trigonometric functions
-    // in geometric queries (for speed).  You may set 'angle' and compute
-    // these by calling SetAngle(inAngle).
-    Real cosAngle, sinAngle, cosAngleSqr;
-
-public:
-    // Comparisons to support sorted containers.  These based only on 'ray',
-    // 'angle', and 'height'.
-    bool operator==(Cone const& cone) const;
-    bool operator!=(Cone const& cone) const;
-    bool operator< (Cone const& cone) const;
-    bool operator<=(Cone const& cone) const;
-    bool operator> (Cone const& cone) const;
-    bool operator>=(Cone const& cone) const;
-};
-
-// Template alias for convenience.
-template <typename Real>
-using Cone3 = Cone<3, Real>;
-
-
-template <int N, typename Real>
-Cone<N, Real>::Cone()
-    :
-    angle((Real)GTE_C_QUARTER_PI),
-    height((Real)1),
-    cosAngle(angle),
-    sinAngle(angle),
-    cosAngleSqr(cosAngle * cosAngle)
-{
-    ray.origin.MakeZero();
-    ray.direction.MakeUnit(N - 1);
-}
-
-template <int N, typename Real>
-Cone<N, Real>::Cone(Ray<N, Real> const& inRay, Real inAngle)
-    :
-    ray(inRay),
-    angle(inAngle),
-    height(std::numeric_limits<Real>::max()),
-    cosAngle(std::cos(angle)),
-    sinAngle(std::sin(angle)),
-    cosAngleSqr(cosAngle * cosAngle)
-{
-}
-
-template <int N, typename Real>
-Cone<N, Real>::Cone(Ray<N, Real> const& inRay, Real inAngle, Real inHeight)
-    :
-    ray(inRay),
-    angle(inAngle),
-    height(inHeight),
-    cosAngle(std::cos(angle)),
-    sinAngle(std::sin(angle)),
-    cosAngleSqr(cosAngle * cosAngle)
-{
-}
-
-template <int N, typename Real>
-void Cone<N, Real>::SetAngle(Real inAngle)
-{
-    angle = inAngle;
-    cosAngle = std::cos(angle);
-    sinAngle = std::sin(angle);
-    cosAngleSqr = cosAngle * cosAngle;
-}
-
-template <int N, typename Real>
-bool Cone<N, Real>::operator==(Cone const& cone) const
-{
-    return ray == cone.ray && angle == cone.angle && height == cone.height;
-}
-
-template <int N, typename Real>
-bool Cone<N, Real>::operator!=(Cone const& cone) const
-{
-    return !operator==(cone);
-}
-
-template <int N, typename Real>
-bool Cone<N, Real>::operator<(Cone const& cone) const
-{
-    if (ray < cone.ray)
+    template <int N, typename Real>
+    class Cone
     {
-        return true;
-    }
+    public:
+        // The default constructor creates an infinite cone with
+        //   center = (0,...,0)
+        //   axis = (0,...,0,1)
+        //   angle = pi/4
+        //   minimum height = 0
+        //   maximum height = std::numeric_limits<Real>::max()
+        Cone()
+            :
+            minHeight((Real)0),
+            maxHeight(std::numeric_limits<Real>::max())
+        {
+            ray.origin.MakeZero();
+            ray.direction.MakeUnit(N - 1);
+            SetAngle((Real)GTE_C_QUARTER_PI);
+        }
 
-    if (ray > cone.ray)
-    {
-        return false;
-    }
+        // This constructor creates an infinite cone with
+        //   center = inRay.origin
+        //   axis = inRay.direction
+        //   angle = inAngle
+        //   minimum height = 0
+        //   maximum height = std::numeric_limits<Real>::max()
+        Cone(Ray<N, Real> const& inRay, Real inAngle)
+            :
+            ray(inRay),
+            minHeight((Real)0),
+            maxHeight(std::numeric_limits<Real>::max())
+        {
+            SetAngle(inAngle);
+        }
 
-    if (angle < cone.angle)
-    {
-        return true;
-    }
+        // This constructor creates a finite cone (cone frustum) with
+        //   center = inRay.origin
+        //   axis = inRay.direction
+        //   angle = inAngle
+        //   minimum height = inMinHeight
+        //   maximum height = inMaxHeight
+        Cone(Ray<N, Real> const& inRay, Real inAngle, Real inMinHeight, Real inMaxHeight)
+            :
+            ray(inRay),
+            minHeight(inMinHeight),
+            maxHeight(inMaxHeight)
+        {
+            LogAssert((Real)0 <= minHeight && minHeight < maxHeight, "Invalid height interval.");
+            SetAngle(inAngle);
+        }
 
-    if (angle > cone.angle)
-    {
-        return false;
-    }
+        // The angle must be in (0,pi/2).  The function sets 'angle' and
+        // computes 'cosAngle', 'sinAngle' and 'cosAngleSqr'.
+        void SetAngle(Real inAngle)
+        {
+            angle = inAngle;
+            cosAngle = std::cos(angle);
+            sinAngle = std::sin(angle);
+            cosAngleSqr = cosAngle * cosAngle;
+        }
 
-    return height < cone.height;
-}
+        // The cone vertex is the ray origin and the cone axis direction is
+        // the ray direction.  The direction must be unit length.  The angle
+        // must be in (0,pi/2).  The heights must satisfy
+        // 0 <= minHeight < maxHeight <= std::numeric_limits<Real>::max().
+        Ray<N, Real> ray;
+        Real angle;
+        Real minHeight, maxHeight;
 
-template <int N, typename Real>
-bool Cone<N, Real>::operator<=(Cone const& cone) const
-{
-    return operator<(cone) || operator==(cone);
-}
+        // Members derived from 'angle', to avoid calling trigonometric
+        // functions in geometric queries (for speed).  You may set 'angle'
+        // and compute these by calling SetAngle(inAngle).
+        Real cosAngle, sinAngle, cosAngleSqr;
 
-template <int N, typename Real>
-bool Cone<N, Real>::operator>(Cone const& cone) const
-{
-    return !operator<=(cone);
-}
+    public:
+        // Comparisons to support sorted containers.  These based only on
+        // 'ray', 'angle', 'minHeight' and 'maxHeight'.
+        bool operator==(Cone const& cone) const
+        {
+            return ray == cone.ray
+                && angle == cone.angle
+                && minHeight == cone.minHeight
+                && maxHeight == cone.maxHeight;
+        }
 
-template <int N, typename Real>
-bool Cone<N, Real>::operator>=(Cone const& cone) const
-{
-    return !operator<(cone);
-}
+        bool operator!=(Cone const& cone) const
+        {
+            return !operator==(cone);
+        }
 
+        bool operator< (Cone const& cone) const
+        {
+            if (ray < cone.ray)
+            {
+                return true;
+            }
 
+            if (ray > cone.ray)
+            {
+                return false;
+            }
+
+            if (angle < cone.angle)
+            {
+                return true;
+            }
+
+            if (angle > cone.angle)
+            {
+                return false;
+            }
+
+            if (minHeight < cone.minHeight)
+            {
+                return true;
+            }
+
+            if (minHeight > cone.minHeight)
+            {
+                return false;
+            }
+
+            return maxHeight < cone.maxHeight;
+        }
+
+        bool operator<=(Cone const& cone) const
+        {
+            return !cone.operator<(*this);
+        }
+
+        bool operator> (Cone const& cone) const
+        {
+            return cone.operator<(*this);
+        }
+
+        bool operator>=(Cone const& cone) const
+        {
+            return !operator<(cone);
+        }
+    };
+
+    // Template alias for convenience.
+    template <typename Real>
+    using Cone3 = Cone<3, Real>;
 }

@@ -2085,6 +2085,9 @@
     <ClInclude Include="Include\Mathematics\GteNURBSSphere.h">
       <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteContCone.h">
+      <Filter>Files\Mathematics\Containment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Applications\GteCommand.cpp">

@@ -816,6 +816,7 @@
     <ClInclude Include="Include\Mathematics\GteConstrainedDelaunay2.h" />
     <ClInclude Include="Include\Mathematics\GteContCapsule3.h" />
     <ClInclude Include="Include\Mathematics\GteContCircle2.h" />
+    <ClInclude Include="Include\Mathematics\GteContCone.h" />
     <ClInclude Include="Include\Mathematics\GteContCylinder3.h" />
     <ClInclude Include="Include\Mathematics\GteContEllipse2.h" />
     <ClInclude Include="Include\Mathematics\GteContEllipse2MinCR.h" />

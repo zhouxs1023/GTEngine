@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/10/05)
+// File Version: 3.0.2 (2018/11/29)
 
 #include "IntersectBoxConeWindow.h"
 
@@ -63,9 +63,19 @@ void IntersectBoxConeWindow::OnIdle()
     }
 
     mEngine->ClearBuffers();
-    mEngine->Draw(mConeMesh);
-    mEngine->Draw(mDiskMesh);
+
+    if (mCone.minHeight == 0.0f)
+    {
+        mEngine->Draw(mConeH0Mesh);
+    }
+    else
+    {
+        mEngine->Draw(mConeH4Mesh);
+    }
+
+    mEngine->Draw(mDiskMaxMesh);
     mEngine->Draw(mBoxMesh);
+
     mEngine->Draw(8, mYSize - 8, { 0.0f, 0.0f, 0.0f, 1.0f }, mTimer.GetFPS());
     mEngine->DisplayColorBuffer(0);
 
@@ -93,6 +103,13 @@ bool IntersectBoxConeWindow::OnCharPress(unsigned char key, int x, int y)
 
     case ' ':
         TestIntersection();
+        return true;
+
+    case 'm':  // toggle between a minimum height of 0 and 4
+    case 'M':
+        mCone.minHeight = 4.0f - mCone.minHeight;
+        TestIntersection();
+        mPVWMatrices.Update();
         return true;
 
     case 'x':  // decrement x-center of box
@@ -144,7 +161,7 @@ bool IntersectBoxConeWindow::OnCharPress(unsigned char key, int x, int y)
         return true;
     }
 
-    return Window::OnCharPress(key, x, y);
+    return Window3::OnCharPress(key, x, y);
 }
 
 void IntersectBoxConeWindow::CreateScene()
@@ -154,15 +171,18 @@ void IntersectBoxConeWindow::CreateScene()
     MeshFactory mf;
     mf.SetVertexFormat(vformat);
 
-    mCone.ray.origin = { 0.0f, 0.0f, 0.0f };
+    mCone.ray.origin = { 0.0f, 0.0f, 0.0f }; // { 1.0f, 1.0f, 1.0f };
     mCone.ray.direction = { 0.0f, 0.0f, 1.0f };
-    //mCone.SetAngle((float)GTE_C_QUARTER_PI);
     mCone.SetAngle(0.25f);
-    mCone.height = 16.0f;
+    mCone.minHeight = 0.0f;
+    mCone.maxHeight = 16.0f;
 
-    float const radius = mCone.height * std::tan(mCone.angle);
-    mConeMesh = mf.CreateDisk(16, 16, radius);
-    std::shared_ptr<VertexBuffer> vbuffer = mConeMesh->GetVertexBuffer();
+    // Create a visual representation of the cone with heights in [0,16].
+    float const tanAngle = std::tan(mCone.angle);
+    float const maxRadius = mCone.maxHeight * tanAngle;
+    mConeH0Mesh = mf.CreateDisk(16, 16, maxRadius);
+    mConeH0Mesh->localTransform.SetTranslation(mCone.ray.origin);
+    std::shared_ptr<VertexBuffer> vbuffer = mConeH0Mesh->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
     Vector3<float>* vertex = vbuffer->Get<Vector3<float>>();
     float cotAngle = mCone.cosAngle / mCone.sinAngle;
@@ -175,16 +195,44 @@ void IntersectBoxConeWindow::CreateScene()
     std::shared_ptr<ConstantColorEffect> effect =
         std::make_shared<ConstantColorEffect>(mProgramFactory,
         Vector4<float>({ 0.0f, 0.5f, 0.0f, 0.5f }));
-    mConeMesh->SetEffect(effect);
-    mPVWMatrices.Subscribe(mConeMesh->worldTransform, effect->GetPVWMatrixConstant());
+    mConeH0Mesh->SetEffect(effect);
+    mPVWMatrices.Subscribe(mConeH0Mesh->worldTransform, effect->GetPVWMatrixConstant());
 
-    mDiskMesh = mf.CreateDisk(16, 16, radius);
-    mDiskMesh->localTransform.SetTranslation(0.0f, 0.0f, mCone.height);
-    mDiskMesh->Update();
+    // Create a visual representation of the cone with heights in [4,16].
+    unsigned int const numAxial = 16;
+    unsigned int const numRadial = 16;
+    mConeH4Mesh = mf.CreateCylinderOpen(numAxial, numRadial, 1.0f, 1.0f);
+    mConeH4Mesh->localTransform.SetTranslation(mCone.ray.origin);
+    vbuffer = mConeH4Mesh->GetVertexBuffer();
+    vertex = vbuffer->Get<Vector3<float>>();
+    for (unsigned int row = 0, i = 0; row < numAxial; ++row)
+    {
+        float const height = 4.0f + 12.0f * static_cast<float>(row) / static_cast<float>(numAxial - 1);
+        float const radius = height * tanAngle;
+        for (unsigned int col = 0; col <= numRadial; ++col, ++i)
+        {
+            Vector3<float>& P = vertex[i];
+            float stretch = radius / std::sqrt(P[0] * P[0] + P[1] * P[1]);
+            P[0] *= stretch;
+            P[1] *= stretch;
+            P[2] = height;
+        }
+    }
+
     effect = std::make_shared<ConstantColorEffect>(mProgramFactory,
         Vector4<float>({ 0.0f, 0.5f, 0.0f, 0.5f }));
-    mDiskMesh->SetEffect(effect);
-    mPVWMatrices.Subscribe(mDiskMesh->worldTransform, effect->GetPVWMatrixConstant());
+    mConeH4Mesh->SetEffect(effect);
+    mPVWMatrices.Subscribe(mConeH4Mesh->worldTransform, effect->GetPVWMatrixConstant());
+
+    // Create a visual representation of the maximum height disk cap for
+    // either cone.
+    mDiskMaxMesh = mf.CreateDisk(16, 16, maxRadius);
+    mDiskMaxMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.maxHeight * mCone.ray.direction);
+    mDiskMaxMesh->Update();
+    effect = std::make_shared<ConstantColorEffect>(mProgramFactory,
+        Vector4<float>({ 0.0f, 0.5f, 0.0f, 0.5f }));
+    mDiskMaxMesh->SetEffect(effect);
+    mPVWMatrices.Subscribe(mDiskMaxMesh->worldTransform, effect->GetPVWMatrixConstant());
 
     mRedEffect = std::make_shared<ConstantColorEffect>(mProgramFactory,
         Vector4<float>({ 0.5f, 0.0f, 0.0f, 0.5f }));
@@ -208,8 +256,9 @@ void IntersectBoxConeWindow::CreateScene()
     mBoxMesh->SetEffect(mBlueEffect);
     mPVWMatrices.Subscribe(mBoxMesh->worldTransform, mBlueEffect->GetPVWMatrixConstant());
 
-    mTrackball.Attach(mConeMesh);
-    mTrackball.Attach(mDiskMesh);
+    mTrackball.Attach(mConeH0Mesh);
+    mTrackball.Attach(mConeH4Mesh);
+    mTrackball.Attach(mDiskMaxMesh);
     mTrackball.Attach(mBoxMesh);
     mTrackball.Update();
 }

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.24 (2018/10/30)
+// File Version: 3.0.25 (2018/11/30)
 
 #pragma once
 
@@ -113,6 +113,7 @@
 #include <Mathematics/GteContAlignedBox.h>
 #include <Mathematics/GteContCapsule3.h>
 #include <Mathematics/GteContCircle2.h>
+#include <Mathematics/GteContCone.h>
 #include <Mathematics/GteContCylinder3.h>
 #include <Mathematics/GteContEllipse2.h>
 #include <Mathematics/GteContEllipse2MinCR.h>
