@@ -758,9 +758,11 @@
     <ClInclude Include="Include\LowLevel\GteLogToStringArray.h" />
     <ClInclude Include="Include\LowLevel\GteMinHeap.h" />
     <ClInclude Include="Include\LowLevel\GteRangeIteration.h" />
+    <ClInclude Include="Include\LowLevel\GteSharedPtrCompare.h" />
     <ClInclude Include="Include\LowLevel\GteThreadSafeMap.h" />
     <ClInclude Include="Include\LowLevel\GteThreadSafeQueue.h" />
     <ClInclude Include="Include\LowLevel\GteTimer.h" />
+    <ClInclude Include="Include\LowLevel\GteWeakPtrCompare.h" />
     <ClInclude Include="Include\LowLevel\GteWrapper.h" />
     <ClInclude Include="Include\LowLevel\MSW\GteLogToMessageBox.h" />
     <ClInclude Include="Include\LowLevel\MSW\GteLogToOutputWindow.h" />
@@ -890,6 +892,7 @@
     <ClInclude Include="Include\Mathematics\GteEdgeKey.h" />
     <ClInclude Include="Include\Mathematics\GteEllipse3.h" />
     <ClInclude Include="Include\Mathematics\GteETManifoldMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteETNonmanifoldMesh.h" />
     <ClInclude Include="Include\Mathematics\GteEulerAngles.h" />
     <ClInclude Include="Include\Mathematics\GteExp2Estimate.h" />
     <ClInclude Include="Include\Mathematics\GteExpEstimate.h" />
@@ -1112,6 +1115,7 @@
     <ClInclude Include="Include\Mathematics\GteVertexAttribute.h" />
     <ClInclude Include="Include\Mathematics\GteVertexCollapseMesh.h" />
     <ClInclude Include="Include\Mathematics\GteVETManifoldMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteVETNonmanifoldMesh.h" />
     <ClInclude Include="Include\Mathematics\MSW\GteCPUQueryInstructions.h" />
     <ClInclude Include="Include\Mathematics\MSW\GteIntelSSE.h" />
     <ClInclude Include="Include\Physics\GteBoxManager.h" />
@@ -1925,6 +1929,7 @@
     <ClCompile Include="Source\Mathematics\GteBSPrecision.cpp" />
     <ClCompile Include="Source\Mathematics\GteEdgeKey.cpp" />
     <ClCompile Include="Source\Mathematics\GteETManifoldMesh.cpp" />
+    <ClCompile Include="Source\Mathematics\GteETNonmanifoldMesh.cpp" />
     <ClCompile Include="Source\Mathematics\GteGenerateMeshUV.cpp" />
     <ClCompile Include="Source\Mathematics\GteIEEEBinary16.cpp" />
     <ClCompile Include="Source\Mathematics\GteTetrahedronKey.cpp" />
@@ -1933,6 +1938,7 @@
     <ClCompile Include="Source\Mathematics\GteUIntegerAP32.cpp" />
     <ClCompile Include="Source\Mathematics\GteVEManifoldMesh.cpp" />
     <ClCompile Include="Source\Mathematics\GteVETManifoldMesh.cpp" />
+    <ClCompile Include="Source\Mathematics\GteVETNonmanifoldMesh.cpp" />
     <ClCompile Include="Source\Mathematics\MSW\GteCPUQueryInstructions.cpp" />
     <ClCompile Include="Source\Mathematics\MSW\GteIntelSSE.cpp" />
     <ClCompile Include="Source\Physics\GteFluid2.cpp" />

@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2018
+// Copyright (c) 1998-2019
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.5.0 (2016/11/26)
+// File Version: 3.5.1 (2018/12/11)
 
 #include "DistanceAlignedBoxOrientedBoxWindow.h"
 
@@ -77,7 +77,6 @@ void DistanceAlignedBoxOrientedBoxWindow::OnIdle()
 bool DistanceAlignedBoxOrientedBoxWindow::OnCharPress(unsigned char key, int x, int y)
 {
     float const delta = 0.1f;
-    Quaternion<float> q, incr;
 
     switch (key)
     {

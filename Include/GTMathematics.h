@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2018
+// Copyright (c) 1998-2019
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.25 (2018/11/30)
+// File Version: 3.0.26 (2019/01/09)
 
 #pragma once
 
@@ -84,6 +84,7 @@
 #include <Mathematics/GteDelaunay3Mesh.h>
 #include <Mathematics/GteEdgeKey.h>
 #include <Mathematics/GteETManifoldMesh.h>
+#include <Mathematics/GteETNonmanifoldMesh.h>
 #include <Mathematics/GteFeatureKey.h>
 #include <Mathematics/GteGenerateMeshUV.h>
 #include <Mathematics/GteIsPlanarGraph.h>
@@ -107,6 +108,7 @@
 #include <Mathematics/GteUniqueVerticesTriangles.h>
 #include <Mathematics/GteVEManifoldMesh.h>
 #include <Mathematics/GteVETManifoldMesh.h>
+#include <Mathematics/GteVETNonmanifoldMesh.h>
 #include <Mathematics/GteVertexCollapseMesh.h>
 
 // Containment

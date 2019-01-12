@@ -2088,6 +2088,18 @@
     <ClInclude Include="Include\Mathematics\GteContCone.h">
       <Filter>Files\Mathematics\Containment</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteETNonmanifoldMesh.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LowLevel\GteWeakPtrCompare.h">
+      <Filter>Files\LowLevel\DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LowLevel\GteSharedPtrCompare.h">
+      <Filter>Files\LowLevel\DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteVETNonmanifoldMesh.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Applications\GteCommand.cpp">
@@ -2815,6 +2827,12 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteTrackcylinder.cpp">
       <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mathematics\GteETNonmanifoldMesh.cpp">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mathematics\GteVETNonmanifoldMesh.cpp">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

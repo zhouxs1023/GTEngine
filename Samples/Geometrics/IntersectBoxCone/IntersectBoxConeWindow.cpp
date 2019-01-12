@@ -1,9 +1,9 @@
 // David Eberly, Geometric Tools, Redmond WA 98052
-// Copyright (c) 1998-2018
+// Copyright (c) 1998-2019
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/11/29)
+// File Version: 3.0.3 (2018/12/11)
 
 #include "IntersectBoxConeWindow.h"
 
@@ -85,7 +85,6 @@ void IntersectBoxConeWindow::OnIdle()
 bool IntersectBoxConeWindow::OnCharPress(unsigned char key, int x, int y)
 {
     float const delta = 0.1f;
-    Quaternion<float> q, incr;
 
     switch (key)
     {
