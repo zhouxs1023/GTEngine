@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.26 (2019/01/09)
+// File Version: 3.0.28 (2019/01/17)
 
 #pragma once
 
@@ -17,15 +17,11 @@
 
 // Arithmetic
 #include <Mathematics/GteBitHacks.h>
-#include <Mathematics/GteUIntegerALU32.h>
-#include <Mathematics/GteUIntegerAP32.h>
-#include <Mathematics/GteUIntegerFP32.h>
-#include <Mathematics/GteBSNumber.h>
-#include <Mathematics/GteBSRational.h>
-#include <Mathematics/GteBSPrecision.h>
 #include <Mathematics/GteIEEEBinary.h>
 #include <Mathematics/GteIEEEBinary16.h>
 #include <Mathematics/GteMath.h>
+#include <Mathematics/GteArbitraryPrecision.h>
+#include <Mathematics/GteQuadraticField.h>
 
 // Algebra
 #include <Mathematics/GteAxisAngle.h>
@@ -361,6 +357,7 @@
 #include <Mathematics/GteIntrSphere3Cone3.h>
 #include <Mathematics/GteIntrSphere3Frustum3.h>
 #include <Mathematics/GteIntrSphere3Sphere3.h>
+#include <Mathematics/GteIntrSphere3Triangle3.h>
 #include <Mathematics/GteIntrTriangle3OrientedBox3.h>
 #include <Mathematics/GteTIQuery.h>
 

@@ -3,18 +3,25 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.17.0 (2018/10/05)
+// File Version: 3.17.1 (2019/01/17)
 
 #pragma once
 
 // This file extends the <cmath> support to include convenient constants and
 // functions.  The shared constants for CPU, Intel SSE and GPU lead to
 // correctly rounded approximations of the constants when using 'float' or
-// 'double'.
+// 'double'.  The file also includes a type trait, is_arbitrary_precision,
+// to support selecting between floating-point arithmetic (float, double,
+//long double) or arbitrary-precision arithmetic (BSNumber<T>, BSRational<T>)
+// in an implementation using std::enable_if.  There is also a type trait,
+// has_division_operator, to support selecting between numeric types that
+// have a division operator (BSRational<T>) and those that do not have a
+// division operator (BSNumber<T>).
 
 #include <GTEngineDEF.h>
 #include <cmath>
 #include <limits>
+#include <type_traits>
 
 // Maximum number of iterations for bisection before a subinterval
 // degenerates to a single point. TODO: Verify these.  I used the formula:
@@ -610,4 +617,38 @@ namespace gte
     {
         return x * x;
     }
+}
+
+// Type traits to support std::enable_if conditional compilation for
+// numerical computations.
+namespace gte
+{
+    // The trait is_arbitrary_precision<T> for type T of float, double or
+    // long double generates is_arbitrary_precision<T>::value of false.  The
+    // implementations for arbitrary-precision arithmetic are found in
+    // GteArbitraryPrecision.h.
+    template <typename T>
+    struct is_arbitrary_precision_internal : std::false_type {};
+
+    template <typename T>
+    struct is_arbitrary_precision : is_arbitrary_precision_internal<std::remove_cv_t<T>>::type {};
+
+    // The trait has_division_operator<T> for type T of float, double or
+    // long double generates has_division_operator<T>::value of true.  The
+    // implementations for arbitrary-precision arithmetic are found in
+    // GteArbitraryPrecision.h.
+    template <typename T>
+    struct has_division_operator_internal : std::false_type {};
+
+    template <typename T>
+    struct has_division_operator : has_division_operator_internal<std::remove_cv_t<T>>::type {};
+
+    template <>
+    struct has_division_operator_internal<float> : std::true_type {};
+
+    template <>
+    struct has_division_operator_internal<double> : std::true_type {};
+
+    template <>
+    struct has_division_operator_internal<long double> : std::true_type {};
 }

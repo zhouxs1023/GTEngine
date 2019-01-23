@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/01/17)
 
 #pragma once
 
@@ -737,4 +737,12 @@ namespace gte
     {
         return (BSRational<UIntegerType>)sqr((double)x);
     }
+
+    // See the comments in GteMath.h about traits is_arbitrary_precision
+    // and has_division_operator.
+    template <typename UIntegerType>
+    struct is_arbitrary_precision_internal<BSRational<UIntegerType>> : std::true_type {};
+
+    template <typename UIntegerType>
+    struct has_division_operator_internal<BSRational<UIntegerType>> : std::true_type {};
 }

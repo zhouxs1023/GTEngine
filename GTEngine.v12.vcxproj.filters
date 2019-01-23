@@ -2067,6 +2067,15 @@
     <ClInclude Include="Include\Mathematics\GteVETNonmanifoldMesh.h">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrSphere3Triangle3.h">
+      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteQuadraticField.h">
+      <Filter>Files\Mathematics\Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteArbitraryPrecision.h">
+      <Filter>Files\Mathematics\Arithmetic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GTEnginePCH.cpp">

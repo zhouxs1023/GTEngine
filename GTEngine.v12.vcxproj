@@ -830,6 +830,7 @@
     <ClInclude Include="Include\Mathematics\GteApprQuery.h" />
     <ClInclude Include="Include\Mathematics\GteApprSphere3.h" />
     <ClInclude Include="Include\Mathematics\GteApprTorus3.h" />
+    <ClInclude Include="Include\Mathematics\GteArbitraryPrecision.h" />
     <ClInclude Include="Include\Mathematics\GteArc2.h" />
     <ClInclude Include="Include\Mathematics\GteASinEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteATanEstimate.h" />
@@ -1051,6 +1052,7 @@
     <ClInclude Include="Include\Mathematics\GteIntrSphere3Cone3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrSphere3Frustum3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrSphere3Sphere3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrSphere3Triangle3.h" />
     <ClInclude Include="Include\Mathematics\GteInvSqrtEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteIsPlanarGraph.h" />
     <ClInclude Include="Include\Mathematics\GteLCPSolver.h" />
@@ -1095,6 +1097,7 @@
     <ClInclude Include="Include\Mathematics\GtePrimalQuery2.h" />
     <ClInclude Include="Include\Mathematics\GtePrimalQuery3.h" />
     <ClInclude Include="Include\Mathematics\GteProjection.h" />
+    <ClInclude Include="Include\Mathematics\GteQuadraticField.h" />
     <ClInclude Include="Include\Mathematics\GteQuarticRootsQR.h" />
     <ClInclude Include="Include\Mathematics\GteQuaternion.h" />
     <ClInclude Include="Include\Mathematics\GteRay.h" />

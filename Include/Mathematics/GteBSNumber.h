@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/01/17)
 
 #pragma once
 
@@ -1072,4 +1072,8 @@ namespace gte
     {
         return (BSNumber<UIntegerType>)sqr((double)x);
     }
+
+    // See the comments in GteMath.h about trait is_arbitrary_precision.
+    template <typename UIntegerType>
+    struct is_arbitrary_precision_internal<BSNumber<UIntegerType>> : std::true_type {};
 }
