@@ -29,9 +29,15 @@
     <ClCompile Include="LoadData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TexturePNT1Effect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CastleWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturePNT1Effect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

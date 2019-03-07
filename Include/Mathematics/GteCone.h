@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/11/29)
+// File Version: 3.0.3 (2019/02/15)
 
 #pragma once
 
@@ -16,14 +16,17 @@
 // 0 < t < pi/2.  The cone interior is defined by the inequality
 // Dot(A,X-V) >= |X-V| cos(t).  Since cos(t) > 0, we can avoid computing
 // square roots.  The solid cone is defined by the inequality
-// Dot(A,X-V)^2 >= Dot(X-V,X-V) cos(t)^2.  This is an infinite, single-sided
-// cone.
+// Dot(A,X-V)^2 >= Dot(X-V,X-V) cos(t)^2.  I refer to this object as an
+// "infinite cone."  Cone axis points are V + h * A, where h is referred to
+// as height and 0 <= h < +infinity.
 //
-// The cone may be truncated by a plane perpendicular to its axis at a height
-// h from the vertex (distance from the vertex to the intersection of the
-// plane and the axis).  The infinite cone has h = infinity.  The finite cone
-// has a disk of intersection between the plane and infinite cone.  The radius
-// r of the disk is r = h*tan(t).
+// The cone can be truncated by a plane perpendicular to its axis at a height
+// hmax with 0 < hmax < +infinity.  I refer to this object as a "finite cone."
+// The finite cone is capped by has a circular disk opposite the vertex; the
+// disk has radius hmax*tan(t).
+//
+// The finite cone can be additionally truncated at a height hmin with
+// 0 < hmin < hmax < +infinity.  I refer to this a a "cone frustum."
 
 namespace gte
 {
@@ -32,7 +35,7 @@ namespace gte
     {
     public:
         // The default constructor creates an infinite cone with
-        //   center = (0,...,0)
+        //   vertex = (0,...,0)
         //   axis = (0,...,0,1)
         //   angle = pi/4
         //   minimum height = 0
@@ -47,10 +50,8 @@ namespace gte
             SetAngle((Real)GTE_C_QUARTER_PI);
         }
 
-        // This constructor creates an infinite cone with
-        //   center = inRay.origin
-        //   axis = inRay.direction
-        //   angle = inAngle
+        // This constructor creates an infinite cone with the specified
+        // vertex, axis direction and angle, and with heights
         //   minimum height = 0
         //   maximum height = std::numeric_limits<Real>::max()
         Cone(Ray<N, Real> const& inRay, Real inAngle)
@@ -62,12 +63,7 @@ namespace gte
             SetAngle(inAngle);
         }
 
-        // This constructor creates a finite cone (cone frustum) with
-        //   center = inRay.origin
-        //   axis = inRay.direction
-        //   angle = inAngle
-        //   minimum height = inMinHeight
-        //   maximum height = inMaxHeight
+        // This constructor creates a cone with all parameters specified.
         Cone(Ray<N, Real> const& inRay, Real inAngle, Real inMinHeight, Real inMaxHeight)
             :
             ray(inRay),
@@ -79,18 +75,22 @@ namespace gte
         }
 
         // The angle must be in (0,pi/2).  The function sets 'angle' and
-        // computes 'cosAngle', 'sinAngle' and 'cosAngleSqr'.
+        // computes 'cosAngle', 'sinAngle', 'tanAngle', 'cosAngleSqr',
+        // 'sinAngleSqr' and 'invSinAngle'.
         void SetAngle(Real inAngle)
         {
+            LogAssert((Real)0 < inAngle && inAngle < (Real)GTE_C_HALF_PI, "Invalid angle.");
             angle = inAngle;
             cosAngle = std::cos(angle);
             sinAngle = std::sin(angle);
+            tanAngle = std::tan(angle);
             cosAngleSqr = cosAngle * cosAngle;
+            sinAngleSqr = sinAngle * sinAngle;
+            invSinAngle = (Real)1 / sinAngle;
         }
 
-        // The cone vertex is the ray origin and the cone axis direction is
-        // the ray direction.  The direction must be unit length.  The angle
-        // must be in (0,pi/2).  The heights must satisfy
+        // The cone axis direction must be unit length.  The angle must
+        // be in (0,pi/2).  The heights must satisfy
         // 0 <= minHeight < maxHeight <= std::numeric_limits<Real>::max().
         Ray<N, Real> ray;
         Real angle;
@@ -99,7 +99,8 @@ namespace gte
         // Members derived from 'angle', to avoid calling trigonometric
         // functions in geometric queries (for speed).  You may set 'angle'
         // and compute these by calling SetAngle(inAngle).
-        Real cosAngle, sinAngle, cosAngleSqr;
+        Real cosAngle, sinAngle, tanAngle;
+        Real cosAngleSqr, sinAngleSqr, invSinAngle;
 
     public:
         // Comparisons to support sorted containers.  These based only on

@@ -296,9 +296,11 @@
     <ClCompile Include="CastleWindow.cpp" />
     <ClCompile Include="CreateMeshes.cpp" />
     <ClCompile Include="LoadData.cpp" />
+    <ClCompile Include="TexturePNT1Effect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CastleWindow.h" />
+    <ClInclude Include="TexturePNT1Effect.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v12.vcxproj">

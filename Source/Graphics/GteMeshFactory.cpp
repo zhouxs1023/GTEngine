@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.5 (2018/10/05)
+// File Version: 3.0.6 (2019/01/30)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteMeshFactory.h>
@@ -45,7 +45,7 @@ std::shared_ptr<Visual> MeshFactory::CreateRectangle(unsigned int numXSamples,
     }
 
     auto ibuffer = CreateIBuffer(desc.numTriangles);
-    if (!vbuffer)
+    if (!ibuffer)
     {
         return nullptr;
     }

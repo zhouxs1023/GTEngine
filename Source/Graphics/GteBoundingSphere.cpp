@@ -3,21 +3,19 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/02/07)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteBoundingSphere.h>
 using namespace gte;
-
 
 BoundingSphere::~BoundingSphere()
 {
 }
 
 BoundingSphere::BoundingSphere()
-    :
-    mTuple({ 0.0f, 0.0f, 0.0f, 0.0f })
 {
+    mTuple.fill(0.0f);
 }
 
 BoundingSphere::BoundingSphere(BoundingSphere const& sphere)
@@ -26,7 +24,7 @@ BoundingSphere::BoundingSphere(BoundingSphere const& sphere)
 {
 }
 
-BoundingSphere& BoundingSphere::operator= (BoundingSphere const& sphere)
+BoundingSphere& BoundingSphere::operator=(BoundingSphere const& sphere)
 {
     mTuple = sphere.mTuple;
     return *this;
@@ -34,7 +32,8 @@ BoundingSphere& BoundingSphere::operator= (BoundingSphere const& sphere)
 
 int BoundingSphere::WhichSide(CullingPlane const& plane) const
 {
-    float signedDistance = plane.DistanceTo(GetCenter());
+    Vector4<float> hcenter = HLift(GetCenter(), 1.0f);
+    float signedDistance = plane.DistanceTo(hcenter);
     float radius = GetRadius();
 
     if (signedDistance <= -radius)
@@ -67,11 +66,11 @@ void BoundingSphere::GrowToContain(BoundingSphere const& sphere)
         return;
     }
 
-    Vector4<float> center0 = GetCenter(), center1 = sphere.GetCenter();
-    Vector4<float> centerDiff = center1 - center0;
+    Vector3<float> center0 = GetCenter(), center1 = sphere.GetCenter();
+    Vector3<float> centerDiff = center1 - center0;
     float lengthSqr = Dot(centerDiff, centerDiff);
     float radiusDiff = radius1 - radius0;
-    float radiusDiffSqr = radiusDiff*radiusDiff;
+    float radiusDiffSqr = radiusDiff * radiusDiff;
 
     if (radiusDiffSqr >= lengthSqr)
     {
@@ -86,46 +85,46 @@ void BoundingSphere::GrowToContain(BoundingSphere const& sphere)
     if (length > 0.0f)
     {
         float coeff = (length + radiusDiff) / (2.0f * length);
-        SetCenter(center0 + coeff*centerDiff);
+        SetCenter(center0 + coeff * centerDiff);
     }
 
     SetRadius(0.5f * (length + radius0 + radius1));
 }
 
-void BoundingSphere::TransformBy(Transform const& transform,
-    BoundingSphere& sphere) const
+void BoundingSphere::TransformBy(Transform const& transform, BoundingSphere& sphere) const
 {
 #if defined (GTE_USE_MAT_VEC)
-    sphere.SetCenter(transform * GetCenter());
+    Vector4<float> hcenter = transform * HLift(GetCenter(), 1.0f);
+    sphere.SetCenter(HProject(hcenter));
 #else
-    sphere.SetCenter(GetCenter() * transform);
+    Vector4<float> hcenter = HLift(GetCenter(), 1.0f) * transform;
+    sphere.SetCenter(HProject(hcenter));
 #endif
     sphere.SetRadius(transform.GetNorm() * GetRadius());
 }
 
-void BoundingSphere::ComputeFromData(int numVertices, int vertexSize,
+void BoundingSphere::ComputeFromData(unsigned int numVertices, unsigned int vertexSize,
     char const* data)
 {
     // The center is the average of the positions.
     float sum[3] = { 0.0f, 0.0f, 0.0f };
-    int i;
-    for (i = 0; i < numVertices; ++i)
+    for (unsigned int i = 0; i < numVertices; ++i)
     {
-        float const* position = (float const*)(data + i*vertexSize);
+        float const* position = reinterpret_cast<float const*>(data + i*vertexSize);
         sum[0] += position[0];
         sum[1] += position[1];
         sum[2] += position[2];
     }
-    float invNumVertices = 1.0f / (float)numVertices;
+    float invNumVertices = 1.0f / static_cast<float>(numVertices);
     mTuple[0] = sum[0] * invNumVertices;
     mTuple[1] = sum[1] * invNumVertices;
     mTuple[2] = sum[2] * invNumVertices;
 
     // The radius is the largest distance from the center to the positions.
     mTuple[3] = 0.0f;
-    for (i = 0; i < numVertices; ++i)
+    for (unsigned int i = 0; i < numVertices; ++i)
     {
-        float const* position = (const float*)(data + i*vertexSize);
+        float const* position = reinterpret_cast<float const*>(data + i*vertexSize);
         float diff[3] =
         {
             position[0] - mTuple[0],
@@ -142,21 +141,20 @@ void BoundingSphere::ComputeFromData(int numVertices, int vertexSize,
     mTuple[3] = std::sqrt(mTuple[3]);
 }
 
-bool BoundingSphere::TestIntersection(Vector4<float> const& origin,
-    Vector4<float> const& direction, float tmin, float tmax) const
+bool BoundingSphere::TestIntersection(Vector3<float> const& origin,
+    Vector3<float> const& direction, float tmin, float tmax) const
 {
     float radius = GetRadius();
     if (radius == 0.0f)
     {
         // The bound is invalid and cannot be intersected.
-        LogWarning(
-            "Invalid bound.  Did you forget to call UpdateModelBound()?");
+        LogWarning("Invalid bound.  Did you forget to call UpdateModelBound()?");
         return false;
     }
 
-    Vector4<float> center = GetCenter();
+    Vector3<float> center = GetCenter();
     float const infinity = std::numeric_limits<float>::max();
-    Vector4<float> diff;
+    Vector3<float> diff;
     float a0, a1, discr;
 
     if (tmin == -infinity)
@@ -165,9 +163,9 @@ bool BoundingSphere::TestIntersection(Vector4<float> const& origin,
 
         // Test for sphere-line intersection.
         diff = origin - center;
-        a0 = Dot(diff, diff) - radius*radius;
+        a0 = Dot(diff, diff) - radius * radius;
         a1 = Dot(direction, diff);
-        discr = a1*a1 - a0;
+        discr = a1 * a1 - a0;
         return discr >= 0.0f;
     }
 
@@ -177,7 +175,7 @@ bool BoundingSphere::TestIntersection(Vector4<float> const& origin,
 
         // Test for sphere-ray intersection.
         diff = origin - center;
-        a0 = Dot(diff, diff) - radius*radius;
+        a0 = Dot(diff, diff) - radius * radius;
         if (a0 <= 0.0f)
         {
             // The ray origin is inside the sphere.
@@ -195,19 +193,19 @@ bool BoundingSphere::TestIntersection(Vector4<float> const& origin,
             return false;
         }
 
-        discr = a1*a1 - a0;
+        discr = a1 * a1 - a0;
         return discr >= 0.0f;
     }
 
     LogAssert(tmax > tmin, "tmin < tmax is required for a segment.");
 
     // Test for sphere-segment intersection.
-    float taverage = 0.5f*(tmin + tmax);
-    Vector4<float> segOrigin = origin + taverage * direction;
+    float taverage = 0.5f * (tmin + tmax);
+    Vector3<float> segOrigin = origin + taverage * direction;
     float segExtent = 0.5f * (tmax - tmin);
 
     diff = segOrigin - GetCenter();
-    a0 = Dot(diff, diff) - radius*radius;
+    a0 = Dot(diff, diff) - radius * radius;
     if (a0 <= 0.0f)
     {
         // The segment center is inside the sphere.
@@ -235,49 +233,46 @@ bool BoundingSphere::TestIntersection(BoundingSphere const& sphere) const
     if (sphere.GetRadius() == 0.0f || GetRadius() == 0.0f)
     {
         // One of the bounds is invalid and cannot be intersected.
-        LogWarning(
-            "Invalid bound.  Did you forget to call UpdateModelBound()?");
+        LogWarning("Invalid bound.  Did you forget to call UpdateModelBound()?");
         return false;
     }
 
     // Test for staticSphere-staticSphere intersection.
-    Vector4<float> diff = GetCenter() - sphere.GetCenter();
+    Vector3<float> diff = GetCenter() - sphere.GetCenter();
     float rSum = GetRadius() + sphere.GetRadius();
-    return Dot(diff, diff) <= rSum*rSum;
+    return Dot(diff, diff) <= rSum * rSum;
 }
 
 bool BoundingSphere::TestIntersection(BoundingSphere const& sphere,
-    float tmax, Vector4<float> const& velocity0,
-    Vector4<float> const& velocity1) const
+    float tmax, Vector3<float> const& velocity0, Vector3<float> const& velocity1) const
 {
     if (sphere.GetRadius() == 0.0f || GetRadius() == 0.0f)
     {
         // One of the bounds is invalid and cannot be intersected.
-        LogWarning(
-            "Invalid bound.  Did you forget to call UpdateModelBound()?");
+        LogWarning("Invalid bound.  Did you forget to call UpdateModelBound()?");
         return false;
     }
 
     // Test for movingSphere-movingSphere intersection.
-    Vector4<float> relVelocity = velocity1 - velocity0;
-    Vector4<float> cenDiff = sphere.GetCenter() - GetCenter();
+    Vector3<float> relVelocity = velocity1 - velocity0;
+    Vector3<float> cenDiff = sphere.GetCenter() - GetCenter();
     float a = Dot(relVelocity, relVelocity);
     float c = Dot(cenDiff, cenDiff);
     float rSum = sphere.GetRadius() + GetRadius();
-    float rSumSqr = rSum*rSum;
+    float rSumSqr = rSum * rSum;
 
     if (a > 0.0f)
     {
         float b = Dot(cenDiff, relVelocity);
         if (b <= 0.0f)
         {
-            if (-tmax*a <= b)
+            if (-tmax  *a <= b)
             {
-                return a*c - b*b <= a*rSumSqr;
+                return a * c - b * b <= a * rSumSqr;
             }
             else
             {
-                return tmax*(tmax*a + 2.0f*b) + c <= rSumSqr;
+                return tmax * (tmax * a + 2.0f * b) + c <= rSumSqr;
             }
         }
     }

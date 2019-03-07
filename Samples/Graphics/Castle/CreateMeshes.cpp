@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/01/31)
 
 #include "CastleWindow.h"
 
@@ -1949,10 +1949,10 @@ std::shared_ptr<PointLightTextureEffect> CastleWindow::CreateLTEffect(
 }
 #endif
 
-std::shared_ptr<Texture2Effect> CastleWindow::CreateTextureEffect(
+std::shared_ptr<TexturePNT1Effect> CastleWindow::CreateTextureEffect(
     std::shared_ptr<Texture2> const& texture)
 {
-    return std::make_shared<Texture2Effect>(mProgramFactory, texture,
+    return std::make_shared<TexturePNT1Effect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP, SamplerState::WRAP);
 }
 

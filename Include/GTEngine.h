@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2016/11/14)
+// File Version: 3.0.4 (2019/02/12)
 
 #pragma once
 
@@ -19,8 +19,6 @@
 #if defined(__MSWINDOWS__)
 #if defined(GTE_DEV_OPENGL)
 #include <GTGraphicsGL4.h>
-#elif defined(GTE_USE_DX12)
-#include <GTGraphicsDX12.h>
 #else
 #include <GTGraphicsDX11.h>
 #endif

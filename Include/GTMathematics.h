@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.28 (2019/01/17)
+// File Version: 3.0.29 (2019/02/13)
 
 #pragma once
 
@@ -276,7 +276,7 @@
 #include <Mathematics/GteIntrCapsule3Capsule3.h>
 #include <Mathematics/GteIntrCircle2Arc2.h>
 #include <Mathematics/GteIntrCircle2Circle2.h>
-#include <Mathematics/GteIntrConvexPolygonPlane.h>
+#include <Mathematics/GteIntrConvexPolygonHyperplane.h>
 #include <Mathematics/GteIntrDisk2Sector2.h>
 #include <Mathematics/GteIntrEllipse2Ellipse2.h>
 #include <Mathematics/GteIntrEllipsoid3Ellipsoid3.h>

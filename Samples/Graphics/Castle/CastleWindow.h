@@ -3,11 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/01/31)
 
 #pragma once
 
 #include <GTEngine.h>
+#include "TexturePNT1Effect.h"
 using namespace gte;
 
 // When exposed, turns off lighting so that the scene is unlit (texturing only).
@@ -386,7 +387,7 @@ private:
         std::shared_ptr<Material> const& material, std::shared_ptr<Texture2> const& texture);
 #endif
 
-    std::shared_ptr<Texture2Effect> CreateTextureEffect(
+    std::shared_ptr<TexturePNT1Effect> CreateTextureEffect(
         std::shared_ptr<Texture2> const& texture);
 
     std::shared_ptr<ConstantColorEffect> CreateMaterialEffect(

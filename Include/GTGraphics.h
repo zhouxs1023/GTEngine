@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/07/25)
+// File Version: 3.0.6 (2019/02/06)
 
 #pragma once
 
@@ -76,7 +76,11 @@
 #include <Graphics/GteBlendTransformController.h>
 #include <Graphics/GteControlledObject.h>
 #include <Graphics/GteController.h>
+#include <Graphics/GteIKController.h>
 #include <Graphics/GteKeyframeController.h>
+#include <Graphics/GteMorphController.h>
+#include <Graphics/GteParticleController.h>
+#include <Graphics/GtePointController.h>
 #include <Graphics/GteSkinController.h>
 #include <Graphics/GteTransformController.h>
 
@@ -89,6 +93,7 @@
 #include <Graphics/GteCameraRig.h>
 #include <Graphics/GteLight.h>
 #include <Graphics/GteNode.h>
+#include <Graphics/GteParticles.h>
 #include <Graphics/GtePVWUpdater.h>
 #include <Graphics/GteSpatial.h>
 #include <Graphics/GteTrackball.h>
@@ -104,6 +109,9 @@
 
 // SceneGraph/Sorting
 #include <Graphics/GteBspNode.h>
+
+// SceneGraph/Terrain
+#include <Graphics/GteTerrain.h>
 
 // SceneGraph/Visibility
 #include <Graphics/GteCuller.h>

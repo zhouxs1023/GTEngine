@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/03/04)
 
 #include "MinimumAreaCircle2DWindow.h"
 
@@ -94,5 +94,5 @@ bool MinimumAreaCircle2DWindow::OnCharPress(unsigned char key, int x, int y)
         return true;
     }
 
-    return Window::OnCharPress(key, x, y);
+    return Window2::OnCharPress(key, x, y);
 }

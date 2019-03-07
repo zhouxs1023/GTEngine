@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/02/06)
+// File Version: 3.0.2 (2019/02/07)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteDistLineSegment.h>
@@ -172,7 +172,7 @@ void Picker::ExecuteRecursive(std::shared_ptr<Spatial> const& object)
     auto visual = std::dynamic_pointer_cast<Visual>(object);
     if (visual)
     {
-        if (visual->worldBound.TestIntersection(mOrigin, mDirection, mTMin, mTMax))
+        if (visual->worldBound.TestIntersection(HProject(mOrigin), HProject(mDirection), mTMin, mTMax))
         {
             // Convert the linear component to model-space coordinates.
             Matrix4x4<float> const& invWorldMatrix = visual->worldTransform.GetHInverse();
@@ -228,7 +228,7 @@ void Picker::ExecuteRecursive(std::shared_ptr<Spatial> const& object)
     auto node = std::dynamic_pointer_cast<Node>(object);
     if (node)
     {
-        if (node->worldBound.TestIntersection(mOrigin, mDirection, mTMin, mTMax))
+        if (node->worldBound.TestIntersection(HProject(mOrigin), HProject(mDirection), mTMin, mTMax))
         {
             int const numChildren = node->GetNumChildren();
             for (int i = 0; i < numChildren; ++i)

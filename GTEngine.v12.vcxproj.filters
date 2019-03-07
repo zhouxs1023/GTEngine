@@ -220,6 +220,15 @@
     <Filter Include="Files\LowLevel\Logger\MSW">
       <UniqueIdentifier>{ae1e25fc-25a8-47a9-8a34-0a6e77aa95e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\Graphics\SceneGraph\Terrain">
+      <UniqueIdentifier>{9107111d-1254-4aaf-a51b-b762d74e55a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Physics\CollisionDetection">
+      <UniqueIdentifier>{9768ec2a-61eb-42de-a30b-7f0d8c30edec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Mathematics\Intersection\ND">
+      <UniqueIdentifier>{6e5ad851-c910-4849-a708-baa1aed7ec4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\GTEngine.h">
@@ -2076,6 +2085,66 @@
     <ClInclude Include="Include\Mathematics\GteArbitraryPrecision.h">
       <Filter>Files\Mathematics\Arithmetic</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteContAlignedBox.h">
+      <Filter>Files\Mathematics\Containment</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteTerrain.h">
+      <Filter>Files\Graphics\SceneGraph\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteMorphController.h">
+      <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GtePointController.h">
+      <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteParticles.h">
+      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteParticleController.h">
+      <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteIKController.h">
+      <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteContCone.h">
+      <Filter>Files\Mathematics\Containment</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIndexAttribute.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDistPoint3ConvexPolyhedron3.h">
+      <Filter>Files\Mathematics\Distance\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteConvexPolyhedron3.h">
+      <Filter>Files\Mathematics\GeometricPrimitives\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntpAkimaNonuniform1.h">
+      <Filter>Files\Mathematics\Interpolation</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Cylinder3.h">
+      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrTriangle3OrientedBox3.h">
+      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrAlignedBox3Sphere3.h">
+      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Cylinder3.h">
+      <Filter>Files\Mathematics\Intersection\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Physics\GteCollisionRecord.h">
+      <Filter>Files\Physics\CollisionDetection</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Physics\GteBoundingVolumeTree.h">
+      <Filter>Files\Physics\CollisionDetection</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Physics\GteCollisionGroup.h">
+      <Filter>Files\Physics\CollisionDetection</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrConvexPolygonHyperplane.h">
+      <Filter>Files\Mathematics\Intersection\ND</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GTEnginePCH.cpp">
@@ -2809,6 +2878,24 @@
     </ClCompile>
     <ClCompile Include="Source\Mathematics\GteVETNonmanifoldMesh.cpp">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteTerrain.cpp">
+      <Filter>Files\Graphics\SceneGraph\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteMorphController.cpp">
+      <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GtePointController.cpp">
+      <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteParticles.cpp">
+      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteParticleController.cpp">
+      <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteIKController.cpp">
+      <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -274,10 +274,10 @@ void MovingSphereTriangleWindow::CreateHalfCylinder(int i, Vector3<float> const&
     auto vbuffer = mEdgeVisual[i]->GetVertexBuffer();
     auto ibuffer = mEdgeVisual[i]->GetIndexBuffer();
     Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
-    for (int row = 0; row < density; ++row)
+    for (unsigned int row = 0; row < density; ++row)
     {
         float z = (float)row / ((float)density - 1.0f);
-        for (int col = 0; col < density; ++col)
+        for (unsigned int col = 0; col < density; ++col)
         {
             float angle = (float)GTE_C_PI * (float)col / ((float)density - 1.0f);
             float cs = std::cos(angle), sn = std::sin(angle);

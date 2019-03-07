@@ -663,6 +663,7 @@
     <ClInclude Include="Include\Graphics\GteGeometryShader.h" />
     <ClInclude Include="Include\Graphics\GteGraphicsEngine.h" />
     <ClInclude Include="Include\Graphics\GteGraphicsObject.h" />
+    <ClInclude Include="Include\Graphics\GteIKController.h" />
     <ClInclude Include="Include\Graphics\GteIndexBuffer.h" />
     <ClInclude Include="Include\Graphics\GteIndexFormat.h" />
     <ClInclude Include="Include\Graphics\GteIndirectArgumentsBuffer.h" />
@@ -674,12 +675,16 @@
     <ClInclude Include="Include\Graphics\GteMaterial.h" />
     <ClInclude Include="Include\Graphics\GteMemberLayout.h" />
     <ClInclude Include="Include\Graphics\GteMeshFactory.h" />
+    <ClInclude Include="Include\Graphics\GteMorphController.h" />
     <ClInclude Include="Include\Graphics\GteNode.h" />
     <ClInclude Include="Include\Graphics\GteOverlayEffect.h" />
+    <ClInclude Include="Include\Graphics\GteParticleController.h" />
+    <ClInclude Include="Include\Graphics\GteParticles.h" />
     <ClInclude Include="Include\Graphics\GtePicker.h" />
     <ClInclude Include="Include\Graphics\GtePickRecord.h" />
     <ClInclude Include="Include\Graphics\GtePixelShader.h" />
     <ClInclude Include="Include\Graphics\GtePlanarReflectionEffect.h" />
+    <ClInclude Include="Include\Graphics\GtePointController.h" />
     <ClInclude Include="Include\Graphics\GtePointLightEffect.h" />
     <ClInclude Include="Include\Graphics\GtePointLightTextureEffect.h" />
     <ClInclude Include="Include\Graphics\GteProgramDefines.h" />
@@ -694,6 +699,7 @@
     <ClInclude Include="Include\Graphics\GteSpatial.h" />
     <ClInclude Include="Include\Graphics\GteSpotLightEffect.h" />
     <ClInclude Include="Include\Graphics\GteStructuredBuffer.h" />
+    <ClInclude Include="Include\Graphics\GteTerrain.h" />
     <ClInclude Include="Include\Graphics\GteTextEffect.h" />
     <ClInclude Include="Include\Graphics\GteTexture.h" />
     <ClInclude Include="Include\Graphics\GteTexture1.h" />
@@ -817,6 +823,7 @@
     <ClInclude Include="Include\Mathematics\GteCircle3.h" />
     <ClInclude Include="Include\Mathematics\GteCone.h" />
     <ClInclude Include="Include\Mathematics\GteConstrainedDelaunay2.h" />
+    <ClInclude Include="Include\Mathematics\GteContAlignedBox.h" />
     <ClInclude Include="Include\Mathematics\GteContCapsule3.h" />
     <ClInclude Include="Include\Mathematics\GteContCircle2.h" />
     <ClInclude Include="Include\Mathematics\GteContCone.h" />
@@ -944,7 +951,8 @@
     <ClInclude Include="Include\Mathematics\GteIntrCapsule3Capsule3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrCircle2Arc2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrCircle2Circle2.h" />
-    <ClInclude Include="Include\Mathematics\GteIntrConvexPolygonPlane.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrConvexPolygon3Plane3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrConvexPolygonHyperplane.h" />
     <ClInclude Include="Include\Mathematics\GteIntrDisk2Sector2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrEllipse2Ellipse2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrEllipsoid3Ellipsoid3.h" />
@@ -1122,7 +1130,10 @@
     <ClInclude Include="Include\Mathematics\GteVETNonmanifoldMesh.h" />
     <ClInclude Include="Include\Mathematics\MSW\GteCPUQueryInstructions.h" />
     <ClInclude Include="Include\Mathematics\MSW\GteIntelSSE.h" />
+    <ClInclude Include="Include\Physics\GteBoundingVolumeTree.h" />
     <ClInclude Include="Include\Physics\GteBoxManager.h" />
+    <ClInclude Include="Include\Physics\GteCollisionGroup.h" />
+    <ClInclude Include="Include\Physics\GteCollisionRecord.h" />
     <ClInclude Include="Include\Physics\GteExtremalQuery3.h" />
     <ClInclude Include="Include\Physics\GteExtremalQuery3BSP.h" />
     <ClInclude Include="Include\Physics\GteExtremalQuery3PRJ.h" />
@@ -1846,6 +1857,7 @@
     <ClCompile Include="Source\Graphics\GteGeometryShader.cpp" />
     <ClCompile Include="Source\Graphics\GteGraphicsEngine.cpp" />
     <ClCompile Include="Source\Graphics\GteGraphicsObject.cpp" />
+    <ClCompile Include="Source\Graphics\GteIKController.cpp" />
     <ClCompile Include="Source\Graphics\GteIndexBuffer.cpp" />
     <ClCompile Include="Source\Graphics\GteIndirectArgumentsBuffer.cpp" />
     <ClCompile Include="Source\Graphics\GteKeyframeController.cpp" />
@@ -1855,12 +1867,16 @@
     <ClCompile Include="Source\Graphics\GteLightingEffect.cpp" />
     <ClCompile Include="Source\Graphics\GteMaterial.cpp" />
     <ClCompile Include="Source\Graphics\GteMeshFactory.cpp" />
+    <ClCompile Include="Source\Graphics\GteMorphController.cpp" />
     <ClCompile Include="Source\Graphics\GteNode.cpp" />
     <ClCompile Include="Source\Graphics\GteOverlayEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GteParticleController.cpp" />
+    <ClCompile Include="Source\Graphics\GteParticles.cpp" />
     <ClCompile Include="Source\Graphics\GtePicker.cpp" />
     <ClCompile Include="Source\Graphics\GtePickRecord.cpp" />
     <ClCompile Include="Source\Graphics\GtePixelShader.cpp" />
     <ClCompile Include="Source\Graphics\GtePlanarReflectionEffect.cpp" />
+    <ClCompile Include="Source\Graphics\GtePointController.cpp" />
     <ClCompile Include="Source\Graphics\GtePointLightEffect.cpp" />
     <ClCompile Include="Source\Graphics\GtePointLightTextureEffect.cpp" />
     <ClCompile Include="Source\Graphics\GteProgramDefines.cpp" />
@@ -1875,6 +1891,7 @@
     <ClCompile Include="Source\Graphics\GteSpatial.cpp" />
     <ClCompile Include="Source\Graphics\GteSpotLightEffect.cpp" />
     <ClCompile Include="Source\Graphics\GteStructuredBuffer.cpp" />
+    <ClCompile Include="Source\Graphics\GteTerrain.cpp" />
     <ClCompile Include="Source\Graphics\GteTextEffect.cpp" />
     <ClCompile Include="Source\Graphics\GteTexture.cpp" />
     <ClCompile Include="Source\Graphics\GteTexture1.cpp" />
