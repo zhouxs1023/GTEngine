@@ -3,359 +3,455 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.23.0 (2019/03/11)
 
 #pragma once
 
-#include <Imagics/GteMarchingCubes.h>
-#include <Imagics/GteImage3.h>
-#include <Mathematics/GteUniqueVerticesTriangles.h>
-#include <Mathematics/GteVector3.h>
+#include <LowLevel/GteLogger.h>
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <cstdint>
+#include <map>
+#include <type_traits>
+#include <vector>
 
 namespace gte
 {
-
-template <typename Real>
-class SurfaceExtractor : public MarchingCubes
-{
-public:
-    // Construction and destruction.
-    virtual ~SurfaceExtractor();
-    SurfaceExtractor(Image3<Real> const& image);
-
-    // Object copies are not allowed.
-    SurfaceExtractor() = delete;
-    SurfaceExtractor(SurfaceExtractor const&) = delete;
-    SurfaceExtractor const& operator=(SurfaceExtractor const&) = delete;
-
-    struct Mesh
+    // The image type T must be one of the integer types:  int8_t, int16_t,
+    // int32_t, uint8_t, uint16_t or uint32_t.  Internal integer computations
+    // are performed using int64_t.  The type Real is for extraction to
+    // floating-point vertices.
+    template <typename T, typename Real>
+    class SurfaceExtractor
     {
-        // All members are set to zeros.
-        Mesh();
-
-        Topology topology;
-        std::array<Vector3<Real>, MAX_VERTICES> vertices;
-    };
-
-    // Extract the triangle mesh approximating F = 0 for a single voxel.
-    // The input function values must be stored as
-    //  F[0] = function(0,0,0), F[4] = function(0,0,1),
-    //  F[1] = function(1,0,0), F[5] = function(1,0,1),
-    //  F[2] = function(0,1,0), F[6] = function(0,1,1),
-    //  F[3] = function(1,1,0), F[7] = function(1,1,1).
-    // Thus, F[k] = function(k & 1, (k & 2) >> 1, (k & 4) >> 2).
-    // The return value is 'true' iff the F[] values are all nonzero.
-    // If they are not, the returned 'mesh' has no vertices and no
-    // triangles--as if F[] had all positive or all negative values.
-    bool Extract(std::array<Real, 8> const& F, Mesh& mesh) const;
-
-    // Extract the triangle mesh approximating F = 0 for all the voxels in
-    // a 3D image.  The input image must be stored in a 1-dimensional array
-    // with lexicographical order; that is, image[i] corresponds to voxel
-    // location (x,y,z) where i = x + bound0 * (y + bound1 * z).  The output
-    // 'indices' consists indices.size()/3 triangles, each a triple of
-    // indices into 'vertices'
-    bool Extract(Real level, std::vector<Vector3<Real>>& vertices, std::vector<int>& indices) const;
-
-    // The extraction has duplicate vertices on edges shared by voxels.  This
-    // function will eliminate the duplication.
-    void MakeUnique(std::vector<Vector3<Real>>& vertices, std::vector<int>& indices) const;
-
-    // The extraction does not use any topological information about the level
-    // surface.  The triangles can be a mixture of clockwise-ordered and
-    // counterclockwise-ordered.  This function is an attempt to give the
-    // triangles a consistent ordering by selecting a normal in approximately
-    // the same direction as the average gradient at the vertices (when
-    // sameDir is true), or in the opposite direction (when sameDir is
-    // false).  This might not always produce a consistent order, but is
-    // fast.  A consistent order can be computed if you build a table of
-    // vertex, edge, and face adjacencies, but the resulting data structure
-    // is somewhat expensive to process to reorient triangles.
-    void OrientTriangles(std::vector<Vector3<Real>> const& vertices, std::vector<int>& indices,
-        bool sameDir) const;
-
-    // Compute vertex normals for the mesh.
-    void ComputeNormals(std::vector<Vector3<Real>> const& vertices, std::vector<int> const& indices,
-        std::vector<Vector3<Real>>& normals) const;
-
-protected:
-    Vector3<Real> GetGradient(Vector3<Real> position) const;
-
-    Image3<Real> const& mImage;
-};
-
-template <typename Real>
-SurfaceExtractor<Real>::~SurfaceExtractor()
-{
-}
-
-template <typename Real>
-SurfaceExtractor<Real>::SurfaceExtractor(Image3<Real> const& image)
-    :
-    mImage(image)
-{
-}
-
-template <typename Real>
-SurfaceExtractor<Real>::Mesh::Mesh()
-{
-    std::array<Real, 3> zero = { (Real)0, (Real)0, (Real)0 };
-    std::fill(vertices.begin(), vertices.end(), zero);
-}
-
-template <typename Real>
-bool SurfaceExtractor<Real>::Extract(std::array<Real, 8> const& F, Mesh& mesh) const
-{
-    int entry = 0;
-    for (int i = 0, mask = 1; i < 8; ++i, mask <<= 1)
-    {
-        if (F[i] < (Real)0)
+    public:
+        // Abstract base class.
+        virtual ~SurfaceExtractor()
         {
-            entry |= mask;
         }
-        else if (F[i] == (Real)0)
+
+        // The level surfaces form a graph of vertices, edges and triangles.
+        // The vertices are computed as triples of nonnegative rational
+        // numbers.  Vertex represents the rational triple
+        //   (xNumer/xDenom, yNumer/yDenom, zNumer/zDenom)
+        // as
+        //   (xNumer, xDenom, yNumer, yDenom, zNumer, zDenom)
+        // where all components are nonnegative.  The edges connect pairs of
+        // vertices and the triangles connect triples of vertices, forming
+        // a graph that represents the level set.
+        struct Vertex
         {
-            return false;
-        }
-    }
+            Vertex() = default;
 
-    mesh.topology = GetTable(entry);
-
-    for (int i = 0; i < mesh.topology.numVertices; ++i)
-    {
-        int j0 = mesh.topology.vpair[i][0];
-        int j1 = mesh.topology.vpair[i][1];
-
-        Real corner0[3];
-        corner0[0] = static_cast<Real>(j0 & 1);
-        corner0[1] = static_cast<Real>((j0 & 2) >> 1);
-        corner0[2] = static_cast<Real>((j0 & 4) >> 2);
-
-        Real corner1[3];
-        corner1[0] = static_cast<Real>(j1 & 1);
-        corner1[1] = static_cast<Real>((j1 & 2) >> 1);
-        corner1[2] = static_cast<Real>((j1 & 4) >> 2);
-
-        Real invDenom = ((Real)1) / (F[j0] - F[j1]);
-        for (int k = 0; k < 3; ++k)
-        {
-            Real numer = F[j0] * corner1[k] - F[j1] * corner0[k];
-            mesh.vertices[i][k] = numer*invDenom;
-        }
-    }
-    return true;
-}
-
-template <typename Real>
-bool SurfaceExtractor<Real>::Extract(Real level, std::vector<Vector3<Real>>& vertices, std::vector<int>& indices) const
-{
-    vertices.clear();
-    indices.clear();
-
-    for (int z = 0; z + 1 < mImage.GetDimension(2); ++z)
-    {
-        for (int y = 0; y + 1 < mImage.GetDimension(1); ++y)
-        {
-            for (int x = 0; x + 1 < mImage.GetDimension(0); ++x)
+            Vertex(int64_t inXNumer, int64_t inXDenom, int64_t inYNumer, int64_t inYDenom,
+                int64_t inZNumer, int64_t inZDenom)
             {
-                std::array<size_t, 8> corners;
-                mImage.GetCorners(x, y, z, corners);
-
-                std::array<Real, 8> F;
-                for (int k = 0; k < 8; ++k)
+                // The vertex generation leads to the numerator and
+                // denominator having the same sign.  This constructor changes
+                // sign to ensure the numerator and denominator are both
+                // positive.
+                if (inXDenom > 0)
                 {
-                    F[k] = mImage[corners[k]] - level;
+                    xNumer = inXNumer;
+                    xDenom = inXDenom;
+                }
+                else
+                {
+                    xNumer = -inXNumer;
+                    xDenom = -inXDenom;
                 }
 
-                Mesh mesh;
-
-                if (Extract(F, mesh))
+                if (inYDenom > 0)
                 {
-                    int vbase = static_cast<int>(vertices.size());
-                    for (int i = 0; i < mesh.topology.numVertices; ++i)
-                    {
-                        Vector3<float> position = mesh.vertices[i];
-                        position[0] += static_cast<Real>(x);
-                        position[1] += static_cast<Real>(y);
-                        position[2] += static_cast<Real>(z);
-                        vertices.push_back(position);
-                    }
+                    yNumer = inYNumer;
+                    yDenom = inYDenom;
+                }
+                else
+                {
+                    yNumer = -inYNumer;
+                    yDenom = -inYDenom;
+                }
 
-                    for (int i = 0; i < mesh.topology.numTriangles; ++i)
+                if (inZDenom > 0)
+                {
+                    zNumer = inZNumer;
+                    zDenom = inZDenom;
+                }
+                else
+                {
+                    zNumer = -inZNumer;
+                    zDenom = -inZDenom;
+                }
+            }
+
+            // The non-default constructor guarantees that xDenom > 0,
+            // yDenom > 0 and zDenom > 0.  The following comparison operators
+            // assume that the denominators are positive.
+            bool operator==(Vertex const& other) const
+            {
+                return xNumer * other.xDenom == other.xNumer * xDenom  // xn0/xd0 == xn1/xd1
+                    && yNumer * other.yDenom == other.yNumer * yDenom  // yn0/yd0 == yn1/yd1
+                    && zNumer * other.zDenom == other.zNumer * zDenom; // zn0/zd0 == zn1/zd1
+            }
+
+            bool operator<(Vertex const& other) const
+            {
+                int64_t xn0txd1 = xNumer * other.xDenom;
+                int64_t xn1txd0 = other.xNumer * xDenom;
+                if (xn0txd1 < xn1txd0)  // xn0/xd0 < xn1/xd1
+                {
+                    return true;
+                }
+                if (xn0txd1 > xn1txd0)  // xn0/xd0 > xn1/xd1
+                {
+                    return false;
+                }
+
+                int64_t yn0tyd1 = yNumer * other.yDenom;
+                int64_t yn1tyd0 = other.yNumer * yDenom;
+                if (yn0tyd1 < yn1tyd0)  // yn0/yd0 < yn1/yd1
+                {
+                    return true;
+                }
+                if (yn0tyd1 > yn1tyd0)  // yn0/yd0 > yn1/yd1
+                {
+                    return false;
+                }
+
+                int64_t zn0tzd1 = zNumer * other.zDenom;
+                int64_t zn1tzd0 = other.zNumer * zDenom;
+                return zn0tzd1 < zn1tzd0;  // zn0/zd0 < zn1/zd1
+            }
+
+            int64_t xNumer, xDenom, yNumer, yDenom, zNumer, zDenom;
+        };
+
+        struct Triangle
+        {
+            Triangle() = default;
+
+            Triangle(int v0, int v1, int v2)
+            {
+                // After the code is executed, (v[0],v[1],v[2]) is a cyclic
+                // permutation of (v0,v1,v2) with v[0] = min{v0,v1,v2}.
+                if (v0 < v1)
+                {
+                    if (v0 < v2)
                     {
-                        for (int j = 0; j < 3; ++j)
-                        {
-                            indices.push_back(vbase + mesh.topology.itriple[i][j]);
-                        }
+                        v[0] = v0;
+                        v[1] = v1;
+                        v[2] = v2;
+                    }
+                    else
+                    {
+                        v[0] = v2;
+                        v[1] = v0;
+                        v[2] = v1;
                     }
                 }
                 else
                 {
-                    vertices.clear();
-                    indices.clear();
-                    return false;
+                    if (v1 < v2)
+                    {
+                        v[0] = v1;
+                        v[1] = v2;
+                        v[2] = v0;
+                    }
+                    else
+                    {
+                        v[0] = v2;
+                        v[1] = v0;
+                        v[2] = v1;
+                    }
+                }
+            }
+
+            bool operator==(Triangle const& other) const
+            {
+                return v[0] == other.v[0] && v[1] == other.v[1] && v[2] == other.v[2];
+            }
+
+            bool operator<(Triangle const& other) const
+            {
+                for (int i = 0; i < 3; ++i)
+                {
+                    if (v[i] < other.v[i])
+                    {
+                        return true;
+                    }
+                    if (v[i] > other.v[i])
+                    {
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            std::array<int, 3> v;
+        };
+
+        // Extract level surfaces and return rational vertices.
+        virtual void Extract(T level, std::vector<Vertex>& vertices,
+            std::vector<Triangle>& triangles) = 0;
+
+        void Extract(T level, bool removeDuplicateVertices,
+            std::vector<std::array<Real, 3>>& vertices, std::vector<Triangle>& triangles)
+        {
+            std::vector<Vertex> rationalVertices;
+            Extract(level, rationalVertices, triangles);
+            if (removeDuplicateVertices)
+            {
+                MakeUnique(rationalVertices, triangles);
+            }
+            Convert(rationalVertices, vertices);
+        }
+
+        // The extraction has duplicate vertices on edges shared by voxels.
+        // This function will eliminate the duplicates.
+        void MakeUnique(std::vector<Vertex>& vertices, std::vector<Triangle>& triangles)
+        {
+            size_t numVertices = vertices.size();
+            size_t numTriangles = triangles.size();
+            if (numVertices == 0 || numTriangles == 0)
+            {
+                return;
+            }
+
+            // Compute the map of unique vertices and assign to them new and
+            // unique indices.
+            std::map<Vertex, int> vmap;
+            int nextVertex = 0;
+            for (size_t v = 0; v < numVertices; ++v)
+            {
+                // Keep only unique vertices.
+                auto result = vmap.insert(std::make_pair(vertices[v], nextVertex));
+                if (result.second)
+                {
+                    ++nextVertex;
+                }
+            }
+
+            // Compute the map of unique triangles and assign to them new and
+            // unique indices.
+            std::map<Triangle, int> tmap;
+            int nextTriangle = 0;
+            for (size_t t = 0; t < numTriangles; ++t)
+            {
+                Triangle& triangle = triangles[t];
+                for (int i = 0; i < 3; ++i)
+                {
+                    auto iter = vmap.find(vertices[triangle.v[i]]);
+                    LogAssert(iter != vmap.end(), "Expecting the vertex to be in the vmap.");
+                    triangle.v[i] = iter->second;
+                }
+
+                // Keep only unique triangles.
+                auto result = tmap.insert(std::make_pair(triangle, nextTriangle));
+                if (result.second)
+                {
+                    ++nextTriangle;
+                }
+            }
+
+            // Pack the vertices into an array.
+            vertices.resize(vmap.size());
+            for (auto const& element : vmap)
+            {
+                vertices[element.second] = element.first;
+            }
+
+            // Pack the triangles into an array.
+            triangles.resize(tmap.size());
+            for (auto const& element : tmap)
+            {
+                triangles[element.second] = element.first;
+            }
+        }
+
+        // Convert from Vertex to std::array<Real, 3> rationals.
+        void Convert(std::vector<Vertex> const& input, std::vector<std::array<Real, 3>>& output)
+        {
+            output.resize(input.size());
+            for (size_t i = 0; i < input.size(); ++i)
+            {
+                Real rxNumer = static_cast<Real>(input[i].xNumer);
+                Real rxDenom = static_cast<Real>(input[i].xDenom);
+                Real ryNumer = static_cast<Real>(input[i].yNumer);
+                Real ryDenom = static_cast<Real>(input[i].yDenom);
+                Real rzNumer = static_cast<Real>(input[i].zNumer);
+                Real rzDenom = static_cast<Real>(input[i].zDenom);
+                output[i][0] = rxNumer / rxDenom;
+                output[i][1] = ryNumer / ryDenom;
+                output[i][2] = rzNumer / rzDenom;
+            }
+        }
+
+        // The extraction does not use any topological information about the
+        // level surfaces. The triangles can be a mixture of clockwise-ordered
+        // and counterclockwise-ordered.  This function is an attempt to give
+        // the triangles a consistent ordering by selecting a normal in
+        // approximately the same direction as the average gradient at the
+        // vertices (when sameDir is true), or in the opposite direction (when
+        // sameDir is false).  This might not always produce a consistent
+        // order, but is fast.  A consistent order can be computed by
+        // choosing a winding order for each triangle so that any corner of
+        // the voxel containing the triangle and that has positive sign sees
+        // a counterclockwise order.  Of course, you can also choose that the
+        // positive sign corners of the voxel always see the voxel-contained
+        // triangles in clockwise order.
+        void OrientTriangles(std::vector<std::array<Real, 3>>& vertices,
+            std::vector<Triangle>& triangles, bool sameDir)
+        {
+            for (auto& triangle : triangles)
+            {
+                // Get the triangle vertices.
+                std::array<Real, 3> v0 = vertices[triangle.v[0]];
+                std::array<Real, 3> v1 = vertices[triangle.v[1]];
+                std::array<Real, 3> v2 = vertices[triangle.v[2]];
+
+                // Construct the triangle normal based on the current
+                // orientation.
+                std::array<Real, 3> edge1, edge2, normal;
+                for (int i = 0; i < 3; ++i)
+                {
+                    edge1[i] = v1[i] - v0[i];
+                    edge2[i] = v2[i] - v0[i];
+                }
+                normal[0] = edge1[1] * edge2[2] - edge1[2] * edge2[1];
+                normal[1] = edge1[2] * edge2[0] - edge1[0] * edge2[2];
+                normal[2] = edge1[0] * edge2[1] - edge1[1] * edge2[0];
+
+                // Get the image gradient at the vertices.
+                std::array<Real, 3> grad0 = GetGradient(v0);
+                std::array<Real, 3> grad1 = GetGradient(v1);
+                std::array<Real, 3> grad2 = GetGradient(v2);
+
+                // Compute the average gradient.
+                std::array<Real, 3> gradAvr;
+                for (int i = 0; i < 3; ++i)
+                {
+                    gradAvr[i] = (grad0[i] + grad1[i] + grad2[i]) / (Real)3;
+                }
+
+                // Compute the dot product of normal and average gradient.
+                Real dot = gradAvr[0] * normal[0] + gradAvr[1] * normal[1] + gradAvr[2] * normal[2];
+
+                // Choose triangle orientation based on gradient direction.
+                if (sameDir)
+                {
+                    if (dot < (Real)0)
+                    {
+                        // Wrong orientation, reorder it.
+                        std::swap(triangle.v[1], triangle.v[2]);
+                    }
+                }
+                else
+                {
+                    if (dot > (Real)0)
+                    {
+                        // Wrong orientation, reorder it.
+                        std::swap(triangle.v[1], triangle.v[2]);
+                    }
                 }
             }
         }
-    }
 
-    return true;
-}
-
-template <typename Real>
-void SurfaceExtractor<Real>::MakeUnique(std::vector<Vector3<Real>>& vertices, std::vector<int>& indices) const
-{
-    std::vector<Vector3<Real>> outVertices;
-    std::vector<int> outIndices;
-    UniqueVerticesTriangles<Vector3<Real>>(vertices, indices, outVertices, outIndices);
-    vertices = std::move(outVertices);
-    indices = std::move(outIndices);
-}
-
-template <typename Real>
-void SurfaceExtractor<Real>::OrientTriangles(std::vector<Vector3<Real>> const& vertices, std::vector<int>& indices,
-    bool sameDir) const
-{
-    int const numTriangles = static_cast<int>(indices.size() / 3);
-    int* triangle = indices.data();
-    for (int t = 0; t < numTriangles; ++t, triangle += 3)
-    {
-        // Get triangle vertices.
-        Vector3<Real> v0 = vertices[triangle[0]];
-        Vector3<Real> v1 = vertices[triangle[1]];
-        Vector3<Real> v2 = vertices[triangle[2]];
-
-        // Construct triangle normal based on current orientation.
-        Vector3<Real> edge1 = v1 - v0;
-        Vector3<Real> edge2 = v2 - v0;
-        Vector3<Real> normal = Cross(edge1, edge2);
-
-        // Get the image gradient at the vertices.
-        Vector3<Real> gradient0 = GetGradient(v0);
-        Vector3<Real> gradient1 = GetGradient(v1);
-        Vector3<Real> gradient2 = GetGradient(v2);
-
-        // Compute the average gradient.
-        Vector3<Real> gradientAvr = (gradient0 + gradient1 + gradient2) / (Real)3;
-
-        // Compute the dot product of normal and average gradient.
-        Real dot = Dot(gradientAvr, normal);
-
-        // Choose triangle orientation based on gradient direction.
-        if (sameDir)
+        // Use this function if you want vertex normals for dynamic lighting
+        // of the mesh.
+        void ComputeNormals(std::vector<std::array<Real, 3>> const& vertices,
+            std::vector<Triangle> const& triangles,
+            std::vector<std::array<Real, 3>>& normals)
         {
-            if (dot < (Real)0)
+            // Compute a vertex normal to be area-weighted sums of the normals
+            // to the triangles that share that vertex.
+            std::array<Real, 3> const zero{ (Real)0, (Real)0, (Real)0 };
+            normals.resize(vertices.size());
+            std::fill(normals.begin(), normals.end(), zero);
+
+            for (auto const& triangle : triangles)
             {
-                // Wrong orientation, reorder it.
-                std::swap(triangle[1], triangle[2]);
+                // Get the triangle vertices.
+                std::array<Real, 3> v0 = vertices[triangle.v[0]];
+                std::array<Real, 3> v1 = vertices[triangle.v[1]];
+                std::array<Real, 3> v2 = vertices[triangle.v[2]];
+
+                // Construct the triangle normal.
+                std::array<Real, 3> edge1, edge2, normal;
+                for (int i = 0; i < 3; ++i)
+                {
+                    edge1[i] = v1[i] - v0[i];
+                    edge2[i] = v2[i] - v0[i];
+                }
+                normal[0] = edge1[1] * edge2[2] - edge1[2] * edge2[1];
+                normal[1] = edge1[2] * edge2[0] - edge1[0] * edge2[2];
+                normal[2] = edge1[0] * edge2[1] - edge1[1] * edge2[0];
+
+                // Maintain the sum of normals at each vertex.
+                for (int i = 0; i < 3; ++i)
+                {
+                    for (int j = 0; j < 3; ++j)
+                    {
+                        normals[triangle.v[i]][j] += normal[j];
+                    }
+                }
+            }
+
+            // The normal vector storage was used to accumulate the sum of
+            // triangle normals.  Now these vectors must be rescaled to be
+            // unit length.
+            for (auto& normal : normals)
+            {
+                Real sqrLength = normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2];
+                Real length = std::sqrt(sqrLength);
+                if (length > (Real)0)
+                {
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        normal[i] /= length;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        normal[i] = (Real)0;
+                    }
+                }
             }
         }
-        else
+
+    protected:
+        // The input is a 3D image with lexicographically ordered voxels
+        // (x,y,z) stored in a linear array.  Voxel (x,y,z) is stored in the
+        // array at location index = x + xBound * (y + yBound * z).  The
+        // inputs xBound, yBound and zBound must each be 2 or larger so that
+        // there is at least one image cube to process.  The inputVoxels must
+        // be nonnull and point to contiguous storage that contains at least
+        // xBound * yBound * zBound elements.
+        SurfaceExtractor(int xBound, int yBound, int zBound, T const* inputVoxels)
+            :
+            mXBound(xBound),
+            mYBound(yBound),
+            mZBound(zBound),
+            mXYBound(xBound * yBound),
+            mInputVoxels(inputVoxels)
         {
-            if (dot > (Real)0)
+            static_assert(std::is_integral<T>::value && sizeof(T) <= 4,
+                "Type T must be int{8,16,32}_t or uint{8,16,32}_t.");
+            if (mXBound <= 1 || mYBound <= 1 || mZBound <= 1 || mInputVoxels == nullptr)
             {
-                // Wrong orientation, reorder it.
-                std::swap(triangle[1], triangle[2]);
+                LogError("Invalid input to SurfaceExtractor constructor.");
+                return;
             }
+
+            mVoxels.resize(static_cast<size_t>(mXBound * mYBound * mZBound));
         }
-    }
-}
 
-template <typename Real>
-void SurfaceExtractor<Real>::ComputeNormals(std::vector<Vector3<Real>> const& vertices, std::vector<int> const& indices,
-    std::vector<Vector3<Real>>& normals) const
-{
-    // Maintain a running sum of triangle normals at each vertex.
-    int const numVertices = static_cast<int>(vertices.size());
-    normals.resize(numVertices);
-    Vector3<Real> zero = Vector3<Real>::Zero();
-    std::fill(normals.begin(), normals.end(), zero);
+        virtual std::array<Real, 3> GetGradient(std::array<Real, 3> const& pos) = 0;
 
-    int const numTriangles = static_cast<int>(indices.size() / 3);
-    int const* current = indices.data();
-    for (int i = 0; i < numTriangles; ++i)
-    {
-        int i0 = *current++;
-        int i1 = *current++;
-        int i2 = *current++;
-        Vector3<Real> v0 = vertices[i0];
-        Vector3<Real> v1 = vertices[i1];
-        Vector3<Real> v2 = vertices[i2];
-
-        // Construct triangle normal.
-        Vector3<Real> edge1 = v1 - v0;
-        Vector3<Real> edge2 = v2 - v0;
-        Vector3<Real> normal = Cross(edge1, edge2);
-
-        // Maintain the sum of normals at each vertex.
-        normals[i0] += normal;
-        normals[i1] += normal;
-        normals[i2] += normal;
-    }
-
-    // The normal vector storage was used to accumulate the sum of triangle
-    // normals.  Now these vectors must be rescaled to be unit length.
-    for (auto& normal : normals)
-    {
-        Normalize(normal);
-    }
-}
-
-template <typename Real>
-Vector3<Real> SurfaceExtractor<Real>::GetGradient(Vector3<Real> position) const
-{
-    int x = static_cast<int>(std::floor(position[0]));
-    if (x < 0 || x >= mImage.GetDimension(0) - 1)
-    {
-        return Vector3<Real>::Zero();
-    }
-
-    int y = static_cast<int>(std::floor(position[1]));
-    if (y < 0 || y >= mImage.GetDimension(1) - 1)
-    {
-        return Vector3<Real>::Zero();
-    }
-
-    int z = static_cast<int>(std::floor(position[2]));
-    if (z < 0 || z >= mImage.GetDimension(2) - 1)
-    {
-        return Vector3<Real>::Zero();
-    }
-
-    position[0] -= static_cast<Real>(x);
-    position[1] -= static_cast<Real>(y);
-    position[2] -= static_cast<Real>(z);
-    Real oneMX = (Real)1 - position[0];
-    Real oneMY = (Real)1 - position[1];
-    Real oneMZ = (Real)1 - position[2];
-
-    // Get image values at corners of voxel.
-    std::array<size_t, 8> corners;
-    mImage.GetCorners(x, y, z, corners);
-    Real f000 = mImage[corners[0]];
-    Real f100 = mImage[corners[1]];
-    Real f010 = mImage[corners[2]];
-    Real f110 = mImage[corners[3]];
-    Real f001 = mImage[corners[4]];
-    Real f101 = mImage[corners[5]];
-    Real f011 = mImage[corners[6]];
-    Real f111 = mImage[corners[7]];
-
-    Vector3<Real> gradient;
-
-    Real tmp0 = oneMY * (f100 - f000) + position[1] * (f110 - f010);
-    Real tmp1 = oneMY * (f101 - f001) + position[1] * (f111 - f011);
-    gradient[0] = oneMZ * tmp0 + position[2] * tmp1;
-
-    tmp0 = oneMX * (f010 - f000) + position[0] * (f110 - f100);
-    tmp1 = oneMX * (f011 - f001) + position[0] * (f111 - f101);
-    gradient[1] = oneMZ * tmp0 + position[2] * tmp1;
-
-    tmp0 = oneMX * (f001 - f000) + position[0] * (f101 - f100);
-    tmp1 = oneMX * (f011 - f010) + position[0] * (f111 - f110);
-    gradient[2] = oneMY * tmp0 + position[1] * tmp1;
-
-    return gradient;
-}
-
+        int mXBound, mYBound, mZBound, mXYBound;
+        T const* mInputVoxels;
+        std::vector<int64_t> mVoxels;
+    };
 }

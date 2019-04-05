@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.13.0 (2018/06/07)
+// File Version: 3.13.1 (2019/03/21)
 
 //#define GTE_INTP_BSPLINE_UNIFORM_NO_SPECIALIZATION
 #if defined(GTE_INTP_BSPLINE_UNIFORM_NO_SPECIALIZATION)
@@ -283,14 +283,12 @@ void DoIntpBSplineUniform3()
         std::vector<uint8_t> image;
     };
 
-    // To save disk space, the 97x97x116 3D image for an x-ray crystallography
-    // of a molecule is stored as a 16x8 array of slices, each slice 97x97.
-    // The last row of the 16 row of slices contains only 4 tiles, the rest
-    // set to zero.
-    std::string infile = gEnvironment.GetPath("Molecule97x97x116.png");
+    // The 100x100x120 3D image for an x-ray crystallography of a molecule is
+    // stored as a 12x10 array of slices, each slice 100x100.
+    std::string infile = gEnvironment.GetPath("Molecule_U8_S100x100x120_T12x10.png");
     if (infile == "")
     {
-        LogError("Cannot find file Molecule97x97x116.png");
+        LogError("Cannot find file Molecule_U8_S100x100x120_T12x10.png");
         return;
     }
 
@@ -302,14 +300,15 @@ void DoIntpBSplineUniform3()
     auto texture = WICFileIO::Load(infile, false);
     auto texels = texture->Get<uint8_t>();
     Controls controls;
-    controls.size[0] = 97;
-    controls.size[1] = 97;
-    controls.size[2] = 116;
+    controls.size[0] = 100;
+    controls.size[1] = 100;
+    controls.size[2] = 120;
     controls.image.resize(controls.size[0] * controls.size[1] * controls.size[2]);
-    for (int yTile = 0, z = 0; yTile < 8; ++yTile)
+    int const numXTiles = 12, numYTiles = 10;
+    for (int yTile = 0, z = 0; yTile < numYTiles; ++yTile)
     {
         int yMin = yTile * controls.size[1];
-        for (int xTile = 0; xTile < 16; ++xTile)
+        for (int xTile = 0; xTile < numXTiles; ++xTile)
         {
             int xMin = xTile * controls.size[0];
             for (int y = 0; y < controls.size[1]; ++y)
@@ -357,10 +356,10 @@ void DoIntpBSplineUniform3()
 
     // Write the output 3D image as an array of 2D slices.
     memset(texels, 0, texture->GetNumBytes());
-    for (int yTile = 0, z = 0; yTile < 8; ++yTile)
+    for (int yTile = 0, z = 0; yTile < numYTiles; ++yTile)
     {
         int yMin = yTile * controls.size[1];
-        for (int xTile = 0; xTile < 16; ++xTile)
+        for (int xTile = 0; xTile < numXTiles; ++xTile)
         {
             int xMin = xTile * controls.size[0];
             for (int y = 0; y < controls.size[1]; ++y)

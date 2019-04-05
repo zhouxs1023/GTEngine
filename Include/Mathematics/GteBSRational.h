@@ -668,6 +668,10 @@ namespace std
     {
         return (gte::BSRational<UIntegerType>)std::tanh((double)x);
     }
+
+    // Type trait that says BSRational is a signed type.
+    template <typename UIntegerType>
+    struct is_signed<gte::BSRational<UIntegerType>> : true_type {};
 }
 
 namespace gte

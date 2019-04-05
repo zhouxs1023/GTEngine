@@ -3,115 +3,42 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/03/18)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteTrackball.h>
-#include <LowLevel/GteLogger.h>
 using namespace gte;
-
 
 Trackball::Trackball()
     :
-    mXSize(0),
-    mYSize(0),
-    mMultiplier(0.0f),
-    mX0(0.0f),
-    mY0(0.0f),
-    mX1(0.0f),
-    mY1(0.0f),
-    mActive(false),
-    mValidTrackball(false)
+    TrackObject()
 {
     mRoot = std::make_shared<Node>();
     mInitialOrientation.MakeIdentity();
 }
 
-Trackball::Trackball(int xSize, int ySize,
-    std::shared_ptr<Camera> const& camera)
+Trackball::Trackball(int xSize, int ySize, std::shared_ptr<Camera> const& camera)
     :
-    mXSize(0),
-    mYSize(0),
-    mMultiplier(0.0f),
-    mX0(0.0f),
-    mY0(0.0f),
-    mX1(0.0f),
-    mY1(0.0f),
-    mActive(false),
-    mValidTrackball(false)
+    TrackObject(xSize, ySize, camera)
 {
     Set(xSize, ySize, camera);
     mRoot = std::make_shared<Node>();
     mInitialOrientation.MakeIdentity();
 }
 
-void Trackball::Set(int xSize, int ySize,
-    std::shared_ptr<Camera> const& camera)
+void Trackball::Reset()
 {
-    if (xSize > 0 && ySize > 0 && camera)
-    {
-        mXSize = xSize;
-        mYSize = ySize;
-        mCamera = camera;
-        mMultiplier = 1.0f / (mXSize >= mYSize ? mYSize : mXSize);
-        mX0 = 0.5f * mXSize;
-        mY0 = 0.5f * mYSize;
-        mX1 = mX0;
-        mY1 = mY0;
-        mValidTrackball = true;
-    }
-    else
-    {
-        LogError("Invalid Trackball parameters.");
-        mValidTrackball = false;
-    }
+    mInitialOrientation.MakeIdentity();
+    mRoot->localTransform.MakeIdentity();
+    mRoot->Update();
 }
 
-void Trackball::Attach(std::shared_ptr<Spatial> const& object)
+void Trackball::OnSetInitialPoint()
 {
-    if (mValidTrackball && object)
-    {
-        mRoot->AttachChild(object);
-    }
+    mInitialOrientation = mRoot->localTransform.GetRotation();
 }
 
-void Trackball::Detach(std::shared_ptr<Spatial> const& object)
-{
-    if (mValidTrackball && object)
-    {
-        mRoot->DetachChild(object);
-    }
-}
-
-void Trackball::DetachAll()
-{
-    mRoot->DetachAllChildren();
-}
-
-void Trackball::SetInitialPoint(int x, int y)
-{
-    if (mValidTrackball)
-    {
-        mX0 = (2.0f * x - mXSize) * mMultiplier;
-        mY0 = (2.0f * y - mYSize) * mMultiplier;
-        mInitialOrientation = mRoot->worldTransform.GetRotation();
-    }
-}
-
-void Trackball::SetFinalPoint(int x, int y)
-{
-    if (mValidTrackball)
-    {
-        mX1 = (2.0f * x - mXSize) * mMultiplier;
-        mY1 = (2.0f * y - mYSize) * mMultiplier;
-        if (mX1 != mX0 || mY1 != mY0)
-        {
-            UpdateOrientation();
-        }
-    }
-}
-
-void Trackball::UpdateOrientation()
+void Trackball::OnSetFinalPoint()
 {
     // Get the first vector on the sphere.
     float sqrLength0 = mX0 * mX0 + mY0 * mY0;
@@ -192,32 +119,32 @@ void Trackball::UpdateOrientation()
         axis[1] * mCamera->GetUVector() +
         axis[2] * mCamera->GetRVector();
 
-    Matrix4x4<float> trackRotate = Rotation<4, float>(
-        AxisAngle<4, float>(worldAxis, angle));
+    Matrix4x4<float> incrRotate = Rotation<4, float>(AxisAngle<4, float>(worldAxis, angle));
 
     // Compute the new rotation, which is the incremental rotation of
     // the trackball appiled after the object has been rotated by its old
-    // rotation.
-#if defined(GTE_USE_MAT_VEC)
-    Matrix4x4<float> rotate = trackRotate * mInitialOrientation;
-#else
-    Matrix4x4<float> rotate = mInitialOrientation * trackRotate;
-#endif
-
-    // Renormalize to avoid accumulated rounding errors that can cause the
-    // rotation matrix to degenerate.
-    Vector4<float> v[3] =
+    // rotation.  If mRoot has a parent, you have to convert the incremental
+    // rotation by a change of basis in the parent's coordinate space.
+    auto const* parent = mRoot->GetParent();
+    Matrix4x4<float> rotate;
+    if (parent)
     {
-        rotate.GetCol(0),
-        rotate.GetCol(1),
-        rotate.GetCol(2)
-    };
-    Orthonormalize<4, float>(3, v);
-    rotate.SetCol(0, v[0]);
-    rotate.SetCol(1, v[1]);
-    rotate.SetCol(2, v[2]);
+        Matrix4x4<float> parWRotate = parent->worldTransform.GetRotation();
+        Matrix4x4<float> trnParWRotate = Transpose(parWRotate);
+#if defined(GTE_USE_MAT_VEC)
+        rotate = trnParWRotate * incrRotate * parWRotate * mInitialOrientation;
+#else
+        rotate = mInitialOrientation * parWROtate * incrRotate * trnParWRotate;
+#endif
+    }
+    else
+    {
+#if defined(GTE_USE_MAT_VEC)
+        rotate = incrRotate * mInitialOrientation;
+#else
+        rotate = mInitialOrientation * incrRotate;
+#endif
+    }
 
-    mRoot->localTransform.SetRotation(rotate);
-    mRoot->Update();
+    NormalizeAndUpdateRoot(rotate);
 }
-

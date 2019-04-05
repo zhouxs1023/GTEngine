@@ -718,6 +718,7 @@
     <ClInclude Include="Include\Graphics\GteTextureSingle.h" />
     <ClInclude Include="Include\Graphics\GteTrackball.h" />
     <ClInclude Include="Include\Graphics\GteTrackcylinder.h" />
+    <ClInclude Include="Include\Graphics\GteTrackObject.h" />
     <ClInclude Include="Include\Graphics\GteTransform.h" />
     <ClInclude Include="Include\Graphics\GteTransformController.h" />
     <ClInclude Include="Include\Graphics\GteTypedBuffer.h" />
@@ -742,6 +743,23 @@
     <ClInclude Include="Include\GTMathematics.h" />
     <ClInclude Include="Include\GTPhysics.h" />
     <ClInclude Include="Include\GTWindows.h" />
+    <ClInclude Include="Include\Imagics\GteAdaptiveSkeletonClimbing2.h" />
+    <ClInclude Include="Include\Imagics\GteAdaptiveSkeletonClimbing3.h" />
+    <ClInclude Include="Include\Imagics\GteCurvatureFlow2.h" />
+    <ClInclude Include="Include\Imagics\GteCurvatureFlow3.h" />
+    <ClInclude Include="Include\Imagics\GteCurveExtractor.h" />
+    <ClInclude Include="Include\Imagics\GteCurveExtractorSquares.h" />
+    <ClInclude Include="Include\Imagics\GteCurveExtractorTriangles.h" />
+    <ClInclude Include="Include\Imagics\GteFastGaussianBlur1.h" />
+    <ClInclude Include="Include\Imagics\GteFastGaussianBlur2.h" />
+    <ClInclude Include="Include\Imagics\GteFastGaussianBlur3.h" />
+    <ClInclude Include="Include\Imagics\GteFastMarch.h" />
+    <ClInclude Include="Include\Imagics\GteFastMarch2.h" />
+    <ClInclude Include="Include\Imagics\GteFastMarch3.h" />
+    <ClInclude Include="Include\Imagics\GteGaussianBlur2.h" />
+    <ClInclude Include="Include\Imagics\GteGaussianBlur3.h" />
+    <ClInclude Include="Include\Imagics\GteGradientAnisotropic2.h" />
+    <ClInclude Include="Include\Imagics\GteGradientAnisotropic3.h" />
     <ClInclude Include="Include\Imagics\GteHistogram.h" />
     <ClInclude Include="Include\Imagics\GteImage.h" />
     <ClInclude Include="Include\Imagics\GteImage2.h" />
@@ -750,7 +768,14 @@
     <ClInclude Include="Include\Imagics\GteImageUtility3.h" />
     <ClInclude Include="Include\Imagics\GteMarchingCubes.h" />
     <ClInclude Include="Include\Imagics\GteMarchingCubesTable.h" />
+    <ClInclude Include="Include\Imagics\GtePdeFilter.h" />
+    <ClInclude Include="Include\Imagics\GtePdeFilter1.h" />
+    <ClInclude Include="Include\Imagics\GtePdeFilter2.h" />
+    <ClInclude Include="Include\Imagics\GtePdeFilter3.h" />
     <ClInclude Include="Include\Imagics\GteSurfaceExtractor.h" />
+    <ClInclude Include="Include\Imagics\GteSurfaceExtractorCubes.h" />
+    <ClInclude Include="Include\Imagics\GteSurfaceExtractorMC.h" />
+    <ClInclude Include="Include\Imagics\GteSurfaceExtractorTetrahedra.h" />
     <ClInclude Include="Include\LowLevel\GteArray2.h" />
     <ClInclude Include="Include\LowLevel\GteArray3.h" />
     <ClInclude Include="Include\LowLevel\GteArray4.h" />
@@ -812,6 +837,8 @@
     <ClInclude Include="Include\Mathematics\GteBSNumber.h" />
     <ClInclude Include="Include\Mathematics\GteBSplineCurve.h" />
     <ClInclude Include="Include\Mathematics\GteBSplineCurveFit.h" />
+    <ClInclude Include="Include\Mathematics\GteBSplineGeodesic.h" />
+    <ClInclude Include="Include\Mathematics\GteBSplineReduction.h" />
     <ClInclude Include="Include\Mathematics\GteBSplineSurface.h" />
     <ClInclude Include="Include\Mathematics\GteBSplineSurfaceFit.h" />
     <ClInclude Include="Include\Mathematics\GteBSplineVolume.h" />
@@ -822,6 +849,7 @@
     <ClInclude Include="Include\Mathematics\GteCholeskyDecomposition.h" />
     <ClInclude Include="Include\Mathematics\GteCircle3.h" />
     <ClInclude Include="Include\Mathematics\GteCone.h" />
+    <ClInclude Include="Include\Mathematics\GteConformalMapGenus0.h" />
     <ClInclude Include="Include\Mathematics\GteConstrainedDelaunay2.h" />
     <ClInclude Include="Include\Mathematics\GteContAlignedBox.h" />
     <ClInclude Include="Include\Mathematics\GteContCapsule3.h" />
@@ -832,6 +860,7 @@
     <ClInclude Include="Include\Mathematics\GteContEllipse2MinCR.h" />
     <ClInclude Include="Include\Mathematics\GteContEllipsoid3.h" />
     <ClInclude Include="Include\Mathematics\GteContEllipsoid3MinCR.h" />
+    <ClInclude Include="Include\Mathematics\GteContLozenge3.h" />
     <ClInclude Include="Include\Mathematics\GteContOrientedBox2.h" />
     <ClInclude Include="Include\Mathematics\GteContOrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteContPointInPolygon2.h" />
@@ -852,6 +881,8 @@
     <ClInclude Include="Include\Mathematics\GteDelaunay2Mesh.h" />
     <ClInclude Include="Include\Mathematics\GteDelaunay3.h" />
     <ClInclude Include="Include\Mathematics\GteDelaunay3Mesh.h" />
+    <ClInclude Include="Include\Mathematics\GteDisjointIntervals.h" />
+    <ClInclude Include="Include\Mathematics\GteDisjointRectangles.h" />
     <ClInclude Include="Include\Mathematics\GteDistAlignedBox3OrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteDistAlignedBoxAlignedBox.h" />
     <ClInclude Include="Include\Mathematics\GteDistCircle3Circle3.h" />
@@ -900,6 +931,7 @@
     <ClInclude Include="Include\Mathematics\GteDistTriangle3Triangle3.h" />
     <ClInclude Include="Include\Mathematics\GteEdgeKey.h" />
     <ClInclude Include="Include\Mathematics\GteEllipse3.h" />
+    <ClInclude Include="Include\Mathematics\GteEllipsoidGeodesic.h" />
     <ClInclude Include="Include\Mathematics\GteETManifoldMesh.h" />
     <ClInclude Include="Include\Mathematics\GteETNonmanifoldMesh.h" />
     <ClInclude Include="Include\Mathematics\GteEulerAngles.h" />
@@ -922,6 +954,7 @@
     <ClInclude Include="Include\Mathematics\GteIEEEBinary16.h" />
     <ClInclude Include="Include\Mathematics\GteIndexAttribute.h" />
     <ClInclude Include="Include\Mathematics\GteIntegration.h" />
+    <ClInclude Include="Include\Mathematics\GteIntervalSet.h" />
     <ClInclude Include="Include\Mathematics\GteIntpAkima1.h" />
     <ClInclude Include="Include\Mathematics\GteIntpAkimaNonuniform1.h" />
     <ClInclude Include="Include\Mathematics\GteIntpAkimaUniform1.h" />
@@ -1034,6 +1067,7 @@
     <ClInclude Include="Include\Mathematics\GteIntrSphere3Frustum3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrSphere3Sphere3.h" />
     <ClInclude Include="Include\Mathematics\GteIntrSphere3Triangle3.h" />
+    <ClInclude Include="Include\Mathematics\GteIntrTriangle2Triangle2.h" />
     <ClInclude Include="Include\Mathematics\GteIntrTriangle3OrientedBox3.h" />
     <ClInclude Include="Include\Mathematics\GteInvSqrtEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteIsPlanarGraph.h" />
@@ -1043,12 +1077,14 @@
     <ClInclude Include="Include\Mathematics\GteLinearSystem.h" />
     <ClInclude Include="Include\Mathematics\GteLog2Estimate.h" />
     <ClInclude Include="Include\Mathematics\GteLogEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteLozenge3.h" />
     <ClInclude Include="Include\Mathematics\GteMath.h" />
     <ClInclude Include="Include\Mathematics\GteMatrix.h" />
     <ClInclude Include="Include\Mathematics\GteMatrix2x2.h" />
     <ClInclude Include="Include\Mathematics\GteMatrix3x3.h" />
     <ClInclude Include="Include\Mathematics\GteMatrix4x4.h" />
     <ClInclude Include="Include\Mathematics\GteMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteMeshCurvature.h" />
     <ClInclude Include="Include\Mathematics\GteMinimalCycleBasis.h" />
     <ClInclude Include="Include\Mathematics\GteMinimize1.h" />
     <ClInclude Include="Include\Mathematics\GteMinimizeN.h" />
@@ -1086,7 +1122,9 @@
     <ClInclude Include="Include\Mathematics\GteRectangle.h" />
     <ClInclude Include="Include\Mathematics\GteRectangleMesh.h" />
     <ClInclude Include="Include\Mathematics\GteRectanglePatchMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteRectangleSet.h" />
     <ClInclude Include="Include\Mathematics\GteRevolutionMesh.h" />
+    <ClInclude Include="Include\Mathematics\GteRiemannianGeodesic.h" />
     <ClInclude Include="Include\Mathematics\GteRootsBisection.h" />
     <ClInclude Include="Include\Mathematics\GteRootsBrentsMethod.h" />
     <ClInclude Include="Include\Mathematics\GteRootsPolynomial.h" />
@@ -1130,10 +1168,7 @@
     <ClInclude Include="Include\Mathematics\GteVETNonmanifoldMesh.h" />
     <ClInclude Include="Include\Mathematics\MSW\GteCPUQueryInstructions.h" />
     <ClInclude Include="Include\Mathematics\MSW\GteIntelSSE.h" />
-    <ClInclude Include="Include\Physics\GteBoundingVolumeTree.h" />
     <ClInclude Include="Include\Physics\GteBoxManager.h" />
-    <ClInclude Include="Include\Physics\GteCollisionGroup.h" />
-    <ClInclude Include="Include\Physics\GteCollisionRecord.h" />
     <ClInclude Include="Include\Physics\GteExtremalQuery3.h" />
     <ClInclude Include="Include\Physics\GteExtremalQuery3BSP.h" />
     <ClInclude Include="Include\Physics\GteExtremalQuery3PRJ.h" />
@@ -1831,7 +1866,6 @@
     <ClCompile Include="Source\Graphics\GteBillboardNode.cpp" />
     <ClCompile Include="Source\Graphics\GteBlendState.cpp" />
     <ClCompile Include="Source\Graphics\GteBlendTransformController.cpp" />
-    <ClCompile Include="Source\Graphics\GteBoundingSphere.cpp" />
     <ClCompile Include="Source\Graphics\GteBspNode.cpp" />
     <ClCompile Include="Source\Graphics\GteBuffer.cpp" />
     <ClCompile Include="Source\Graphics\GteCamera.cpp" />
@@ -1843,7 +1877,6 @@
     <ClCompile Include="Source\Graphics\GteControlledObject.cpp" />
     <ClCompile Include="Source\Graphics\GteController.cpp" />
     <ClCompile Include="Source\Graphics\GteCuller.cpp" />
-    <ClCompile Include="Source\Graphics\GteCullingPlane.cpp" />
     <ClCompile Include="Source\Graphics\GteDataFormat.cpp" />
     <ClCompile Include="Source\Graphics\GteDepthStencilState.cpp" />
     <ClCompile Include="Source\Graphics\GteDirectionalLightEffect.cpp" />
@@ -1910,6 +1943,7 @@
     <ClCompile Include="Source\Graphics\GteTextureSingle.cpp" />
     <ClCompile Include="Source\Graphics\GteTrackball.cpp" />
     <ClCompile Include="Source\Graphics\GteTrackcylinder.cpp" />
+    <ClCompile Include="Source\Graphics\GteTrackObject.cpp" />
     <ClCompile Include="Source\Graphics\GteTransform.cpp" />
     <ClCompile Include="Source\Graphics\GteTransformController.cpp" />
     <ClCompile Include="Source\Graphics\GteTypedBuffer.cpp" />

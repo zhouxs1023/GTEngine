@@ -1003,6 +1003,10 @@ namespace std
     {
         return (gte::BSNumber<UIntegerType>)std::tanh((double)x);
     }
+
+    // Type trait that says BSNumber is a signed type.
+    template <typename UIntegerType>
+    struct is_signed<gte::BSNumber<UIntegerType>> : true_type {};
 }
 
 namespace gte

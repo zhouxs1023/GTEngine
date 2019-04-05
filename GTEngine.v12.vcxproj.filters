@@ -223,11 +223,26 @@
     <Filter Include="Files\Graphics\SceneGraph\Terrain">
       <UniqueIdentifier>{9107111d-1254-4aaf-a51b-b762d74e55a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Physics\CollisionDetection">
-      <UniqueIdentifier>{9768ec2a-61eb-42de-a30b-7f0d8c30edec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Files\Mathematics\Intersection\ND">
       <UniqueIdentifier>{6e5ad851-c910-4849-a708-baa1aed7ec4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Imagics\Extraction">
+      <UniqueIdentifier>{99fcbd2b-a95c-480e-8f92-d4aa161354ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Imagics\Images">
+      <UniqueIdentifier>{0aa3a99e-f08c-4c7c-b74c-703da9ca60bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Imagics\Utilities">
+      <UniqueIdentifier>{c6ba415a-3f19-48a4-b2c4-0c92aa112394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Imagics\Filters">
+      <UniqueIdentifier>{ac3822c3-4498-4e1f-8bf4-d95b474bd5b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Imagics\Segmenters">
+      <UniqueIdentifier>{8a594f13-60cf-40c2-a80e-4710a258eaca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Mathematics\Intersection\1D">
+      <UniqueIdentifier>{8617c6a8-b652-439b-a345-905ff4e2346d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -578,33 +593,6 @@
     </ClInclude>
     <ClInclude Include="Include\Graphics\GteVisualProgram.h">
       <Filter>Files\Graphics\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteHistogram.h">
-      <Filter>Files\Imagics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteImage.h">
-      <Filter>Files\Imagics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteImage2.h">
-      <Filter>Files\Imagics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteImage3.h">
-      <Filter>Files\Imagics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteImageUtility2.h">
-      <Filter>Files\Imagics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteImageUtility3.h">
-      <Filter>Files\Imagics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteMarchingCubes.h">
-      <Filter>Files\Imagics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteMarchingCubesTable.h">
-      <Filter>Files\Imagics</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Imagics\GteSurfaceExtractor.h">
-      <Filter>Files\Imagics</Filter>
     </ClInclude>
     <ClInclude Include="Include\LowLevel\GteAtomicMinMax.h">
       <Filter>Files\LowLevel\DataTypes</Filter>
@@ -1163,9 +1151,6 @@
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteIntpVectorField2.h">
       <Filter>Files\Mathematics\Interpolation</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteIntrIntervals.h">
-      <Filter>Files\Mathematics\Intersection</Filter>
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteIntrAlignedBox2AlignedBox2.h">
       <Filter>Files\Mathematics\Intersection\2D</Filter>
@@ -2133,17 +2118,146 @@
     <ClInclude Include="Include\Mathematics\GteIntrOrientedBox3Cylinder3.h">
       <Filter>Files\Mathematics\Intersection\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Physics\GteCollisionRecord.h">
-      <Filter>Files\Physics\CollisionDetection</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Physics\GteBoundingVolumeTree.h">
-      <Filter>Files\Physics\CollisionDetection</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Physics\GteCollisionGroup.h">
-      <Filter>Files\Physics\CollisionDetection</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Mathematics\GteIntrConvexPolygonHyperplane.h">
       <Filter>Files\Mathematics\Intersection\ND</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrTriangle2Triangle2.h">
+      <Filter>Files\Mathematics\Intersection\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteHistogram.h">
+      <Filter>Files\Imagics\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteImageUtility2.h">
+      <Filter>Files\Imagics\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteImageUtility3.h">
+      <Filter>Files\Imagics\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteImage.h">
+      <Filter>Files\Imagics\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteImage2.h">
+      <Filter>Files\Imagics\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteImage3.h">
+      <Filter>Files\Imagics\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteMarchingCubes.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteMarchingCubesTable.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteCurveExtractor.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteCurveExtractorSquares.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteCurveExtractorTriangles.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteSurfaceExtractorCubes.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteSurfaceExtractorMC.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteSurfaceExtractor.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteSurfaceExtractorTetrahedra.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteCurvatureFlow3.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteFastGaussianBlur1.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteFastGaussianBlur2.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteFastGaussianBlur3.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteGaussianBlur2.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteGaussianBlur3.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteGradientAnisotropic2.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteGradientAnisotropic3.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GtePdeFilter.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GtePdeFilter1.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GtePdeFilter2.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GtePdeFilter3.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteCurvatureFlow2.h">
+      <Filter>Files\Imagics\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteMeshCurvature.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteTrackObject.h">
+      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteConformalMapGenus0.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteFastMarch.h">
+      <Filter>Files\Imagics\Segmenters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteFastMarch3.h">
+      <Filter>Files\Imagics\Segmenters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteFastMarch2.h">
+      <Filter>Files\Imagics\Segmenters</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteAdaptiveSkeletonClimbing2.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Imagics\GteAdaptiveSkeletonClimbing3.h">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteLozenge3.h">
+      <Filter>Files\Mathematics\GeometricPrimitives\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteContLozenge3.h">
+      <Filter>Files\Mathematics\Containment</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteRiemannianGeodesic.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteBSplineGeodesic.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteEllipsoidGeodesic.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteBSplineReduction.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteIntrIntervals.h">
+      <Filter>Files\Mathematics\Intersection\1D</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDisjointRectangles.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteDisjointIntervals.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2477,21 +2591,6 @@
     <ClCompile Include="Source\Graphics\GteVisualProgram.cpp">
       <Filter>Files\Graphics\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Imagics\GteHistogram.cpp">
-      <Filter>Files\Imagics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Imagics\GteImageUtility2.cpp">
-      <Filter>Files\Imagics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Imagics\GteImageUtility3.cpp">
-      <Filter>Files\Imagics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Imagics\GteMarchingCubes.cpp">
-      <Filter>Files\Imagics</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Imagics\GteMarchingCubesTable.cpp">
-      <Filter>Files\Imagics</Filter>
-    </ClCompile>
     <ClCompile Include="Source\LowLevel\GteWrapper.cpp">
       <Filter>Files\LowLevel\DataTypes</Filter>
     </ClCompile>
@@ -2657,9 +2756,6 @@
     <ClCompile Include="Source\Graphics\GteCuller.cpp">
       <Filter>Files\Graphics\SceneGraph\Visibility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\GteCullingPlane.cpp">
-      <Filter>Files\Graphics\SceneGraph\Visibility</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Graphics\GtePicker.cpp">
       <Filter>Files\Graphics\SceneGraph\Picking</Filter>
     </ClCompile>
@@ -2680,9 +2776,6 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteTransformController.cpp">
       <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Graphics\GteBoundingSphere.cpp">
-      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteNode.cpp">
       <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
@@ -2896,6 +2989,24 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteIKController.cpp">
       <Filter>Files\Graphics\SceneGraph\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Imagics\GteHistogram.cpp">
+      <Filter>Files\Imagics\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Imagics\GteImageUtility2.cpp">
+      <Filter>Files\Imagics\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Imagics\GteImageUtility3.cpp">
+      <Filter>Files\Imagics\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Imagics\GteMarchingCubes.cpp">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Imagics\GteMarchingCubesTable.cpp">
+      <Filter>Files\Imagics\Extraction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteTrackObject.cpp">
+      <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

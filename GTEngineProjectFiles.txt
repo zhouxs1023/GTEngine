@@ -365,8 +365,7 @@ Files (13)
             Detail (2)
                 GteBillboardNode.cpp
                 GteBillboardNode.h
-            Hierarchy (28)
-                GteBoundingSphere.cpp
+            Hierarchy (29)
                 GteBoundingSphere.h
                 GteCamera.cpp
                 GteCamera.h
@@ -386,6 +385,8 @@ Files (13)
                 GteTrackball.h
                 GteTrackcylinder.cpp
                 GteTrackcylinder.h
+				GteTrackObject.h
+				GteTrackObject.cpp
                 GteTransform.cpp
                 GteTransform.h
                 GteViewVolume.cpp
@@ -405,9 +406,8 @@ Files (13)
             Terrain (2)
                 GteTerrain.cpp
                 GteTerrain.h
-            Visibility (4)
+            Visibility (3)
                 GteCuller.cpp
-                GteCullingPlane.cpp
                 GteCuller.h
                 GteCullingPlane.h
             GteMeshFactory.cpp
@@ -451,21 +451,50 @@ Files (13)
         GteGEObject.h
         GteGraphicsEngine.cpp
         GteGraphicsEngine.h
-    Imagics (14)
-        GteHistogram.cpp
-        GteHistogram.h
-        GteImage.h
-        GteImage2.h
-        GteImage3.h
-        GteImageUtility2.cpp
-        GteImageUtility2.h
-        GteImageUtility3.cpp
-        GteImageUtility3.h
-        GteMarchingCubes.cpp
-        GteMarchingCubes.h
-        GteMarchingCubesTable.cpp
-        GteMarchingCubesTable.h
-        GteSurfaceExtractor.h
+    Imagics (0)
+        Extraction (13)
+		    GteAdaptiveSkeletonClimbing2.h
+		    GteAdaptiveSkeletonClimbing3.h
+            GteCurveExtractor.h
+            GteCurveExtractorSquares.h
+            GteCurveExtractorTriangles.h
+            GteMarchingCubes.cpp
+            GteMarchingCubes.h
+            GteMarchingCubesTable.cpp
+            GteMarchingCubesTable.h
+            GteSurfaceExtractor.h
+            GteSurfaceExtractorCubes.h
+            GteSurfaceExtractorMC.h
+            GteSurfaceExtractorTetrahedra.h
+        Filters (13)
+            GteCurvatureFlow2.h
+            GteCurvatureFlow3.h
+            GteFastGaussianBlur1.h
+            GteFastGaussianBlur2.h
+            GteFastGaussianBlur3.h
+            GteGaussianBlur2.h
+            GteGaussianBlur3.h
+            GteGradientAnisotropic2.h
+            GteGradientAnisotropic3.h
+            GtePdeFilter.h
+            GtePdeFilter1.h
+            GtePdeFilter2.h
+            GtePdeFilter3.h
+        Images (3)
+            GteImage.h
+            GteImage2.h
+            GteImage3.h
+		Segmenters (3)
+			GteFastMarch.h
+			GteFastMarch2.h
+			GteFastMarch3.h
+        Utilities (6)
+            GteHistogram.cpp
+            GteHistogram.h
+            GteImageUtility2.cpp
+            GteImageUtility2.h
+            GteImageUtility3.cpp
+            GteImageUtility3.h
     LowLevel (0)
         DataTypes (14)
             GteArray2.h
@@ -564,7 +593,8 @@ Files (13)
             GteUIntegerAP32.cpp
             GteUIntegerAP32.h
             GteUIntegerFP32.h
-        ComputationalGeometry (45)
+        ComputationalGeometry (49)
+		    GteConformalMapGenus0.h
             GteConstrainedDelaunay2.h
             GteConvexHull2.h
             GteConvexHull3.h
@@ -572,6 +602,8 @@ Files (13)
             GteDelaunay2Mesh.h
             GteDelaunay3.h
             GteDelaunay3Mesh.h
+            GteDisjointIntervals.h
+            GteDisjointRectangles.h
             GteEdgeKey.cpp
             GteEdgeKey.h
             GteETManifoldMesh.cpp
@@ -582,6 +614,7 @@ Files (13)
             GteGenerateMeshUV.cpp
             GteGenerateMeshUV.h
             GteIsPlanarGraph.h
+			GteMeshCurvature.h
             GteMinimalCycleBasis.h
             GteMinimumAreaBox2.h
             GteMinimumAreaCircle2.h
@@ -620,6 +653,7 @@ Files (13)
             GteContEllipse2MinCR.h
             GteContEllipsoid3.h
             GteContEllipsoid3MinCR.h
+			GteContLozenge3.h
             GteContOrientedBox2.h
             GteContOrientedBox3.h
             GteContPointInPolygon2.h
@@ -627,15 +661,18 @@ Files (13)
             GteContScribeCircle2.h
             GteContScribeCircle3Sphere3.h
             GteContSphere3.h
-        CurvesSurfacesVolumes (25)
+        CurvesSurfacesVolumes (29)
             GteBasisFunction.h
             GteBezierCurve.h
             GteBSplineCurve.h
             GteBSplineCurveFit.h
+			GteBSplineGeodesic.h
+			GteBSplineReduction.h
             GteBSplineSurface.h
             GteBSplineSurfaceFit.h
             GteBSplineVolume.h
             GteDarbouxFrame.h
+			GteEllipsoidGeodesic.h
             GteFrenetFrame.h
             GteIndexAttribute.h
             GteMesh.h
@@ -650,6 +687,7 @@ Files (13)
             GteRectangleMesh.h
             GteRectanglePatchMesh.h
             GteRevolutionMesh.h
+			GteRiemannianGeodesic.h
             GteTCBSplineCurve.h
             GteTubeMesh.h
             GteVertexAttribute.h
@@ -723,12 +761,13 @@ Files (13)
                 GteArc2.h
                 GtePolygon2.h
                 GteSector2.h
-            3D (8)
+            3D (9)
                 GteCircle3.h
                 GteConvexPolyhedron3.h
                 GteCylinder3.h
                 GteEllipse3.h
                 GteFrustum3.h
+				GteLozenge3.h
                 GtePolyhedron3.h
                 GteTetrahedron3.h
                 GteTorus3.h
@@ -764,8 +803,10 @@ Files (13)
                 GteIntpTricubic3.h
                 GteIntpTrilinear3.h
                 GteIntpVectorField2.h
-        Intersection (3)
-            2D (34)
+        Intersection (2)
+            1D (1)
+                GteIntrIntervals.h
+            2D (35)
                 GteIntrAlignedBox2AlignedBox2.h
                 GteIntrAlignedBox2Circle2.h
                 GteIntrAlignedBox2OrientedBox2.h
@@ -800,6 +841,7 @@ Files (13)
                 GteIntrSegment2OrientedBox2.h
                 GteIntrSegment2Segment2.h
                 GteIntrSegment2Triangle2.h
+                GteIntrTriangle2Triangle2.h
             3D (60)
                 GteIntrAlignedBox3AlignedBox3.h
                 GteIntrAlignedBox3Cone3.h
@@ -860,10 +902,9 @@ Files (13)
                 GteIntrSphere3Sphere3.h
                 GteIntrSphere3Triangle3.h
                 GteIntrTriangle3OrientedBox3.h
-            ND
+            ND (1)
                 GteIntrConvexPolygonHyperplane.h
             GteFIQuery.h
-            GteIntrIntervals.h
             GteTIQuery.h
         NumericalMethods (24)
             GteCholeskyDecomposition.h

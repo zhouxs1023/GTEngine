@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/03/06)
 
 #pragma once
 
@@ -18,49 +18,121 @@
 
 namespace gte
 {
+    template <typename Real>
+    class CullingPlane
+    {
+    public:
+        // Construction and destruction.  The destructor hides the base-class
+        // destructor, but the latter has no side effects.
+        ~CullingPlane()
+        {
+        }
 
-class GTE_IMPEXP CullingPlane
-{
-public:
-    // Construction and destruction.  The destructor hides the base-class
-    // destructor, but the latter has no side effects.
-    ~CullingPlane ();
-    CullingPlane ();
-    CullingPlane (CullingPlane const& plane);
-    CullingPlane (Vector4<float> const& N, float c);
-    CullingPlane (float n0, float n1, float n2, float c);
-    CullingPlane (Vector4<float> const& N, Vector4<float> const& P);
-    CullingPlane (Vector4<float> const& P0, Vector4<float> const& P1,
-        Vector4<float> const& P2);
+        CullingPlane()
+            :
+            mTuple({ (Real)0, (Real)0, (Real)0, (Real)0 })
+        {
+        }
 
-    // Assignment.
-    CullingPlane& operator= (CullingPlane const& plane);
+        CullingPlane(CullingPlane const& plane)
+            :
+            mTuple(plane.mTuple)
+        {
+        }
 
-    // Member access.  Because N and c are interdependent, there are no
-    // accessors to set N or c individually.
-    void Set (Vector4<float> const& N, float c);
-    void Get (Vector4<float>& N, float& c) const;
-    Vector4<float> GetNormal () const;
-    float GetConstant () const;
+        CullingPlane(Vector4<Real> const& N, Real c)
+            :
+            mTuple({ N[0], N[1], N[2], c })
+        {
+        }
 
-    // Compute L = Length(n0,n1,n2) and set the plane to (n0,n1,n2,c)/L.
-    // This is useful when transforming planes by homogeneous matrices.
-    // The function returns L.
-    float Normalize ();
+        CullingPlane(Real n0, Real n1, Real n2, Real c)
+            :
+            mTuple({ n0, n1, n2, c })
+        {
+        }
 
-    // The "positive side" of the plane is the half space to which the
-    // plane normal is directed.  The "negative side" is the other half
-    // space.  The function returns +1 when P is on the positive side, -1
-    // when P is on the negative side, or 0 when P is on the plane.
-    int WhichSide (Vector4<float> const& P) const;
+        CullingPlane(Vector4<Real> const& N, Vector4<Real> const& P)
+            :
+            mTuple({ N[0], N[1], N[2], -Dot(N, P) })
+        {
+        }
 
-    // Compute d = Dot(N,P)+c where N is the plane normal and c is the plane
-    // constant.  This is a signed pseudodistance.  The sign of the return
-    // value is consistent with that in the comments for WhichSide(...).
-    float DistanceTo (Vector4<float> const& P) const;
+        CullingPlane(Vector4<Real> const& P0, Vector4<Real> const& P1, Vector4<Real> const& P2)
+        {
+            Vector4<Real> edge1 = P1 - P0;
+            Vector4<Real> edge2 = P2 - P0;
+            Vector4<Real> N = Cross(edge1, edge2);
+            mTuple[0] = N[0];
+            mTuple[1] = N[1];
+            mTuple[2] = N[2];
+            mTuple[3] = -Dot(N, P0);
+        }
 
-private:
-    Vector4<float> mTuple;
-};
+        // Assignment.
+        CullingPlane& operator= (CullingPlane const& plane)
+        {
+            mTuple = plane.mTuple;
+            return *this;
+        }
 
+        // Member access.  Because N and c are interdependent, there are no
+        // accessors to set N or c individually.
+        void Set(Vector4<Real> const& N, Real c)
+        {
+            mTuple[0] = N[0];
+            mTuple[1] = N[1];
+            mTuple[2] = N[2];
+            mTuple[3] = c;
+        }
+
+        void Get(Vector4<Real>& N, Real& c) const
+        {
+            N[0] = mTuple[0];
+            N[1] = mTuple[1];
+            N[2] = mTuple[2];
+            c = mTuple[3];
+        }
+
+        Vector4<Real> GetNormal() const
+        {
+            return Vector4<Real>{ mTuple[0], mTuple[1], mTuple[2], (Real)0 };
+        }
+
+        Real GetConstant() const
+        {
+            return mTuple[3];
+        }
+
+        // Compute L = Length(n0,n1,n2) and set the plane to (n0,n1,n2,c)/L.
+        // This is useful when transforming planes by homogeneous matrices.
+        // The function returns L.
+        Real Normalize()
+        {
+            Real length = std::sqrt(mTuple[0] * mTuple[0] + mTuple[1] * mTuple[1] + mTuple[2] * mTuple[2]);
+            mTuple /= length;
+            return length;
+        }
+
+        // The "positive side" of the plane is the half space to which the
+        // plane normal is directed.  The "negative side" is the other half
+        // space.  The function returns +1 when P is on the positive side, -1
+        // when P is on the negative side, or 0 when P is on the plane.
+        int WhichSide(Vector4<Real> const& P) const
+        {
+            Real distance = Dot(mTuple, P);
+            return (distance > (Real)0 ? +1 : (distance < (Real)0 ? -1 : 0));
+        }
+
+        // Compute d = Dot(N,P)+c where N is the plane normal and c is the plane
+        // constant.  This is a signed pseudodistance.  The sign of the return
+        // value is consistent with that in the comments for WhichSide(...).
+        Real DistanceTo(Vector4<Real> const& P) const
+        {
+            return Dot(mTuple, P);
+        }
+
+    private:
+        Vector4<Real> mTuple;
+    };
 }

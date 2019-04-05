@@ -3,10 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/03/09)
 
 #include "DeformableBall.h"
-#include <Imagics/GteSurfaceExtractor.h>
+#include <Imagics/GteSurfaceExtractorMC.h>
 
 DeformableBall::DeformableBall(float duration, float period, std::shared_ptr<Texture2Effect> const& effect)
     :
@@ -33,7 +33,7 @@ void DeformableBall::CreateBall(std::shared_ptr<Texture2Effect> const& effect)
     int const bound = 16;
     float const invBoundM1 = 1.0f / (bound - 1);
     Image3<float> image(bound, bound, bound);
-    SurfaceExtractor<float> extractor(image);
+    SurfaceExtractorMC<float> extractor(image);
 
     // Scale function values to [-1024,1024].
     float const imageScale = 1024.0f;

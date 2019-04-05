@@ -54,28 +54,26 @@
     <None Include="Shaders\VertexColoringVS.glsl">
       <Filter>Sample GLSL Shader Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Shaders\AppendConsume.hlsl">
+    <None Include="Shaders\AppendConsume.hlsl">
       <Filter>Sample HLSL Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\Billboards.hlsl">
+    </None>
+    <None Include="Shaders\Billboards.hlsl">
       <Filter>Sample HLSL Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\NestedStruct.hlsl">
+    </None>
+    <None Include="Shaders\NestedStruct.hlsl">
       <Filter>Sample HLSL Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\SimpleBuffers.hlsl">
+    </None>
+    <None Include="Shaders\SimpleBuffers.hlsl">
       <Filter>Sample HLSL Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\TextureArrays.hlsl">
+    </None>
+    <None Include="Shaders\TextureArrays.hlsl">
       <Filter>Sample HLSL Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\Texturing.hlsl">
+    </None>
+    <None Include="Shaders\Texturing.hlsl">
       <Filter>Sample HLSL Shader Files</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\VertexColoring.hlsl">
+    </None>
+    <None Include="Shaders\VertexColoring.hlsl">
       <Filter>Sample HLSL Shader Files</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

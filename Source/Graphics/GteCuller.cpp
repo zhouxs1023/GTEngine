@@ -3,13 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/03/06)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteCamera.h>
 #include <Graphics/GteSpatial.h>
 using namespace gte;
-
 
 Culler::~Culler()
 {
@@ -24,7 +23,7 @@ Culler::Culler()
     mVisibleSet.reserve(INITIALLY_VISIBLE);
 }
 
-bool Culler::PushPlane(CullingPlane const& plane)
+bool Culler::PushPlane(CullingPlane<float> const& plane)
 {
     if (mPlaneQuantity < MAX_PLANE_QUANTITY)
     {
@@ -62,7 +61,7 @@ void Culler::ComputeVisibleSet(std::shared_ptr<Camera> const& camera,
     }
 }
 
-bool Culler::IsVisible(BoundingSphere const& sphere)
+bool Culler::IsVisible(BoundingSphere<float> const& sphere)
 {
     if (sphere.GetRadius() == 0.0f)
     {
@@ -170,4 +169,3 @@ void Culler::PushViewFrustumPlanes(std::shared_ptr<Camera> const& camera)
     // All planes are active initially.
     mPlaneState = 0xFFFFFFFFu;
 }
-

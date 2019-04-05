@@ -54,12 +54,26 @@
     <None Include="Shaders\VertexColoringVS.glsl">
       <Filter>Sample GLSL Shader Files</Filter>
     </None>
-    <None Include="Shaders\AppendConsume.hlsl" />
-    <None Include="Shaders\Billboards.hlsl" />
-    <None Include="Shaders\NestedStruct.hlsl" />
-    <None Include="Shaders\SimpleBuffers.hlsl" />
-    <None Include="Shaders\TextureArrays.hlsl" />
-    <None Include="Shaders\Texturing.hlsl" />
-    <None Include="Shaders\VertexColoring.hlsl" />
+    <None Include="Shaders\AppendConsume.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\Billboards.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\NestedStruct.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\SimpleBuffers.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\TextureArrays.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\Texturing.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </None>
+    <None Include="Shaders\VertexColoring.hlsl">
+      <Filter>Sample HLSL Shader Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

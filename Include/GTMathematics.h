@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.29 (2019/02/13)
+// File Version: 3.0.36 (2019/03/26)
 
 #pragma once
 
@@ -71,6 +71,7 @@
 #include <Mathematics/GteApprTorus3.h>
 
 // ComputationalGeometry
+#include <Mathematics/GteConformalMapGenus0.h>
 #include <Mathematics/GteConstrainedDelaunay2.h>
 #include <Mathematics/GteConvexHull2.h>
 #include <Mathematics/GteConvexHull3.h>
@@ -78,12 +79,15 @@
 #include <Mathematics/GteDelaunay2Mesh.h>
 #include <Mathematics/GteDelaunay3.h>
 #include <Mathematics/GteDelaunay3Mesh.h>
+#include <Mathematics/GteDisjointIntervals.h>
+#include <Mathematics/GteDisjointRectangles.h>
 #include <Mathematics/GteEdgeKey.h>
 #include <Mathematics/GteETManifoldMesh.h>
 #include <Mathematics/GteETNonmanifoldMesh.h>
 #include <Mathematics/GteFeatureKey.h>
 #include <Mathematics/GteGenerateMeshUV.h>
 #include <Mathematics/GteIsPlanarGraph.h>
+#include <Mathematics/GteMeshCurvature.h>
 #include <Mathematics/GteMinimalCycleBasis.h>
 #include <Mathematics/GteMinimumAreaBox2.h>
 #include <Mathematics/GteMinimumAreaCircle2.h>
@@ -117,6 +121,7 @@
 #include <Mathematics/GteContEllipse2MinCR.h>
 #include <Mathematics/GteContEllipsoid3.h>
 #include <Mathematics/GteContEllipsoid3MinCR.h>
+#include <Mathematics/GteContLozenge3.h>
 #include <Mathematics/GteContOrientedBox2.h>
 #include <Mathematics/GteContOrientedBox3.h>
 #include <Mathematics/GteContPointInPolygon2.h>
@@ -130,10 +135,13 @@
 #include <Mathematics/GteBezierCurve.h>
 #include <Mathematics/GteBSplineCurve.h>
 #include <Mathematics/GteBSplineCurveFit.h>
+#include <Mathematics/GteBSplineGeodesic.h>
+#include <Mathematics/GteBSplineReduction.h>
 #include <Mathematics/GteBSplineSurface.h>
 #include <Mathematics/GteBSplineSurfaceFit.h>
 #include <Mathematics/GteBSplineVolume.h>
 #include <Mathematics/GteDarbouxFrame.h>
+#include <Mathematics/GteEllipsoidGeodesic.h>
 #include <Mathematics/GteFrenetFrame.h>
 #include <Mathematics/GteIndexAttribute.h>
 #include <Mathematics/GteMesh.h>
@@ -148,6 +156,7 @@
 #include <Mathematics/GteRectangleMesh.h>
 #include <Mathematics/GteRectanglePatchMesh.h>
 #include <Mathematics/GteRevolutionMesh.h>
+#include <Mathematics/GteRiemannianGeodesic.h>
 #include <Mathematics/GteTCBSplineCurve.h>
 #include <Mathematics/GteTubeMesh.h>
 #include <Mathematics/GteVertexAttribute.h>
@@ -232,6 +241,7 @@
 #include <Mathematics/GteHyperplane.h>
 #include <Mathematics/GteHypersphere.h>
 #include <Mathematics/GteLine.h>
+#include <Mathematics/GteLozenge3.h>
 #include <Mathematics/GteOrientedBox.h>
 #include <Mathematics/GtePolygon2.h>
 #include <Mathematics/GtePolyhedron3.h>
@@ -359,6 +369,7 @@
 #include <Mathematics/GteIntrSphere3Sphere3.h>
 #include <Mathematics/GteIntrSphere3Triangle3.h>
 #include <Mathematics/GteIntrTriangle3OrientedBox3.h>
+#include <Mathematics/GteIntrTriangle2Triangle2.h>
 #include <Mathematics/GteTIQuery.h>
 
 // NumericalMethods
