@@ -2259,6 +2259,21 @@
     <ClInclude Include="Include\Mathematics\GteDisjointIntervals.h">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteQuadricSurface.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GtePolynomialCurve.h">
+      <Filter>Files\Mathematics\CurvesSurfacesVolumes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteBSPPolygon2.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteSplitMeshByPlane.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteCLODPolyline.h">
+      <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Applications\GteCommand.cpp">

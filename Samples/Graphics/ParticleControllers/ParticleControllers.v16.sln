@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParticleControllers.v16", "ParticleControllers.v16.vcxproj", "{0C74B5D8-715A-4021-9A82-F40169027A55}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Required", "Required", "{C0CED136-2DDF-413E-A32D-9CEF2280452B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GTEngine.v16", "..\..\..\GTEngine.v16.vcxproj", "{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		DebugGL4|x64 = DebugGL4|x64
+		DebugGL4|x86 = DebugGL4|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+		ReleaseGL4|x64 = ReleaseGL4|x64
+		ReleaseGL4|x86 = ReleaseGL4|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.Debug|x64.ActiveCfg = Debug|x64
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.Debug|x64.Build.0 = Debug|x64
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.Debug|x86.ActiveCfg = Debug|Win32
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.Debug|x86.Build.0 = Debug|Win32
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.DebugGL4|x64.ActiveCfg = DebugGL4|x64
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.DebugGL4|x64.Build.0 = DebugGL4|x64
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.DebugGL4|x86.ActiveCfg = DebugGL4|Win32
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.DebugGL4|x86.Build.0 = DebugGL4|Win32
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.Release|x64.ActiveCfg = Release|x64
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.Release|x64.Build.0 = Release|x64
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.Release|x86.ActiveCfg = Release|Win32
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.Release|x86.Build.0 = Release|Win32
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.ReleaseGL4|x64.ActiveCfg = ReleaseGL4|x64
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.ReleaseGL4|x64.Build.0 = ReleaseGL4|x64
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.ReleaseGL4|x86.ActiveCfg = ReleaseGL4|Win32
+		{0C74B5D8-715A-4021-9A82-F40169027A55}.ReleaseGL4|x86.Build.0 = ReleaseGL4|Win32
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Debug|x64.ActiveCfg = Debug|x64
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Debug|x64.Build.0 = Debug|x64
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Debug|x86.ActiveCfg = Debug|Win32
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Debug|x86.Build.0 = Debug|Win32
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.DebugGL4|x64.ActiveCfg = DebugGL4|x64
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.DebugGL4|x64.Build.0 = DebugGL4|x64
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.DebugGL4|x86.ActiveCfg = DebugGL4|Win32
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.DebugGL4|x86.Build.0 = DebugGL4|Win32
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Release|x64.ActiveCfg = Release|x64
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Release|x64.Build.0 = Release|x64
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Release|x86.ActiveCfg = Release|Win32
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Release|x86.Build.0 = Release|Win32
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.ReleaseGL4|x64.ActiveCfg = ReleaseGL4|x64
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.ReleaseGL4|x64.Build.0 = ReleaseGL4|x64
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.ReleaseGL4|x86.ActiveCfg = ReleaseGL4|Win32
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.ReleaseGL4|x86.Build.0 = ReleaseGL4|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829} = {C0CED136-2DDF-413E-A32D-9CEF2280452B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6582FA9C-C6B9-41C9-9F75-3A14E322D6EA}
+	EndGlobalSection
+EndGlobal

@@ -593,7 +593,9 @@ Files (13)
             GteUIntegerAP32.cpp
             GteUIntegerAP32.h
             GteUIntegerFP32.h
-        ComputationalGeometry (49)
+        ComputationalGeometry (52)
+		    GteBSPPolygon2.h
+			GteCLODPolyline.h
 		    GteConformalMapGenus0.h
             GteConstrainedDelaunay2.h
             GteConvexHull2.h
@@ -627,6 +629,7 @@ Files (13)
             GtePrimalQuery3.h
             GteSeparatePoints2.h
             GteSeparatePoints3.h
+			GteSplitPlaneByMesh.h
             GteTetrahedronKey.cpp
             GteTetrahedronKey.h
             GteTriangleKey.cpp
@@ -661,7 +664,7 @@ Files (13)
             GteContScribeCircle2.h
             GteContScribeCircle3Sphere3.h
             GteContSphere3.h
-        CurvesSurfacesVolumes (29)
+        CurvesSurfacesVolumes (31)
             GteBasisFunction.h
             GteBezierCurve.h
             GteBSplineCurve.h
@@ -684,6 +687,8 @@ Files (13)
             GteNURBSVolume.h
             GteParametricCurve.h
             GteParametricSurface.h
+			GtePolynomialCurve.h
+			GteQuadricSurface.h
             GteRectangleMesh.h
             GteRectanglePatchMesh.h
             GteRevolutionMesh.h

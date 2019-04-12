@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/18)
+// File Version: 3.23.1 (2019/04/10)
 
 #pragma once
 
@@ -40,18 +40,19 @@ namespace gte
         }
 
         // Set the root node that the track object manipulates.  NOTE:  The
-        // constructor creates a default root node named mRoot.  The SetRoot
-        // function replaces mRoot by the caller-specified node.  If you
-        // have called Attach while the default-constructed mRoot node is
-        // active, the SetRoot call will replace mRoot and you lose the
-        // information about the previous mRoot descendants.  If you intend
-        // on having a different root, call SetRoot first and then use Attach.
-        inline void Set(std::shared_ptr<Node> const& root)
+        // constructor creates a default root node named mRoot.  The Set(...)
+        // function replaces mRoot by the caller-specified 'root', which can
+        // be a non-Node object.  If you have called Attach while the
+        // default-constructed mRoot node is active, the SetRoot call will
+        // replace mRoot and you lose the information about the previous mRoot
+        // descendants.  If you intend on having a different root that is
+        // Node-based, call Set(...) first and then use Attach.
+        inline void Set(std::shared_ptr<Spatial> const& root)
         {
             mRoot = root;
         }
 
-        inline std::shared_ptr<Node> const& GetRoot() const
+        inline std::shared_ptr<Spatial> const& GetRoot() const
         {
             return mRoot;
         }
@@ -77,7 +78,9 @@ namespace gte
         // The root node is the top-level node of a hierarchy whose local
         // transformation is the trackball orientation relative to the
         // specified camera.  The camera directions {D,U,R} act as the world
-        // coordinate system.
+        // coordinate system.  NOTE:  These functions are successful only
+        // when the 'object' is a Node-based object.  If the 'object' is
+        // a Visual-based object, the functions do nothing.
         void Attach(std::shared_ptr<Spatial> const& object);
         void Detach(std::shared_ptr<Spatial> const& object);
         void DetachAll();
@@ -104,7 +107,7 @@ namespace gte
         void NormalizeAndUpdateRoot(Matrix4x4<float>& rotate);
 
         std::shared_ptr<Camera> mCamera;
-        std::shared_ptr<Node> mRoot;
+        std::shared_ptr<Spatial> mRoot;
         int mXSize, mYSize;
         float mX0, mY0, mX1, mY1, mMultiplier;
         bool mActive, mValid;

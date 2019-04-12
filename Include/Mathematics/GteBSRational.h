@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2019/01/17)
+// File Version: 3.0.4 (2019/04/05)
 
 #pragma once
 
@@ -124,6 +124,70 @@ namespace gte
         }
 
         BSRational(double numerator, double denominator)
+            :
+            mNumerator(numerator),
+            mDenominator(denominator)
+        {
+            LogAssert(mDenominator.mSign != 0, "Division by zero not allowed.");
+            if (mDenominator.mSign < 0)
+            {
+                mNumerator.mSign = -mNumerator.mSign;
+                mDenominator.mSign = 1;
+            }
+#if defined(GTE_BINARY_SCIENTIFIC_SHOW_DOUBLE)
+            mValue = (double)*this;
+#endif
+        }
+
+        BSRational(int32_t numerator, int32_t denominator)
+            :
+            mNumerator(numerator),
+            mDenominator(denominator)
+        {
+            LogAssert(mDenominator.mSign != 0, "Division by zero not allowed.");
+            if (mDenominator.mSign < 0)
+            {
+                mNumerator.mSign = -mNumerator.mSign;
+                mDenominator.mSign = 1;
+            }
+#if defined(GTE_BINARY_SCIENTIFIC_SHOW_DOUBLE)
+            mValue = (double)*this;
+#endif
+        }
+
+        BSRational(uint32_t numerator, uint32_t denominator)
+            :
+            mNumerator(numerator),
+            mDenominator(denominator)
+        {
+            LogAssert(mDenominator.mSign != 0, "Division by zero not allowed.");
+            if (mDenominator.mSign < 0)
+            {
+                mNumerator.mSign = -mNumerator.mSign;
+                mDenominator.mSign = 1;
+            }
+#if defined(GTE_BINARY_SCIENTIFIC_SHOW_DOUBLE)
+            mValue = (double)*this;
+#endif
+        }
+
+        BSRational(int64_t numerator, int64_t denominator)
+            :
+            mNumerator(numerator),
+            mDenominator(denominator)
+        {
+            LogAssert(mDenominator.mSign != 0, "Division by zero not allowed.");
+            if (mDenominator.mSign < 0)
+            {
+                mNumerator.mSign = -mNumerator.mSign;
+                mDenominator.mSign = 1;
+            }
+#if defined(GTE_BINARY_SCIENTIFIC_SHOW_DOUBLE)
+            mValue = (double)*this;
+#endif
+        }
+
+        BSRational(uint64_t numerator, uint64_t denominator)
             :
             mNumerator(numerator),
             mDenominator(denominator)

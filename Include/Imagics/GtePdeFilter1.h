@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/12)
+// File Version: 3.23.1 (2019/04/12)
 
 #pragma once
 
@@ -176,14 +176,12 @@ namespace gte
                     continue;
                 }
 
-                bool found = false;
                 for (int i0 = 0, j0 = x - 1; i0 < 3; ++i0, ++j0)
                 {
                     if (mMask[j0])
                     {
                         mBuffer[mSrc][x] = this->mBorderValue;
                         mBuffer[mDst][x] = this->mBorderValue;
-                        found = true;
                         break;
                     }
                 }

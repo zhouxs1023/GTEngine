@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/30)
+// File Version: 3.0.2 (2019/04/11)
 
 #include <windows.h>
 #include <string>
@@ -198,7 +198,7 @@ void CreateFontData(HDC hDC, int& width, int& height, std::vector<unsigned char>
         characterData[i+1] = (end + 0.5f)*dx;
 
         // Clear the background.
-        FillRect(hDC, &r, nullptr);
+        FillRect(hDC, &r, 0);
 
         // Draw the character.
         wchar_t cChar = static_cast<wchar_t>(i);
@@ -237,7 +237,7 @@ void ProcessFont(HWND hWnd, std::wstring const& fontName, int weight,
     r.left = r.top = 0;
     r.right = gWindowWidth - 1;
     r.bottom = gWindowHeight - 1;
-    FillRect(hDC, &r, nullptr);
+    FillRect(hDC, &r, 0);
     wchar_t msg[256];
     wsprintf(msg, L"Rendering %s, weight = %d, size = %d, italics = %d",
         fontName.c_str(), weight, size, italic);
@@ -259,7 +259,7 @@ void ProcessFont(HWND hWnd, std::wstring const& fontName, int weight,
 
 int wmain(int, wchar_t const*[])
 {
-    wchar_t* className = L"BitmapFontCreator";
+    wchar_t const* className = L"BitmapFontCreator";
     WNDCLASS wc;
     wc.style         = CS_OWNDC;
     wc.lpfnWndProc   = DefWindowProc;

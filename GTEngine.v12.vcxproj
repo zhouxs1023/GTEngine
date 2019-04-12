@@ -878,12 +878,14 @@
     <ClInclude Include="Include\Mathematics\GteBSplineSurface.h" />
     <ClInclude Include="Include\Mathematics\GteBSplineSurfaceFit.h" />
     <ClInclude Include="Include\Mathematics\GteBSplineVolume.h" />
+    <ClInclude Include="Include\Mathematics\GteBSPPolygon2.h" />
     <ClInclude Include="Include\Mathematics\GteBSPrecision.h" />
     <ClInclude Include="Include\Mathematics\GteBSRational.h" />
     <ClInclude Include="Include\Mathematics\GteCapsule.h" />
     <ClInclude Include="Include\Mathematics\GteChebyshevRatio.h" />
     <ClInclude Include="Include\Mathematics\GteCholeskyDecomposition.h" />
     <ClInclude Include="Include\Mathematics\GteCircle3.h" />
+    <ClInclude Include="Include\Mathematics\GteCLODPolyline.h" />
     <ClInclude Include="Include\Mathematics\GteCone.h" />
     <ClInclude Include="Include\Mathematics\GteConformalMapGenus0.h" />
     <ClInclude Include="Include\Mathematics\GteConstrainedDelaunay2.h" />
@@ -1146,10 +1148,12 @@
     <ClInclude Include="Include\Mathematics\GtePolygon2.h" />
     <ClInclude Include="Include\Mathematics\GtePolyhedron3.h" />
     <ClInclude Include="Include\Mathematics\GtePolynomial1.h" />
+    <ClInclude Include="Include\Mathematics\GtePolynomialCurve.h" />
     <ClInclude Include="Include\Mathematics\GtePrimalQuery2.h" />
     <ClInclude Include="Include\Mathematics\GtePrimalQuery3.h" />
     <ClInclude Include="Include\Mathematics\GteProjection.h" />
     <ClInclude Include="Include\Mathematics\GteQuadraticField.h" />
+    <ClInclude Include="Include\Mathematics\GteQuadricSurface.h" />
     <ClInclude Include="Include\Mathematics\GteQuarticRootsQR.h" />
     <ClInclude Include="Include\Mathematics\GteQuaternion.h" />
     <ClInclude Include="Include\Mathematics\GteRay.h" />
@@ -1169,6 +1173,7 @@
     <ClInclude Include="Include\Mathematics\GteSinEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteSingularValueDecomposition.h" />
     <ClInclude Include="Include\Mathematics\GteSlerpEstimate.h" />
+    <ClInclude Include="Include\Mathematics\GteSplitMeshByPlane.h" />
     <ClInclude Include="Include\Mathematics\GteSqrtEstimate.h" />
     <ClInclude Include="Include\Mathematics\GteSymmetricEigensolver.h" />
     <ClInclude Include="Include\Mathematics\GteSymmetricEigensolver2x2.h" />

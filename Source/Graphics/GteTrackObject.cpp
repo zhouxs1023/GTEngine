@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/18)
+// File Version: 3.23.1 (2019/04/10)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteTrackObject.h>
@@ -72,25 +72,37 @@ void TrackObject::Set(int xSize, int ySize, std::shared_ptr<Camera> const& camer
 
 void TrackObject::Attach(std::shared_ptr<Spatial> const& object)
 {
-    if (mValid && object && mRoot)
+    if (mValid && object)
     {
-        mRoot->AttachChild(object);
+        auto node = std::dynamic_pointer_cast<Node>(mRoot);
+        if (node)
+        {
+            node->AttachChild(object);
+        }
     }
 }
 
 void TrackObject::Detach(std::shared_ptr<Spatial> const& object)
 {
-    if (mValid && object && mRoot)
+    if (mValid && object)
     {
-        mRoot->DetachChild(object);
+        auto node = std::dynamic_pointer_cast<Node>(mRoot);
+        if (node)
+        {
+            node->DetachChild(object);
+        }
     }
 }
 
 void TrackObject::DetachAll()
 {
-    if (mValid && mRoot)
+    if (mValid)
     {
-        mRoot->DetachAllChildren();
+        auto node = std::dynamic_pointer_cast<Node>(mRoot);
+        if (node)
+        {
+            node->DetachAllChildren();
+        }
     }
 }
 

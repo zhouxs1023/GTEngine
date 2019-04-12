@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/10)
 
 #pragma once
 
@@ -31,7 +31,9 @@
 //  MSVC 11.0 is version 17.0 (MSVS 2012)
 //  MSVC 12.0 is version 18.0 (MSVS 2013)
 //  MSVC 14.0 is version 19.0 (MSVS 2015)
-//  Currently, projects are provided only for MSVC 12.0 and 14.0.
+//  MSVC 15.0 is version 19.1* (MSVS 2017) [latest is 19.16 for 15.9.1]
+//  MSVC 16.0 is version 19.2 (MSVS 2019)
+//  Currently, projects are provided only for MSVS 2013, 2015, 2017, 2019
 #if _MSC_VER < 1800
 #error Microsoft Visual Studio 2013 or later is required.
 #endif

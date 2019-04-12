@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/22)
+// File Version: 3.23.1 (2019/04/12)
 
 #pragma once
 
@@ -251,7 +251,6 @@ namespace gte
             Real multiplier = mSearchStep * searchRadius;
             Real minLength = oldLength;
             GVector<Real> minPoint = mid;
-            int minIndex = 0;
             for (int i = -searchSamples; i <= searchSamples; ++i)
             {
                 tRay = multiplier * static_cast<Real>(i);
@@ -263,7 +262,6 @@ namespace gte
                 {
                     minLength = newLength;
                     minPoint = pRay;
-                    minIndex = i;
                 }
             }
 

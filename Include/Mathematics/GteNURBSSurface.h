@@ -149,68 +149,68 @@ namespace gte
         }
 
         // Evaluation of the surface.  The function supports derivative
-        // calculation through order 2; that is, maxOrder <= 2 is required.
-        // If you want only the position, pass in maxOrder of 0.  If you want
-        // the position and first-order derivatives, pass in maxOrder of 1,
-        // and so on.  The output 'values' are ordered as: position X;
-        // first-order derivatives dX/du, dX/dv; second-order derivatives
-        // d2X/du2, d2X/dudv, d2X/dv2.
-        virtual void Evaluate(Real u, Real v, unsigned int maxOrder, Vector<N, Real> values[6]) const
+        // calculation through order 2; that is, order <= 2 is required.  If
+        // you want only the position, pass in order of 0.  If you want the
+        // position and first-order derivatives, pass in order of 1, and so
+        // on.  The output array 'jet' must have enough storage to support the
+        // maximum order.  The values are ordered as: position X; first-order
+        // derivatives dX/du, dX/dv; second-order derivatives d2X/du2,
+        // d2X/dudv, d2X/dv2.
+        virtual void Evaluate(Real u, Real v, unsigned int order, Vector<N, Real>* jet) const override
         {
-            if (!this->mConstructed)
+            unsigned int const supOrder = ParametricSurface<N, Real>::SUP_ORDER;
+            if (!this->mConstructed || order >= supOrder)
             {
-                // Errors were already generated during construction.
-                for (int i = 0; i < 6; ++i)
+                // Return a zero-valued jet for invalid state.
+                for (unsigned int i = 0; i < supOrder; ++i)
                 {
-                    values[i].MakeZero();
+                    jet[i].MakeZero();
                 }
                 return;
             }
 
             int iumin, iumax, ivmin, ivmax;
-            mBasisFunction[0].Evaluate(u, maxOrder, iumin, iumax);
-            mBasisFunction[1].Evaluate(v, maxOrder, ivmin, ivmax);
+            mBasisFunction[0].Evaluate(u, order, iumin, iumax);
+            mBasisFunction[1].Evaluate(v, order, ivmin, ivmax);
 
             // Compute position.
             Vector<N, Real> X;
             Real w;
             Compute(0, 0, iumin, iumax, ivmin, ivmax, X, w);
-            Real invW = ((Real)1) / w;
-            values[0] = invW * X;
+            Real invW = (Real)1 / w;
+            jet[0] = invW * X;
 
-            if (maxOrder >= 1)
+            if (order >= 1)
             {
                 // Compute first-order derivatives.
                 Vector<N, Real> XDerU;
                 Real wDerU;
                 Compute(1, 0, iumin, iumax, ivmin, ivmax, XDerU, wDerU);
-                values[1] = invW * (XDerU - wDerU * values[0]);
+                jet[1] = invW * (XDerU - wDerU * jet[0]);
 
                 Vector<N, Real> XDerV;
                 Real wDerV;
                 Compute(0, 1, iumin, iumax, ivmin, ivmax, XDerV, wDerV);
-                values[2] = invW * (XDerV - wDerV * values[0]);
+                jet[2] = invW * (XDerV - wDerV * jet[0]);
 
-                if (maxOrder >= 2)
+                if (order >= 2)
                 {
                     // Compute second-order derivatives.
                     Vector<N, Real> XDerUU;
                     Real wDerUU;
                     Compute(2, 0, iumin, iumax, ivmin, ivmax, XDerUU, wDerUU);
-                    values[3] = invW * (XDerUU - ((Real)2) * wDerU * values[1] -
-                        wDerUU * values[0]);
+                    jet[3] = invW * (XDerUU - (Real)2 * wDerU * jet[1] - wDerUU * jet[0]);
 
                     Vector<N, Real> XDerUV;
                     Real wDerUV;
                     Compute(1, 1, iumin, iumax, ivmin, ivmax, XDerUV, wDerUV);
-                    values[4] = invW * (XDerUV - wDerU * values[2] - wDerV * values[1]
-                        - wDerUV * values[0]);
+                    jet[4] = invW * (XDerUV - wDerU * jet[2] - wDerV * jet[1]
+                        - wDerUV * jet[0]);
 
                     Vector<N, Real> XDerVV;
                     Real wDerVV;
                     Compute(0, 2, iumin, iumax, ivmin, ivmax, XDerVV, wDerVV);
-                    values[5] = invW * (XDerVV - ((Real)2) * wDerV * values[2] -
-                        wDerVV * values[0]);
+                    jet[5] = invW * (XDerVV - (Real)2 * wDerV * jet[2] - wDerVV * jet[0]);
                 }
             }
         }
@@ -249,5 +249,4 @@ namespace gte
         std::vector<Vector<N, Real>> mControls;
         std::vector<Real> mWeights;
     };
-
 }

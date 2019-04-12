@@ -118,102 +118,89 @@ namespace gte
         }
 
         // Evaluation of the volume.  The function supports derivative
-        // calculation through order 2; that is, maxOrder <= 2 is required.
-        // If you want only the position, pass in maxOrder of 0.  If you want
-        // the position and first-order derivatives, pass in maxOrder of 1,
-        // and so on.  The output 'values' are ordered as: position X;
+        // calculation through order 2; that is, order <= 2 is required.  If
+        // you want only the position, pass in order of 0.  If you want the
+        // position and first-order derivatives, pass in order of 1, and so
+        // on.  The output array 'jet' muist have enough storage to support
+        // the maximum order.  The values are ordered as: position X;
         // first-order derivatives dX/du, dX/dv, dX/dw; second-order
         // derivatives d2X/du2, d2X/dv2, d2X/dw2, d2X/dudv, d2X/dudw,
         // d2X/dvdw.
-        void Evaluate(Real u, Real v, Real w, unsigned int maxOrder, Vector<N, Real> values[10]) const
+        enum { SUP_ORDER = 10 };
+        void Evaluate(Real u, Real v, Real w, unsigned int order, Vector<N, Real>* jet) const
         {
-            if (!mConstructed)
+            if (!mConstructed || order >= SUP_ORDER)
             {
                 // Errors were already generated during construction.
-                for (int i = 0; i < 10; ++i)
+                for (unsigned int i = 0; i < SUP_ORDER; ++i)
                 {
-                    values[i].MakeZero();
+                    jet[i].MakeZero();
                 }
                 return;
             }
 
             int iumin, iumax, ivmin, ivmax, iwmin, iwmax;
-            mBasisFunction[0].Evaluate(u, maxOrder, iumin, iumax);
-            mBasisFunction[1].Evaluate(v, maxOrder, ivmin, ivmax);
-            mBasisFunction[2].Evaluate(w, maxOrder, iwmin, iwmax);
+            mBasisFunction[0].Evaluate(u, order, iumin, iumax);
+            mBasisFunction[1].Evaluate(v, order, ivmin, ivmax);
+            mBasisFunction[2].Evaluate(w, order, iwmin, iwmax);
 
             // Compute position.
             Vector<N, Real> X;
             Real h;
             Compute(0, 0, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax, X, h);
-            Real invH = ((Real)1) / h;
-            values[0] = invH * X;
+            Real invH = (Real)1 / h;
+            jet[0] = invH * X;
 
-            if (maxOrder >= 1)
+            if (order >= 1)
             {
                 // Compute first-order derivatives.
                 Vector<N, Real> XDerU;
                 Real hDerU;
-                Compute(1, 0, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                    XDerU, hDerU);
-                values[1] = invH * (XDerU - hDerU * values[0]);
+                Compute(1, 0, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerU, hDerU);
+                jet[1] = invH * (XDerU - hDerU * jet[0]);
 
                 Vector<N, Real> XDerV;
                 Real hDerV;
-                Compute(0, 1, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                    XDerV, hDerV);
-                values[2] = invH * (XDerV - hDerV * values[0]);
+                Compute(0, 1, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerV, hDerV);
+                jet[2] = invH * (XDerV - hDerV * jet[0]);
 
                 Vector<N, Real> XDerW;
                 Real hDerW;
-                Compute(0, 0, 1, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                    XDerW, hDerW);
-                values[3] = invH * (XDerW - hDerW * values[0]);
+                Compute(0, 0, 1, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerW, hDerW);
+                jet[3] = invH * (XDerW - hDerW * jet[0]);
 
-                if (maxOrder >= 2)
+                if (order >= 2)
                 {
                     // Compute second-order derivatives.
                     Vector<N, Real> XDerUU;
                     Real hDerUU;
-                    Compute(2, 0, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                        XDerUU, hDerUU);
-                    values[4] = invH * (XDerUU - ((Real)2) * hDerU * values[1] -
-                        hDerUU * values[0]);
+                    Compute(2, 0, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerUU, hDerUU);
+                    jet[4] = invH * (XDerUU - (Real)2 * hDerU * jet[1] - hDerUU * jet[0]);
 
                     Vector<N, Real> XDerVV;
                     Real hDerVV;
-                    Compute(0, 2, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                        XDerVV, hDerVV);
-                    values[5] = invH * (XDerVV - ((Real)2) * hDerV * values[2] -
-                        hDerVV * values[0]);
+                    Compute(0, 2, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerVV, hDerVV);
+                    jet[5] = invH * (XDerVV - (Real)2 * hDerV * jet[2] - hDerVV * jet[0]);
 
                     Vector<N, Real> XDerWW;
                     Real hDerWW;
-                    Compute(0, 0, 2, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                        XDerWW, hDerWW);
-                    values[6] = invH * (XDerWW - ((Real)2) * hDerW * values[3] -
-                        hDerWW * values[0]);
+                    Compute(0, 0, 2, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerWW, hDerWW);
+                    jet[6] = invH * (XDerWW - (Real)2 * hDerW * jet[3] - hDerWW * jet[0]);
 
                     Vector<N, Real> XDerUV;
                     Real hDerUV;
-                    Compute(1, 1, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                        XDerUV, hDerUV);
-                    values[7] = invH * (XDerUV - hDerU * values[2]
-                        - hDerV * values[1] - hDerUV * values[0]);
+                    Compute(1, 1, 0, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerUV, hDerUV);
+                    jet[7] = invH * (XDerUV - hDerU * jet[2] - hDerV * jet[1] - hDerUV * jet[0]);
 
                     Vector<N, Real> XDerUW;
                     Real hDerUW;
-                    Compute(1, 0, 1, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                        XDerUW, hDerUW);
-                    values[8] = invH * (XDerUW - hDerU * values[3]
-                        - hDerW * values[1] - hDerUW * values[0]);
+                    Compute(1, 0, 1, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerUW, hDerUW);
+                    jet[8] = invH * (XDerUW - hDerU * jet[3] - hDerW * jet[1] - hDerUW * jet[0]);
 
                     Vector<N, Real> XDerVW;
                     Real hDerVW;
-                    Compute(0, 1, 1, iumin, iumax, ivmin, ivmax, iwmin, iwmax,
-                        XDerVW, hDerVW);
-                    values[9] = invH * (XDerVW - hDerV * values[3]
-                        - hDerW * values[2] - hDerVW * values[0]);
+                    Compute(0, 1, 1, iumin, iumax, ivmin, ivmax, iwmin, iwmax, XDerVW, hDerVW);
+                    jet[9] = invH * (XDerVW - hDerV * jet[3] - hDerW * jet[2] - hDerVW * jet[0]);
                 }
             }
         }

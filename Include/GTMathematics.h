@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.36 (2019/03/26)
+// File Version: 3.0.38 (2019/04/06)
 
 #pragma once
 
@@ -71,6 +71,8 @@
 #include <Mathematics/GteApprTorus3.h>
 
 // ComputationalGeometry
+#include <Mathematics/GteBSPPolygon2.h>
+#include <Mathematics/GteCLODPolyline.h>
 #include <Mathematics/GteConformalMapGenus0.h>
 #include <Mathematics/GteConstrainedDelaunay2.h>
 #include <Mathematics/GteConvexHull2.h>
@@ -100,6 +102,7 @@
 #include <Mathematics/GtePrimalQuery3.h>
 #include <Mathematics/GteSeparatePoints2.h>
 #include <Mathematics/GteSeparatePoints3.h>
+#include <Mathematics/GteSplitMeshByPlane.h>
 #include <Mathematics/GteTetrahedronKey.h>
 #include <Mathematics/GteTriangleKey.h>
 #include <Mathematics/GteTriangulateCDT.h>
@@ -153,6 +156,8 @@
 #include <Mathematics/GteNURBSVolume.h>
 #include <Mathematics/GteParametricCurve.h>
 #include <Mathematics/GteParametricSurface.h>
+#include <Mathematics/GtePolynomialCurve.h>
+#include <Mathematics/GteQuadricSurface.h>
 #include <Mathematics/GteRectangleMesh.h>
 #include <Mathematics/GteRectanglePatchMesh.h>
 #include <Mathematics/GteRevolutionMesh.h>

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2018/12/06)
+// File Version: 3.0.4 (2019/04/05)
 
 #pragma once
 
@@ -19,22 +19,16 @@ namespace gte
     {
     public:
         // Construction and destruction.  The first constructor creates a
-        // polynomial of degree 0.  The first and second constructors do not
-        // initialize their coefficients.  In the third constructor, the
-        // degree is the number of initializers plus 1, but then adjusted to
-        // ensure coefficient[degree] is not zero.
-        Polynomial1()
+        // polynomial of the specified degree but sets all coefficients to
+        // zero (to ensure initialization).  You are responsible for setting
+        // the coefficients, presumably with the degree-term set to a nonzero
+        // number.  In the second constructor, the degree is the number of
+        // initializers plus 1, but then adjusted so that coefficient[degree]
+        // is not zero (unless all initializer values are zero).
+        Polynomial1(unsigned int degree = 0)
             :
-            mCoefficient(1)
+            mCoefficient(degree + 1, (Real)0)
         {
-            // uninitialized
-        }
-
-        Polynomial1(unsigned int degree)
-            :
-            mCoefficient(degree + 1)
-        {
-            // uninitialized
         }
 
         Polynomial1(std::initializer_list<Real> values)

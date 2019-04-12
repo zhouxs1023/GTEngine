@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2018/10/28)
+// File Version: 3.0.4 (2019/04/05)
 
 #pragma once
 
@@ -141,62 +141,59 @@ namespace gte
         }
 
         // Evaluation of the curve.  The function supports derivative
-        // calculation through order 3; that is, maxOrder <= 3 is required.
-        // If you want only the position, pass in maxOrder of 0.  If you
-        // want the position and first derivative, pass in maxOrder of 1,
-        // and so on.  The output 'values' are ordered as: position, first
-        // derivative, second derivative, third derivative.
-        virtual void Evaluate(Real t, unsigned int maxOrder, Vector<N, Real> values[4]) const
+        // calculation through order 3; that is, order <= 3 is required.  If
+        // you want/ only the position, pass in order of 0.  If you want the
+        // position and first derivative, pass in order of 1, and so on.  The
+        // output array 'jet' must have enough storage to support the maximum
+        // order.  The values are ordered as: position, first derivative,
+        // second derivative, third derivative.
+        virtual void Evaluate(Real t, unsigned int order, Vector<N, Real>* jet) const override
         {
-            if (!this->mConstructed)
+            unsigned int const supOrder = ParametricCurve<N, Real>::SUP_ORDER;
+            if (!this->mConstructed || order >= supOrder)
             {
-                // Errors were already generated during construction.
-                for (unsigned int order = 0; order < 4; ++order)
+                // Return a zero-valued jet for invalid state.
+                for (unsigned int i = 0; i < supOrder; ++i)
                 {
-                    values[order].MakeZero();
+                    jet[i].MakeZero();
                 }
                 return;
             }
 
             int imin, imax;
-            mBasisFunction.Evaluate(t, maxOrder, imin, imax);
+            mBasisFunction.Evaluate(t, order, imin, imax);
 
             // Compute position.
             Vector<N, Real> X;
             Real w;
             Compute(0, imin, imax, X, w);
-            Real invW = ((Real)1) / w;
-            values[0] = invW * X;
+            Real invW = (Real)1 / w;
+            jet[0] = invW * X;
 
-            if (maxOrder >= 1)
+            if (order >= 1)
             {
                 // Compute first derivative.
                 Vector<N, Real> XDer1;
                 Real wDer1;
                 Compute(1, imin, imax, XDer1, wDer1);
-                values[1] = invW * (XDer1 - wDer1 * values[0]);
+                jet[1] = invW * (XDer1 - wDer1 * jet[0]);
 
-                if (maxOrder >= 2)
+                if (order >= 2)
                 {
                     // Compute second derivative.
                     Vector<N, Real> XDer2;
                     Real wDer2;
                     Compute(2, imin, imax, XDer2, wDer2);
-                    values[2] = invW * (XDer2 - ((Real)2) * wDer1 * values[1] -
-                        wDer2 * values[0]);
+                    jet[2] = invW * (XDer2 - (Real)2 * wDer1 * jet[1] - wDer2 * jet[0]);
 
-                    if (maxOrder == 3)
+                    if (order == 3)
                     {
                         // Compute third derivative.
                         Vector<N, Real> XDer3;
                         Real wDer3;
                         Compute(3, imin, imax, XDer3, wDer3);
-                        values[3] = invW * (XDer3 - ((Real)3) * wDer1 * values[2] -
-                            ((Real)3) * wDer2 * values[1] - wDer3 * values[0]);
-                    }
-                    else
-                    {
-                        values[3].MakeZero();
+                        jet[3] = invW * (XDer3 - (Real)3 * wDer1 * jet[2] -
+                            (Real)3 * wDer2 * jet[1] - wDer3 * jet[0]);
                     }
                 }
             }
