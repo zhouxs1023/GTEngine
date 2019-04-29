@@ -345,11 +345,13 @@ xcopy /DFYV "$(TargetPath)" "..\..\Executable\$(PlatformToolset)\$(Platform)\$(C
     <ClCompile Include="ProjectTemplate.v12.cpp" />
     <ClCompile Include="ProjectTemplate.v14.cpp" />
     <ClCompile Include="ProjectTemplate.v15.cpp" />
+    <ClCompile Include="ProjectTemplate.v16.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectTemplate.v12.h" />
     <ClInclude Include="ProjectTemplate.v14.h" />
     <ClInclude Include="ProjectTemplate.v15.h" />
+    <ClInclude Include="ProjectTemplate.v16.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

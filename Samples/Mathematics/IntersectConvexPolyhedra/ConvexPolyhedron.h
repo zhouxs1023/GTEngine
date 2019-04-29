@@ -1428,8 +1428,8 @@ private:
                     int v0 = vOrdered[0];
                     int v2 = vOrdered[numEdges - 1];
                     int v1 = vOrdered[(numEdges - 1) >> 1];
-					gte::Vector3<Real> diff1 = mVertices[v1].point - mVertices[v0].point;
-					gte::Vector3<Real> diff2 = mVertices[v2].point - mVertices[v0].point;
+                    gte::Vector3<Real> diff1 = mVertices[v1].point - mVertices[v0].point;
+                    gte::Vector3<Real> diff2 = mVertices[v2].point - mVertices[v0].point;
                     Real sgnVolume = Dot(face.plane.normal, Cross(diff1, diff2));
                     if (sgnVolume > (Real)0)
                     {

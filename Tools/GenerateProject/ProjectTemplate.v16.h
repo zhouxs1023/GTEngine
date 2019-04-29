@@ -13,7 +13,7 @@
 class TemplateV16
 {
 public:
-	TemplateV16(std::string const& name, std::string const& gtPath, bool& success);
+    TemplateV16(std::string const& name, std::string const& gtPath, bool& success);
 
 private:
     bool Create(std::string const& name, std::vector<std::string> const& lines, bool useUT8);
@@ -25,14 +25,14 @@ private:
     static std::regex const mPGPattern;
     static std::regex const mRQPattern;
     static std::regex const mGTPattern;
-	static std::regex const mSGPattern;
+    static std::regex const mSGPattern;
 
     // Replacements for patterns.
     std::string mName;
     std::string mGTPath;
     std::string mProjectGUID;
     std::string mRequiredGUID;
-	std::string mSolutionGUID;
+    std::string mSolutionGUID;
     static std::string const msGTGUID;
 
     // Templates for solution, project, project filter, and source code.

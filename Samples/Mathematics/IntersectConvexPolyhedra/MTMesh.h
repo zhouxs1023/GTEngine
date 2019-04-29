@@ -23,12 +23,12 @@ class MTMesh
 {
 public:
     MTMesh(int numVertices = 0, int numEdges = 0, int numTriangles = 0)
-		:
-		mVertices(numVertices),
-		mEdges(numEdges),
-		mTriangles(numTriangles),
-		mInitialELabel(-1),
-		mInitialTLabel(-1)
+        :
+        mVertices(numVertices),
+        mEdges(numEdges),
+        mTriangles(numTriangles),
+        mInitialELabel(-1),
+        mInitialTLabel(-1)
     {
     }
 

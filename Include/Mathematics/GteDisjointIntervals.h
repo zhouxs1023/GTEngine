@@ -81,8 +81,8 @@ namespace gte
                 xmax = mEndpoints[++index];
                 return true;
             }
-			xmin = (Scalar)0;
-			xmax = (Scalar)0;
+            xmin = (Scalar)0;
+            xmax = (Scalar)0;
             return false;
         }
 

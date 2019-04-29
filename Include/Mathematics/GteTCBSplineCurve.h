@@ -182,23 +182,23 @@ namespace gte
             {
                 key = 0;
                 dt = (Real)0;
-				return;
+                return;
             }
 
-			if (t < this->mTime[numSegments])
-			{
-				for (int i = 0; i < numSegments; ++i)
-				{
-					if (t < this->mTime[i + 1])
-					{
-						key = i;
-						dt = t - this->mTime[i];
-						return;
-					}
-				}
-			}
+            if (t < this->mTime[numSegments])
+            {
+                for (int i = 0; i < numSegments; ++i)
+                {
+                    if (t < this->mTime[i + 1])
+                    {
+                        key = i;
+                        dt = t - this->mTime[i];
+                        return;
+                    }
+                }
+            }
 
-			key = numSegments - 1;
+            key = numSegments - 1;
             dt = this->mTime[numSegments] - this->mTime[numSegments - 1];
         }
 

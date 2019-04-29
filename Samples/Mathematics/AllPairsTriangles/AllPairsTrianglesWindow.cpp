@@ -108,7 +108,7 @@ bool AllPairsTrianglesWindow::SetEnvironment()
         return false;
     }
 
-    mEnvironment.Insert(path + "/Samples/Geometrics/AllPairsTriangles/Shaders/");
+    mEnvironment.Insert(path + "/Samples/Mathematics/AllPairsTriangles/Shaders/");
 #if defined(GTE_DEV_OPENGL)
     std::vector<std::string> inputs =
     {

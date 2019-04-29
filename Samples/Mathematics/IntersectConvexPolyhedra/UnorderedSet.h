@@ -31,11 +31,11 @@ public:
     };
 
     UnorderedSet(int maxNumElements = 0, int grow = 0)
-		:
-		mMaxNumElements(maxNumElements > 0 ? maxNumElements : DEFAULT_GROW),
-		mGrow(grow > 0 ? grow : DEFAULT_GROW),
-		mNumElements(0),
-		mElements(mMaxNumElements)
+        :
+        mMaxNumElements(maxNumElements > 0 ? maxNumElements : DEFAULT_GROW),
+        mGrow(grow > 0 ? grow : DEFAULT_GROW),
+        mNumElements(0),
+        mElements(mMaxNumElements)
     {
     }
 
@@ -122,15 +122,15 @@ public:
             }
         }
 
-		if (oldIndex)
-		{
-			*oldIndex = -1;
-		}
-		if (newIndex)
-		{
-			*newIndex = -1;
-		}
-		return false;
+        if (oldIndex)
+        {
+            *oldIndex = -1;
+        }
+        if (newIndex)
+        {
+            *newIndex = -1;
+        }
+        return false;
     }
 
     bool RemoveAt(int i, int* oldIndex = nullptr, int* newIndex = nullptr)
@@ -141,14 +141,14 @@ public:
             return true;
         }
 
-		if (oldIndex)
-		{
-			*oldIndex = -1;
-		}
-		if (newIndex)
-		{
-			*newIndex = -1;
-		}
+        if (oldIndex)
+        {
+            *oldIndex = -1;
+        }
+        if (newIndex)
+        {
+            *newIndex = -1;
+        }
         return false;
     }
 

@@ -63,12 +63,12 @@ int main(int numArguments, char* arguments[])
         return -7;
     }
 
-	TemplateV16 generatev16(name, gtPath, success);
-	if (!success)
-	{
-		std::cout << "Could not create the V16 project files." << std::endl;
-		return -8;
-	}
+    TemplateV16 generatev16(name, gtPath, success);
+    if (!success)
+    {
+        std::cout << "Could not create the V16 project files." << std::endl;
+        return -8;
+    }
 
     return 0;
 }

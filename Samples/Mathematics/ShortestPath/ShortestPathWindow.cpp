@@ -89,7 +89,7 @@ bool ShortestPathWindow::SetEnvironment()
         return false;
     }
 
-    mEnvironment.Insert(path + "/Samples/Geometrics/ShortestPath/Shaders/");
+    mEnvironment.Insert(path + "/Samples/Mathematics/ShortestPath/Shaders/");
 #if defined(GTE_DEV_OPENGL)
     std::string ext = ".glsl";
 #else

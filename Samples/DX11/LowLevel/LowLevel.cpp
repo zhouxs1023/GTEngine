@@ -15,5 +15,5 @@ int main()
         TheApplication->Run();
     }
     delete TheApplication;
-	return 0;
+    return 0;
 }

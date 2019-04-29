@@ -23,6 +23,9 @@
     <ClCompile Include="ProjectTemplate.v15.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectTemplate.v16.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectTemplate.v12.h">
@@ -32,6 +35,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProjectTemplate.v15.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectTemplate.v16.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1002,7 +1002,7 @@ int main(int, char const*[])
         return -1;
     }
 
-    gEnvironment.Insert(path + "/Samples/Geometrics/DistanceSegments3/Shaders/");
+    gEnvironment.Insert(path + "/Samples/Mathematics/DistanceSegments3/Shaders/");
 
     if (gEnvironment.GetPath(gShaderFile) == "")
     {
