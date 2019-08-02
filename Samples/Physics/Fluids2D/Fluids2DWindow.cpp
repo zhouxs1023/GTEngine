@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #include "Fluids2DWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
 
 int main(int, char const*[])
 {
@@ -33,7 +35,7 @@ int main(int, char const*[])
 
 Fluids2DWindow::Fluids2DWindow(Parameters& parameters)
     :
-    Window(parameters),
+    Window2(parameters),
     mFluid(mEngine, mProgramFactory, GRID_SIZE, GRID_SIZE, 0.001f, 0.0001f, 0.0001f)
 {
     if (!SetEnvironment() || !CreateOverlay())
@@ -90,19 +92,11 @@ bool Fluids2DWindow::SetEnvironment()
 
     mEnvironment.Insert(path + "/Samples/Physics/Fluids2D/Shaders/");
 
-#if defined(GTE_DEV_OPENGL)
-    if (mEnvironment.GetPath("DrawDensity.glsl") == "")
+    if (mEnvironment.GetPath(DefaultShaderName("DrawDensity.ps")) == "")
     {
-        LogError("Cannot find file DrawDensity.glsl.");
+        LogError("Cannot find file " + DefaultShaderName("DrawDensity.ps"));
         return false;
     }
-#else
-    if (mEnvironment.GetPath("DrawDensity.hlsl") == "")
-    {
-        LogError("Cannot find file DrawDensity.hlsl.");
-        return false;
-    }
-#endif
 
     return true;
 }
@@ -110,28 +104,16 @@ bool Fluids2DWindow::SetEnvironment()
 bool Fluids2DWindow::CreateOverlay()
 {
     // Create the supporting objects for visualizing the fluid simulation.
-#if defined(GTE_DEV_OPENGL)
-    std::string drawDensityPSSource = ProgramFactory::GetStringFromFile(
-        mEnvironment.GetPath("DrawDensity.glsl"));
-#else
-    std::string drawDensityPSSource = ProgramFactory::GetStringFromFile(
-        mEnvironment.GetPath("DrawDensity.hlsl"));
-#endif
-    mOverlay = std::make_shared<OverlayEffect>(mProgramFactory, mXSize,
-        mYSize, GRID_SIZE, GRID_SIZE, drawDensityPSSource);
-    std::shared_ptr<SamplerState> bilinearClampSampler =
-        std::make_shared<SamplerState>();
-    bilinearClampSampler->filter = SamplerState::MIN_L_MAG_L_MIP_P;
-    bilinearClampSampler->mode[0] = SamplerState::CLAMP;
-    bilinearClampSampler->mode[1] = SamplerState::CLAMP;
-    std::shared_ptr<PixelShader> pshader = mOverlay->GetProgram()->GetPShader();
-#if defined(GTE_DEV_OPENGL)
-    pshader->Set("stateSampler", mFluid.GetState());
-    pshader->Set("stateSampler", bilinearClampSampler);
-#else
-    pshader->Set("state", mFluid.GetState());
-    pshader->Set("bilinearClampSampler", bilinearClampSampler);
-#endif
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("DrawDensity.ps"));
+    std::string psSource = ProgramFactory::GetStringFromFile(psPath);
+    mOverlay = std::make_shared<OverlayEffect>(mProgramFactory, mXSize, mYSize,
+        GRID_SIZE, GRID_SIZE, psSource);
+    auto stateSampler = std::make_shared<SamplerState>();
+    stateSampler->filter = SamplerState::MIN_L_MAG_L_MIP_P;
+    stateSampler->mode[0] = SamplerState::CLAMP;
+    stateSampler->mode[1] = SamplerState::CLAMP;
+    auto pshader = mOverlay->GetProgram()->GetPShader();
+    pshader->Set("stateTexture", mFluid.GetState(), "stateSampler", stateSampler);
 
     mNoDepthState = std::make_shared<DepthStencilState>();
     mNoDepthState->depthEnable = false;
@@ -141,8 +123,7 @@ bool Fluids2DWindow::CreateOverlay()
     mEngine->SetRasterizerState(mNoCullingState);
 
 #if defined(SAVE_RENDERING_TO_DISK)
-    mTarget = std::make_shared<DrawTarget>(1, DF_R8G8B8A8_UNORM, mXSize,
-        mYSize);
+    mTarget = std::make_shared<DrawTarget>(1, DF_R8G8B8A8_UNORM, mXSize, mYSize);
     mTarget->GetRTTexture(0)->SetCopyType(Resource::COPY_STAGING_TO_CPU);
     mVideoFrame = 0;
 #endif

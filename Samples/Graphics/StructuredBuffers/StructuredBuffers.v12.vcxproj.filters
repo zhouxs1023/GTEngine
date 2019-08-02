@@ -24,13 +24,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\StructuredBuffers.hlsl">
+    <None Include="Shaders\StructuredBuffers.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\StructuredBuffersPS.glsl">
+    <None Include="Shaders\StructuredBuffers.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\StructuredBuffersVS.glsl">
+    <None Include="Shaders\StructuredBuffers.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\StructuredBuffers.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

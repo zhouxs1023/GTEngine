@@ -3,11 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/07/13)
+// File Version: 3.3.1 (2019/05/02)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow3.h>
+#include <LowLevel/GteTimer.h>
+#include <Mathematics/GteBSplineCurve.h>
+#include <Mathematics/GteTubeMesh.h>
 #include "PhysicsModule.h"
 using namespace gte;
 

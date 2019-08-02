@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/16)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteShader.h>
+#include <functional>
 using namespace gte;
 
 
@@ -346,6 +347,17 @@ Shader::Shader(GLSLReflection const& reflector, int type)
                 mData[StructuredBuffer::shaderDataLookup].push_back(
                     Data(GT_STRUCTURED_BUFFER, block.name, block.bufferBinding,
                     structSize, idAtomicCounter, hasAtomicCounter));
+
+                // OpenGL implementions might store structured buffer member
+                // information in different orders; for example, alphabetical
+                // by name or by offset.  To produce a consistent layout, sort
+                // the layout by offset.
+                std::sort(layout.begin(), layout.end(),
+                    [](MemberLayout const& layout0, MemberLayout const& layout1)
+                    {
+                        return layout0.offset < layout1.offset;
+                    }
+                );
 
                 ++layoutIndex;
             }

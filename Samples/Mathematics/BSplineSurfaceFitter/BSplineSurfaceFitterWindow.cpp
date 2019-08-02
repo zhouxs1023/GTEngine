@@ -3,9 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.2 (2019/04/23)
 
 #include "BSplineSurfaceFitterWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <Graphics/GteVertexColorEffect.h>
+#include <Mathematics/GteBSplineSurfaceFit.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -124,28 +130,26 @@ void BSplineSurfaceFitterWindow::CreateScene()
     mf.SetVertexFormat(hfformat);
     mHeightField = mf.CreateRectangle(numSamples, numSamples, extent, extent);
     int numVertices = numSamples * numSamples;
-    VertexPT* hfvertices = mHeightField->GetVertexBuffer()->Get<VertexPT>();
+    auto* hfvertices = mHeightField->GetVertexBuffer()->Get<VertexPT>();
 
     // Set the heights based on a precomputed height field.  Also create a
     // texture image to go with the height field.
     std::string path = mEnvironment.GetPath("BTHeightField.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
-    std::shared_ptr<Texture2Effect> txeffect =
-        std::make_shared<Texture2Effect>(mProgramFactory, texture,
-        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP,
-        SamplerState::CLAMP);
+    auto texture = WICFileIO::Load(path, false);
+    auto txeffect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
     mHeightField->SetEffect(txeffect);
 
     std::mt19937 mte;
     std::uniform_real_distribution<float> symmr(-0.05f, 0.05f);
     std::uniform_real_distribution<float> intvr(32.0f, 64.0f);
-    unsigned char* data = (unsigned char*)texture->Get<unsigned char>();
+    auto* data = texture->Get<unsigned char>();
     std::vector<Vector3<float>> samplePoints(numVertices);
     for (int i = 0; i < numVertices; ++i)
     {
         unsigned char value = *data;
-        float height = 3.0f*((float)value) / 255.0f + symmr(mte);
-        *data++ = (unsigned char)intvr(mte);
+        float height = 3.0f * (static_cast<float>(value)) / 255.0f + symmr(mte);
+        *data++ = static_cast<unsigned char>(intvr(mte));
         *data++ = 3 * (128 - value / 2) / 4;
         *data++ = 0;
         data++;
@@ -167,19 +171,18 @@ void BSplineSurfaceFitterWindow::CreateScene()
     ffformat.Bind(VA_COLOR, DF_R32G32B32A32_FLOAT, 0);
     mf.SetVertexFormat(ffformat);
     mFittedField = mf.CreateRectangle(numSamples, numSamples, extent, extent);
-    VertexPC* ffvertices = mFittedField->GetVertexBuffer()->Get<VertexPC>();
+    auto* ffvertices = mFittedField->GetVertexBuffer()->Get<VertexPC>();
 
     Vector4<float> translucent{ 1.0f, 1.0f, 1.0f, 0.5f };
     for (int i = 0; i < numVertices; ++i)
     {
-        float u = 0.5f*(ffvertices[i].position[0] / extent + 1.0f);
-        float v = 0.5f*(ffvertices[i].position[1] / extent + 1.0f);
+        float u = 0.5f * (ffvertices[i].position[0] / extent + 1.0f);
+        float v = 0.5f * (ffvertices[i].position[1] / extent + 1.0f);
         ffvertices[i].position = fitter.GetPosition(u, v);
         ffvertices[i].color = translucent;
     }
 
-    std::shared_ptr<VertexColorEffect> vceffect =
-        std::make_shared<VertexColorEffect>(mProgramFactory);
+    auto vceffect = std::make_shared<VertexColorEffect>(mProgramFactory);
     mFittedField->SetEffect(vceffect);
 
     mPVWMatrices.Subscribe(mHeightField->worldTransform, txeffect->GetPVWMatrixConstant());

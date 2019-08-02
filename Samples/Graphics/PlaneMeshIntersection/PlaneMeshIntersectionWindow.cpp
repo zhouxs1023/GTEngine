@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include "PlaneMeshIntersectionWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -52,15 +55,9 @@ PlaneMeshIntersectionWindow::PlaneMeshIntersectionWindow(
     mEngine->SetClearColor({ 1.0f, 1.0f, 1.0f, std::numeric_limits<float>::max() });
 
     std::shared_ptr<ComputeShader> cshader = mDrawIntersections->GetCShader();
-#if defined(GTE_DEV_OPENGL)
     cshader->Set("colorImage", mPSColor);
     cshader->Set("planeConstantImage", mPSPlaneConstant);
     cshader->Set("outputImage", mScreen);
-#else
-    cshader->Set("color", mPSColor);
-    cshader->Set("planeConstant", mPSPlaneConstant);
-    cshader->Set("output", mScreen);
-#endif
 
     InitializeCamera(60.0f, GetAspectRatio(), 0.1f, 100.0f, 0.01f, 0.001f,
         {0.0f, 0.0f, -2.5f}, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
@@ -100,14 +97,9 @@ bool PlaneMeshIntersectionWindow::SetEnvironment()
     mEnvironment.Insert(path + "/Samples/Graphics/PlaneMeshIntersection/Shaders/");
     std::vector<std::string> inputs =
     {
-#if defined(GTE_DEV_OPENGL)
-        "PlaneMeshIntersectionVS.glsl",
-        "PlaneMeshIntersectionPS.glsl",
-        "DrawIntersections.glsl"
-#else
-        "PlaneMeshIntersection.hlsl",
-        "DrawIntersections.hlsl"
-#endif
+        DefaultShaderName("PlaneMeshIntersection.vs"),
+        DefaultShaderName("PlaneMeshIntersection.ps"),
+        DefaultShaderName("DrawIntersections.cs")
     };
 
     for (auto const& input : inputs)
@@ -124,30 +116,16 @@ bool PlaneMeshIntersectionWindow::SetEnvironment()
 
 bool PlaneMeshIntersectionWindow::CreateScene()
 {
-    std::string path;
-
-#if defined(GTE_DEV_OPENGL)
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(
-            mEnvironment.GetPath("PlaneMeshIntersectionVS.glsl"),
-            mEnvironment.GetPath("PlaneMeshIntersectionPS.glsl"),
-            "");
-#else
-    path = mEnvironment.GetPath("PlaneMeshIntersection.hlsl");
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(path, path, "");
-#endif
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("PlaneMeshIntersection.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("PlaneMeshIntersection.ps"));
+    auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
     if (!program)
     {
         return false;
     }
 
-#if defined(GTE_DEV_OPENGL)
-    path = mEnvironment.GetPath("DrawIntersections.glsl");
-#else
-    path = mEnvironment.GetPath("DrawIntersections.hlsl");
-#endif
-    mDrawIntersections = mProgramFactory->CreateFromFile(path);
+    std::string csPath = mEnvironment.GetPath(DefaultShaderName("DrawIntersections.cs"));
+    mDrawIntersections = mProgramFactory->CreateFromFile(csPath);
     if (!mDrawIntersections)
     {
         return false;
@@ -162,7 +140,7 @@ bool PlaneMeshIntersectionWindow::CreateScene()
     p.planeVector1 = Vector4<float>{ 0.0f, 1.0f, 0.0f, 0.0f } / planeDelta;
     program->GetVShader()->Set("PMIParameters", mPMIParameters);
 
-    std::shared_ptr<VisualEffect> effect = std::make_shared<VisualEffect>(program);
+    auto effect = std::make_shared<VisualEffect>(program);
 
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
@@ -178,12 +156,7 @@ void PlaneMeshIntersectionWindow::UpdateMatrices()
 {
     PMIParameters& p = *mPMIParameters->Get<PMIParameters>();
     p.pvMatrix = mCamera->GetProjectionViewMatrix();
-
-#if defined(GTE_USE_MAT_VEC)
-    p.wMatrix = mTrackball.GetOrientation() * mMesh->worldTransform;
-#else
-    p.wMatrix = mMesh->worldTransform * mTrackball.GetOrientation();
-#endif
-
+    Matrix4x4<float> wMatrix = mMesh->worldTransform;
+    p.wMatrix = DoTransform(mTrackball.GetOrientation(), wMatrix);
     mEngine->Update(mPMIParameters);
 }

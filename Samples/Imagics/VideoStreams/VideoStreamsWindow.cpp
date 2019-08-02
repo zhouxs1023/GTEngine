@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/04/01)
+// File Version: 3.0.3 (2019/05/03)
 
 #include "VideoStreamsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -34,7 +36,7 @@ VideoStreamsWindow::~VideoStreamsWindow()
 
 VideoStreamsWindow::VideoStreamsWindow(Parameters& parameters)
     :
-    Window(parameters),
+    Window2(parameters),
     mVideoStreams(NUM_VIDEO_STREAMS),
     mOverlay(NUM_VIDEO_STREAMS),
     mVideoStreamManager(nullptr),
@@ -184,7 +186,7 @@ bool VideoStreamsWindow::OnCharPress(unsigned char key, int x, int y)
         return true;
     }
 
-    return Window::OnCharPress(key, x, y);
+    return Window2::OnCharPress(key, x, y);
 }
 
 bool VideoStreamsWindow::CreateOverlays(int textureWidth, int textureHeight)
@@ -214,10 +216,9 @@ bool VideoStreamsWindow::CreateOverlays(int textureWidth, int textureHeight)
     mOverlay[3]->SetOverlayRectangle(rect3);
 
     // Create a black texture for the initial drawing of the window.
-    std::shared_ptr<Texture2> texture =
-        std::make_shared<Texture2>(DF_R16_UNORM, textureWidth, textureHeight);
+    auto texture = std::make_shared<Texture2>(DF_R16_UNORM, textureWidth, textureHeight);
     texture->SetName("black texture");
-    memset(texture->GetData(), 0, texture->GetNumBytes());
+    std::memset(texture->GetData(), 0, texture->GetNumBytes());
     mEngine->Bind(texture);
     mOverlay[0]->SetTexture(texture);
     mOverlay[1]->SetTexture(texture);

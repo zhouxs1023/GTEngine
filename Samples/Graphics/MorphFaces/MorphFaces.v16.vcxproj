@@ -356,13 +356,21 @@
     <Text Include="Data\SharedTexTri.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Texture2PNTPS.glsl" />
-    <None Include="Shaders\Texture2PNTVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Texture2PNT.ps.glsl" />
+    <None Include="Shaders\Texture2PNT.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Texture2PNT.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\Texture2PNT.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

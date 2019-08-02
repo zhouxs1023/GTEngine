@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.1 (2018/10/05)
+// File Version: 3.1.2 (2019/05/02)
 
 #include "FreeTopFixedTipWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -194,7 +198,7 @@ void FreeTopFixedTipWindow::CreateAxisVertical()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, 2);
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     vertices[0] = { 0.0f, 0.0f, 0.0f };
     vertices[1] = { 0.0f, 0.0f, 4.0f };
 
@@ -229,7 +233,7 @@ void FreeTopFixedTipWindow::CreateTop()
     // Adjust the shape.
     auto vbuffer = visual->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         Vector3<float>& pos = vertices[i].position;
@@ -257,7 +261,7 @@ void FreeTopFixedTipWindow::CreateAxisTop()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, 2);
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     vertices[0] = { 0.0f, 0.0f, 0.0f };
     vertices[1] = { 0.0f, 0.0f, 4.0f };
 

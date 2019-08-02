@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include "VertexColoringWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteVertexColorEffect.h>
 
 int main(int, char const*[])
 {
@@ -73,24 +75,25 @@ void VertexColoringWindow::CreateScene()
         Vector3<float> position;
         Vector4<float> color;
     };
+
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_COLOR, DF_R32G32B32A32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 3);
-    Vertex* vertex = vbuffer->Get<Vertex>();
-    vertex[0].position = { 0.0f, 0.0f, 0.0f };
-    vertex[0].color = { 1.0f, 0.0f, 0.0f, 1.0f };
-    vertex[1].position = { 1.0f, 0.0f, 0.0f };
-    vertex[1].color = { 0.0f, 1.0f, 0.0f, 1.0f };
-    vertex[2].position = { 0.0f, 1.0f, 0.0f };
-    vertex[2].color = { 0.0f, 0.0f, 1.0f, 1.0f };
+
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 3);
+    auto* vertices = vbuffer->Get<Vertex>();
+    vertices[0].position = { 0.0f, 0.0f, 0.0f };
+    vertices[0].color = { 1.0f, 0.0f, 0.0f, 1.0f };
+    vertices[1].position = { 1.0f, 0.0f, 0.0f };
+    vertices[1].color = { 0.0f, 1.0f, 0.0f, 1.0f };
+    vertices[2].position = { 0.0f, 1.0f, 0.0f };
+    vertices[2].color = { 0.0f, 0.0f, 1.0f, 1.0f };
 
     // Create an indexless buffer for a triangle mesh with one triangle.
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 1);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 1);
 
     // Create an effect for the vertex and pixel shaders.
-    std::shared_ptr<VertexColorEffect> effect =
-        std::make_shared<VertexColorEffect>(mProgramFactory);
+    auto effect = std::make_shared<VertexColorEffect>(mProgramFactory);
 
     // Create the geometric object for drawing.  Translate it so that its
     // center of mass is at the origin.  This supports virtual trackball

@@ -1,42 +1,42 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.1
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GpuGaussianBlur2.v14", "GpuGaussianBlur2.v14.vcxproj", "{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GpuGaussianBlur2.v14", "GpuGaussianBlur2.v14.vcxproj", "{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Required", "Required", "{00d4e079-bd89-4600-8a48-009f0abdc095}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Required", "Required", "{00D4E079-BD89-4600-8A48-009F0ABDC095}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GTEngine.v14", "..\..\..\GTEngine.v14.vcxproj", "{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
 		Debug|x64 = Debug|x64
-		DebugGL4|x86 = DebugGL4|x86
+		Debug|x86 = Debug|x86
 		DebugGL4|x64 = DebugGL4|x64
-		Release|x86 = Release|x86
+		DebugGL4|x86 = DebugGL4|x86
 		Release|x64 = Release|x64
-		ReleaseGL4|x86 = ReleaseGL4|x86
+		Release|x86 = Release|x86
 		ReleaseGL4|x64 = ReleaseGL4|x64
+		ReleaseGL4|x86 = ReleaseGL4|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.Debug|x64.ActiveCfg = Debug|x64
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.Debug|x64.Build.0 = Debug|x64
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.Debug|x86.ActiveCfg = Debug|Win32
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.Debug|x86.Build.0 = Debug|Win32
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.DebugGL4|x64.ActiveCfg = DebugGL4|x64
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.DebugGL4|x64.Build.0 = DebugGL4|x64
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.DebugGL4|x86.ActiveCfg = DebugGL4|Win32
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.DebugGL4|x86.Build.0 = DebugGL4|Win32
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.Release|x64.ActiveCfg = Release|x64
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.Release|x64.Build.0 = Release|x64
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.Release|x86.ActiveCfg = Release|Win32
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.Release|x86.Build.0 = Release|Win32
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.ReleaseGL4|x64.ActiveCfg = ReleaseGL4|x64
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.ReleaseGL4|x64.Build.0 = ReleaseGL4|x64
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.ReleaseGL4|x86.ActiveCfg = ReleaseGL4|Win32
-		{b489a9cf-cd7b-43b0-8f5e-cc19df014ad8}.ReleaseGL4|x86.Build.0 = ReleaseGL4|Win32
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.Debug|x64.ActiveCfg = Debug|x64
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.Debug|x64.Build.0 = Debug|x64
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.Debug|x86.ActiveCfg = Debug|Win32
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.Debug|x86.Build.0 = Debug|Win32
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.DebugGL4|x64.ActiveCfg = DebugGL4|x64
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.DebugGL4|x64.Build.0 = DebugGL4|x64
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.DebugGL4|x86.ActiveCfg = DebugGL4|Win32
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.DebugGL4|x86.Build.0 = DebugGL4|Win32
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.Release|x64.ActiveCfg = Release|x64
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.Release|x64.Build.0 = Release|x64
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.Release|x86.ActiveCfg = Release|Win32
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.Release|x86.Build.0 = Release|Win32
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.ReleaseGL4|x64.ActiveCfg = ReleaseGL4|x64
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.ReleaseGL4|x64.Build.0 = ReleaseGL4|x64
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.ReleaseGL4|x86.ActiveCfg = ReleaseGL4|Win32
+		{B489A9CF-CD7B-43B0-8F5E-CC19DF014AD8}.ReleaseGL4|x86.Build.0 = ReleaseGL4|Win32
 		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Debug|x64.ActiveCfg = Debug|x64
 		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Debug|x64.Build.0 = Debug|x64
 		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829}.Debug|x86.ActiveCfg = Debug|Win32
@@ -58,6 +58,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829} = {00d4e079-bd89-4600-8a48-009f0abdc095}
+		{43A54DE9-1F9B-4BC6-A7BC-C3FD13B2C829} = {00D4E079-BD89-4600-8A48-009F0ABDC095}
 	EndGlobalSection
 EndGlobal

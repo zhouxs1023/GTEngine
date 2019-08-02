@@ -3,18 +3,25 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #pragma once
 
-#include <GTEngine.h>
-using namespace gte;
-
-// Expose this for the BSP-based query.  Comment it out for the projection-based query.
+// Expose this for the BSP-based query.  Comment it out for the
+// projection-based query.
 //#define USE_BSP_QUERY
 
 // Uncomment this for timing information.
 //#define MEASURE_TIMING_OF_QUERY
+
+#include <Applications/GteWindow3.h>
+#include <Mathematics/GtePolyhedron3.h>
+#if defined(USE_BSP_QUERY)
+#include <Physics/GteExtremalQuery3BSP.h>
+#else
+#include <Physics/GteExtremalQuery3PRJ.h>
+#endif
+using namespace gte;
 
 class ExtremalQueryWindow : public Window3
 {

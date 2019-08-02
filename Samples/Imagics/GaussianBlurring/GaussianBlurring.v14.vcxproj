@@ -319,8 +319,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\GaussianBlur3x3.glsl" />
-    <None Include="Shaders\GaussianBlur3x3.hlsl">
+    <None Include="Shaders\GaussianBlur3x3.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\GaussianBlur3x3.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

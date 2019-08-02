@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/03/04)
+// File Version: 3.0.4 (2019/05/03)
 
 #include "SurfaceExtractionWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -146,17 +149,11 @@ bool SurfaceExtractionWindow::SetEnvironment()
     mEnvironment.Insert(path + "/Samples/Imagics/SurfaceExtraction/Shaders/");
     std::vector<std::string> inputs =
     {
-#if defined(GTE_DEV_OPENGL)
-        "ExtractSurface.glsl",
-        "ExtractSurfaceIndirect.glsl",
-        "DrawSurfaceIndirectVS.glsl",
-        "DrawSurfaceIndirectGS.glsl",
-        "DrawSurfaceIndirectPS.glsl"
-#else
-        "DrawSurfaceIndirect.hlsl",
-        "ExtractSurface.hlsl",
-        "ExtractSurfaceIndirect.hlsl"
-#endif
+        DefaultShaderName("ExtractSurface.cs"),
+        DefaultShaderName("ExtractSurfaceIndirect.cs"),
+        DefaultShaderName("DrawSurfaceIndirect.vs"),
+        DefaultShaderName("DrawSurfaceIndirect.gs"),
+        DefaultShaderName("DrawSurfaceIndirect.ps")
     };
 
     for (auto const& input : inputs)
@@ -198,7 +195,7 @@ void SurfaceExtractionWindow::CreateSharedResources()
     unsigned int const numElements = 256 * 41;
     unsigned int const numBytes = numElements * sizeof(int);
     mLookup = std::make_shared<StructuredBuffer>(numElements, sizeof(int));
-    memcpy(mLookup->GetData(), mMarchingCubes.GetTable(), numBytes);
+    std::memcpy(mLookup->GetData(), mMarchingCubes.GetTable(), numBytes);
 
     // Use a Mersenne twister engine for random numbers.
     std::mt19937 mte;
@@ -228,7 +225,7 @@ void SurfaceExtractionWindow::CreateSharedResources()
 
     float const dx = 2.0f / XBOUND, dy = 2.0f / YBOUND, dz = 2.0f / ZBOUND;
     mImage = std::make_shared<StructuredBuffer>(NUM_VOXELS, sizeof(float));
-    float* image = mImage->Get<float>();
+    auto* image = mImage->Get<float>();
     Vector3<float> pos;
     float wmin = std::numeric_limits<float>::max(), wmax = 0.0f;
     for (int z = 0; z < ZBOUND; ++z)
@@ -271,7 +268,7 @@ void SurfaceExtractionWindow::CreateSharedResources()
     }
 
     mParametersBuffer = std::make_shared<ConstantBuffer>(4 * sizeof(float), true);
-    float* param = mParametersBuffer->Get<float>();
+    auto* param = mParametersBuffer->Get<float>();
     *param++ = dx;
     *param++ = dy;
     *param++ = dz;
@@ -281,7 +278,7 @@ void SurfaceExtractionWindow::CreateSharedResources()
     mTranslate.SetTranslation(-1.0f, -1.0f, -1.0f);
 
     mColorTexture = std::make_shared<Texture3>(DF_R8G8B8A8_UNORM, 2, 2, 2);
-    unsigned int* color = mColorTexture->Get<unsigned int>();
+    auto* color = mColorTexture->Get<unsigned int>();
     color[0] = 0xFF000000;
     color[1] = 0xFF0000FF;
     color[2] = 0xFF00FF00;
@@ -304,34 +301,12 @@ bool SurfaceExtractionWindow::CreateDirectResources()
     mProgramFactory->defines.Set("YTHREADS", YTHREADS);
     mProgramFactory->defines.Set("ZTHREADS", ZTHREADS);
 
-#if defined(GTE_DEV_OPENGL)
-    std::string path = mEnvironment.GetPath("ExtractSurface.glsl");
-#else
-    std::string path = mEnvironment.GetPath("ExtractSurface.hlsl");
-#endif
-    mDirectExtractProgram = mProgramFactory->CreateFromFile(path);
+    std::string csPath = mEnvironment.GetPath(DefaultShaderName("ExtractSurface.cs"));
+    mDirectExtractProgram = mProgramFactory->CreateFromFile(csPath);
     if (!mDirectExtractProgram)
     {
         return false;
     }
-
-#if defined(GTE_DEV_OPENGL)
-    BufferLayout layout;
-    mDirectExtractProgram->GetCShader()->GetStructuredBufferLayout("voxels", layout);
-    LogAssert(layout[0].offset == offsetof(DirectVoxel, configuration),
-        "DirectVoxel::configuration in GLSL is at offset = " + std::to_string(layout[0].offset));
-    LogAssert(layout[1].offset == offsetof(DirectVoxel, numVertices),
-        "DirectVoxel::numVertices in GLSL is at offset = " + std::to_string(layout[1].offset));
-    LogAssert(layout[2].offset == offsetof(DirectVoxel, numTriangles),
-        "DirectVoxel::numTriangles in GLSL is at offset = " + std::to_string(layout[2].offset));
-    LogAssert(layout[3].offset == offsetof(DirectVoxel, vertices),
-        "DirectVoxel::vertices in GLSL is at offset = " + std::to_string(layout[3].offset));
-    LogAssert(layout[4].offset == offsetof(DirectVoxel, indices),
-        "DirectVoxel::indices in GLSL is at offset = " + std::to_string(layout[4].offset));
-#endif
-    auto const layoutSize = mDirectExtractProgram->GetCShader()->GetStructuredBufferSize("voxels");
-    LogAssert(layoutSize == sizeof(DirectVoxel),
-        "DirectVoxel in GLSL has size = " + std::to_string(layoutSize));
 
     // Create the buffer for voxel output.  Because we will read back the
     // voxels every frame, create a persistent staging buffer for the copy
@@ -341,7 +316,7 @@ bool SurfaceExtractionWindow::CreateDirectResources()
     mDirectVoxels->SetCopyType(Resource::COPY_STAGING_TO_CPU);
 
     // Attach resources to the shader.
-    std::shared_ptr<ComputeShader> cshader = mDirectExtractProgram->GetCShader();
+    auto cshader = mDirectExtractProgram->GetCShader();
     cshader->Set("Parameters", mParametersBuffer);
     cshader->Set("lookup", mLookup);
     cshader->Set("image", mImage);
@@ -393,8 +368,8 @@ void SurfaceExtractionWindow::CreateMesh()
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32B32_FLOAT, 0);
     unsigned int numVertices = static_cast<unsigned int>(vertices.size());
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
-    Vertex* v = vbuffer->Get<Vertex>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
+    auto* v = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i, ++v)
     {
         v->position = vertices[i];
@@ -402,9 +377,8 @@ void SurfaceExtractionWindow::CreateMesh()
     }
 
     unsigned int numTriangles = static_cast<int>(indices.size() / 3);
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH,
-        numTriangles, sizeof(unsigned int));
-    memcpy(ibuffer->GetData(), &indices[0], ibuffer->GetNumBytes());
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
+    std::memcpy(ibuffer->GetData(), &indices[0], ibuffer->GetNumBytes());
 
     mDirectMesh = std::make_shared<Visual>(vbuffer, ibuffer, mDirectDrawEffect);
 }
@@ -422,12 +396,8 @@ bool SurfaceExtractionWindow::CreateIndirectResources()
     mProgramFactory->defines.Set("YTHREADS", YTHREADS);
     mProgramFactory->defines.Set("ZTHREADS", ZTHREADS);
 
-#if defined(GTE_DEV_OPENGL)
-    std::string path = mEnvironment.GetPath("ExtractSurfaceIndirect.glsl");
-#else
-    std::string path = mEnvironment.GetPath("ExtractSurfaceIndirect.hlsl");
-#endif
-    mIndirectExtractProgram = mProgramFactory->CreateFromFile(path);
+    std::string csPath = mEnvironment.GetPath(DefaultShaderName("ExtractSurfaceIndirect.cs"));
+    mIndirectExtractProgram = mProgramFactory->CreateFromFile(csPath);
     if (!mIndirectExtractProgram)
     {
         return false;
@@ -454,16 +424,10 @@ bool SurfaceExtractionWindow::CreateIndirectResources()
         "IndirectVoxel in GLSL has size = " + std::to_string(layoutSizeVoxelsCS));
 #endif
 
-#if defined(GTE_DEV_OPENGL)
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(
-            mEnvironment.GetPath("DrawSurfaceIndirectVS.glsl"),
-            mEnvironment.GetPath("DrawSurfaceIndirectPS.glsl"),
-            mEnvironment.GetPath("DrawSurfaceIndirectGS.glsl"));
-#else
-    path = mEnvironment.GetPath("DrawSurfaceIndirect.hlsl");
-    std::shared_ptr<VisualProgram> program = mProgramFactory->CreateFromFiles(path, path, path);
-#endif
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("DrawSurfaceIndirect.vs"));
+    std::string gsPath = mEnvironment.GetPath(DefaultShaderName("DrawSurfaceIndirect.gs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("DrawSurfaceIndirect.ps"));
+    std::shared_ptr<VisualProgram> program = mProgramFactory->CreateFromFiles(vsPath, psPath, gsPath);
     if (!program)
     {
         return false;
@@ -479,11 +443,11 @@ bool SurfaceExtractionWindow::CreateIndirectResources()
     // Create the vertex and index buffers for SV_VertexID-based drawing.
     VertexFormat vformat;
     vformat.Bind(VA_NO_SEMANTIC, DF_R32G32_UINT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, mIndirectVoxels);
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_POLYPOINT, NUM_VOXELS);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, mIndirectVoxels);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYPOINT, NUM_VOXELS);
 
     // Create and attach resources to the shaders.
-    std::shared_ptr<ComputeShader> cshader = mIndirectExtractProgram->GetCShader();
+    auto cshader = mIndirectExtractProgram->GetCShader();
     cshader->Set("Parameters", mParametersBuffer);
     cshader->Set("image", mImage);
     cshader->Set("voxels", mIndirectVoxels);
@@ -494,7 +458,7 @@ bool SurfaceExtractionWindow::CreateIndirectResources()
     mIndirectPVWMatrix = mIndirectPVWMatrixBuffer->Get<Matrix4x4<float>>();
     *mIndirectPVWMatrix = Matrix4x4<float>::Identity();
 
-    std::shared_ptr<GeometryShader> gshader = program->GetGShader();
+    auto gshader = program->GetGShader();
     gshader->Set("Parameters", mParametersBuffer);
     gshader->Set("PVWMatrix", mIndirectPVWMatrixBuffer);
     gshader->Set("lookup", mLookup);
@@ -506,13 +470,7 @@ bool SurfaceExtractionWindow::CreateIndirectResources()
     mColorSampler->mode[1] = SamplerState::CLAMP;
     mColorSampler->mode[2] = SamplerState::CLAMP;
 
-    std::shared_ptr<PixelShader> pshader = program->GetPShader();
-#if defined(GTE_DEV_OPENGL)
-    pshader->Set("colorSampler", mColorTexture);
-#else
-    pshader->Set("colorTexture", mColorTexture);
-#endif
-    pshader->Set("colorSampler", mColorSampler);
+    program->GetPShader()->Set("colorTexture", mColorTexture, "colorSampler", mColorSampler);
 
     mIndirectDrawEffect = std::make_shared<VisualEffect>(program);
 
@@ -527,11 +485,8 @@ void SurfaceExtractionWindow::UpdateConstants()
     // Compute the new world transforms and copy to constant buffers.
     Matrix4x4<float> pvMatrix = mCamera->GetProjectionViewMatrix();
     Matrix4x4<float> rotate = mTrackball.GetOrientation();
-#if defined(GTE_USE_MAT_VEC)
-    Matrix4x4<float> pvwMatrix = pvMatrix * rotate * mTranslate;
-#else
-    Matrix4x4<float> pvwMatrix = mTranslate * rotate * pvMatrix;
-#endif
+    Matrix4x4<float> translate = mTranslate.GetHMatrix();
+    Matrix4x4<float> pvwMatrix = DoTransform(DoTransform(pvMatrix, rotate), translate);
 
 #if defined(USE_DRAW_DIRECT)
     mDirectDrawEffect->SetPVWMatrix(pvwMatrix);

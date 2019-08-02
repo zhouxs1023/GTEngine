@@ -24,13 +24,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\TextureArrays.hlsl">
+    <None Include="Shaders\TextureArrays.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\TextureArraysPixel.glsl">
+    <None Include="Shaders\TextureArrays.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\TextureArraysVertex.glsl">
+    <None Include="Shaders\TextureArrays.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\TextureArrays.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

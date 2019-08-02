@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/06/13)
 
 #pragma once
 
@@ -91,7 +91,7 @@ FIQuery<Real, Halfspace3<Real>, Segment3<Real>>::operator()(
     //   1 0 1  point (endpoint)
     //   2 0 0  none
 
-    Real s[3];
+    Real s[2];
     int numPositive = 0, numNegative = 0, numZero = 0;
     for (int i = 0; i < 2; ++i)
     {

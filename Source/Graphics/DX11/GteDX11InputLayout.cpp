@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/03)
 
 #include <GTEnginePCH.h>
 #include <Graphics/DX11/GteDX11InputLayout.h>
@@ -20,7 +20,7 @@ DX11InputLayout::DX11InputLayout(ID3D11Device* device,
     mLayout(nullptr),
     mNumElements(0)
 {
-    memset(&mElements[0], 0, VA_MAX_ATTRIBUTES*sizeof(mElements[0]));
+    std::memset(&mElements[0], 0, VA_MAX_ATTRIBUTES*sizeof(mElements[0]));
     if (vbuffer && vshader)
     {
         VertexFormat const& format = vbuffer->GetFormat();

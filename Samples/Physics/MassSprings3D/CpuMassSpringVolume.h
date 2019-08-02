@@ -3,11 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteEnvironment.h>
+#include <Graphics/GteProgramFactory.h>
 using namespace gte;
 
 class CpuMassSpringVolume
@@ -22,9 +23,9 @@ public:
     // connecting them to their neighbors: a "face" mass has 5 neighbors, an
     // "edge" mass has 4 neighbors, and a "corner" mass has 3 neighbors.
     ~CpuMassSpringVolume();
-    CpuMassSpringVolume(ProgramFactory&, int numColumns, int numRows,
-        int numSlices, float step, float viscosity, Environment& environment,
-        bool& created);
+    CpuMassSpringVolume(std::shared_ptr<ProgramFactory> const& factory,
+        int numColumns, int numRows, int numSlices, float step, float viscosity,
+        Environment& environment, bool& created);
 
     // Deferred construction.  The physical parameters must be set before
     // starting the simulation.

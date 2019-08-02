@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.24.0 (2019/04/10)
+// File Version: 3.24.1 (2019/05/02)
 
 #include "IntersectConvexPolyhedraWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
 
 int main(int, char const*[])
 {
@@ -134,12 +137,12 @@ void IntersectConvexPolyhedraWindow::CreateScene()
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, static_cast<unsigned int>(numVertices));
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH,
         static_cast<unsigned int>(numTriangles), sizeof(unsigned int));
-    auto* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     for (int i = 0; i < numVertices; ++i)
     {
         vertices[i] = mPoly0.GetPoint(i);
     }
-    auto* indices = ibuffer->Get<int>();
+    auto indices = ibuffer->Get<int>();
     for (int i = 0; i < numTriangles; ++i)
     {
         MTTriangle const& triangle = mPoly0.GetTriangle(i);
@@ -172,7 +175,7 @@ void IntersectConvexPolyhedraWindow::CreateScene()
     {
         vertices[i] = mPoly1.GetPoint(i);
     }
-    indices = (int*)ibuffer->GetData();
+    indices = ibuffer->Get<int>();
     for (int i = 0; i < numTriangles; ++i)
     {
         MTTriangle const& triangle = mPoly1.GetTriangle(i);
@@ -201,7 +204,7 @@ void IntersectConvexPolyhedraWindow::ComputeIntersection()
     // Transform the model-space vertices to world space.
     auto vbuffer = mMeshPoly0->GetVertexBuffer();
     int numVertices = static_cast<int>(vbuffer->GetNumElements());
-    auto* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     for (int i = 0; i < numVertices; ++i)
     {
         Vector4<float> model = HLift(vertices[i], 1.0f);
@@ -238,7 +241,7 @@ void IntersectConvexPolyhedraWindow::ComputeIntersection()
         {
             vertices[i] = mIntersection.GetPoint(i);
         }
-        auto* indices = ibuffer->Get<int>();
+        auto indices = ibuffer->Get<int>();
         for (int i = 0; i < numTriangles; ++i)
         {
             MTTriangle const& triangle = mIntersection.GetTriangle(i);

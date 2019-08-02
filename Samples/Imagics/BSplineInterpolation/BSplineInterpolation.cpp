@@ -3,14 +3,18 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.13.1 (2019/03/21)
+// File Version: 3.13.3 (2019/05/03)
 
 //#define GTE_INTP_BSPLINE_UNIFORM_NO_SPECIALIZATION
 #if defined(GTE_INTP_BSPLINE_UNIFORM_NO_SPECIALIZATION)
 //#define USE_RUNTIME_TEMPLATE
 #endif
 
-#include <GTEngine.h>
+#include <GTGraphics.h>
+#include <Applications/GteEnvironment.h>
+#include <Applications/GteTextureIO.h>
+#include <Mathematics/GteIntpBSplineUniform.h>
+#include <LowLevel/GteLogReporter.h>
 using namespace gte;
 
 Environment gEnvironment;
@@ -65,8 +69,8 @@ void DoIntpBSplineUniform1()
     // Draw the graph as a sequence of points to see that it looks similar
     // to that in the PDF.
     auto texture = std::make_shared<Texture2>(DF_R8G8B8A8_UNORM, 512, 512);
-    uint32_t* texels = texture->Get<uint32_t>();
-    memset(texels, 0xFF, texture->GetNumBytes());
+    auto* texels = texture->Get<uint32_t>();
+    std::memset(texels, 0xFF, texture->GetNumBytes());
     double fmin = -0.1, fmax = 2.1;
     double tmin = interp.GetTMin(0), tmax = interp.GetTMax(0);
     for (uint32_t x = 0; x < 512; ++x)
@@ -218,8 +222,8 @@ void DoIntpBSplineUniform2()
 #endif
 
     auto texture = std::make_shared<Texture2>(DF_R8G8B8A8_UNORM, controls.size[0], controls.size[1]);
-    uint32_t* texels = texture->Get<uint32_t>();
-    memset(texels, 0xFF, texture->GetNumBytes());
+    auto* texels = texture->Get<uint32_t>();
+    std::memset(texels, 0xFF, texture->GetNumBytes());
     for (int y = 0; y < controls.size[1]; ++y)
     {
         float t1 = static_cast<float>(y);
@@ -355,7 +359,7 @@ void DoIntpBSplineUniform3()
     }
 
     // Write the output 3D image as an array of 2D slices.
-    memset(texels, 0, texture->GetNumBytes());
+    std::memset(texels, 0, texture->GetNumBytes());
     for (int yTile = 0, z = 0; yTile < numYTiles; ++yTile)
     {
         int yMin = yTile * controls.size[1];

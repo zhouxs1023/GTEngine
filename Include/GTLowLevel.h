@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/01/09)
+// File Version: 3.0.3 (2019/07/30)
 
 #pragma once
 
@@ -17,10 +17,10 @@
 #include <LowLevel/GteMinHeap.h>
 #include <LowLevel/GteRangeIteration.h>
 #include <LowLevel/GteSharedPtrCompare.h>
+#include <LowLevel/GteStringUtility.h>
 #include <LowLevel/GteThreadSafeMap.h>
 #include <LowLevel/GteThreadSafeQueue.h>
 #include <LowLevel/GteWeakPtrCompare.h>
-#include <LowLevel/GteWrapper.h>
 
 // Logger
 #include <LowLevel/GteLogger.h>

@@ -3,10 +3,9 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/03)
 
 #include <GTEnginePCH.h>
-#include <LowLevel/GteWrapper.h>
 #include <Graphics/DX11/GteDX11Buffer.h>
 using namespace gte;
 
@@ -41,11 +40,11 @@ bool DX11Buffer::Update(ID3D11DeviceContext* context)
             unsigned int offsetInBytes = buffer->GetOffset() * buffer->GetElementSize();
             char const* source = buffer->GetData() + offsetInBytes;
             char* target = (char*)sub.pData + offsetInBytes;
-            Memcpy(target, source, numActiveBytes);
+            std::memcpy(target, source, numActiveBytes);
         }
         else
         {
-            Memcpy(sub.pData, buffer->GetData(), buffer->GetNumBytes());
+            std::memcpy(sub.pData, buffer->GetData(), buffer->GetNumBytes());
         }
         context->Unmap(dxBuffer, 0);
     }
@@ -78,7 +77,7 @@ bool DX11Buffer::CopyCpuToGpu(ID3D11DeviceContext* context)
         unsigned int offsetInBytes = buffer->GetOffset() * buffer->GetElementSize();
         char const* source = buffer->GetData() + offsetInBytes;
         char* target = (char*)sub.pData + offsetInBytes;
-        Memcpy(target, source, numActiveBytes);
+        std::memcpy(target, source, numActiveBytes);
         context->Unmap(mStaging, 0);
 
         // Copy from staging buffer to GPU memory.
@@ -119,7 +118,7 @@ bool DX11Buffer::CopyGpuToCpu(ID3D11DeviceContext* context)
         // Copy from staging buffer to CPU memory.
         char const* source = (char*)sub.pData + offsetInBytes;
         char* target = buffer->GetData() + offsetInBytes;
-        Memcpy(target, source, numActiveBytes);
+        std::memcpy(target, source, numActiveBytes);
         context->Unmap(mStaging, 0);
     }
     else

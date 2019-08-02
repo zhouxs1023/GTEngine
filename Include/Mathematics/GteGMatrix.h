@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/06/02)
 
 #pragma once
 
@@ -651,7 +651,7 @@ template <typename Real>
 GVector<Real> operator*(GMatrix<Real> const& M, GVector<Real> const& V)
 {
 #if defined(GTE_ASSERT_ON_GMATRIX_SIZE_MISMATCH)
-    LogAssert(V.GetSize() == M.GetNumRows(), "Mismatched size.");
+    LogAssert(V.GetSize() == M.GetNumCols(), "Mismatched size.");
 #endif
     GVector<Real> result(M.GetNumRows());
     for (int r = 0; r < M.GetNumRows(); ++r)
@@ -669,7 +669,7 @@ template <typename Real>
 GVector<Real> operator*(GVector<Real> const& V, GMatrix<Real> const& M)
 {
 #if defined(GTE_ASSERT_ON_GMATRIX_SIZE_MISMATCH)
-    LogAssert(V.GetSize() == M.GetNumCols(), "Mismatched size.");
+    LogAssert(V.GetSize() == M.GetNumRows(), "Mismatched size.");
 #endif
     GVector<Real> result(M.GetNumCols());
     for (int c = 0; c < M.GetNumCols(); ++c)

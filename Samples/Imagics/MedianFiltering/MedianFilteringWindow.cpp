@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2019/05/03)
 
 #include "MedianFilteringWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -47,13 +50,13 @@ MedianFilteringWindow::MedianFilteringWindow(Parameters& parameters)
 
     std::mt19937 mte;
     std::uniform_real_distribution<float> rnd(0.0625f, 1.0f);
-    float* data = mOriginal->Get<float>();
-    for (unsigned int i = 0; i < txWidth*txHeight; ++i)
+    auto* data = mOriginal->Get<float>();
+    for (unsigned int i = 0; i < txWidth * txHeight; ++i)
     {
         data[i] = rnd(mte);
     }
-    Memcpy(mImage[0]->GetData(), data, mImage[0]->GetNumBytes());
-    Memcpy(mImage[1]->GetData(), data, mImage[1]->GetNumBytes());
+    std::memcpy(mImage[0]->GetData(), data, mImage[0]->GetNumBytes());
+    std::memcpy(mImage[1]->GetData(), data, mImage[1]->GetNumBytes());
 
     // Create two overlays, one for the original image and one for the
     // median-filtered image.
@@ -104,36 +107,36 @@ bool MedianFilteringWindow::OnCharPress(unsigned char key, int x, int y)
     {
     case '0':
         mSelection = 0;
-        Memcpy(mImage[0]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
+        std::memcpy(mImage[0]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
         mEngine->CopyCpuToGpu(mImage[0]);
-        Memcpy(mImage[1]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
+        std::memcpy(mImage[1]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
         mEngine->CopyCpuToGpu(mImage[1]);
         mCProgram = mMedianProgram[0];
         return true;
 
     case '1':
         mSelection = 1;
-        Memcpy(mImage[0]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
+        std::memcpy(mImage[0]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
         mEngine->CopyCpuToGpu(mImage[0]);
-        Memcpy(mImage[1]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
+        std::memcpy(mImage[1]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
         mEngine->CopyCpuToGpu(mImage[1]);
         mCProgram = mMedianProgram[1];
         return true;
 
     case '2':
         mSelection = 2;
-        Memcpy(mImage[0]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
+        std::memcpy(mImage[0]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
         mEngine->CopyCpuToGpu(mImage[0]);
-        Memcpy(mImage[1]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
+        std::memcpy(mImage[1]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
         mEngine->CopyCpuToGpu(mImage[1]);
         mCProgram = mMedianProgram[2];
         return true;
 
     case '3':
         mSelection = 3;
-        Memcpy(mImage[0]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
+        std::memcpy(mImage[0]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
         mEngine->CopyCpuToGpu(mImage[0]);
-        Memcpy(mImage[1]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
+        std::memcpy(mImage[1]->GetData(), mOriginal->GetData(), mOriginal->GetNumBytes());
         mEngine->CopyCpuToGpu(mImage[1]);
         mCProgram = mMedianProgram[3];
         return true;
@@ -151,22 +154,12 @@ bool MedianFilteringWindow::SetEnvironment()
     }
 
     mEnvironment.Insert(path + "/Samples/Imagics/MedianFiltering/Shaders/");
-#if defined(GTE_DEV_OPENGL)
     std::vector<std::string> inputs =
     {
-        "Median3x3.glsl",
-        "Median5x5.glsl",
-        "MedianBySort.glsl"
+        DefaultShaderName("Median3x3.cs"),
+        DefaultShaderName("Median5x5.cs"),
+        DefaultShaderName("MedianBySort.cs")
     };
-#else
-    std::vector<std::string> inputs =
-    {
-        "Median3x3.hlsl",
-        "Median5x5.hlsl",
-        "MedianBySort.hlsl",
-        "MedianShared.hlsli"
-    };
-#endif
 
     for (auto const& input : inputs)
     {
@@ -190,33 +183,31 @@ bool MedianFilteringWindow::CreatePrograms(unsigned int txWidth, unsigned int tx
     mProgramFactory->defines.Set("NUM_X_THREADS", numThreads);
     mProgramFactory->defines.Set("NUM_Y_THREADS", numThreads);
 
-#if defined(GTE_DEV_OPENGL)
-    std::string ext = ".glsl";
-#else
-    std::string ext = ".hlsl";
-#endif
-
+    std::string csPath = mEnvironment.GetPath(DefaultShaderName("MedianBySort.cs"));
     mProgramFactory->defines.Set("RADIUS", 1);
-    mMedianProgram[0] = mProgramFactory->CreateFromFile(mEnvironment.GetPath("MedianBySort" + ext));
+    mMedianProgram[0] = mProgramFactory->CreateFromFile(csPath);
     if (!mMedianProgram[0])
     {
         return false;
     }
 
-    mMedianProgram[1] = mProgramFactory->CreateFromFile(mEnvironment.GetPath("Median3x3" + ext));
+    csPath = mEnvironment.GetPath(DefaultShaderName("Median3x3.cs"));
+    mMedianProgram[1] = mProgramFactory->CreateFromFile(csPath);
     if (!mMedianProgram[1])
     {
         return false;
     }
 
     mProgramFactory->defines.Set("RADIUS", 2);
-    mMedianProgram[2] = mProgramFactory->CreateFromFile(mEnvironment.GetPath("MedianBySort" + ext));
+    csPath = mEnvironment.GetPath(DefaultShaderName("MedianBySort.cs"));
+    mMedianProgram[2] = mProgramFactory->CreateFromFile(csPath);
     if (!mMedianProgram[2])
     {
         return false;
     }
 
-    mMedianProgram[3] = mProgramFactory->CreateFromFile(mEnvironment.GetPath("Median5x5" + ext));
+    csPath = mEnvironment.GetPath(DefaultShaderName("Median5x5.cs"));
+    mMedianProgram[3] = mProgramFactory->CreateFromFile(csPath);
     if (!mMedianProgram[3])
     {
         return false;

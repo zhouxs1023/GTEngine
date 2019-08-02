@@ -3,9 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.18.0 (2018/10/30)
+// File Version: 3.18.1 (2019/05/02)
 
 #include "FitConeWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Mathematics/GteApprCone3.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -215,10 +220,9 @@ void FitConeWindow::CreateGNCone(std::vector<Vector3<double>> const& X,
     double const errorDifferenceTolerance = 1e-08;
     bool useConeInputAsInitialGuess = false;
 
-    auto result = fitter(static_cast<int>(X.size()), X.data(),
+    fitter(static_cast<int>(X.size()), X.data(),
         maxIterations, updateLengthTolerance, errorDifferenceTolerance,
         useConeInputAsInitialGuess, coneVertex, coneAxis, coneAngle);
-    (void)result;
 }
 
 void FitConeWindow::CreateLMCone(std::vector<Vector3<double>> const& X,
@@ -233,11 +237,10 @@ void FitConeWindow::CreateLMCone(std::vector<Vector3<double>> const& X,
     size_t const maxAdjustments = 8;
     bool useConeInputAsInitialGuess = false;
 
-    auto result = fitter(static_cast<int>(X.size()), X.data(),
+    fitter(static_cast<int>(X.size()), X.data(),
         maxIterations, updateLengthTolerance, errorDifferenceTolerance,
         lambdaFactor, lambdaAdjust, maxAdjustments, useConeInputAsInitialGuess,
         coneVertex, coneAxis, coneAngle);
-    (void)result;
 }
 
 std::shared_ptr<Visual> FitConeWindow::CreateConeMesh(std::vector<Vector3<double>> const& X,

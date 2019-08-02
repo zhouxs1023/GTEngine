@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.3 (2019/05/03)
 
 #include "BallHillWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -140,20 +143,20 @@ void BallHillWindow::CreateGround()
 {
     // Create the ground.  Change the texture repeat pattern.
     mGround = mMeshFactory.CreateRectangle(2, 2, 32.0f, 32.0f);
-    VertexBuffer* vbuffer = mGround->GetVertexBuffer().get();
+    auto vbuffer = mGround->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
-        vertex[i].tcoord *= 8.0f;
+        vertices[i].tcoord *= 8.0f;
     }
 
     // Create a texture effect for the ground.
     std::string path = mEnvironment.GetPath("Grass.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, true);
+    auto texture = WICFileIO::Load(path, true);
     texture->AutogenerateMipmaps();
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(mProgramFactory,
-        texture, SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
     mGround->SetEffect(effect);
 
     mPVWMatrices.Subscribe(mGround->worldTransform, effect->GetPVWMatrixConstant());
@@ -162,24 +165,24 @@ void BallHillWindow::CreateGround()
 
 void BallHillWindow::CreateHill()
 {
-    // Create the hill.  Adjust the disk vertices to form an elliptical paraboloid
-    // for the hill.  Change the texture repeat pattern.
+    // Create the hill.  Adjust the disk vertices to form an elliptical
+    // paraboloid for the hill.  Change the texture repeat pattern.
     mHill = mMeshFactory.CreateDisk(32, 32, 2.0f);
-    VertexBuffer* vbuffer = mHill->GetVertexBuffer().get();
+    auto vbuffer = mHill->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
-        vertex[i].position[2] = mModule.GetHeight(vertex[i].position[0], vertex[i].position[1]);
-        vertex[i].tcoord *= 8.0f;
+        vertices[i].position[2] = mModule.GetHeight(vertices[i].position[0], vertices[i].position[1]);
+        vertices[i].tcoord *= 8.0f;
     }
 
     // Create a texture effect for the hill.
     std::string path = mEnvironment.GetPath("Gravel.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, true);
+    auto texture = WICFileIO::Load(path, true);
     texture->AutogenerateMipmaps();
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(mProgramFactory,
-        texture, SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
     mHill->SetEffect(effect);
 
     mPVWMatrices.Subscribe(mHill->worldTransform, effect->GetPVWMatrixConstant());
@@ -199,10 +202,10 @@ void BallHillWindow::CreateBall()
 
     // Create a texture effect for the ball.
     std::string path = mEnvironment.GetPath("BallTexture.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, true);
+    auto texture = WICFileIO::Load(path, true);
     texture->AutogenerateMipmaps();
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(mProgramFactory,
-        texture, SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
     mBall->SetEffect(effect);
 
     mPVWMatrices.Subscribe(mBall->worldTransform, effect->GetPVWMatrixConstant());
@@ -216,18 +219,17 @@ void BallHillWindow::CreatePath()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     unsigned int const numVertices = 1024;
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
     vbuffer->SetNumActiveElements(0);
-    memset(vbuffer->GetData(), 0, vbuffer->GetNumBytes());
+    std::memset(vbuffer->GetData(), 0, vbuffer->GetNumBytes());
 
     // Create a polyline of contiguous line segments.
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(
-        IP_POLYSEGMENT_CONTIGUOUS, numVertices - 1);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYSEGMENT_CONTIGUOUS, numVertices - 1);
 
     // Create a vertex color effect for the path.
-    std::shared_ptr<ConstantColorEffect> effect = std::make_shared<ConstantColorEffect>(
-        mProgramFactory, Vector4<float>{ 1.0f, 1.0f, 1.0f, 1.0f });
+    auto effect = std::make_shared<ConstantColorEffect>(mProgramFactory,
+        Vector4<float>{ 1.0f, 1.0f, 1.0f, 1.0f });
     mPath = std::make_shared<Visual>(vbuffer, ibuffer, effect);
 
     mPVWMatrices.Subscribe(mPath->worldTransform, effect->GetPVWMatrixConstant());
@@ -245,11 +247,7 @@ Vector4<float> BallHillWindow::UpdateBall()
     // Update the ball position and orientation.
     mBall->localTransform.SetTranslation(center);
     Matrix4x4<float> orient = mBall->localTransform.GetRotation();
-#if defined(GTE_USE_MAT_VEC)
-    mBall->localTransform.SetRotation(incrRot * orient);
-#else
-    mBall->localTransform.SetRotation(orient * incrRot);
-#endif
+    mBall->localTransform.SetRotation(DoTransform(incrRot, orient));
 
     // Return the new ball center for further use by application.
     return center;
@@ -271,13 +269,13 @@ void BallHillWindow::PhysicsTick()
 
     // Draw only the active quantity of path points for the initial portion
     // of the simulation.  Once all points are activated, then all are drawn.
-    std::shared_ptr<VertexBuffer> vbuffer = mPath->GetVertexBuffer();
+    auto vbuffer = mPath->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
     unsigned int numActive = vbuffer->GetNumActiveElements();
     if (numActive < numVertices)
     {
         vbuffer->SetNumActiveElements(++numActive);
-        Vector3<float>* position = vbuffer->Get<Vector3<float>>();
+        auto position = vbuffer->Get<Vector3<float>>();
         position[numActive] = { center[0], center[1], center[2] };
         if (numActive == 1)
         {

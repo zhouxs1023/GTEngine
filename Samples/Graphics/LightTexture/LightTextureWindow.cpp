@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include "LightTextureWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -122,22 +125,22 @@ void LightTextureWindow::CreateScene()
 
     // Create the visual effect.  The world up-direction is (0,0,1).  Choose
     // the light to point down.
-    std::shared_ptr<Material> material = std::make_shared<Material>();
+    auto material = std::make_shared<Material>();
     material->emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
     material->ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
     material->diffuse = { 0.5f, 0.5f, 0.5f, 1.0f };
     material->specular = { 1.0f, 1.0f, 1.0f, 75.0f };
 
-    std::shared_ptr<Lighting> lighting = std::make_shared<Lighting>();
+    auto lighting = std::make_shared<Lighting>();
     lighting->ambient = mEngine->GetClearColor();
     lighting->attenuation = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    std::shared_ptr<LightCameraGeometry> geometry = std::make_shared<LightCameraGeometry>();
+    auto geometry = std::make_shared<LightCameraGeometry>();
     mLightWorldPosition = { 0.0f, 0.0f, 8.0f, 1.0f };
     mLightWorldDirection = { 0.0f, 0.0f, -1.0f, 0.0f };
 
     std::string stoneFile = mEnvironment.GetPath("BTStone.png");
-    std::shared_ptr<Texture2> stoneTexture = WICFileIO::Load(stoneFile, true);
+    auto stoneTexture = WICFileIO::Load(stoneFile, true);
     stoneTexture->AutogenerateMipmaps();
 
     mDLTEffect = std::make_shared<DirectionalLightTextureEffect>(mProgramFactory,
@@ -155,6 +158,7 @@ void LightTextureWindow::CreateScene()
         Vector3<float> position, normal;
         Vector2<float> tcoord;
     };
+
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_NORMAL, DF_R32G32B32_FLOAT, 0);
@@ -174,13 +178,13 @@ void LightTextureWindow::CreateScene()
     std::uniform_real_distribution<float> rnd(-1.0f, 1.0f);
     std::shared_ptr<VertexBuffer> vbuffer = mTerrain->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto* vertices = vbuffer->Get<Vertex>();
     unsigned char* heights = heightTexture->Get<unsigned char>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         float height = static_cast<float>(heights[4 * i]) / 255.0f;
         float perturb = 0.05f * rnd(mte);
-        vertex[i].position[2] = 3.0f * height + perturb;
+        vertices[i].position[2] = 3.0f * height + perturb;
     }
 
     mTerrain->SetEffect(mDLTEffect);
@@ -192,32 +196,18 @@ void LightTextureWindow::UpdateConstants()
 {
     Matrix4x4<float> invWMatrix = mTerrain->worldTransform.GetHInverse();
     Vector4<float> cameraWorldPosition = mCamera->GetPosition();
-    std::shared_ptr<LightCameraGeometry> const& geometry = mDLTEffect->GetGeometry();
-#if defined(GTE_USE_MAT_VEC)
-    geometry->cameraModelPosition = invWMatrix * cameraWorldPosition;
+    auto geometry = mDLTEffect->GetGeometry();
+    geometry->cameraModelPosition = DoTransform(invWMatrix, cameraWorldPosition);
     if (mUseDirectional)
     {
-        geometry->lightModelDirection = invWMatrix * mLightWorldDirection;
+        geometry->lightModelDirection = DoTransform(invWMatrix, mLightWorldDirection);
         mDLTEffect->UpdateGeometryConstant();
     }
     else
     {
-        geometry->lightModelPosition = invWMatrix * mLightWorldPosition;
+        geometry->lightModelPosition = DoTransform(invWMatrix, mLightWorldPosition);
         mPLTEffect->UpdateGeometryConstant();
     }
-#else
-    geometry->cameraModelPosition = cameraWorldPosition * invWMatrix;
-    if (mUseDirectional)
-    {
-        geometry->lightModelDirection = mLightWorldDirection * invWMatrix;
-        mDLTEffect->UpdateGeometryConstant();
-    }
-    else
-    {
-        geometry->lightModelPosition = mLightWorldPosition * invWMatrix;
-        mPLTEffect->UpdateGeometryConstant();
-    }
-#endif
     mPVWMatrices.Update();
 }
 

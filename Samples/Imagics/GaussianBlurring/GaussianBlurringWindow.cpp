@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/19)
 
 #include "GaussianBlurringWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
 
 int main(int, char const*[])
 {
@@ -27,7 +29,7 @@ int main(int, char const*[])
 
 GaussianBlurringWindow::GaussianBlurringWindow(Parameters& parameters)
     :
-    Window(parameters),
+    Window2(parameters),
     mNumXThreads(8),
     mNumYThreads(8),
     mNumXGroups(mXSize / mNumXThreads),  // 1024/8 = 128
@@ -72,7 +74,7 @@ void GaussianBlurringWindow::OnIdle()
     }
 #endif
 
-    std::shared_ptr<ComputeShader> cshader = mGaussianBlurProgram->GetCShader();
+    auto cshader = mGaussianBlurProgram->GetCShader();
     mEngine->Execute(mGaussianBlurProgram, mNumXGroups, mNumYGroups, 1);
     mEngine->Draw(mOverlay);
     std::swap(mImage[0], mImage[1]);
@@ -100,11 +102,7 @@ bool GaussianBlurringWindow::SetEnvironment()
     std::vector<std::string> inputs =
     {
         "MedicineBag.png",
-#if defined(GTE_DEV_OPENGL)
-        "GaussianBlur3x3.glsl"
-#else
-        "GaussianBlur3x3.hlsl"
-#endif
+        DefaultShaderName("GaussianBlur3x3.cs")
     };
 
     for (auto const& input : inputs)
@@ -129,8 +127,8 @@ bool GaussianBlurringWindow::CreateImages()
 
     std::string path = mEnvironment.GetPath("MedicineBag.png");
     auto original = WICFileIO::Load(path, false);
-    unsigned int const* src = original->Get<unsigned int>();
-    float* trg = mImage[0]->Get<float>();
+    auto const* src = original->Get<unsigned int>();
+    auto* trg = mImage[0]->Get<float>();
     for (int j = 0; j < mXSize*mYSize; ++j)
     {
         unsigned int rgba = *src++;
@@ -145,29 +143,11 @@ bool GaussianBlurringWindow::CreateImages()
 
 bool GaussianBlurringWindow::CreateShader()
 {
-#if !defined(GTE_DEV_OPENGL)
-    // The flags are chosen to allow you to debug the shaders through MSVS.
-    // The menu path is "Debug | Graphics | Start Diagnostics" (ALT+F5).
-    mProgramFactory->PushFlags();
-    mProgramFactory->flags =
-        D3DCOMPILE_ENABLE_STRICTNESS |
-        D3DCOMPILE_IEEE_STRICTNESS |
-        D3DCOMPILE_DEBUG |
-        D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
-
     mProgramFactory->defines.Set("NUM_X_THREADS", mNumXThreads);
     mProgramFactory->defines.Set("NUM_Y_THREADS", mNumYThreads);
-#if defined(GTE_DEV_OPENGL)
-    mGaussianBlurProgram = mProgramFactory->CreateFromFile(mEnvironment.GetPath("GaussianBlur3x3.glsl"));
-#else
-    mGaussianBlurProgram = mProgramFactory->CreateFromFile(mEnvironment.GetPath("GaussianBlur3x3.hlsl"));
-#endif
+    std::string csPath = mEnvironment.GetPath(DefaultShaderName("GaussianBlur3x3.cs"));
+    mGaussianBlurProgram = mProgramFactory->CreateFromFile(csPath);
     mProgramFactory->defines.Clear();
-
-#if !defined(GTE_DEV_OPENGL)
-    mProgramFactory->PopFlags();
-#endif
 
     if (mGaussianBlurProgram)
     {

@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.4.2 (2019/03/04)
+// File Version: 3.4.3 (2019/05/02)
 
 #include "IntersectBoxCylinderWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {

@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include "PickingWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -117,9 +121,8 @@ void PickingWindow::CreateScene()
     mf.SetVertexFormat(vformat0);
 
     mTorus = mf.CreateTorus(16, 16, 4.0f, 1.0f);
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(
-        mProgramFactory, texture, SamplerState::MIN_L_MAG_L_MIP_P,
-        SamplerState::CLAMP, SamplerState::CLAMP);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
     mTorus->SetEffect(effect);
     mPVWMatrices.Subscribe(mTorus->worldTransform, effect->GetPVWMatrixConstant());
     mScene->AttachChild(mTorus);
@@ -134,15 +137,14 @@ void PickingWindow::CreateScene()
 
     VertexFormat vformat1;
     vformat1.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat1, 4);
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat1, 4);
+    auto* vertices = vbuffer->Get<Vector3<float>>();
     vertices[0] = { 1.0f, 1.0f, 4.0f };
     vertices[1] = { 1.0f, 2.0f, 5.0f };
     vertices[2] = { 2.0f, 2.0f, 6.0f };
     vertices[3] = { 2.0f, 1.0f, 7.0f };
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_POLYPOINT, 4);
-    std::shared_ptr<ConstantColorEffect> cceffect =
-        std::make_shared<ConstantColorEffect>(mProgramFactory,
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYPOINT, 4);
+    auto cceffect = std::make_shared<ConstantColorEffect>(mProgramFactory,
         Vector4<float>({ 0.5f, 0.0f, 0.0f, 1.0f }));
     mPoints = std::make_shared<Visual>(vbuffer, ibuffer, cceffect);
     mPoints->UpdateModelBound();
@@ -155,8 +157,7 @@ void PickingWindow::CreateScene()
     vertices[1] = { -1.0f, -2.0f, 5.0f };
     vertices[2] = { -2.0f, -1.0f, 6.0f };
     vertices[3] = { -2.0f, -2.0f, 7.0f };
-    ibuffer = std::make_shared<IndexBuffer>(IP_POLYSEGMENT_CONTIGUOUS, 3,
-        sizeof(int));
+    ibuffer = std::make_shared<IndexBuffer>(IP_POLYSEGMENT_CONTIGUOUS, 3, sizeof(int));
     ibuffer->SetSegment(0, 0, 1);
     ibuffer->SetSegment(1, 1, 2);
     ibuffer->SetSegment(2, 2, 3);
@@ -205,11 +206,7 @@ void PickingWindow::DoPick(int x, int y)
             Matrix4x4<float> const& invWMatrix = mScene->worldTransform.GetHInverse();
             for (int i = 0; i < mNumActiveSpheres; ++i)
             {
-#if defined(GTE_USE_MAT_VEC)
-                Vector4<float> modelPosition = invWMatrix * mPicker.records[i].primitivePoint;
-#else
-                Vector4<float> modelPosition = mPicker.records[i].primitivePoint * invWMatrix;
-#endif
+                Vector4<float> modelPosition = DoTransform(invWMatrix, mPicker.records[i].primitivePoint);
                 mSphere[i]->localTransform.SetTranslation(modelPosition);
             }
 

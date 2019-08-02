@@ -30,13 +30,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\SimpleBumpMap.hlsl">
+    <None Include="Shaders\SimpleBumpMap.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\SimpleBumpMapPS.glsl">
+    <None Include="Shaders\SimpleBumpMap.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\SimpleBumpMapVS.glsl">
+    <None Include="Shaders\SimpleBumpMap.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\SimpleBumpMap.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

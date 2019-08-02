@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2019/03/09)
+// File Version: 3.0.4 (2019/05/03)
 
 #include "DeformableBall.h"
 #include <Imagics/GteSurfaceExtractorMC.h>
@@ -122,7 +122,7 @@ void DeformableBall::CreateBall(std::shared_ptr<Texture2Effect> const& effect)
     unsigned int const numTriangles = static_cast<unsigned int>(indices.size() / 3);
     std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH,
         numTriangles, sizeof(unsigned int));
-    memcpy(ibuffer->GetData(), indices.data(), ibuffer->GetNumBytes());
+    std::memcpy(ibuffer->GetData(), indices.data(), ibuffer->GetNumBytes());
 
     mMesh = std::make_shared<Visual>(vbuffer, ibuffer, effect);
 

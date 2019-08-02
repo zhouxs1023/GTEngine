@@ -10,89 +10,120 @@
 #include <Mathematics/GteSegment.h>
 #include <Mathematics/GteIntrLine3Cone3.h>
 
-// The queries consider the cone to be single sided and solid.
+// The queries consider the cone to be single sided and solid.  The
+// cone height range is [hmin,hmax].  The cone can be infinite where
+// hmin = 0 and hmax = +infinity, infinite truncated where hmin > 0
+// and hmax = +infinity, finite where hmin = 0 and hmax < +infinity,
+// or a cone frustum where hmin > 0 and hmax < +infinity.  The
+// algorithm details are found in
+// https://www.geometrictools.com/Documentation/IntersectionLineCone.pdf
 
 namespace gte
 {
-
-template <typename Real>
-class FIQuery<Real, Segment3<Real>, Cone3<Real>>
-    :
-    public FIQuery<Real, Line3<Real>, Cone3<Real>>
-{
-public:
-    struct Result
+    template <typename Real>
+    class FIQuery<Real, Segment3<Real>, Cone3<Real>>
         :
-        public FIQuery<Real, Line3<Real>, Cone3<Real>>::Result
+        public FIQuery<Real, Line3<Real>, Cone3<Real>>
     {
-        // No additional information to compute.
+    public:
+        struct Result
+            :
+            public FIQuery<Real, Line3<Real>, Cone3<Real>>::Result
+        {
+            // No additional information to compute.
+        };
+
+        Result operator()(Segment3<Real> const& segment, Cone3<Real> const& cone)
+        {
+            // Execute the line-cone query.
+            Result result;
+            Vector3<Real> segOrigin = segment.p[0];
+            Vector3<Real> segDirection = segment.p[1] - segment.p[0];
+            this->DoQuery(segOrigin, segDirection, cone, result);
+
+            // Adjust the t-interval depending on whether the line-cone
+            // t-interval overlaps the segment interval [0,1].  The block
+            // numbers are a continuation of those in GteIntrRay3Cone3.h,
+            // which themselves are a continuation of those in
+            // GteIntrLine3Cone3.h.
+            if (result.type != Result::isEmpty)
+            {
+                using QFN1 = typename FIQuery<Real, Line3<Real>, Cone3<Real>>::QFN1;
+                QFN1 zero(0, 0, result.t[0].d), one(1, 0, result.t[0].d);
+
+                if (result.type == Result::isPoint)
+                {
+                    if (result.t[0] < zero || result.t[0] > one)
+                    {
+                        // Block 21.
+                        this->SetEmpty(result);
+                    }
+                    // else: Block 22.
+                }
+                else if (result.type == Result::isSegment)
+                {
+                    if (result.t[1] < zero || result.t[0] > one)
+                    {
+                        // Block 23.
+                        this->SetEmpty(result);
+                    }
+                    else
+                    {
+                        auto t0 = std::max(zero, result.t[0]);
+                        auto t1 = std::min(one, result.t[1]);
+                        if (t0 < t1)
+                        {
+                            // Block 24.
+                            this->SetSegment(t0, t1, result);
+                        }
+                        else
+                        {
+                            // Block 25.
+                            this->SetPoint(t0, result);
+                        }
+                    }
+                }
+                else if (result.type == Result::isRayPositive)
+                {
+                    if (one < result.t[0])
+                    {
+                        // Block 26.
+                        this->SetEmpty(result);
+                    }
+                    else if (one > result.t[0])
+                    {
+                        // Block 27.
+                        this->SetSegment(std::max(zero, result.t[0]), one, result);
+                    }
+                    else
+                    {
+                        // Block 28.
+                        this->SetPoint(one, result);
+                    }
+                }
+                else  // result.type == Result::isRayNegative
+                {
+                    if (zero > result.t[1])
+                    {
+                        // Block 29.
+                        this->SetEmpty(result);
+                    }
+                    else if (zero < result.t[1])
+                    {
+                        // Block 30.
+                        this->SetSegment(zero, std::min(one, result.t[1]), result);
+                    }
+                    else
+                    {
+                        // Block 31.
+                        this->SetPoint(zero, result);
+                    }
+                }
+            }
+
+            result.ComputePoints(segment.p[0], segDirection);
+            result.intersect = (result.type != Result::isEmpty);
+            return result;
+        }
     };
-
-    Result operator()(Segment3<Real> const& segment, Cone3<Real> const& cone);
-
-protected:
-    void DoQuery(Vector3<Real> const& segOrigin,
-        Vector3<Real> const& segDirection, Real segExtent,
-        Cone3<Real> const& cone, Result& result);
-};
-
-
-template <typename Real>
-typename FIQuery<Real, Segment3<Real>, Cone3<Real>>::Result
-FIQuery<Real, Segment3<Real>, Cone3<Real>>::operator()(
-    Segment3<Real> const& segment, Cone3<Real> const& cone)
-{
-    Vector3<Real> segOrigin, segDirection;
-    Real segExtent;
-    segment.GetCenteredForm(segOrigin, segDirection, segExtent);
-
-    Result result;
-    DoQuery(segOrigin, segDirection, segExtent, cone, result);
-    switch (result.type)
-    {
-    case 1:  // point
-        result.point[0] = segOrigin + result.parameter[0] * segDirection;
-        result.point[1] = result.point[0];
-        break;
-    case 2:  // segment
-        result.point[0] = segOrigin + result.parameter[0] * segDirection;
-        result.point[1] = segOrigin + result.parameter[1] * segDirection;
-        break;
-    default:  // no intersection
-        break;
-    }
-    return result;
-}
-
-template <typename Real>
-void FIQuery<Real, Segment3<Real>, Cone3<Real>>::DoQuery(
-    Vector3<Real> const& segOrigin, Vector3<Real> const& segDirection,
-    Real segExtent, Cone3<Real> const& cone, Result& result)
-{
-    FIQuery<Real, Line3<Real>, Cone3<Real>>::DoQuery(segOrigin,
-        segDirection, cone, result);
-
-    if (result.intersect)
-    {
-        // The line containing the segment intersects the cone; the
-        // t-interval is [t0,t1].  The segment intersects the cone as
-        // long as [t0,t1] overlaps the segment t-interval
-        // [-segExtent,+segExtent].
-        std::array<Real, 2> segInterval = { -segExtent, segExtent };
-        FIIntervalInterval<Real> iiQuery;
-        auto iiResult = iiQuery(result.parameter, segInterval);
-        if (iiResult.intersect)
-        {
-            result.parameter = iiResult.overlap;
-            result.type = iiResult.numIntersections;
-        }
-        else
-        {
-            result.intersect = false;
-            result.type = 0;
-        }
-    }
-}
-
-
 }

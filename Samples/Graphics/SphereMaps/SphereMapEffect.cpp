@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/07)
+// File Version: 3.0.2 (2019/04/17)
 
 #include "SphereMapEffect.h"
 using namespace gte;
@@ -18,8 +18,7 @@ SphereMapEffect::SphereMapEffect(std::shared_ptr<ProgramFactory> const& factory,
     mProgram = factory->CreateFromSources(*msVSSource[api], *msPSSource[api], "");
     if (mProgram)
     {
-        mVWMatrixConstant = std::make_shared<ConstantBuffer>(
-            sizeof(Matrix4x4<float>), true);
+        mVWMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
         *mVWMatrixConstant->Get<Matrix4x4<float>>() = Matrix4x4<float>::Identity();
 
         mSampler = std::make_shared<SamplerState>();
@@ -27,14 +26,10 @@ SphereMapEffect::SphereMapEffect(std::shared_ptr<ProgramFactory> const& factory,
         mSampler->mode[0] = mode0;
         mSampler->mode[1] = mode1;
 
-        mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
-        mProgram->GetVShader()->Set("VWMatrix", mVWMatrixConstant);
-#if defined(GTE_DEV_OPENGL)
-        mProgram->GetPShader()->Set("baseSampler", texture);
-#else
-        mProgram->GetPShader()->Set("baseTexture", texture);
-#endif
-        mProgram->GetPShader()->Set("baseSampler", mSampler);
+        auto vshader = mProgram->GetVShader();
+        vshader->Set("PVWMatrix", mPVWMatrixConstant);
+        vshader->Set("VWMatrix", mVWMatrixConstant);
+        mProgram->GetPShader()->Set("baseTexture", texture, "baseSampler", mSampler);
     }
 }
 

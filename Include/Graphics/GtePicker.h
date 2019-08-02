@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/07/31)
 
 #pragma once
 
@@ -18,9 +18,10 @@ namespace gte
 class GTE_IMPEXP Picker
 {
 public:
-    // Construction and destruction.
-    ~Picker();
-    Picker();
+    // Construction and destruction. Set the numThreads parameter to a value
+    // larger than 1 for multithreaded picking of triangle primitives.
+    ~Picker() = default;
+    Picker(unsigned int numThreads = 1);
 
     // Set the maximum distance when the 'scene' contains point or segment
     // primitives.  Such primitives are selected when they are within the
@@ -64,11 +65,19 @@ private:
     void PickTriangles(std::shared_ptr<Visual> const& visual, char const* positions,
         unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line);
 
+    void PickTriangles(std::shared_ptr<Visual> const& visual, char const* positions,
+        unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line,
+        unsigned int i0, unsigned int i1, std::vector<PickRecord>& output) const;
+
     void PickSegments(std::shared_ptr<Visual> const& visual, char const* positions,
         unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line);
 
     void PickPoints(std::shared_ptr<Visual> const& visual, char const* positions,
         unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line);
+
+    // The maximum number of threads that may be used to perform picking
+    // requests for triangle primitives.
+    unsigned int mNumThreads;
 
     // The maximum distance from the pick line used to select point or segment
     // primitives.

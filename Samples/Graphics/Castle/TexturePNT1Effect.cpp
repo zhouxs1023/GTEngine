@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.22.0 (2019/01/31)
+// File Version: 3.22.1 (2019/04/16)
 
 #include "TexturePNT1Effect.h"
 using namespace gte;
@@ -24,12 +24,7 @@ TexturePNT1Effect::TexturePNT1Effect(std::shared_ptr<ProgramFactory> const& fact
         mSampler->mode[1] = mode1;
 
         mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
-#if defined(GTE_DEV_OPENGL)
-        mProgram->GetPShader()->Set("baseSampler", texture);
-#else
-        mProgram->GetPShader()->Set("baseTexture", texture);
-#endif
-        mProgram->GetPShader()->Set("baseSampler", mSampler);
+        mProgram->GetPShader()->Set("baseTexture", texture, "baseSampler", mSampler);
     }
 }
 

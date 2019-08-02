@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #include "FitSqrt.h"
 #include "FitInvSqrt.h"
@@ -14,7 +14,8 @@
 #include "FitATan.h"
 #include "FitExp2.h"
 #include "FitLog2.h"
-
+#include "FitReciprocal.h"
+#include <LowLevel/GteLogReporter.h>
 
 int main(int, char const*[])
 {
@@ -36,9 +37,10 @@ int main(int, char const*[])
     FitATan fitterATan;  // template parameter is 'order', degree = 2*order + 1
     FitExp2 fitterExp2;
     FitLog2 fitterLog2;
+    FitReciprocal fitterReciprocal;
     std::vector<double> poly;
     double error;
-    fitterSin.Generate<6>(poly, error);
+    fitterSin.Generate<4>(poly, error);
     return 0;
 }
 

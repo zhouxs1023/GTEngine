@@ -323,26 +323,26 @@
     <ClInclude Include="MedianFilteringWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Median3x3.glsl" />
-    <None Include="Shaders\Median3x3.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\Median5x5.glsl" />
-    <None Include="Shaders\Median5x5.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\MedianBySort.glsl" />
-    <None Include="Shaders\MedianBySort.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\MedianShared.hlsli" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Median3x3.cs.glsl" />
+    <None Include="Shaders\Median5x5.cs.glsl" />
+    <None Include="Shaders\MedianBySort.cs.glsl" />
+    <None Include="Shaders\MedianShared.cs.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Median3x3.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\Median5x5.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\MedianBySort.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

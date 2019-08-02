@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/19)
+// File Version: 3.23.2 (2019/06/02)
 
-#include <GTEngine.h>
+#include <LowLevel/GteLogReporter.h>
+#include <Imagics/GteAdaptiveSkeletonClimbing3.h>
+#include <Imagics/GteImageUtility3.h>
 using namespace gte;
 
 static void Test()
@@ -83,6 +85,15 @@ static void Test()
 
 int main()
 {
+#if defined(_DEBUG)
+    LogReporter reporter(
+        "LogReport.txt",
+        Logger::Listener::LISTEN_FOR_ALL,
+        Logger::Listener::LISTEN_FOR_ALL,
+        Logger::Listener::LISTEN_FOR_ALL,
+        Logger::Listener::LISTEN_FOR_ALL);
+#endif
+
     Test();
     return 0;
 }

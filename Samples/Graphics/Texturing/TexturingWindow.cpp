@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include "TexturingWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -97,31 +99,30 @@ void TexturingWindow::CreateScene()
         Vector3<float> position;
         Vector2<float> tcoord;
     };
+
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    Vertex* vertex = vbuffer->Get<Vertex>();
-    vertex[0].position = { 0.0f, 0.0f, 0.0f };
-    vertex[0].tcoord = { 0.0f, 1.0f };
-    vertex[1].position = { 1.0f, 0.0f, 0.0f };
-    vertex[1].tcoord = { 1.0f, 1.0f };
-    vertex[2].position = { 0.0f, 1.0f, 0.0f };
-    vertex[2].tcoord = { 0.0f, 0.0f };
-    vertex[3].position = { 1.0f, 1.0f, 0.0f };
-    vertex[3].tcoord = { 1.0f, 0.0f };
+
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto* vertices = vbuffer->Get<Vertex>();
+    vertices[0].position = { 0.0f, 0.0f, 0.0f };
+    vertices[0].tcoord = { 0.0f, 1.0f };
+    vertices[1].position = { 1.0f, 0.0f, 0.0f };
+    vertices[1].tcoord = { 1.0f, 1.0f };
+    vertices[2].position = { 0.0f, 1.0f, 0.0f };
+    vertices[2].tcoord = { 0.0f, 0.0f };
+    vertices[3].position = { 1.0f, 1.0f, 0.0f };
+    vertices[3].tcoord = { 1.0f, 0.0f };
 
     // Create an indexless buffer for a triangle mesh with two triangles.
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
 
     // Create an effect for the vertex and pixel shaders.  The texture is
     // bilinearly filtered and the texture coordinates are clamped to [0,1]^2.
-    std::shared_ptr<Texture2> myTexture = WICFileIO::Load(
-        mEnvironment.GetPath("StoneWall.png"), false);
-    std::shared_ptr<Texture2Effect> effect =
-        std::make_shared<Texture2Effect>(mProgramFactory, myTexture,
-        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP,
-        SamplerState::CLAMP);
+    auto myTexture = WICFileIO::Load(mEnvironment.GetPath("StoneWall.png"), false);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, myTexture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
 
     // Create the geometric object for drawing.  Translate it so that its
     // center of mass is at the origin.  This supports virtual trackball

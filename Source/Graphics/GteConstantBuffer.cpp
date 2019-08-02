@@ -17,7 +17,7 @@ ConstantBuffer::ConstantBuffer(size_t numBytes, bool allowDynamicUpdate)
 {
     mType = GT_CONSTANT_BUFFER;
     mUsage = (allowDynamicUpdate ? DYNAMIC_UPDATE : IMMUTABLE);
-    memset(mData, 0, mNumBytes);
+    std::memset(mData, 0, mNumBytes);
 }
 
 bool ConstantBuffer::HasMember(std::string const& name) const

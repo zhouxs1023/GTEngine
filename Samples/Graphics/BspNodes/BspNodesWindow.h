@@ -3,11 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/08)
+// File Version: 3.0.2 (2019/04/15)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow3.h>
+#include <Graphics/GteBspNode.h>
+#include <Graphics/GteVertexColorEffect.h>
 using namespace gte;
 
 // In addition to illustrating BSP nodes, this example shows how to use

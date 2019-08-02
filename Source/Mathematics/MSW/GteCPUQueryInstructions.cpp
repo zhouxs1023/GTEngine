@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.13.0 (2018/04/02)
+// File Version: 3.13.2 (2019/05/18)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/MSW/GteCPUQueryInstructions.h>
@@ -40,7 +40,7 @@ CPUQueryInstructions::CPUQueryInstructions()
 
     // Get the vendor string.
     char vendor[0x20];
-    memset(vendor, 0, sizeof(vendor));
+    std::memset(vendor, 0, sizeof(vendor));
     *reinterpret_cast<int*>(vendor) = mData[0][1];
     *reinterpret_cast<int*>(vendor + 4) = mData[0][3];
     *reinterpret_cast<int*>(vendor + 8) = mData[0][2];
@@ -49,7 +49,7 @@ CPUQueryInstructions::CPUQueryInstructions()
     {
         mIsIntel = true;
     }
-    else if (mVendor == "AuthenticAMD")
+    else if (mVendor == "AuthenticAMD" || mVendor == "HygonGenuine")
     {
         mIsAMD = true;
     }
@@ -74,7 +74,7 @@ CPUQueryInstructions::CPUQueryInstructions()
     mNumExIds = cpui[0];
 
     char brand[0x40];
-    memset(brand, 0, sizeof(brand));
+    std::memset(brand, 0, sizeof(brand));
 
     for (int i = 0x80000000; i <= mNumExIds; ++i)
     {
@@ -92,9 +92,9 @@ CPUQueryInstructions::CPUQueryInstructions()
     // Interpret the CPU brand string if reported.
     if (mNumExIds >= 0x80000004)
     {
-        memcpy(brand, mExtData[2].data(), sizeof(cpui));
-        memcpy(brand + 16, mExtData[3].data(), sizeof(cpui));
-        memcpy(brand + 32, mExtData[4].data(), sizeof(cpui));
+        std::memcpy(brand, mExtData[2].data(), sizeof(cpui));
+        std::memcpy(brand + 16, mExtData[3].data(), sizeof(cpui));
+        std::memcpy(brand + 32, mExtData[4].data(), sizeof(cpui));
         mBrand = brand;
     }
 }

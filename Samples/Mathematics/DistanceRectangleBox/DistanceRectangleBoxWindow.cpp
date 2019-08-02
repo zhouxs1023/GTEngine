@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.5.2 (2019/03/04)
+// File Version: 3.5.3 (2019/04/23)
 
 #include "DistanceRectangleBoxWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -160,11 +162,11 @@ void DistanceRectangleBoxWindow::CreateScene()
     mRectangle.extent = { 2.0f, 1.0f };
 
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    std::array<Vector3<float>, 4>& vertices = *vbuffer->Get<std::array<Vector3<float>, 4>>();
+    auto& vertices = *vbuffer->Get<std::array<Vector3<float>, 4>>();
     mRectangle.GetVertices(vertices);
 
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto* indices = ibuffer->Get<unsigned int>();
     indices[0] = 0;  indices[1] = 1;  indices[2] = 2;
     indices[3] = 1;  indices[4] = 3;  indices[5] = 2;
 
@@ -220,8 +222,7 @@ void DistanceRectangleBoxWindow::Rotate(int direction, float delta)
     {
         if (i != direction)
         {
-            mBox.axis[i] = HProject(
-                gte::Rotate(incr, HLift(mBox.axis[i], 0.0f)));
+            mBox.axis[i] = HProject(gte::Rotate(incr, HLift(mBox.axis[i], 0.0f)));
         }
     }
     Quaternion<float> q;
@@ -249,7 +250,7 @@ void DistanceRectangleBoxWindow::DoQuery()
         mPVWMatrices.Subscribe(mBoxMesh->worldTransform, mBlueEffect->GetPVWMatrixConstant());
     }
 
-    Vector3<float>* vertices = mSegment->GetVertexBuffer()->Get<Vector3<float>>();
+    auto* vertices = mSegment->GetVertexBuffer()->Get<Vector3<float>>();
     vertices[0] = result.closestPoint[0];
     vertices[1] = result.closestPoint[1];
     mEngine->Update(mSegment->GetVertexBuffer());

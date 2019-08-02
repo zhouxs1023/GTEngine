@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.5.2 (2019/03/04)
+// File Version: 3.5.3 (2019/05/02)
 
 #include "DistanceTriangleBoxWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -158,7 +160,7 @@ void DistanceTriangleBoxWindow::CreateScene()
     mTriangle.v[2] = { 1.5f, 1.0f, 0.0f };
 
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, 3);
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto* vertices = vbuffer->Get<Vector3<float>>();
     for (int i = 0; i < 3; ++i)
     {
         vertices[i] = mTriangle.v[i];
@@ -218,8 +220,7 @@ void DistanceTriangleBoxWindow::Rotate(int direction, float delta)
     {
         if (i != direction)
         {
-            mBox.axis[i] = HProject(
-                gte::Rotate(incr, HLift(mBox.axis[i], 0.0f)));
+            mBox.axis[i] = HProject(gte::Rotate(incr, HLift(mBox.axis[i], 0.0f)));
         }
     }
     Quaternion<float> q;
@@ -247,7 +248,7 @@ void DistanceTriangleBoxWindow::DoQuery()
         mPVWMatrices.Subscribe(mBoxMesh->worldTransform, mBlueEffect->GetPVWMatrixConstant());
     }
 
-    Vector3<float>* vertices = mSegment->GetVertexBuffer()->Get<Vector3<float>>();
+    auto* vertices = mSegment->GetVertexBuffer()->Get<Vector3<float>>();
     vertices[0] = result.closestPoint[0];
     vertices[1] = result.closestPoint[1];
     mEngine->Update(mSegment->GetVertexBuffer());

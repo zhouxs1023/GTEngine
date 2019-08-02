@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.13.2 (2018/10/05)
+// File Version: 3.13.3 (2019/06/20)
 
 #pragma once
 
@@ -47,6 +47,7 @@
 //   // the input is an n-tuple listed component-by-component (1, 2 or 3
 //   // components).
 //   Type operator() (int i0, int i1, ..., int inm1) const;
+// }
 
 namespace gte
 {

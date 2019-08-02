@@ -24,29 +24,31 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\EvaluateBezier.hlsl">
+    <None Include="Shaders\EvaluateBezier.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneEstimation.hlsl">
+    <None Include="Shaders\PlaneEstimation.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneVisualize.hlsl">
+    <None Include="Shaders\PlaneVisualize.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PositionVisualize.hlsl">
+    <None Include="Shaders\PositionVisualize.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\EvaluateBezier.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\EvaluateBezier.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\PlaneEstimation.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\PlaneEstimation.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\PlaneVisualize.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\PlaneVisualize.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\PositionVisualize.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\PositionVisualize.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

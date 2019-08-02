@@ -304,12 +304,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\WireMesh.hlsl">
+    <None Include="Shaders\WireMesh.gs.glsl" />
+    <None Include="Shaders\WireMesh.ps.glsl" />
+    <None Include="Shaders\WireMesh.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\WireMesh.gs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\WireMeshGS.glsl" />
-    <None Include="Shaders\WireMeshPS.glsl" />
-    <None Include="Shaders\WireMeshVS.glsl" />
+    <None Include="Shaders\WireMesh.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\WireMesh.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include "MorphFacesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -104,9 +107,7 @@ bool MorphFacesWindow::SetEnvironment()
     }
 
     mEnvironment.Insert(path + "/Samples/Graphics/MorphFaces/Data/");
-#if defined(GTE_DEV_OPENGL)
     mEnvironment.Insert(path + "/Samples/Graphics/MorphFaces/Shaders/");
-#endif
 
     std::vector<std::string> inputs =
     {
@@ -137,12 +138,9 @@ bool MorphFacesWindow::SetEnvironment()
         "M8HalfRightWeights.txt",
         "M9HalfLeftPosNor.txt",
         "M9HalfLeftWeights.txt",
-        "SharedTexTri.txt"
-#if defined(GTE_DEV_OPENGL)
-        ,
-        "Texture2PNTVS.glsl",
-        "Texture2PNTPS.glsl"
-#endif
+        "SharedTexTri.txt",
+        DefaultShaderName("Texture2PNT.vs"),
+        DefaultShaderName("Texture2PNT.ps")
     };
 
     for (auto const& input : inputs)
@@ -241,8 +239,7 @@ void MorphFacesWindow::CreateMorphResult()
 
     std::ifstream input(mEnvironment.GetPath("SharedTexTri.txt"));
     input >> mNumVertices;
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(
-        vformat, mNumVertices);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, mNumVertices);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
     OutVertex* vertices = vbuffer->Get<OutVertex>();
     for (int i = 0; i < mNumVertices; ++i)
@@ -258,9 +255,8 @@ void MorphFacesWindow::CreateMorphResult()
         int numSubTriangles;
         input >> numSubTriangles;
         int numSubIndices = 3 * numSubTriangles;
-        std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(
-            IP_TRIMESH, numSubTriangles, sizeof(unsigned int));
-        unsigned int* subIndices = ibuffer->Get<unsigned int>();
+        auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numSubTriangles, sizeof(unsigned int));
+        auto* subIndices = ibuffer->Get<unsigned int>();
         for (int i = 0; i < numSubIndices; ++i)
         {
             int index;
@@ -268,7 +264,7 @@ void MorphFacesWindow::CreateMorphResult()
             *subIndices++ = index;
         }
 
-        std::shared_ptr<Visual> visual = std::make_shared<Visual>(vbuffer, ibuffer);
+        auto visual = std::make_shared<Visual>(vbuffer, ibuffer);
         mMorphResult->AttachChild(visual);
         if (j != 1)
         {
@@ -278,16 +274,12 @@ void MorphFacesWindow::CreateMorphResult()
         else
         {
             std::string path = mEnvironment.GetPath("Eye.png");
-            std::shared_ptr<Texture2> texture = WICFileIO::Load(path, true);
+            auto texture = WICFileIO::Load(path, true);
             texture->AutogenerateMipmaps();
 
-#if defined(GTE_DEV_OPENGL)
-            // The locations of the vertex shader inputs are hard-coded in
-            // the GLSL files.
-            auto program = mProgramFactory->CreateFromFiles(
-                mEnvironment.GetPath("Texture2PNTVS.glsl"),
-                mEnvironment.GetPath("Texture2PNTPS.glsl"),
-                "");
+            std::string vsPath = mEnvironment.GetPath(DefaultShaderName("Texture2PNT.vs"));
+            std::string psPath = mEnvironment.GetPath(DefaultShaderName("Texture2PNT.ps"));
+            auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
             auto pvwMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
             auto sampler = std::make_shared<SamplerState>();
             sampler->filter = SamplerState::MIN_L_MAG_L_MIP_L;
@@ -296,20 +288,10 @@ void MorphFacesWindow::CreateMorphResult()
             auto vshader = program->GetVShader();
             auto pshader = program->GetPShader();
             vshader->Set("PVWMatrix", pvwMatrixConstant);
-            pshader->Set("baseSampler", texture);
-            pshader->Set("baseSampler", sampler);
+            pshader->Set("baseTexture", texture, "baseSampler", sampler);
             auto txEffect = std::make_shared<VisualEffect>(program);
             visual->SetEffect(txEffect);
             mPVWMatrices.Subscribe(visual->worldTransform, pvwMatrixConstant);
-#else
-            // DX11/HLSL can connect the vertex buffer channels to VSMain inputs
-            // using semantics.
-            std::shared_ptr<Texture2Effect> txEffect = std::make_shared<Texture2Effect>(
-                mProgramFactory, texture, SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP,
-                SamplerState::WRAP);
-            visual->SetEffect(txEffect);
-            mPVWMatrices.Subscribe(visual->worldTransform, txEffect->GetPVWMatrixConstant());
-#endif
         }
         mVisuals.push_back(visual);
     }
@@ -407,13 +389,8 @@ void MorphFacesWindow::UpdateMorph(float time)
     mLighting->diffuse = mLighting->ambient;
     mLighting->specular = mLighting->ambient;
     Matrix4x4<float> hinverse = mScene->worldTransform.GetHInverse();
-#if defined(GTE_USE_MAT_VEC)
-    mLightGeometry->lightModelPosition = hinverse * mLightWorldPosition;
-    mLightGeometry->cameraModelPosition = hinverse * mCamera->GetPosition();
-#else
-    mLightGeometry->lightModelPosition = mLightWorldPosition * hinverse;
-    mLightGeometry->cameraModelPosition = mCamera->GetPosition() * hinverse;
-#endif
+    mLightGeometry->lightModelPosition = DoTransform(hinverse, mLightWorldPosition);
+    mLightGeometry->cameraModelPosition = DoTransform(hinverse, mCamera->GetPosition());
     for (int i = 0; i < 4; ++i)
     {
         if (i != 1)

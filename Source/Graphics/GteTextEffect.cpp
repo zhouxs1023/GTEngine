@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteVector2.h>
@@ -25,13 +25,9 @@ TextEffect::TextEffect(std::shared_ptr<ProgramFactory> const& factory,
         mProgram->GetVShader()->Set("Translate", mTranslate);
 
         SetColor({ 0.0f, 0.0f, 0.0f, 0.0f });
-        mProgram->GetPShader()->Set("TextColor", mColor);
-#if defined(GTE_DEV_OPENGL)
-        mProgram->GetPShader()->Set("baseSampler", texture);
-#else
-        mProgram->GetPShader()->Set("baseTexture", texture);
-#endif
-        mProgram->GetPShader()->Set("baseSampler", mSamplerState);
+        auto pshader = mProgram->GetPShader();
+        pshader->Set("TextColor", mColor);
+        pshader->Set("baseTexture", texture, "baseSampler", mSamplerState);
     }
 }
 

@@ -323,20 +323,25 @@
     <ClInclude Include="PlaneMeshIntersectionWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawIntersections.glsl" />
-    <None Include="Shaders\DrawIntersections.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\PlaneMeshIntersection.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\PlaneMeshIntersectionPS.glsl" />
-    <None Include="Shaders\PlaneMeshIntersectionVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DrawIntersections.cs.glsl" />
+    <None Include="Shaders\PlaneMeshIntersection.ps.glsl" />
+    <None Include="Shaders\PlaneMeshIntersection.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DrawIntersections.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\PlaneMeshIntersection.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\PlaneMeshIntersection.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

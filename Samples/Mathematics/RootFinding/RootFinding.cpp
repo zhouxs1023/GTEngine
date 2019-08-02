@@ -3,20 +3,16 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2018/10/20)
+// File Version: 3.0.4 (2019/05/02)
 
-#include <GTEngine.h>
-#if defined(__LINUX__)
-#include <Graphics/GL4/GteGLSLProgramFactory.h>
-#include <Graphics/GL4/GLX/GteGLXEngine.h>
-#endif
+#include <Applications/GteEnvironment.h>
+#include <LowLevel/GteLogReporter.h>
+#include <LowLevel/GteTimer.h>
+#include <GTGraphics.h>
 #include <iostream>
 #include <thread>
 using namespace gte;
 
-// To avoid breaking the C++ strict-aliasing rules that occur when
-//   unsigned int encoding = <some value>;
-//   float number = *(float*)&encoding;
 union IEEEFloatType
 {
     float number;
@@ -43,7 +39,7 @@ void FindRootsCPU(std::set<float>& roots)
             float f1 = MyFunction(z1.number);
             if (f0 * f1 <= 0.0f)
             {
-                roots.insert(std::abs(f0) <= std::abs(f1) ? z0.number : z1.number);
+                roots.insert(std::fabs(f0) <= std::abs(f1) ? z0.number : z1.number);
             }
 
             z0.number = -z0.number;
@@ -52,7 +48,7 @@ void FindRootsCPU(std::set<float>& roots)
             f1 = MyFunction(z1.number);
             if (f0 * f1 <= 0.0f)
             {
-                roots.insert(std::abs(f0) <= std::abs(f1) ? z0.number : z1.number);
+                roots.insert(std::fabs(f0) <= std::fabs(f1) ? z0.number : z1.number);
             }
         }
     }
@@ -66,37 +62,26 @@ void FindRootsGPU(std::set<float>& roots)
     {
         LogError("You must create the environment variable GTE_PATH.");
         return;
-}
+    }
     env.Insert(path + "/Samples/Mathematics/RootFinding/Shaders/");
 
-#if defined(GTE_DEV_OPENGL)
-#if defined(__MSWINDOWS__)
-    WGLEngine engine(true, false);
-#else
-    GLXEngine engine(true, false);
-#endif
-    GLSLProgramFactory factory;
-    path = env.GetPath("RootFinder.glsl");
-#else
-    DX11Engine engine(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0);
-    HLSLProgramFactory factory;
-    path = env.GetPath("RootFinder.hlsl");
-#endif
+    path = env.GetPath(DefaultShaderName("RootFinder.cs"));
     if (path == "")
     {
         LogError("Cannot find file. ");
         return;
     }
 
+    DefaultEngine engine;
+    DefaultProgramFactory factory;
     factory.defines.Set("FUNCTION_BODY", "(z - 1.1f)*(z + 2.2f)");
-    std::shared_ptr<ComputeProgram> cprogram = factory.CreateFromFile(path);
+    auto cprogram = factory.CreateFromFile(path);
     if (!cprogram)
     {
         return;
     }
 
-    std::shared_ptr<StructuredBuffer> acBuffer =
-        std::make_shared<StructuredBuffer>(1024, sizeof(Vector4<float>));
+    auto acBuffer = std::make_shared<StructuredBuffer>(1024, sizeof(Vector4<float>));
     acBuffer->MakeAppendConsume();
     acBuffer->SetCopyType(Resource::COPY_STAGING_TO_CPU);
     acBuffer->SetNumActiveElements(0);
@@ -106,12 +91,12 @@ void FindRootsGPU(std::set<float>& roots)
     engine.Execute(cprogram, 512, 256, 1);
 
     engine.CopyGpuToCpu(acBuffer);
-    int numActive = acBuffer->GetNumActiveElements();
-    Vector4<float>* rootBounds = acBuffer->Get<Vector4<float>>();
-    for (int i = 0; i < numActive; ++i)
+    unsigned int numActive = acBuffer->GetNumActiveElements();
+    auto rootBounds = acBuffer->Get<Vector4<float>>();
+    for (unsigned int i = 0; i < numActive; ++i)
     {
-        Vector4<float> const& rb = rootBounds[i];
-        if (std::abs(rb[1]) <= std::abs(rb[3]))
+        auto const& rb = rootBounds[i];
+        if (std::fabs(rb[1]) <= std::fabs(rb[3]))
         {
             roots.insert(rb[0]);
         }
@@ -125,8 +110,7 @@ void FindRootsGPU(std::set<float>& roots)
     cprogram = nullptr;
 }
 
-void FindSubRootsCPU(unsigned int tmin, unsigned int tsup,
-    std::set<float>& roots)
+void FindSubRootsCPU(unsigned int tmin, unsigned int tsup, std::set<float>& roots)
 {
     for (unsigned int trailing = tmin; trailing < tsup; ++trailing)
     {
@@ -140,7 +124,7 @@ void FindSubRootsCPU(unsigned int tmin, unsigned int tsup,
             float f1 = MyFunction(z1.number);
             if (f0 * f1 <= 0.0f)
             {
-                roots.insert(std::abs(f0) <= std::abs(f1) ? z0.number : z1.number);
+                roots.insert(std::fabs(f0) <= std::fabs(f1) ? z0.number : z1.number);
             }
 
             z0.number = -z0.number;
@@ -149,7 +133,7 @@ void FindSubRootsCPU(unsigned int tmin, unsigned int tsup,
             f1 = MyFunction(z1.number);
             if (f0 * f1 <= 0.0f)
             {
-                roots.insert(std::abs(f0) <= std::abs(f1) ? z0.number : z1.number);
+                roots.insert(std::fabs(f0) <= std::fabs(f1) ? z0.number : z1.number);
             }
         }
     }

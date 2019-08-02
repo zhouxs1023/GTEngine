@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.2 (2019/04/22)
 
 #include "AllPairsTrianglesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -38,9 +41,6 @@ AllPairsTrianglesWindow::AllPairsTrianglesWindow(Parameters& parameters)
         return;
     }
 
-    mWireState = std::make_shared<RasterizerState>();
-    mWireState->fillMode = RasterizerState::FILL_WIREFRAME;
-
 #if !defined(USE_CPU_FIND_INTERSECTIONS)
     if (!CreateShaders())
     {
@@ -48,6 +48,9 @@ AllPairsTrianglesWindow::AllPairsTrianglesWindow(Parameters& parameters)
         return;
     }
 #endif
+
+    mWireState = std::make_shared<RasterizerState>();
+    mWireState->fillMode = RasterizerState::FILL_WIREFRAME;
 
     InitializeCamera(60.0f, GetAspectRatio(), 1.0f, 1000.0f, 0.1f, 0.01f,
         { 8.0f, 0.0f, 0.0f }, { -1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f });
@@ -109,25 +112,15 @@ bool AllPairsTrianglesWindow::SetEnvironment()
     }
 
     mEnvironment.Insert(path + "/Samples/Mathematics/AllPairsTriangles/Shaders/");
-#if defined(GTE_DEV_OPENGL)
     std::vector<std::string> inputs =
     {
-        "DrawUsingVertexIDVS.glsl",
-        "DrawUsingVertexIDPS.glsl",
-        "InitializeColors.glsl",
-        "TriangleIntersection.glsl",
-        "VertexColorIndexedVS.glsl",
-        "VertexColorIndexedPS.glsl"
+        DefaultShaderName("DrawUsingVertexID.vs"),
+        DefaultShaderName("DrawUsingVertexID.ps"),
+        DefaultShaderName("InitializeColors.cs"),
+        DefaultShaderName("TriangleIntersection.cs"),
+        DefaultShaderName("VertexColorIndexed.vs"),
+        DefaultShaderName("VertexColorIndexed.ps")
     };
-#else
-    std::vector<std::string> inputs =
-    {
-        "DrawUsingVertexID.hlsl",
-        "InitializeColors.hlsl",
-        "TriangleIntersection.hlsl",
-        "VertexColorIndexed.hlsl"
-    };
-#endif
 
     for (auto const& input : inputs)
     {
@@ -144,49 +137,43 @@ bool AllPairsTrianglesWindow::SetEnvironment()
 bool AllPairsTrianglesWindow::CreateCylinder(unsigned int numAxisSamples,
     unsigned int numRadialSamples, float radius, float height)
 {
-#if defined(GTE_DEV_OPENGL)
-    std::string pathVS = mEnvironment.GetPath("VertexColorIndexedVS.glsl");
-    std::string pathPS = mEnvironment.GetPath("VertexColorIndexedPS.glsl");
-    std::shared_ptr<VisualProgram> program = mProgramFactory->CreateFromFiles(pathVS, pathPS, "");
-#else
-    std::string path = mEnvironment.GetPath("VertexColorIndexed.hlsl");
-    std::shared_ptr<VisualProgram> program = mProgramFactory->CreateFromFiles(path, path, "");
-#endif
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("VertexColorIndexed.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("VertexColorIndexed.ps"));
+    auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
     if (!program)
     {
         return false;
     }
 
+    // Create a cylinder as an indexed triangle mesh.  The positions are used
+    // to create a cylinder as a non-indexed collection of triangles.
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     MeshFactory mf;
     mf.SetVertexFormat(vformat);
-    mf.SetIndexFormat(true);
-
-    std::shared_ptr<Visual> cylinder = mf.CreateCylinderClosed(
-        numAxisSamples, numRadialSamples, radius, height);
-    std::shared_ptr<VertexBuffer> vbuffer = cylinder->GetVertexBuffer();
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
-    std::shared_ptr<IndexBuffer> ibuffer = cylinder->GetIndexBuffer();
+    auto cylinder = mf.CreateCylinderClosed(numAxisSamples, numRadialSamples, radius, height);
+    auto vbuffer = cylinder->GetVertexBuffer();
+    auto* vertices = vbuffer->Get<Vector3<float>>();
+    auto ibuffer = cylinder->GetIndexBuffer();
     unsigned int numIndices = ibuffer->GetNumElements();
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto* indices = ibuffer->Get<unsigned int>();
 
+    // Create a cylinder as a non-indexed collection of triangles.  The vertex
+    // colors are generated in the shaders by a color index that is in
+    // {0,1,2,3}.  The vertex format is (x,y,z,colorIndex).
     VertexFormat meshVFormat;
-    meshVFormat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
-    meshVFormat.Bind(VA_COLOR, DF_R32_UINT, 0);
-    std::shared_ptr<VertexBuffer> meshVBuffer =
-        std::make_shared<VertexBuffer>(meshVFormat, numIndices);
+    meshVFormat.Bind(VA_POSITION, DF_R32G32B32A32_FLOAT, 0);
+    auto meshVBuffer = std::make_shared<VertexBuffer>(meshVFormat, numIndices);
     meshVBuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    Vertex* meshVertices = meshVBuffer->Get<Vertex>();
+    auto* meshVertices = meshVBuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numIndices; ++i)
     {
         meshVertices[i].position = vertices[indices[i]];
-        meshVertices[i].colorIndex = 0;
+        meshVertices[i].colorIndex = 0.0f;
     }
 
     mNumCylinderTriangles = numIndices / 3;
-    std::shared_ptr<IndexBuffer> meshIBuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, mNumCylinderTriangles);
+    auto meshIBuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, mNumCylinderTriangles);
 
     mCylinderPVWMatrix = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
     program->GetVShader()->Set("PVWMatrix", mCylinderPVWMatrix);
@@ -199,49 +186,43 @@ bool AllPairsTrianglesWindow::CreateCylinder(unsigned int numAxisSamples,
 bool AllPairsTrianglesWindow::CreateTorus(unsigned int numCircleSamples,
     unsigned int numRadialSamples, float outerRadius, float innerRadius)
 {
-#if defined(GTE_DEV_OPENGL)
-    std::string pathVS = mEnvironment.GetPath("VertexColorIndexedVS.glsl");
-    std::string pathPS = mEnvironment.GetPath("VertexColorIndexedPS.glsl");
-    std::shared_ptr<VisualProgram> program = mProgramFactory->CreateFromFiles(pathVS, pathPS, "");
-#else
-    std::string path = mEnvironment.GetPath("VertexColorIndexed.hlsl");
-    std::shared_ptr<VisualProgram> program = mProgramFactory->CreateFromFiles(path, path, "");
-#endif
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("VertexColorIndexed.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("VertexColorIndexed.ps"));
+    auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
     if (!program)
     {
         return false;
     }
 
+    // Create a torus as an indexed triangle mesh.  The positions are used
+    // to create a torus as a non-indexed collection of triangles.
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     MeshFactory mf;
     mf.SetVertexFormat(vformat);
-    mf.SetIndexFormat(true);
-
-    std::shared_ptr<Visual> cylinder = mf.CreateTorus(
-        numCircleSamples, numRadialSamples, outerRadius, innerRadius);
-    std::shared_ptr<VertexBuffer> vbuffer = cylinder->GetVertexBuffer();
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
-    std::shared_ptr<IndexBuffer> ibuffer = cylinder->GetIndexBuffer();
+    auto torus = mf.CreateTorus(numCircleSamples, numRadialSamples, outerRadius, innerRadius);
+    auto vbuffer = torus->GetVertexBuffer();
+    auto* vertices = vbuffer->Get<Vector3<float>>();
+    auto ibuffer = torus->GetIndexBuffer();
     unsigned int numIndices = ibuffer->GetNumElements();
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto* indices = ibuffer->Get<unsigned int>();
 
+    // Create a torus as a non-indexed collection of triangles.  The vertex
+    // colors are generated in the shaders by a color index that is in
+    // {0,1,2,3}.  The vertex format is (x,y,z,colorIndex).
     VertexFormat meshVFormat;
-    meshVFormat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
-    meshVFormat.Bind(VA_COLOR, DF_R32_UINT, 0);
-    std::shared_ptr<VertexBuffer> meshVBuffer =
-        std::make_shared<VertexBuffer>(meshVFormat, numIndices);
+    meshVFormat.Bind(VA_POSITION, DF_R32G32B32A32_FLOAT, 0);
+    auto meshVBuffer = std::make_shared<VertexBuffer>(meshVFormat, numIndices);
     meshVBuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    Vertex* meshVertices = meshVBuffer->Get<Vertex>();
+    auto* meshVertices = meshVBuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numIndices; ++i)
     {
         meshVertices[i].position = vertices[indices[i]];
-        meshVertices[i].colorIndex = 1;
+        meshVertices[i].colorIndex = 1.0f;
     }
 
     mNumTorusTriangles = numIndices / 3;
-    std::shared_ptr<IndexBuffer> meshIBuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, mNumTorusTriangles);
+    auto meshIBuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, mNumTorusTriangles);
 
     mTorusPVWMatrix = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
     program->GetVShader()->Set("PVWMatrix", mTorusPVWMatrix);
@@ -261,22 +242,14 @@ bool AllPairsTrianglesWindow::CreateShaders()
     mNumYGroups = mNumTorusTriangles / numThreads;
     mProgramFactory->defines.Set("NUM_X_THREADS", numThreads);
     mProgramFactory->defines.Set("NUM_Y_THREADS", numThreads);
-#if defined(GTE_DEV_OPENGL)
-    std::string path = mEnvironment.GetPath("InitializeColors.glsl");
-#else
-    std::string path = mEnvironment.GetPath("InitializeColors.hlsl");
-#endif
-    mInitializeColor = mProgramFactory->CreateFromFile(path);
+    std::string csPath = mEnvironment.GetPath(DefaultShaderName("InitializeColors.cs"));
+    mInitializeColor = mProgramFactory->CreateFromFile(csPath);
     if (!mInitializeColor)
     {
         return false;
     }
-#if defined(GTE_DEV_OPENGL)
-    path = mEnvironment.GetPath("TriangleIntersection.glsl");
-#else
-    path = mEnvironment.GetPath("TriangleIntersection.hlsl");
-#endif
-    mTriangleIntersection = mProgramFactory->CreateFromFile(path);
+    csPath = mEnvironment.GetPath(DefaultShaderName("TriangleIntersection.cs"));
+    mTriangleIntersection = mProgramFactory->CreateFromFile(csPath);
     if (!mTriangleIntersection)
     {
         return false;
@@ -284,28 +257,18 @@ bool AllPairsTrianglesWindow::CreateShaders()
     mProgramFactory->defines.Clear();
 
     // Create the visual programs.
-#if defined(GTE_DEV_OPENGL)
-    std::string pathVS = mEnvironment.GetPath("DrawUsingVertexIDVS.glsl");
-    std::string pathPS = mEnvironment.GetPath("DrawUsingVertexIDPS.glsl");
-    std::shared_ptr<VisualProgram> cylinderProgram = mProgramFactory->CreateFromFiles(pathVS, pathPS, "");
-#else
-    path = mEnvironment.GetPath("DrawUsingVertexID.hlsl");
-    std::shared_ptr<VisualProgram> cylinderProgram = mProgramFactory->CreateFromFiles(path, path, "");
-#endif
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("DrawUsingVertexID.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("DrawUsingVertexID.ps"));
+    auto cylinderProgram = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
     if (!cylinderProgram)
     {
         return false;
     }
     mCylinderIDEffect = std::make_shared<VisualEffect>(cylinderProgram);
 
-#if defined(GTE_DEV_OPENGL)
-    pathVS = mEnvironment.GetPath("DrawUsingVertexIDVS.glsl");
-    pathPS = mEnvironment.GetPath("DrawUsingVertexIDPS.glsl");
-    std::shared_ptr<VisualProgram> torusProgram = mProgramFactory->CreateFromFiles(pathVS, pathPS, "");
-#else
-    path = mEnvironment.GetPath("DrawUsingVertexID.hlsl");
-    std::shared_ptr<VisualProgram> torusProgram = mProgramFactory->CreateFromFiles(path, path, "");
-#endif
+    vsPath = mEnvironment.GetPath(DefaultShaderName("DrawUsingVertexID.vs"));
+    psPath = mEnvironment.GetPath(DefaultShaderName("DrawUsingVertexID.ps"));
+    auto torusProgram = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
     if (!torusProgram)
     {
         return false;
@@ -333,42 +296,43 @@ bool AllPairsTrianglesWindow::CreateShaders()
     data.numTriangles1 = mNumTorusTriangles;
 
     mVertices0 = std::make_shared<StructuredBuffer>(numIndices0, sizeof(Vector4<float>));
-    Vector4<float>* data0 = mVertices0->Get<Vector4<float>>();
-    Vertex* meshVertices0 = mCylinder->GetVertexBuffer()->Get<Vertex>();
+    auto* data0 = mVertices0->Get<Vector4<float>>();
+    auto* meshVertices0 = mCylinder->GetVertexBuffer()->Get<Vertex>();
     for (unsigned int i = 0; i < numIndices0; ++i)
     {
         data0[i] = HLift(meshVertices0[i].position, 1.0f);
     }
 
     mVertices1 = std::make_shared<StructuredBuffer>(numIndices1, sizeof(Vector4<float>));
-    Vector4<float>* data1 = mVertices1->Get<Vector4<float>>();
-    Vertex* meshVertices1 = mTorus->GetVertexBuffer()->Get<Vertex>();
+    auto* data1 = mVertices1->Get<Vector4<float>>();
+    auto* meshVertices1 = mTorus->GetVertexBuffer()->Get<Vertex>();
     for (unsigned int i = 0; i < numIndices1; ++i)
     {
         data1[i] = HLift(meshVertices1[i].position, 1.0f);
     }
 
-    mInitializeColor->GetCShader()->Set("color0", mColor0Buffer);
-    mInitializeColor->GetCShader()->Set("color1", mColor1Buffer);
+    auto cshader = mInitializeColor->GetCShader();
+    cshader->Set("color0", mColor0Buffer);
+    cshader->Set("color1", mColor1Buffer);
 
-    mTriangleIntersection->GetCShader()->Set("Parameters", mTIParameters);
-    mTriangleIntersection->GetCShader()->Set("vertices0", mVertices0);
-    mTriangleIntersection->GetCShader()->Set("vertices1", mVertices1);
-    mTriangleIntersection->GetCShader()->Set("color0", mColor0Buffer);
-    mTriangleIntersection->GetCShader()->Set("color1", mColor1Buffer);
+    cshader = mTriangleIntersection->GetCShader();
+    cshader->Set("Parameters", mTIParameters);
+    cshader->Set("vertices0", mVertices0);
+    cshader->Set("vertices1", mVertices1);
+    cshader->Set("color0", mColor0Buffer);
+    cshader->Set("color1", mColor1Buffer);
 
     // Create resources for the cylinder visual program, attach them to the
     // shaders, and create the geometric primitive.
-    std::shared_ptr<ConstantBuffer> cbuffer =
-        std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
-    std::shared_ptr<VertexShader> vshader = cylinderProgram->GetVShader();
+    auto cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
+    auto vshader = cylinderProgram->GetVShader();
     vshader->Set("PVWMatrix", cbuffer);
     vshader->Set("positions", mVertices0);
     vshader->Set("colorIndices", mColor0Buffer);
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32A32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, mVertices0);
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices0 / 3);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, mVertices0);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices0 / 3);
     mCylinderID = std::make_shared<Visual>(vbuffer, ibuffer, mCylinderIDEffect);
 
     // Create resources for the torus visual program, attach them to the
@@ -389,12 +353,8 @@ bool AllPairsTrianglesWindow::CreateShaders()
 void AllPairsTrianglesWindow::UpdateTransforms()
 {
     Matrix4x4<float> pvMatrix = mCamera->GetProjectionViewMatrix();
-    Matrix4x4<float> pvwMatrix;
-#if defined(GTE_USE_MAT_VEC)
-    pvwMatrix = pvMatrix * mTrackball.GetOrientation();
-#else
-    pvwMatrix = mTrackball.GetOrientation() * pvMatrix;
-#endif
+    Matrix4x4<float> wMatrix = mTrackball.GetOrientation();
+    Matrix4x4<float> pvwMatrix = DoTransform(pvMatrix, wMatrix);
     mCylinderPVWMatrix->SetMember("pvwMatrix", pvMatrix);
     mTorusPVWMatrix->SetMember("pvwMatrix", pvwMatrix);
     mEngine->Update(mCylinderPVWMatrix);
@@ -403,7 +363,7 @@ void AllPairsTrianglesWindow::UpdateTransforms()
 #if !defined(USE_CPU_FIND_INTERSECTIONS)
     TIParameters& data = *mTIParameters->Get<TIParameters>();
     data.wMatrix0 = Matrix4x4<float>::Identity();
-    data.wMatrix1 = mTrackball.GetOrientation();
+    data.wMatrix1 = wMatrix;
     mEngine->Update(mTIParameters);
 
     std::shared_ptr<ConstantBuffer> cbuffer;
@@ -419,24 +379,25 @@ void AllPairsTrianglesWindow::UpdateTransforms()
 void AllPairsTrianglesWindow::FindIntersections()
 {
 #if defined(USE_CPU_FIND_INTERSECTIONS)
-    std::shared_ptr<VertexBuffer> buffer0 = mCylinder->GetVertexBuffer();
+    auto buffer0 = mCylinder->GetVertexBuffer();
     unsigned int numVertices0 = buffer0->GetNumElements();
     unsigned int numTriangles0 = numVertices0 / 3;
-    Vertex* vertices0 = buffer0->Get<Vertex>();
+    auto* vertices0 = buffer0->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices0; ++i)
     {
-        vertices0[i].colorIndex = 0;
+        vertices0[i].colorIndex = 0.0f;
     }
 
-    std::shared_ptr<VertexBuffer> buffer1 = mTorus->GetVertexBuffer();
+    auto buffer1 = mTorus->GetVertexBuffer();
     unsigned int numVertices1 = buffer1->GetNumElements();
     unsigned int numTriangles1 = numVertices1 / 3;
-    Vertex* vertices1 = buffer1->Get<Vertex>();
+    auto* vertices1 = buffer1->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices1; ++i)
     {
-        vertices1[i].colorIndex = 1;
+        vertices1[i].colorIndex = 1.0f;
     }
 
+    Matrix4x4<float> wMatrix = mTrackball.GetOrientation();
     TriangleIntersection intersects;
     Vector3<float> cylinder[3], torus[3];
     for (unsigned int t0 = 0; t0 < numTriangles0; ++t0)
@@ -450,23 +411,17 @@ void AllPairsTrianglesWindow::FindIntersections()
         {
             for (int j = 0; j < 3; ++j)
             {
-                Vector3<float> pos3 = vertices1[3 * t1 + j].position;
-                Vector4<float> pos4{ pos3[0], pos3[1], pos3[2], 1.0f };
-#if defined(GTE_USE_MAT_VEC)
-                pos4 = mTrackball.GetOrientation() * pos4;
-#else
-                pos4 = pos4 * mTrackball.GetOrientation();
-#endif
-                pos3 = Vector3<float>{ pos4[0], pos4[1], pos4[2] };
-                torus[j] = pos3;
+                Vector4<float> pos = HLift(vertices1[3 * t1 + j].position, 1.0f);
+                pos = DoTransform(wMatrix, pos);
+                torus[j] = HProject(pos);
             }
 
             if (intersects(cylinder, torus))
             {
                 for (int j = 0; j < 3; ++j)
                 {
-                    vertices0[3 * t0 + j].colorIndex = 2;
-                    vertices1[3 * t1 + j].colorIndex = 3;
+                    vertices0[3 * t0 + j].colorIndex = 2.0f;
+                    vertices1[3 * t1 + j].colorIndex = 3.0f;
                 }
             }
         }

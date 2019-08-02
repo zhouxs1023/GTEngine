@@ -24,28 +24,28 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\EvaluateBezier.hlsl">
+    <None Include="Shaders\EvaluateBezier.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneEstimation.hlsl">
+    <None Include="Shaders\PlaneEstimation.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneVisualize.hlsl">
+    <None Include="Shaders\PlaneVisualize.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PositionVisualize.hlsl">
+    <None Include="Shaders\PositionVisualize.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\EvaluateBezier.glsl">
+    <None Include="Shaders\EvaluateBezier.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneEstimation.glsl">
+    <None Include="Shaders\PlaneEstimation.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneVisualize.glsl">
+    <None Include="Shaders\PlaneVisualize.ps.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PositionVisualize.glsl">
+    <None Include="Shaders\PositionVisualize.ps.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

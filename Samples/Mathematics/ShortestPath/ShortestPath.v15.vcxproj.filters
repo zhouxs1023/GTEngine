@@ -36,41 +36,43 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\InitializeDiagToCol.hlsl">
+    <None Include="Shaders\InitializeDiagToCol.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\InitializeDiagToRow.hlsl">
+    <None Include="Shaders\InitializeDiagToRow.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PartialSumsDiagToCol.hlsl">
+    <None Include="Shaders\PartialSumsDiagToCol.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PartialSumsDiagToRow.hlsl">
+    <None Include="Shaders\PartialSumsDiagToRow.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\UpdateShader.hlsl">
+    <None Include="Shaders\UpdateShader.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\WeightsShader.hlsl">
+    <None Include="Shaders\WeightsShader.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\InitializeDiagToCol.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\InitializeDiagToCol.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\InitializeDiagToRow.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\InitializeDiagToRow.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\PartialSumsDiagToCol.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\PartialSumsDiagToCol.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\PartialSumsDiagToRow.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\PartialSumsDiagToRow.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\UpdateShader.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\UpdateShader.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\WeightsShader.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\WeightsShader.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

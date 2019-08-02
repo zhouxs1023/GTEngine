@@ -3,15 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.0 (2016/07/16)
+// File Version: 3.3.2 (2019/06/02)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow3.h>
 #include "PhysicsModule.h"
 using namespace gte;
-
-//#define SIMPLE_PENDULUM_FRICTION_SINGLE_STEP
 
 class SimplePendulumFrictionWindow : public Window3
 {

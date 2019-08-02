@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/07/31)
 
 #pragma once
 
@@ -20,6 +20,12 @@ namespace gte
 
 class GTE_IMPEXP OverlayEffect
 {
+public:
+    // Allow derived classes for OverlayEffect.
+    virtual ~OverlayEffect() = default;
+protected:
+    OverlayEffect(int windowWidth, int windowHeight);
+
 public:
     // Create an overlay that allows you to use a simple color shader or a
     // simple gray-scale shader.
@@ -78,9 +84,14 @@ public:
     void SetTexture(std::string const& textureName,
         std::shared_ptr<Texture2> const& texture);
 
+    // Set the value that will be used for the rectangle's normalized device
+    // z-coordinate. The depth range for DirectX is [0,1] and the depth range
+    // for OpenGL is [-1,1]. In this function, set z in [0,1]. It is used
+    // directly for DirectX. It is converted to [-1,1] using 2*z-1 for OpenGL.
+    void SetNormalizedZ(float z);
+
 protected:
-    void Initialize(int windowWidth, int windowHeight, int textureWidth,
-        int textureHeight);
+    virtual void Initialize(int windowWidth, int windowHeight, int textureWidth, int textureHeight);
 
     struct Vertex
     {
@@ -88,7 +99,7 @@ protected:
         Vector2<float> tcoord;
     };
 
-    void UpdateVertexBuffer();
+    virtual void UpdateVertexBuffer();
 
     float mWindowWidth, mWindowHeight;
     float mInvTextureWidth, mInvTextureHeight;

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.22.0 (2019/01/31)
+// File Version: 3.22.1 (2019/04/17)
 
 #include "TerrainEffect.h"
 using namespace gte;
@@ -33,19 +33,14 @@ TerrainEffect::TerrainEffect(std::shared_ptr<VisualProgram> const& program,
     mDetailSampler->mode[0] = SamplerState::CLAMP;
     mDetailSampler->mode[1] = SamplerState::CLAMP;
 
-    mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
-    mProgram->GetVShader()->Set("VWMatrix", mVWMatrixConstant);
-    mProgram->GetVShader()->Set("FogColorDensity", mFogColorDensityConstant);
+    auto vshader = mProgram->GetVShader();
+    vshader->Set("PVWMatrix", mPVWMatrixConstant);
+    vshader->Set("VWMatrix", mVWMatrixConstant);
+    vshader->Set("FogColorDensity", mFogColorDensityConstant);
 
-#if defined(GTE_DEV_OPENGL)
-    mProgram->GetPShader()->Set("baseSampler", mBaseTexture);
-    mProgram->GetPShader()->Set("detailSampler", mDetailTexture);
-#else
-    mProgram->GetPShader()->Set("baseTexture", mBaseTexture);
-    mProgram->GetPShader()->Set("detailTexture", mDetailTexture);
-#endif
-    mProgram->GetPShader()->Set("baseSampler", mBaseSampler);
-    mProgram->GetPShader()->Set("detailSampler", mDetailSampler);
+    auto pshader = mProgram->GetPShader();
+    pshader->Set("baseTexture", mBaseTexture, "baseSampler", mBaseSampler);
+    pshader->Set("detailTexture", mDetailTexture, "detailSampler", mDetailSampler);
 }
 
 void TerrainEffect::SetPVWMatrixConstant(std::shared_ptr<ConstantBuffer> const& buffer)

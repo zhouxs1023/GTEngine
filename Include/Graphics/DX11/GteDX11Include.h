@@ -3,17 +3,19 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/07/30)
 
 #pragma once
 
-// <windows.h> is referenced by the DX11 headers.  Turn off the min and max
+// <windows.h> is referenced by the DX11 headers. Turn off the min and max
 // macros to avoid conflicts with std::min and std::max.
 #define NOMINMAX
 #include <D3D11.h>
 #include <D3Dcompiler.h>
 #include <DXGI.h>
 #include <LowLevel/GteLogger.h>
+#include <iomanip>
+#include <sstream>
 
 // Required libraries for linking DX11.0 with GTE:
 //   d3d11.lib          (for DX11.0 core)
@@ -24,112 +26,114 @@
 // Convenient for reference counting.
 namespace gte
 {
-
-
-template <typename T>
-inline ULONG SafeRelease(T*& object)
-{
-    if (object)
+    template <typename T>
+    inline ULONG SafeRelease(T*& object)
     {
-        ULONG refs = object->Release();
-        object = nullptr;
-        return refs;
-    }
-    return 0;
-}
-
-template <typename T>
-inline ULONG FinalRelease(T*& object)
-{
-    if (object)
-    {
-        ULONG refs = object->Release();
-        object = nullptr;
-        if (refs > 0)
+        if (object)
         {
-            LogError("Reference count is not zero after release.");
+            ULONG refs = object->Release();
+            object = nullptr;
             return refs;
         }
-    }
-    return 0;
-}
-
-class InterfaceReleaser
-{
-public:
-    InterfaceReleaser(IUnknown* object)
-        :
-        mObject(object)
-    {
+        return 0;
     }
 
-    ~InterfaceReleaser()
+    template <typename T>
+    inline ULONG FinalRelease(T*& object)
     {
-        if (mObject)
+        if (object)
         {
-            mObject->Release();
+            ULONG refs = object->Release();
+            object = nullptr;
+            if (refs > 0)
+            {
+                LogError("Reference count is not zero after release.");
+                return refs;
+            }
         }
+        return 0;
     }
 
-private:
-    IUnknown* mObject;
-};
-
-inline HRESULT SetPrivateName(ID3D11DeviceChild* object,
-    std::string const& name)
-{
-    HRESULT hr;
-    if (object && name != "")
+    class InterfaceReleaser
     {
-        hr = object->SetPrivateData(WKPDID_D3DDebugObjectName,
-            static_cast<UINT>(name.length()), name.c_str());
-    }
-    else
-    {
-        // Callers are allowed to call this function with a null input
-        // or with an empty name (for convenience).
-        hr = S_OK;
-    }
-    return hr;
-}
+    public:
+        InterfaceReleaser(IUnknown* object)
+            :
+            mObject(object)
+        {
+        }
 
-inline HRESULT SetPrivateName(IDXGIObject* object, std::string const& name)
-{
-    HRESULT hr;
-    if (object && name != "")
-    {
-        hr = object->SetPrivateData(WKPDID_D3DDebugObjectName,
-            static_cast<UINT>(name.length()), name.c_str());
-    }
-    else
-    {
-        // Callers are allowed to call this function with a null input
-        // or with an empty name (for convenience).
-        hr = S_OK;
-    }
-    return hr;
-}
+        ~InterfaceReleaser()
+        {
+            if (mObject)
+            {
+                mObject->Release();
+            }
+        }
 
+    private:
+        IUnknown* mObject;
+    };
 
+    inline HRESULT SetPrivateName(ID3D11DeviceChild* object,
+        std::string const& name)
+    {
+        HRESULT hr;
+        if (object && name != "")
+        {
+            hr = object->SetPrivateData(WKPDID_D3DDebugObjectName,
+                static_cast<UINT>(name.length()), name.c_str());
+        }
+        else
+        {
+            // Callers are allowed to call this function with a null input
+            // or with an empty name (for convenience).
+            hr = S_OK;
+        }
+        return hr;
+    }
+
+    inline HRESULT SetPrivateName(IDXGIObject* object, std::string const& name)
+    {
+        HRESULT hr;
+        if (object && name != "")
+        {
+            hr = object->SetPrivateData(WKPDID_D3DDebugObjectName,
+                static_cast<UINT>(name.length()), name.c_str());
+        }
+        else
+        {
+            // Callers are allowed to call this function with a null input
+            // or with an empty name (for convenience).
+            hr = S_OK;
+        }
+        return hr;
+    }
 }
 
 #define CHECK_HR_RETURN_NONE(msg)\
 if (FAILED(hr))\
 { \
-    LogError(std::string(msg) + ", hr = " + std::to_string(hr) + "."); \
+    std::ostringstream oss; \
+    oss << msg << ", hr = 0x" << std::right << std::setfill('0') << std::setw(8) << std::hex << hr << "."; \
+    LogError(oss.str()); \
 }
 
 #define CHECK_HR_RETURN_VOID(msg)\
 if (FAILED(hr))\
 { \
-    LogError(std::string(msg) + ", hr = " + std::to_string(hr) + "."); \
+    std::ostringstream oss; \
+    oss << msg << ", hr = 0x" << std::right << std::setfill('0') << std::setw(8) << std::hex << hr << "."; \
+    LogError(oss.str()); \
     return; \
 }
 
 #define CHECK_HR_RETURN(msg, value)\
 if (FAILED(hr))\
 { \
-    LogError(std::string(msg) + ", hr = " + std::to_string(hr) + "."); \
+    std::ostringstream oss; \
+    oss << msg << ", hr = 0x" << std::right << std::setfill('0') << std::setw(8) << std::hex << hr << "."; \
+    LogError(oss.str()); \
     return value; \
 }
 

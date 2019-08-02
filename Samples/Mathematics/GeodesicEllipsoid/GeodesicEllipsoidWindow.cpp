@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/22)
+// File Version: 3.23.1 (2019/05/02)
 
 #include "GeodesicEllipsoidWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -33,11 +35,11 @@ GeodesicEllipsoidWindow::GeodesicEllipsoidWindow(Parameters& parameters)
     mParam0(2),
     mParam1(2),
     mXMin(0.0f),
-    mXMax((float)GTE_C_HALF_PI),
-    mXDelta((mXMax - mXMin) / (float)mSize),
-    mYMin((float)GTE_C_HALF_PI / (float)mSize),
-    mYMax((float)GTE_C_HALF_PI),
-    mYDelta((mYMax - mYMin) / (float)mSize),
+    mXMax(static_cast<float>(GTE_C_HALF_PI)),
+    mXDelta((mXMax - mXMin) / static_cast<float>(mSize)),
+    mYMin(static_cast<float>(GTE_C_HALF_PI) / static_cast<float>(mSize)),
+    mYMax(static_cast<float>(GTE_C_HALF_PI)),
+    mYDelta((mYMax - mYMin) / static_cast<float>(mSize)),
     mNumTruePoints(129),
     mTruePoints(mNumTruePoints),
     mNumApprPoints((1 << mGeodesic.subdivisions) + 1),
@@ -159,7 +161,7 @@ void GeodesicEllipsoidWindow::ComputeTruePath()
     // 0 <= theta < 2*pi and 0 <= phi < pi/2, thus placing the points on the
     // the first octant of the ellipsoid.
     std::default_random_engine dre;
-    std::uniform_real_distribution<float> rnd(0.0f, (float)GTE_C_HALF_PI);
+    std::uniform_real_distribution<float> rnd(0.0f, static_cast<float>(GTE_C_HALF_PI));
     mParam0[0] = rnd(dre);
     mParam0[1] = rnd(dre);
     mParam1[0] = rnd(dre);
@@ -169,9 +171,10 @@ void GeodesicEllipsoidWindow::ComputeTruePath()
     Vector3<float> pos0 = mGeodesic.ComputePosition(mParam0);
     Vector3<float> pos1 = mGeodesic.ComputePosition(mParam1);
     float angle = std::acos(Dot(pos0, pos1));
+    float divisor = static_cast<float>(mNumTruePoints - 1);
     for (int i = 0; i < mNumTruePoints; ++i)
     {
-        float t = i / static_cast<float>(mNumTruePoints - 1);
+        float t = i / divisor;
         float sn0 = std::sin((1.0f - t) * angle);
         float sn1 = std::sin(t * angle);
         float sn = std::sin(angle);

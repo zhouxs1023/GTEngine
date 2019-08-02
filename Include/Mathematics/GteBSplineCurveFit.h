@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/04/05)
+// File Version: 3.0.3 (2019/07/30)
 
 #pragma once
 
@@ -31,7 +31,8 @@ namespace gte
             mSampleData(sampleData),
             mDegree(degree),
             mNumControls(numControls),
-            mControlData(dimension * numControls)
+            mControlData(dimension * numControls, (Real)0),
+            mConstructed(false)
         {
             LogAssert(dimension >= 1, "Invalid dimension.");
             LogAssert(1 <= degree && degree < numControls, "Invalid degree.");
@@ -103,7 +104,7 @@ namespace gte
 
             // Construct the matrix A^T.
             Array2<Real> ATMat(mNumSamples, mNumControls);
-            memset(ATMat[0], 0, mNumControls * mNumSamples * sizeof(Real));
+            std::memset(ATMat[0], 0, mNumControls * mNumSamples * sizeof(Real));
             for (i0 = 0; i0 < mNumControls; ++i0)
             {
                 for (i1 = 0; i1 < mNumSamples; ++i1)
@@ -119,13 +120,15 @@ namespace gte
 
             // Compute X0 = (A^T*A)^{-1}*A^T by solving the linear system
             // A^T*A*X = A^T.
-            bool solved = ATAMat.template SolveSystem<true>(ATMat[0], mNumSamples);
-            LogAssert(solved, "Failed to solve linear system.");
-            (void)solved;
+            mConstructed = ATAMat.template SolveSystem<true>(ATMat[0], mNumSamples);
+            if (!mConstructed)
+            {
+                LogWarning("Failed to solve linear system.");
+                return;
+            }
 
             // The control points for the fitted curve are stored in the
             // vector Q = X0*P, where P is the vector of sample data.
-            std::fill(mControlData.begin(), mControlData.end(), (Real)0);
             for (i0 = 0; i0 < mNumControls; ++i0)
             {
                 Real* Q = &mControlData[i0 * mDimension];
@@ -154,6 +157,14 @@ namespace gte
                 *cEnd0++ = *sEnd0++;
                 *cEnd1++ = *sEnd1++;
             }
+        }
+
+        // To validate construction, create an object as shown:
+        //     BSplineCurveFit<Real> curve(parameters);
+        //     if (!curve) { <constructor failed, handle accordingly>; }
+        inline operator bool() const
+        {
+            return mConstructed;
         }
 
         // Access to input sample information.
@@ -197,26 +208,31 @@ namespace gte
         // If a t-value is outside [0,1], an open spline clamps it to [0,1].
         // The caller must ensure that position[] has at least 'dimension'
         // elements.
-        void GetPosition(Real t, Real* position) const
+        void Evaluate(Real t, unsigned int order, Real* value) const
         {
             int imin, imax;
-            mBasis.Evaluate(t, 0, imin, imax);
+            mBasis.Evaluate(t, order, imin, imax);
 
             Real const* source = &mControlData[mDimension * imin];
-            Real basisValue = mBasis.GetValue(0, imin);
+            Real basisValue = mBasis.GetValue(order, imin);
             for (int j = 0; j < mDimension; ++j)
             {
-                position[j] = basisValue * (*source++);
+                value[j] = basisValue * (*source++);
             }
 
             for (int i = imin + 1; i <= imax; ++i)
             {
-                basisValue = mBasis.GetValue(0, i);
+                basisValue = mBasis.GetValue(order, i);
                 for (int j = 0; j < mDimension; ++j)
                 {
-                    position[j] += basisValue * (*source++);
+                    value[j] += basisValue * (*source++);
                 }
             }
+        }
+
+        void GetPosition(Real t, Real* position) const
+        {
+            Evaluate(t, 0, position);
         }
 
     private:
@@ -230,5 +246,6 @@ namespace gte
         int mNumControls;
         std::vector<Real> mControlData;
         BasisFunction<Real> mBasis;
+        bool mConstructed;
     };
 }

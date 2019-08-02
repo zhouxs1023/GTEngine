@@ -325,16 +325,21 @@
     <ClInclude Include="SimpleBumpMapEffect.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\SimpleBumpMap.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\SimpleBumpMapPS.glsl" />
-    <None Include="Shaders\SimpleBumpMapVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\SimpleBumpMap.ps.glsl" />
+    <None Include="Shaders\SimpleBumpMap.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\SimpleBumpMap.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\SimpleBumpMap.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,10 +3,18 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.3 (2019/05/03)
 
 #include "MinimumVolumeBox3DWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <LowLevel/GteTimer.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteVertexColorEffect.h>
+#include <Mathematics/GteArbitraryPrecision.h>
+#include <Mathematics/GteConvexHull3.h>
+#include <Mathematics/GteMinimumVolumeBox3.h>
 #include <iostream>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -96,8 +104,7 @@ void MinimumVolumeBox3DWindow::CreateScene()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_COLOR, DF_R32G32B32A32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(vformat, NUM_POINTS);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, NUM_POINTS);
     Vertex* vertex = vbuffer->Get<Vertex>();
     for (int i = 0; i < NUM_POINTS; ++i)
     {
@@ -110,11 +117,8 @@ void MinimumVolumeBox3DWindow::CreateScene()
         vertex[i].color[3] = 1.0f;
     }
 
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_POLYPOINT, NUM_POINTS);
-
-    std::shared_ptr<VertexColorEffect> effect =
-        std::make_shared<VertexColorEffect>(mProgramFactory);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYPOINT, NUM_POINTS);
+    auto effect = std::make_shared<VertexColorEffect>(mProgramFactory);
 
     mPoints = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mPVWMatrices.Subscribe(mPoints->worldTransform, effect->GetPVWMatrixConstant());
@@ -158,7 +162,7 @@ void MinimumVolumeBox3DWindow::CreateScene()
 
     std::vector<int> const& hull = mvb3.GetHull();
     ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, static_cast<int>(hull.size() / 3), sizeof(int));
-    Memcpy(ibuffer->GetData(), &hull[0], ibuffer->GetNumBytes());
+    std::memcpy(ibuffer->GetData(), &hull[0], ibuffer->GetNumBytes());
     mPolytope = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mScene->AttachChild(mPolytope);
 

@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #include "BallRubberBandWindow.h"
+#include <LowLevel/GteLogReporter.h>
 
 int main(int, char const*[])
 {
@@ -62,8 +63,8 @@ void BallRubberBandWindow::OnDisplay()
     for (int i = 0; i < numPositions - 1; ++i)
     {
         float w = i * invNumPositions, omw = 1.0f - w;
-        unsigned int blue = (unsigned int)(255.0f * omw);
-        unsigned int green = (unsigned int)(255.0f * w);
+        unsigned int blue = static_cast<unsigned int>(255.0f * omw);
+        unsigned int green = static_cast<unsigned int>(255.0f * w);
         unsigned int color = (green << 8) | (blue << 16) | 0xFF000000;
         int x0 = static_cast<int>(std::lrint(mPosition[i][0] + fHalfSize));
         int y0 = static_cast<int>(std::lrint(mPosition[i][1] + fHalfSize));

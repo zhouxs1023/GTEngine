@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/02/15)
+// File Version: 3.0.3 (2019/06/22)
 
 #pragma once
 
@@ -33,9 +33,9 @@ namespace gte
         Result operator()(Sphere3<Real> const& sphere, Cone3<Real> const& cone)
         {
             Result result;
-            if (cone.minHeight > (Real)0)
+            if (cone.GetMinHeight() > (Real)0)
             {
-                if (cone.maxHeight < std::numeric_limits<Real>::max())
+                if (cone.IsFinite())
                 {
                     result.intersect = DoQueryConeFrustum(sphere, cone);
                 }
@@ -46,7 +46,7 @@ namespace gte
             }
             else
             {
-                if (cone.maxHeight < std::numeric_limits<Real>::max())
+                if (cone.IsFinite())
                 {
                     result.intersect = DoQueryFiniteCone(sphere, cone);
                 }
@@ -102,7 +102,8 @@ namespace gte
                 {
                     Vector3<Real> CmV = sphere.center - cone.ray.origin;
                     Real AdCmV = Dot(cone.ray.direction, CmV);
-                    if (AdCmV < cone.minHeight - sphere.radius)
+                    Real minHeight = cone.GetMinHeight();
+                    if (AdCmV < minHeight - sphere.radius)
                     {
                         return false;
                     }
@@ -113,15 +114,15 @@ namespace gte
                         return true;
                     }
 
-                    Vector3<Real> D = CmV - cone.minHeight * cone.ray.direction;
+                    Vector3<Real> D = CmV - minHeight * cone.ray.direction;
                     Real lengthAxD = Length(Cross(cone.ray.direction, D));
-                    Real hminTanAngle = cone.minHeight * cone.tanAngle;
+                    Real hminTanAngle = minHeight * cone.tanAngle;
                     if (lengthAxD <= hminTanAngle)
                     {
                         return true;
                     }
 
-                    Real AdD = AdCmV - cone.minHeight;
+                    Real AdD = AdCmV - minHeight;
                     Real diff = lengthAxD - hminTanAngle;
                     Real sqrLengthCmK = AdD * AdD + diff * diff;
                     return sqrLengthCmK <= sphere.radius * sphere.radius;
@@ -148,7 +149,8 @@ namespace gte
                         return false;
                     }
 
-                    if (AdCmV > cone.maxHeight + sphere.radius)
+                    Real maxHeight = cone.GetMaxHeight();
+                    if (AdCmV > cone.GetMaxHeight() + sphere.radius)
                     {
                         return false;
                     }
@@ -156,21 +158,21 @@ namespace gte
                     Real rSinAngle = sphere.radius * cone.sinAngle;
                     if (AdCmV >= -rSinAngle)
                     {
-                        if (AdCmV <= cone.maxHeight - rSinAngle)
+                        if (AdCmV <= maxHeight - rSinAngle)
                         {
                             return true;
                         }
                         else
                         {
-                            Vector3<Real> barD = CmV - cone.maxHeight * cone.ray.direction;
+                            Vector3<Real> barD = CmV - maxHeight * cone.ray.direction;
                             Real lengthAxBarD = Length(Cross(cone.ray.direction, barD));
-                            Real hmaxTanAngle = cone.maxHeight * cone.tanAngle;
+                            Real hmaxTanAngle = maxHeight * cone.tanAngle;
                             if (lengthAxBarD <= hmaxTanAngle)
                             {
                                 return true;
                             }
 
-                            Real AdBarD = AdCmV - cone.maxHeight;
+                            Real AdBarD = AdCmV - maxHeight;
                             Real diff = lengthAxBarD - hmaxTanAngle;
                             Real sqrLengthCmBarK = AdBarD * AdBarD + diff * diff;
                             return sqrLengthCmBarK <= sphere.radius * sphere.radius;
@@ -199,34 +201,36 @@ namespace gte
                 {
                     Vector3<Real> CmV = sphere.center - cone.ray.origin;
                     Real AdCmV = Dot(cone.ray.direction, CmV);
-                    if (AdCmV < cone.minHeight - sphere.radius)
+                    Real minHeight = cone.GetMinHeight();
+                    if (AdCmV < minHeight - sphere.radius)
                     {
                         return false;
                     }
 
-                    if (AdCmV > cone.maxHeight + sphere.radius)
+                    Real maxHeight = cone.GetMaxHeight();
+                    if (AdCmV > maxHeight + sphere.radius)
                     {
                         return false;
                     }
 
                     Real rSinAngle = sphere.radius * cone.sinAngle;
-                    if (AdCmV >= cone.minHeight - rSinAngle)
+                    if (AdCmV >= minHeight - rSinAngle)
                     {
-                        if (AdCmV <= cone.maxHeight - rSinAngle)
+                        if (AdCmV <= maxHeight - rSinAngle)
                         {
                             return true;
                         }
                         else
                         {
-                            Vector3<Real> barD = CmV - cone.maxHeight * cone.ray.direction;
+                            Vector3<Real> barD = CmV - maxHeight * cone.ray.direction;
                             Real lengthAxBarD = Length(Cross(cone.ray.direction, barD));
-                            Real hmaxTanAngle = cone.maxHeight * cone.tanAngle;
+                            Real hmaxTanAngle = maxHeight * cone.tanAngle;
                             if (lengthAxBarD <= hmaxTanAngle)
                             {
                                 return true;
                             }
 
-                            Real AdBarD = AdCmV - cone.maxHeight;
+                            Real AdBarD = AdCmV - maxHeight;
                             Real diff = lengthAxBarD - hmaxTanAngle;
                             Real sqrLengthCmBarK = AdBarD * AdBarD + diff * diff;
                             return sqrLengthCmBarK <= sphere.radius * sphere.radius;
@@ -234,15 +238,15 @@ namespace gte
                     }
                     else
                     {
-                        Vector3<Real> D = CmV - cone.minHeight * cone.ray.direction;
+                        Vector3<Real> D = CmV - minHeight * cone.ray.direction;
                         Real lengthAxD = Length(Cross(cone.ray.direction, D));
-                        Real hminTanAngle = cone.minHeight * cone.tanAngle;
+                        Real hminTanAngle = minHeight * cone.tanAngle;
                         if (lengthAxD <= hminTanAngle)
                         {
                             return true;
                         }
 
-                        Real AdD = AdCmV - cone.minHeight;
+                        Real AdD = AdCmV - minHeight;
                         Real diff = lengthAxD - hminTanAngle;
                         Real sqrLengthCmK = AdD * AdD + diff * diff;
                         return sqrLengthCmK <= sphere.radius * sphere.radius;

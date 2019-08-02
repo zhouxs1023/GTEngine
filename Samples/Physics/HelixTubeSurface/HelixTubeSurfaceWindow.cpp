@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.2 (2018/10/05)
+// File Version: 3.3.3 (2019/05/02)
 
 #include "HelixTubeSurfaceWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <Mathematics/GteTubeMesh.h>
 
 int main(int, char const*[])
 {
@@ -149,7 +152,7 @@ void HelixTubeSurfaceWindow::CreateScene()
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, desc.numVertices);
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, desc.numTriangles, sizeof(unsigned int));
 
     desc.vertexAttributes =

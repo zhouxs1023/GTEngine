@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.2 (2019/04/15)
 
 #include "BlendedAnimationsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -192,22 +194,21 @@ void BlendedAnimationsWindow::CreateScene()
     mFloor = mf.CreateRectangle(2, 2, 1024.0f, 2048.0f);
     mFloor->name = "Floor";
     mScene->AttachChild(mFloor);
-    std::shared_ptr<VertexBuffer> vbuffer = mFloor->GetVertexBuffer();
+    auto vbuffer = mFloor->GetVertexBuffer();
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
     unsigned int numVertices = vbuffer->GetNumElements();
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto* vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
-        vertex[i].tcoord[0] *= 64.0f;
-        vertex[i].tcoord[1] *= 256.0f;
+        vertices[i].tcoord[0] *= 64.0f;
+        vertices[i].tcoord[1] *= 256.0f;
     }
 
     std::string textureName = mEnvironment.GetPath("Grating.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(textureName, true);
+    auto texture = WICFileIO::Load(textureName, true);
     texture->AutogenerateMipmaps();
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(
-        mProgramFactory, texture, SamplerState::MIN_L_MAG_L_MIP_L,
-        SamplerState::WRAP, SamplerState::WRAP);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+        SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP, SamplerState::WRAP);
     mFloor->SetEffect(effect);
 
     mPVWMatrices.Subscribe(mFloor->worldTransform, effect->GetPVWMatrixConstant());

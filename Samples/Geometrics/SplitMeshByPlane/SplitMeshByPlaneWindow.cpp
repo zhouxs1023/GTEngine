@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.24.0 (2019/04/08)
+// File Version: 3.24.2 (2019/05/03)
 
 #include "SplitMeshByPlaneWindow.h"
-
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 #include <Mathematics/GteSplitMeshByPlane.h>
 
 namespace gte
@@ -153,7 +154,7 @@ void SplitMeshByPlaneWindow::CreateScene()
     int numIndices = ibuffer->GetNumElements();
     auto const* indices = ibuffer->Get<int>();
     mTorusIndices.resize(numIndices);
-    memcpy(mTorusIndices.data(), indices, mTorusIndices.size() * sizeof(int));
+    std::memcpy(mTorusIndices.data(), indices, mTorusIndices.size() * sizeof(int));
 }
 
 void SplitMeshByPlaneWindow::Update()
@@ -206,6 +207,6 @@ void SplitMeshByPlaneWindow::Update()
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
     mMeshTorus->SetIndexBuffer(ibuffer);
     auto* indices = ibuffer->Get<int>();
-    memcpy(indices, negIndices.data(), negQuantity * sizeof(int));
-    memcpy(indices + negQuantity, posIndices.data(), posQuantity * sizeof(int));
+    std::memcpy(indices, negIndices.data(), negQuantity * sizeof(int));
+    std::memcpy(indices + negQuantity, posIndices.data(), posQuantity * sizeof(int));
 }

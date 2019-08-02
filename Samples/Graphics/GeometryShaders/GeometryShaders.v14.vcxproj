@@ -319,17 +319,32 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\RandomSquares.hlsl">
+    <None Include="Shaders\RandomSquaresDirect.gs.glsl" />
+    <None Include="Shaders\RandomSquaresDirect.ps.glsl" />
+    <None Include="Shaders\RandomSquaresDirect.vs.glsl" />
+    <None Include="Shaders\RandomSquaresIndirect.gs.glsl" />
+    <None Include="Shaders\RandomSquaresIndirect.ps.glsl" />
+    <None Include="Shaders\RandomSquaresIndirect.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\RandomSquaresDirect.gs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\RandomSquaresDirectGS.glsl" />
-    <None Include="Shaders\RandomSquaresDirectVS.glsl" />
-    <None Include="Shaders\RandomSquaresIndirect.hlsl">
+    <None Include="Shaders\RandomSquaresDirect.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\RandomSquaresIndirectGS.glsl" />
-    <None Include="Shaders\RandomSquaresIndirectVS.glsl" />
-    <None Include="Shaders\RandomSquaresPS.glsl" />
+    <None Include="Shaders\RandomSquaresDirect.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RandomSquaresIndirect.gs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RandomSquaresIndirect.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RandomSquaresIndirect.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,10 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/16)
 
 #include "GlossMapsWindow.h"
-#include "GlossMapEffect.h"
+#include <LowLevel/GteLogReporter.h>
 
 int main(int, char const*[])
 {
@@ -97,41 +97,40 @@ void GlossMapsWindow::CreateScene()
     vformat.Bind(VA_NORMAL, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
 
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    Vertex* vertex = vbuffer->Get<Vertex>();
-    vertex[0].position = { -0.5f, 0.0f, -0.5f };
-    vertex[0].normal = { 0.0f, 1.0f, 0.0f };
-    vertex[0].tcoord = { 1.0f, 1.0f };
-    vertex[1].position = { -0.5f, 0.0f, +0.5f };
-    vertex[1].normal = { 0.0f, 1.0f, 0.0f };
-    vertex[1].tcoord = { 1.0f, 0.0f };
-    vertex[2].position = { +0.5f, 0.0f, +0.5f };
-    vertex[2].normal = { 0.0f, 1.0f, 0.0f };
-    vertex[2].tcoord = { 0.0f, 0.0f };
-    vertex[3].position = { +0.5f, 0.0f, -0.5f };
-    vertex[3].normal = { 0.0f, 1.0f, 0.0f };
-    vertex[3].tcoord = { 0.0f, 1.0f };
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto* vertices = vbuffer->Get<Vertex>();
+    vertices[0].position = { -0.5f, 0.0f, -0.5f };
+    vertices[0].normal = { 0.0f, 1.0f, 0.0f };
+    vertices[0].tcoord = { 1.0f, 1.0f };
+    vertices[1].position = { -0.5f, 0.0f, +0.5f };
+    vertices[1].normal = { 0.0f, 1.0f, 0.0f };
+    vertices[1].tcoord = { 1.0f, 0.0f };
+    vertices[2].position = { +0.5f, 0.0f, +0.5f };
+    vertices[2].normal = { 0.0f, 1.0f, 0.0f };
+    vertices[2].tcoord = { 0.0f, 0.0f };
+    vertices[3].position = { +0.5f, 0.0f, -0.5f };
+    vertices[3].normal = { 0.0f, 1.0f, 0.0f };
+    vertices[3].tcoord = { 0.0f, 1.0f };
 
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
+    auto* indices = ibuffer->Get<unsigned int>();
     indices[0] = 0;  indices[1] = 1;  indices[2] = 3;
     indices[3] = 3;  indices[4] = 1;  indices[5] = 2;
 
-    std::shared_ptr<Material> material = std::make_shared<Material>();
+    auto material = std::make_shared<Material>();
     material->emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
     material->ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
     material->diffuse = { 0.7f, 0.7f, 0.7f, 1.0f };
     material->specular = { 1.0f, 1.0f, 1.0f, 25.0f };
 
-    std::shared_ptr<Lighting> lighting = std::make_shared<Lighting>();
+    auto lighting = std::make_shared<Lighting>();
     lighting->ambient = { 0.1f, 0.1f, 0.1f, 1.0f };
     lighting->diffuse = { 0.6f, 0.6f, 0.6f, 1.0f };
     lighting->specular = { 1.0f, 1.0f, 1.0f, 1.0f };
     lighting->attenuation = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    std::shared_ptr<LightCameraGeometry> geometry0 = std::make_shared<LightCameraGeometry>();
-    std::shared_ptr<LightCameraGeometry> geometry1 = std::make_shared<LightCameraGeometry>();
+    auto geometry0 = std::make_shared<LightCameraGeometry>();
+    auto geometry1 = std::make_shared<LightCameraGeometry>();
     mLightWorldDirection = { 0.0f, -1.0f, 0.0f, 0.0f };
 
     AxisAngle<4, float> aa(Vector4<float>::Unit(0), static_cast<float>(-GTE_C_QUARTER_PI));
@@ -148,7 +147,7 @@ void GlossMapsWindow::CreateScene()
 
     // Create a gloss-mapped square.
     std::string path = mEnvironment.GetPath("Magic.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
+    auto texture = WICFileIO::Load(path, false);
     mGMEffect = std::make_shared<GlossMapEffect>(mProgramFactory, mUpdater,
         material, lighting, geometry1, texture, SamplerState::MIN_L_MAG_L_MIP_P,
         SamplerState::CLAMP, SamplerState::CLAMP);
@@ -168,19 +167,12 @@ void GlossMapsWindow::UpdateConstants()
     Matrix4x4<float> invWMatrix0 = mSquareNoGloss->worldTransform.GetHInverse();
     Matrix4x4<float> invWMatrix1 = mSquareGloss->worldTransform.GetHInverse();
     Vector4<float> cameraWorldPosition = mCamera->GetPosition();
-    std::shared_ptr<LightCameraGeometry> const& geometry0 = mDLEffect->GetGeometry();
-    std::shared_ptr<LightCameraGeometry> const& geometry1 = mGMEffect->GetGeometry();
-#if defined(GTE_USE_MAT_VEC)
-    geometry0->cameraModelPosition = invWMatrix0 * cameraWorldPosition;
-    geometry0->lightModelDirection = invWMatrix0 * mLightWorldDirection;
-    geometry1->cameraModelPosition = invWMatrix1 * cameraWorldPosition;
-    geometry1->lightModelDirection = invWMatrix1 * mLightWorldDirection;
-#else
-    geometry0->cameraModelPosition = cameraWorldPosition * invWMatrix0;
-    geometry0->lightModelDirection = mLightWorldDirection * invWMatrix0;
-    geometry1->cameraModelPosition = cameraWorldPosition * invWMatrix1;
-    geometry1->lightModelDirection = mLightWorldDirection * invWMatrix1;
-#endif
+    auto geometry0 = mDLEffect->GetGeometry();
+    auto geometry1 = mGMEffect->GetGeometry();
+    geometry0->cameraModelPosition = DoTransform(invWMatrix0, cameraWorldPosition);
+    geometry0->lightModelDirection = DoTransform(invWMatrix0, mLightWorldDirection);
+    geometry1->cameraModelPosition = DoTransform(invWMatrix1, cameraWorldPosition);
+    geometry1->lightModelDirection = DoTransform(invWMatrix1, mLightWorldDirection);
     mDLEffect->UpdateGeometryConstant();
     mGMEffect->UpdateGeometryConstant();
     mPVWMatrices.Update();

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include <GTEnginePCH.h>
 #include <Physics/GteFluid2UpdateState.h>
@@ -37,11 +37,6 @@ Fluid2UpdateState::Fluid2UpdateState(std::shared_ptr<ProgramFactory> const& fact
     {
         std::shared_ptr<ComputeShader> cshader =  mComputeUpdateState->GetCShader();
         cshader->Set("Parameters", parameters);
-#if defined(GTE_DEV_OPENGL)
-        cshader->Set("stateTm1", mAdvectionSampler);
-#else
-        cshader->Set("advectionSampler", mAdvectionSampler);
-#endif
         cshader->Set("updateState", mUpdateState);
     }
 
@@ -53,9 +48,9 @@ void Fluid2UpdateState::Execute(std::shared_ptr<GraphicsEngine> const& engine,
     std::shared_ptr<Texture2> const& stateTm1,
     std::shared_ptr<Texture2> const& stateT)
 {
-    std::shared_ptr<ComputeShader> cshader = mComputeUpdateState->GetCShader();
+    auto cshader = mComputeUpdateState->GetCShader();
     cshader->Set("source", source);
-    cshader->Set("stateTm1", stateTm1);
+    cshader->Set("stateTm1", stateTm1, "advectionSampler", mAdvectionSampler);
     cshader->Set("stateT", stateT);
     engine->Execute(mComputeUpdateState, mNumXGroups, mNumYGroups, 1);
 }
@@ -74,7 +69,7 @@ std::string const Fluid2UpdateState::msGLSLSource =
 "\n"
 "layout(rgba32f) uniform readonly image2D source;\n"
 "layout(rgba32f) uniform readonly image2D stateT;\n"
-"uniform sampler2D stateTm1;\n"
+"uniform sampler2D advectionSampler;\n"
 "layout(rgba32f) uniform writeonly image2D updateState;\n"
 "\n"
 "layout (local_size_x = NUM_X_THREADS, local_size_y = NUM_Y_THREADS, local_size_z = 1) in;\n"
@@ -101,16 +96,16 @@ std::string const Fluid2UpdateState::msGLSLSource =
 "    vec4 src = imageLoad(source, c);\n"
 "\n"
 "    // Estimate second-order derivatives of state at (x,y).\n"
-"    vec4 stateDXX = statePZ - 2.0f*stateZZ + stateMZ;\n"
-"    vec4 stateDYY = stateZP - 2.0f*stateZZ + stateZM;\n"
+"    vec4 stateDXX = statePZ - 2.0f * stateZZ + stateMZ;\n"
+"    vec4 stateDYY = stateZP - 2.0f * stateZZ + stateZM;\n"
 "\n"
 "    // Compute advection.\n"
-"    vec2 tcd = spaceDelta.xy*(c.xy - timeDelta.xy*stateZZ.xy + 0.5f);\n"
-"    vec4 advection = textureLod(stateTm1, tcd, 0.0f);\n"
+"    vec2 tcd = spaceDelta.xy * (c.xy - timeDelta.xy * stateZZ.xy + 0.5f);\n"
+"    vec4 advection = textureLod(advectionSampler, tcd, 0.0f);\n"
 "\n"
 "    // Update the state.\n"
 "    imageStore(updateState, c, advection +\n"
-"        (viscosityX*stateDXX + viscosityY*stateDYY + timeDelta.w*src));\n"
+"        (viscosityX * stateDXX + viscosityY * stateDYY + timeDelta.w * src));\n"
 "}\n";
 
 std::string const Fluid2UpdateState::msHLSLSource =
@@ -154,16 +149,16 @@ std::string const Fluid2UpdateState::msHLSLSource =
 "    float4 src = source[int2(x, y)];\n"
 "\n"
 "    // Estimate second-order derivatives of state at (x,y).\n"
-"    float4 stateDXX = statePZ - 2.0f*stateZZ + stateMZ;\n"
-"    float4 stateDYY = stateZP - 2.0f*stateZZ + stateZM;\n"
+"    float4 stateDXX = statePZ - 2.0f * stateZZ + stateMZ;\n"
+"    float4 stateDYY = stateZP - 2.0f * stateZZ + stateZM;\n"
 "\n"
 "    // Compute advection.\n"
-"    float2 tcd = spaceDelta.xy*(c - timeDelta.xy*stateZZ.xy + 0.5f);\n"
+"    float2 tcd = spaceDelta.xy * (c - timeDelta.xy * stateZZ.xy + 0.5f);\n"
 "    float4 advection = stateTm1.SampleLevel(advectionSampler, tcd, 0.0f);\n"
 "\n"
 "    // Update the state.\n"
 "    updateState[c] = advection +\n"
-"        (viscosityX*stateDXX + viscosityY*stateDYY + timeDelta.w*src);\n"
+"        (viscosityX * stateDXX + viscosityY * stateDYY + timeDelta.w * src);\n"
 "}\n";
 
 std::string const* Fluid2UpdateState::msSource[] =

@@ -320,17 +320,17 @@
     <ClCompile Include="DistanceSegments3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DistanceSeg3Seg3.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\DistanceSeg3Seg3.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DistanceSeg3Seg3.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DistanceSeg3Seg3.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/03/04)
+// File Version: 3.0.4 (2019/05/03)
 
 #include "MultipleRenderTargetsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
 
 int main(int, char const*[])
 {
@@ -78,7 +80,7 @@ void MultipleRenderTargetsWindow::OnIdle()
     // application window.
     //
     // mEngine->CopyGpuToCpu(dsTexture);
-    // memcpy(mLinearDepth->GetData(), dsTexture->GetData(),
+    // std::memcpy(mLinearDepth->GetData(), dsTexture->GetData(),
     //     dsTexture->GetNumBytes());
     // mEngine->CopyCpuToGpu(mLinearDepth);
     //
@@ -99,7 +101,7 @@ void MultipleRenderTargetsWindow::OnIdle()
     // runs at 840 fps for a 512x512 application window.
 #if defined(GTE_DEV_OPENGL)
     mEngine->CopyGpuToCpu(dsTexture);
-    memcpy(mLinearDepth->GetData(), dsTexture->GetData(), dsTexture->GetNumBytes());
+    std::memcpy(mLinearDepth->GetData(), dsTexture->GetData(), dsTexture->GetNumBytes());
     mEngine->CopyCpuToGpu(mLinearDepth);
 #else
     DX11Engine* engine = static_cast<DX11Engine*>(mEngine.get());
@@ -114,7 +116,7 @@ void MultipleRenderTargetsWindow::OnIdle()
     D3D11_MAPPED_SUBRESOURCE srcSub, dstSub;
     HRESULT hr = context->Map(srcStaging, 0, D3D11_MAP_READ, 0, &srcSub);
     hr = context->Map(dstStaging, 0, D3D11_MAP_WRITE, 0, &dstSub);
-    Memcpy(dstSub.pData, srcSub.pData, dsTexture->GetNumBytes());
+    std::memcpy(dstSub.pData, srcSub.pData, dsTexture->GetNumBytes());
     context->Unmap(srcStaging, 0);
     context->Unmap(dstStaging, 0);
     context->CopySubresourceRegion(dstResource, 0, 0, 0, 0, dstStaging, 0, nullptr);
@@ -134,8 +136,8 @@ void MultipleRenderTargetsWindow::OnIdle()
     {
         // The output depth for the rendering of mSquare is set to linearized
         // depth, not the default perspective depth.  The depth texture of the
-        // draw target is of the form 0xSSDDDDDD, which means the high-order
-        // 8 bits are stencil values and the low-order 24 bits are depth values.
+        // draw target is of the form 0xSSDDDDDD, which means the high-order 8
+        // bits are stencil values and the low-order 24 bits are depth values.
         // The depth texture was read from GPU to CPU as a 32-bit integer and
         // copied to mLinearDepth, a regular 2D texture with format R32_INT.
         // This texture is attached as an input to the gsOverlay1PShader pixel
@@ -215,24 +217,12 @@ bool MultipleRenderTargetsWindow::SetEnvironment()
         return false;
     }
 
-    int api = mProgramFactory->GetAPI();
-    if (ProgramFactory::PF_GLSL == api)
-    {
-        mSourceFileVS = "MultipleRenderTargetsVertex.glsl";
-        mSourceFilePS = "MultipleRenderTargetsPixel.glsl";
-    }
-    else if (ProgramFactory::PF_HLSL == api)
-    {
-        mSourceFileVS = "MultipleRenderTargets.hlsl";
-        mSourceFilePS = "MultipleRenderTargets.hlsl";
-    }
-
     mEnvironment.Insert(path + "/Samples/Data/");
     mEnvironment.Insert(path + "/Samples/Graphics/MultipleRenderTargets/Shaders/");
     std::vector<std::string> inputs =
     {
-        mSourceFileVS,
-        mSourceFilePS,
+        DefaultShaderName("MultipleRenderTargets.vs"),
+        DefaultShaderName("MultipleRenderTargets.ps"),
         "StoneWall.png"
     };
 
@@ -251,45 +241,32 @@ bool MultipleRenderTargetsWindow::SetEnvironment()
 bool MultipleRenderTargetsWindow::CreateScene()
 {
     // Create a visual effect that populates the draw target.
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(
-            mEnvironment.GetPath(mSourceFileVS), 
-            mEnvironment.GetPath(mSourceFilePS),
-            "");
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("MultipleRenderTargets.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("MultipleRenderTargets.ps"));
+    auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
     if (!program)
     {
         return false;
     }
 
-    int const api = mProgramFactory->GetAPI();
-
-    std::shared_ptr<ConstantBuffer> cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
+    auto cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
     program->GetVShader()->Set("PVWMatrix", cbuffer);
 
-    std::shared_ptr<PixelShader> pshader = program->GetPShader();
-    std::shared_ptr<ConstantBuffer> farNearRatio = std::make_shared<ConstantBuffer>(sizeof(float), false);
+    auto pshader = program->GetPShader();
+    auto farNearRatio = std::make_shared<ConstantBuffer>(sizeof(float), false);
     pshader->Set("FarNearRatio", farNearRatio);
     farNearRatio->SetMember("farNearRatio", mCamera->GetDMax() / mCamera->GetDMin());
 
     std::string path = mEnvironment.GetPath("StoneWall.png");
-    std::shared_ptr<Texture2> baseTexture = WICFileIO::Load(path, true);
+    auto baseTexture = WICFileIO::Load(path, true);
     baseTexture->AutogenerateMipmaps();
-    if (ProgramFactory::PF_GLSL == api)
-    {
-        pshader->Set("baseSampler", baseTexture);
-    }
-    else if (ProgramFactory::PF_HLSL == api)
-    {
-        pshader->Set("baseTexture", baseTexture);
-    }
-
-    std::shared_ptr<SamplerState> baseSampler = std::make_shared<SamplerState>();
+    auto baseSampler = std::make_shared<SamplerState>();
     baseSampler->filter = SamplerState::MIN_L_MAG_L_MIP_L;
     baseSampler->mode[0] = SamplerState::CLAMP;
     baseSampler->mode[1] = SamplerState::CLAMP;
-    pshader->Set("baseSampler", baseSampler);
+    pshader->Set("baseTexture", baseTexture, "baseSampler", baseSampler);
 
-    std::shared_ptr<VisualEffect> effect = std::make_shared<VisualEffect>(program);
+    auto effect = std::make_shared<VisualEffect>(program);
 
     // Create a vertex buffer for a two-triangle square.  The PNG is stored
     // in left-handed coordinates.  The texture coordinates are chosen to
@@ -302,7 +279,7 @@ bool MultipleRenderTargetsWindow::CreateScene()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
     Vertex* vertex = vbuffer->Get<Vertex>();
 #if defined(GTE_DEV_OPENGL)
     vertex[1].position = { -1.0f, -1.0f, 0.0f };
@@ -325,8 +302,7 @@ bool MultipleRenderTargetsWindow::CreateScene()
 #endif
 
     // Create an indexless buffer for a triangle mesh with two triangles.
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
 
     // Create the geometric object for drawing and enable automatic updates
     // of pvw-matrices and w-matrices.
@@ -357,12 +333,11 @@ void MultipleRenderTargetsWindow::CreateOverlays()
         SamplerState::CLAMP, SamplerState::CLAMP, true);
     mOverlay[0]->SetTexture(mDrawTarget->GetRTTexture(0));
 
-    int api = mProgramFactory->GetAPI();
-
     // Display mSquare using only miplevel i and using nearest-neighbor
     // sampling.
+    int api = mProgramFactory->GetAPI();
     std::shared_ptr<PixelShader> pshader;
-    std::shared_ptr<SamplerState> nearestSampler = std::make_shared<SamplerState>();
+    auto nearestSampler = std::make_shared<SamplerState>();
     nearestSampler->filter = SamplerState::MIN_P_MAG_P_MIP_P;
     nearestSampler->mode[0] = SamplerState::CLAMP;
     nearestSampler->mode[1] = SamplerState::CLAMP;
@@ -371,15 +346,7 @@ void MultipleRenderTargetsWindow::CreateOverlays()
         mOverlay[i] = std::make_shared<OverlayEffect>(mProgramFactory, mXSize,
             mYSize, mXSize, mYSize, *msOverlayPSSource[api][i]);
         pshader = mOverlay[i]->GetProgram()->GetPShader();
-        if (ProgramFactory::PF_GLSL == api)
-        {
-            pshader->Set("inSampler", mDrawTarget->GetRTTexture(0));
-        }
-        else if (ProgramFactory::PF_HLSL == api)
-        {
-            pshader->Set("inTexture", mDrawTarget->GetRTTexture(0));
-        }
-        pshader->Set("inSampler", nearestSampler);
+        pshader->Set("inTexture", mDrawTarget->GetRTTexture(0), "inSampler", nearestSampler);
     }
 
     // Display mSquare using linearized depth.
@@ -393,16 +360,7 @@ void MultipleRenderTargetsWindow::CreateOverlays()
     linearSampler->mode[0] = SamplerState::CLAMP;
     linearSampler->mode[1] = SamplerState::CLAMP;
     pshader = mOverlay[5]->GetProgram()->GetPShader();
-    if (ProgramFactory::PF_GLSL == api)
-    {
-        pshader->Set("inPositionSampler", mDrawTarget->GetRTTexture(1));
-        pshader->Set("inPositionSampler", linearSampler);
-    }
-    else if (ProgramFactory::PF_HLSL == api)
-    {
-        pshader->Set("positionTexture", mDrawTarget->GetRTTexture(1));
-        pshader->Set("inSampler", linearSampler);
-    }
+    pshader->Set("positionTexture", mDrawTarget->GetRTTexture(1), "positionSampler", linearSampler);
     pshader->Set("depthTexture", mLinearDepth);
     pshader->Set("colorTexture", mDrawTarget->GetRTTexture(0));
 
@@ -418,14 +376,14 @@ std::string const MultipleRenderTargetsWindow::msGLSLOverlayPSSource[5] =
 {
     "layout (r32f) uniform readonly image2D depthTexture;\n"
     "layout (rgba32f) uniform writeonly image2D colorTexture;\n"
-    "uniform sampler2D inPositionSampler;\n"
+    "uniform sampler2D positionSampler;\n"
     "\n"
     "layout(location = 0) in vec2 vertexTCoord;\n"
     "layout(location = 0) out vec4 pixelColor0;\n"
     "\n"
     "void main()\n"
     "{\n"
-    "    vec4 pos = texture(inPositionSampler, vertexTCoord);\n"
+    "    vec4 pos = texture(positionSampler, vertexTCoord);\n"
     "    float depth = imageLoad(depthTexture, ivec2(pos.xy)).x;\n"
     "    pixelColor0 = vec4(depth, depth, depth, 1.0f);\n"
     "    imageStore(colorTexture, ivec2(pos.xy), vec4(0.4f, 0.5f, 0.6f, 1.0f));\n"
@@ -476,8 +434,8 @@ std::string const MultipleRenderTargetsWindow::msHLSLOverlayPSSource[5] =
 {
     "Texture2D<float> depthTexture;\n"
     "Texture2D<float4> positionTexture;\n"
+    "SamplerState positionSampler;\n"
     "RWTexture2D<float4> colorTexture;\n"
-    "SamplerState inSampler;\n"
     "\n"
     "struct PS_INPUT\n"
     "{\n"
@@ -492,7 +450,7 @@ std::string const MultipleRenderTargetsWindow::msHLSLOverlayPSSource[5] =
     "PS_OUTPUT PSMain(PS_INPUT input)\n"
     "{\n"
     "    PS_OUTPUT output;\n"
-    "    float4 pos = positionTexture.Sample(inSampler, input.vertexTCoord);\n"
+    "    float4 pos = positionTexture.Sample(positionSampler, input.vertexTCoord);\n"
     "    float depth = depthTexture[(int2)pos.xy];\n"
     "    output.pixelColor0 = float4(depth, depth, depth, 1.0f);\n"
     "    colorTexture[(int2)pos.xy] = float4(0.4f, 0.5f, 0.6f, 1.0f);\n"

@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.24.0 (2019/04/09)
+// File Version: 3.24.1 (2019/04/23)
 
-#include <GTEngine.h>
+#include <LowLevel/GteLogReporter.h>
+#include <Mathematics/GteDistPointHyperellipsoid.h>
+#include <Mathematics/GteVector2.h>
+#include <Mathematics/GteVector3.h>
+#include <fstream>
 using namespace gte;
 
 static void TestDistancePointEllipse()

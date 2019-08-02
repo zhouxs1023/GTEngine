@@ -3,11 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/19)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow3.h>
+#include <Imagics/GteMarchingCubes.h>
+#include <Graphics/GteTexture3Effect.h>
 using namespace gte;
 
 //#define USE_DRAW_DIRECT
@@ -59,34 +61,23 @@ private:
     void CreateMesh();
     bool CreateDirectResources();
 
-#if defined(GTE_DEV_OPENGL)
     struct DirectVoxel
     {
+        // GLSL will store the first 3 'int' members in a 4-tuple, so the
+        // 'unused0' member is padding.
         int configuration;
         int numVertices;
         int numTriangles;
-        int dummyA;
+        int unused0;
 
-        // starts at offset 16
-        // change from Vector3 to Vector4 because
-        // GLSL forces 3-component vectors to 4-component ones
         Vector4<float> vertices[12];
 
+        // GLSL will store the array in a 16-element chunk of memory, so the
+        // 'unused1' member is padding.
+        // 'unused0' member is padding.
         int indices[15];
-
-        // total structured size needs to be 272
-        int dummyB;
+        int unused1;
     };
-#else
-    struct DirectVoxel
-    {
-        int configuration;
-        int numVertices;
-        int numTriangles;
-        Vector3<float> vertices[12];
-        int indices[15];
-    };
-#endif
 
     struct Vertex
     {

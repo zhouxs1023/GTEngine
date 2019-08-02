@@ -3,14 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/18)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow2.h>
 using namespace gte;
 
-class ConvolutionWindow : public Window
+class ConvolutionWindow : public Window2
 {
 public:
     ConvolutionWindow(Parameters& parameters);
@@ -31,6 +31,7 @@ private:
     std::shared_ptr<Texture2> mImage[3];
     unsigned int mNumXGroups, mNumYGroups;
     int mRadius;
+    bool mShadersCreated;
 
     // 0 = convolve
     // 1 = convolve groupshared

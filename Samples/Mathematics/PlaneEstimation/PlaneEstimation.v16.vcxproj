@@ -323,27 +323,29 @@
     <ClInclude Include="PlaneEstimationWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\EvaluateBezier.glsl" />
-    <None Include="Shaders\EvaluateBezier.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\PlaneEstimation.glsl" />
-    <None Include="Shaders\PlaneEstimation.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\PlaneVisualize.glsl" />
-    <None Include="Shaders\PlaneVisualize.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\PositionVisualize.glsl" />
-    <None Include="Shaders\PositionVisualize.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\EvaluateBezier.cs.glsl" />
+    <None Include="Shaders\PlaneEstimation.cs.glsl" />
+    <None Include="Shaders\PlaneVisualize.ps.glsl" />
+    <None Include="Shaders\PositionVisualize.ps.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\EvaluateBezier.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\PlaneEstimation.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\PlaneVisualize.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\PositionVisualize.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

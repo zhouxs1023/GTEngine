@@ -15,26 +15,11 @@
     <Filter Include="Data Files">
       <UniqueIdentifier>{5986cd47-05e5-4b7c-abd4-1bab25603f83}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data Files\Color32">
-      <UniqueIdentifier>{1f15c397-af9a-4f79-8b8d-e3a81eb19d2c}</UniqueIdentifier>
+    <Filter Include="Data Files\Color">
+      <UniqueIdentifier>{be517ad1-92a2-4d88-8e43-dcbe954a583e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data Files\Color64">
-      <UniqueIdentifier>{8f64b1a0-7f90-45b7-968d-15a8392cf87a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data Files\Color128">
-      <UniqueIdentifier>{78696089-54ff-4e32-99e6-7b26c55a3694}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data Files\Height32">
-      <UniqueIdentifier>{10ab4a59-6d9f-4f1f-b9ce-185647accaf6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data Files\Height64">
-      <UniqueIdentifier>{47d22895-eb66-42aa-a513-a8a8fa4722af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data Files\Height128">
-      <UniqueIdentifier>{69345e69-bb5f-4adc-b52c-6c72710e7b98}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data Files\OriginalBmp">
-      <UniqueIdentifier>{d257bc6f-d889-4d28-87db-d7695e9e3100}</UniqueIdentifier>
+    <Filter Include="Data Files\Height">
+      <UniqueIdentifier>{d20372cd-daf8-42fb-b42f-1af05d4620b4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,1183 +39,209 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\BaseMulDetailFogExpSqr.hlsl">
-      <Filter>Shader Files</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\BaseMulDetailFogExpSqrPS.glsl">
+    <None Include="Shaders\BaseMulDetailFogExpSqr.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\BaseMulDetailFogExpSqrVS.glsl">
+    <None Include="Shaders\BaseMulDetailFogExpSqr.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Data\SkyDomeIndices_U32_792.binary">
-      <Filter>Data Files</Filter>
+    <None Include="Data\height.7.5.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\SkyDomeVertices_Pos3Nor3Tex2_184.binary">
-      <Filter>Data Files</Filter>
+    <None Include="Data\height.7.6.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.0.0.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.7.7.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.0.1.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.0.0.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.0.2.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.0.1.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.0.3.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.0.2.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.0.4.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.0.3.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.0.5.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.0.4.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.0.6.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.0.5.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.0.7.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.0.6.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.1.0.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.0.7.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.1.1.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.1.0.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.1.2.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.1.1.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.1.3.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.1.2.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.1.4.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.1.3.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.1.5.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.1.4.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.1.6.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.1.5.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.1.7.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.1.6.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.2.0.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.1.7.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.2.1.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.2.0.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.2.2.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.2.1.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.2.3.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.2.2.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.2.4.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.2.3.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.2.5.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.2.4.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.2.6.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.2.5.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.2.7.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.2.6.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.3.0.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.2.7.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.3.1.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.3.0.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.3.2.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.3.1.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.3.3.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.3.2.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.3.4.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.3.3.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.3.5.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.3.4.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.3.6.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.3.5.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.3.7.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.3.6.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.4.0.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.3.7.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.4.1.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.4.0.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.4.2.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.4.1.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.4.3.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.4.2.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.4.4.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.4.3.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.4.5.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.4.4.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.4.6.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.4.5.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.4.7.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.4.6.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.5.0.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.4.7.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.5.1.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.5.0.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.5.2.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.5.1.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.5.3.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.5.2.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.5.4.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.5.3.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.5.5.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.5.4.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.5.6.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.5.5.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.5.7.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.5.6.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.6.0.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.5.7.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.6.1.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.6.0.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.6.2.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.6.1.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.6.3.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.6.2.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.6.4.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.6.3.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.6.5.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.6.4.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.6.6.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.6.5.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.6.7.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.6.6.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.7.0.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.6.7.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.7.1.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.7.0.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.7.2.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.7.1.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.7.3.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.7.2.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.7.4.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.7.3.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.7.5.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Data\height.7.4.binary">
+      <Filter>Data Files\Height</Filter>
     </None>
-    <None Include="Data\Color32\color.7.6.binary">
-      <Filter>Data Files\Color32</Filter>
+    <None Include="Shaders\BaseMulDetailFogExpSqr.ps.hlsl">
+      <Filter>Shader Files</Filter>
     </None>
-    <None Include="Data\Color32\color.7.7.binary">
-      <Filter>Data Files\Color32</Filter>
-    </None>
-    <None Include="Data\Color64\color.0.0.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.0.1.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.0.2.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.0.3.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.0.4.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.0.5.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.0.6.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.0.7.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.1.0.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.1.1.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.1.2.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.1.3.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.1.4.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.1.5.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.1.6.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.1.7.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.2.0.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.2.1.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.2.2.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.2.3.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.2.4.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.2.5.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.2.6.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.2.7.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.3.0.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.3.1.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.3.2.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.3.3.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.3.4.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.3.5.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.3.6.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.3.7.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.4.0.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.4.1.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.4.2.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.4.3.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.4.4.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.4.5.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.4.6.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.4.7.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.5.0.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.5.1.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.5.2.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.5.3.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.5.4.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.5.5.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.5.6.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.5.7.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.6.0.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.6.1.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.6.2.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.6.3.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.6.4.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.6.5.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.6.6.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.6.7.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.7.0.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.7.1.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.7.2.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.7.3.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.7.4.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.7.5.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.7.6.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color64\color.7.7.binary">
-      <Filter>Data Files\Color64</Filter>
-    </None>
-    <None Include="Data\Color128\color.0.0.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.0.1.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.0.2.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.0.3.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.0.4.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.0.5.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.0.6.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.0.7.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.1.0.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.1.1.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.1.2.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.1.3.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.1.4.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.1.5.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.1.6.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.1.7.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.2.0.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.2.1.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.2.2.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.2.3.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.2.4.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.2.5.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.2.6.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.2.7.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.3.0.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.3.1.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.3.2.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.3.3.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.3.4.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.3.5.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.3.6.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.3.7.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.4.0.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.4.1.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.4.2.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.4.3.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.4.4.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.4.5.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.4.6.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.4.7.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.5.0.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.5.1.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.5.2.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.5.3.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.5.4.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.5.5.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.5.6.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.5.7.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.6.0.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.6.1.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.6.2.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.6.3.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.6.4.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.6.5.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.6.6.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.6.7.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.7.0.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.7.1.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.7.2.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.7.3.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.7.4.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.7.5.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.7.6.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Color128\color.7.7.binary">
-      <Filter>Data Files\Color128</Filter>
-    </None>
-    <None Include="Data\Height32\height.0.0.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.0.1.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.0.2.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.0.3.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.0.4.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.0.5.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.0.6.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.0.7.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.1.0.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.1.1.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.1.2.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.1.3.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.1.4.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.1.5.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.1.6.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.1.7.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.2.0.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.2.1.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.2.2.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.2.3.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.2.4.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.2.5.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.2.6.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.2.7.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.3.0.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.3.1.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.3.2.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.3.3.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.3.4.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.3.5.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.3.6.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.3.7.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.4.0.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.4.1.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.4.2.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.4.3.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.4.4.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.4.5.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.4.6.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.4.7.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.5.0.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.5.1.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.5.2.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.5.3.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.5.4.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.5.5.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.5.6.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.5.7.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.6.0.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.6.1.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.6.2.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.6.3.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.6.4.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.6.5.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.6.6.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.6.7.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.7.0.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.7.1.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.7.2.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.7.3.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.7.4.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.7.5.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.7.6.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.7.7.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height32\height.binary">
-      <Filter>Data Files\Height32</Filter>
-    </None>
-    <None Include="Data\Height64\height.0.0.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.0.1.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.0.2.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.0.3.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.0.4.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.0.5.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.0.6.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.0.7.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.1.0.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.1.1.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.1.2.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.1.3.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.1.4.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.1.5.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.1.6.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.1.7.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.2.0.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.2.1.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.2.2.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.2.3.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.2.4.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.2.5.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.2.6.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.2.7.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.3.0.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.3.1.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.3.2.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.3.3.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.3.4.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.3.5.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.3.6.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.3.7.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.4.0.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.4.1.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.4.2.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.4.3.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.4.4.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.4.5.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.4.6.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.4.7.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.5.0.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.5.1.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.5.2.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.5.3.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.5.4.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.5.5.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.5.6.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.5.7.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.6.0.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.6.1.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.6.2.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.6.3.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.6.4.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.6.5.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.6.6.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.6.7.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.7.0.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.7.1.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.7.2.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.7.3.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.7.4.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.7.5.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.7.6.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.7.7.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height64\height.binary">
-      <Filter>Data Files\Height64</Filter>
-    </None>
-    <None Include="Data\Height128\height.0.0.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.0.1.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.0.2.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.0.3.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.0.4.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.0.5.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.0.6.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.0.7.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.1.0.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.1.1.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.1.2.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.1.3.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.1.4.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.1.5.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.1.6.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.1.7.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.2.0.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.2.1.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.2.2.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.2.3.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.2.4.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.2.5.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.2.6.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.2.7.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.3.0.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.3.1.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.3.2.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.3.3.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.3.4.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.3.5.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.3.6.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.3.7.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.4.0.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.4.1.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.4.2.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.4.3.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.4.4.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.4.5.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.4.6.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.4.7.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.5.0.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.5.1.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.5.2.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.5.3.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.5.4.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.5.5.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.5.6.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.5.7.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.6.0.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.6.1.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.6.2.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.6.3.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.6.4.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.6.5.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.6.6.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.6.7.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.7.0.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.7.1.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.7.2.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.7.3.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.7.4.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.7.5.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.7.6.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.7.7.binary">
-      <Filter>Data Files\Height128</Filter>
-    </None>
-    <None Include="Data\Height128\height.binary">
-      <Filter>Data Files\Height128</Filter>
+    <None Include="Shaders\BaseMulDetailFogExpSqr.vs.hlsl">
+      <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1240,11 +251,202 @@
     <Image Include="..\..\Data\SkyDome.png">
       <Filter>Data Files</Filter>
     </Image>
-    <Image Include="Data\OriginalBmp\Color.bmp">
-      <Filter>Data Files\OriginalBmp</Filter>
+    <Image Include="Data\color.7.5.png">
+      <Filter>Data Files\Color</Filter>
     </Image>
-    <Image Include="Data\OriginalBmp\Height.bmp">
-      <Filter>Data Files\OriginalBmp</Filter>
+    <Image Include="Data\color.7.6.png">
+      <Filter>Data Files\Color</Filter>
     </Image>
+    <Image Include="Data\color.7.7.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.0.0.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.0.1.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.0.2.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.0.3.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.0.4.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.0.5.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.0.6.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.0.7.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.1.0.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.1.1.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.1.2.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.1.3.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.1.4.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.1.5.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.1.6.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.1.7.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.2.0.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.2.1.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.2.2.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.2.3.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.2.4.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.2.5.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.2.6.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.2.7.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.3.0.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.3.1.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.3.2.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.3.3.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.3.4.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.3.5.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.3.6.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.3.7.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.4.0.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.4.1.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.4.2.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.4.3.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.4.4.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.4.5.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.4.6.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.4.7.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.5.0.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.5.1.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.5.2.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.5.3.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.5.4.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.5.5.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.5.6.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.5.7.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.6.0.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.6.1.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.6.2.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.6.3.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.6.4.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.6.5.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.6.6.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.6.7.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.7.0.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.7.1.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.7.2.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.7.3.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+    <Image Include="Data\color.7.4.png">
+      <Filter>Data Files\Color</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data\height.information.txt">
+      <Filter>Data Files\Height</Filter>
+    </Text>
   </ItemGroup>
 </Project>

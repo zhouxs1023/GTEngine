@@ -308,22 +308,49 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawUsingVertexID.hlsl">
+    <None Include="Shaders\DrawUsingVertexID.ps.glsl" />
+    <None Include="Shaders\DrawUsingVertexID.vs.glsl" />
+    <None Include="Shaders\RungeKutta.cs.hlsli" />
+    <None Include="Shaders\RungeKutta1a.cs.glsl" />
+    <None Include="Shaders\RungeKutta1b.cs.glsl" />
+    <None Include="Shaders\RungeKutta2a.cs.glsl" />
+    <None Include="Shaders\RungeKutta2b.cs.glsl" />
+    <None Include="Shaders\RungeKutta3a.cs.glsl" />
+    <None Include="Shaders\RungeKutta3b.cs.glsl" />
+    <None Include="Shaders\RungeKutta4a.cs.glsl" />
+    <None Include="Shaders\RungeKutta4b.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DrawUsingVertexID.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\DrawUsingVertexIDPS.glsl" />
-    <None Include="Shaders\DrawUsingVertexIDVS.glsl" />
-    <None Include="Shaders\RungeKutta.hlsl">
+    <None Include="Shaders\DrawUsingVertexID.vs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\RungeKutta1a.glsl" />
-    <None Include="Shaders\RungeKutta1b.glsl" />
-    <None Include="Shaders\RungeKutta2a.glsl" />
-    <None Include="Shaders\RungeKutta2b.glsl" />
-    <None Include="Shaders\RungeKutta3a.glsl" />
-    <None Include="Shaders\RungeKutta3b.glsl" />
-    <None Include="Shaders\RungeKutta4a.glsl" />
-    <None Include="Shaders\RungeKutta4b.glsl" />
+    <None Include="Shaders\RungeKutta1a.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RungeKutta1b.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RungeKutta2a.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RungeKutta2b.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RungeKutta3a.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RungeKutta3b.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RungeKutta4a.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\RungeKutta4b.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

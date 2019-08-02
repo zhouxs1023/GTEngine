@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #include "GpuMassSpringVolume.h"
+#include <Graphics/GteGraphicsDefaults.h>
 
 GpuMassSpringVolume::~GpuMassSpringVolume()
 {
@@ -28,34 +29,18 @@ GpuMassSpringVolume::GpuMassSpringVolume(std::shared_ptr<ProgramFactory> const& 
     factory->defines.Set("NUM_Y_THREADS", numThreads);
     factory->defines.Set("NUM_Z_THREADS", numThreads);
 
-#if defined(GTE_DEV_OPENGL)
     for (int i = 0; i < 8; ++i)
     {
-        std::string filename = "RungeKutta" +
+        std::string name = "RungeKutta" +
             std::to_string(1 + i / 2) + ((i & 1) == 0 ? "a" : "b") +
-            ".glsl";
-        std::string path = environment.GetPath(filename);
-        mRK4Shader[i] = factory->CreateFromFile(path);
+            ".cs";
+        std::string csPath = environment.GetPath(DefaultShaderName(name));
+        mRK4Shader[i] = factory->CreateFromFile(csPath);
         if (!mRK4Shader[i])
         {
             return;
         }
     }
-#else
-    std::string path = environment.GetPath("RungeKutta.hlsl");
-
-    for (int i = 0; i < 8; ++i)
-    {
-        factory->csEntry = "RK4Step";
-        factory->csEntry += std::to_string(1 + i/2);
-        factory->csEntry += ((i & 1) == 0 ? "a" : "b");
-        mRK4Shader[i] = factory->CreateFromFile(path);
-        if (!mRK4Shader[i])
-        {
-            return;
-        }
-    }
-#endif
 
     // The cbuffer is tightly packed.  Only time, halfTime, and fullTime vary.
     mParameters = std::make_shared<ConstantBuffer>(sizeof(SimulationParameters), true);
@@ -73,11 +58,7 @@ GpuMassSpringVolume::GpuMassSpringVolume(std::shared_ptr<ProgramFactory> const& 
     p.fullTime = p.time + p.delta;
 
     unsigned int const numParticles = p.dimensions[2] * p.dimensions[3];
-#if defined(GTE_DEV_OPENGL)
     size_t const vecsize = sizeof(Vector4<float>);
-#else
-    size_t const vecsize = sizeof(Vector3<float>);
-#endif
     mMass = std::make_shared<StructuredBuffer>(numParticles, sizeof(float));
     mInvMass = std::make_shared<StructuredBuffer>(numParticles, sizeof(float));
     mPosition = std::make_shared<StructuredBuffer>(numParticles, vecsize);
@@ -235,21 +216,13 @@ void GpuMassSpringVolume::SetMass(int c, int r, int s, float mass)
 void GpuMassSpringVolume::SetPosition(int c, int r, int s,
     Vector3<float> const& position)
 {
-#if defined(GTE_DEV_OPENGL)
     mPosition->Get<Vector4<float>>()[GetIndex(c, r, s)] = HLift(position, 1.0f);
-#else
-    mPosition->Get<Vector3<float>>()[GetIndex(c, r, s)] = position;
-#endif
 }
 
 void GpuMassSpringVolume::SetVelocity(int c, int r, int s,
     Vector3<float> const& velocity)
 {
-#if defined(GTE_DEV_OPENGL)
     mVelocity->Get<Vector4<float>>()[GetIndex(c, r, s)] = HLift(velocity, 0.0f);
-#else
-    mVelocity->Get<Vector3<float>>()[GetIndex(c, r, s)] = velocity;
-#endif
 }
 
 void GpuMassSpringVolume::SetConstantC(int c, int r, int s, float v)
@@ -284,11 +257,7 @@ void GpuMassSpringVolume::SetLengthS(int c, int r, int s, float v)
 
 Vector3<float> GpuMassSpringVolume::GetPosition(int c, int r, int s) const
 {
-#if defined(GTE_DEV_OPENGL)
     return HProject(mPosition->Get<Vector4<float>>()[GetIndex(c, r, s)]);
-#else
-    return mPosition->Get<Vector3<float>>()[GetIndex(c, r, s)];
-#endif
 }
 
 std::shared_ptr<StructuredBuffer>& GpuMassSpringVolume::GetPosition()

@@ -3,10 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.16.0 (2018/10/03)
+// File Version: 3.16.1 (2019/05/02)
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow3.h>
+#include <Mathematics/GteIntrAlignedBox3Sphere3.h>
+#include <Mathematics/GteIntrOrientedBox3Sphere3.h>
 using namespace gte;
 
 // The default is to test the query for aligned box and sphere.

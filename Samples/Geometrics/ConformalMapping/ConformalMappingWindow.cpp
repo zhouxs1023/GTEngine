@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/18)
+// File Version: 3.23.1 (2019/04/13)
 
 #include "ConformalMappingWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteVertexColorEffect.h>
+#include <Mathematics/GteConformalMapGenus0.h>
+#include <Mathematics/GteMeshCurvature.h>
 
 int main(int, char const*[])
 {

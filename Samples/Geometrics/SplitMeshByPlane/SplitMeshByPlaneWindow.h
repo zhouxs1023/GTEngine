@@ -3,11 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.24.0 (2019/04/08)
+// File Version: 3.24.1 (2019/04/13)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow3.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteVertexColorEffect.h>
+#include <Mathematics/GteHyperplane.h>
 using namespace gte;
 
 class SplitMeshByPlaneWindow : public Window3
@@ -17,8 +20,7 @@ public:
 
     virtual void OnIdle() override;
     virtual bool OnCharPress(unsigned char key, int x, int y) override;
-    virtual bool OnMouseMotion(MouseButton button, int x, int y,
-        unsigned int modifiers) override;
+    virtual bool OnMouseMotion(MouseButton button, int x, int y, unsigned int modifiers) override;
 
 private:
     void CreateScene();

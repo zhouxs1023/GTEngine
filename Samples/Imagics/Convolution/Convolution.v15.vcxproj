@@ -320,36 +320,38 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Convolve.glsl" />
-    <None Include="Shaders\Convolve.hlsl">
+    <None Include="Shaders\Convolve.cs.glsl" />
+    <None Include="Shaders\ConvolveGS.cs.glsl" />
+    <None Include="Shaders\ConvolveSeparableH.cs.glsl" />
+    <None Include="Shaders\ConvolveSeparableHGS.cs.glsl" />
+    <None Include="Shaders\ConvolveSeparableHGS2.cs.glsl" />
+    <None Include="Shaders\ConvolveSeparableV.cs.glsl" />
+    <None Include="Shaders\ConvolveSeparableVGS.cs.glsl" />
+    <None Include="Shaders\ConvolveSeparableVGS2.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Convolve.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ConvolveGS.glsl" />
-    <None Include="Shaders\ConvolveGS.hlsl">
+    <None Include="Shaders\ConvolveGS.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ConvolveSeparableH.glsl" />
-    <None Include="Shaders\ConvolveSeparableH.hlsl">
+    <None Include="Shaders\ConvolveSeparableH.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ConvolveSeparableHGS.glsl" />
-    <None Include="Shaders\ConvolveSeparableHGS.hlsl">
+    <None Include="Shaders\ConvolveSeparableHGS.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ConvolveSeparableHGS2.glsl" />
-    <None Include="Shaders\ConvolveSeparableHGS2.hlsl">
+    <None Include="Shaders\ConvolveSeparableHGS2.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ConvolveSeparableV.glsl" />
-    <None Include="Shaders\ConvolveSeparableV.hlsl">
+    <None Include="Shaders\ConvolveSeparableV.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ConvolveSeparableVGS.glsl" />
-    <None Include="Shaders\ConvolveSeparableVGS.hlsl">
+    <None Include="Shaders\ConvolveSeparableVGS.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ConvolveSeparableVGS2.glsl" />
-    <None Include="Shaders\ConvolveSeparableVGS2.hlsl">
+    <None Include="Shaders\ConvolveSeparableVGS2.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

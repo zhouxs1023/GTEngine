@@ -321,11 +321,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\SimpleBumpMap.hlsl">
+    <None Include="Shaders\SimpleBumpMap.ps.glsl" />
+    <None Include="Shaders\SimpleBumpMap.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\SimpleBumpMap.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\SimpleBumpMapPS.glsl" />
-    <None Include="Shaders\SimpleBumpMapVS.glsl" />
+    <None Include="Shaders\SimpleBumpMap.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

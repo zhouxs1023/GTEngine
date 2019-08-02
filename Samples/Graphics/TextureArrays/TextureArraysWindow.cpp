@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2019/05/03)
 
 #include "TextureArraysWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
 
 int main(int, char const*[])
 {
@@ -68,7 +70,8 @@ bool TextureArraysWindow::SetEnvironment()
     mEnvironment.Insert(path + "/Samples/Graphics/TextureArrays/Shaders/");
     std::vector<std::string> inputs =
     {
-        "TextureArrays.hlsl",
+        DefaultShaderName("TextureArrays.vs"),
+        DefaultShaderName("TextureArrays.ps"),
         "StoneWall.png"
     };
 
@@ -88,25 +91,10 @@ bool TextureArraysWindow::CreateScene()
 {
     std::shared_ptr<VisualProgram> program;
 
-    int api = mProgramFactory->GetAPI();
-
     // Load and compile the shaders.
-    if (ProgramFactory::PF_GLSL == api)
-    {
-        auto pathVertexShader = mEnvironment.GetPath("TextureArraysVertex.glsl");
-        auto pathPixelShader = mEnvironment.GetPath("TextureArraysPixel.glsl");
-        program = mProgramFactory->CreateFromFiles(pathVertexShader, pathPixelShader, "");
-    }
-    else if (ProgramFactory::PF_HLSL == api)
-    {
-        auto path = mEnvironment.GetPath("TextureArrays.hlsl");
-        program = mProgramFactory->CreateFromFiles(path, path, "");
-    }
-    else
-    {
-        LogError("No shader support for API=" + api);
-    }
-
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("TextureArrays.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("TextureArrays.ps"));
+    program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
     if (!program)
     {
         return false;
@@ -120,66 +108,55 @@ bool TextureArraysWindow::CreateScene()
         Vector3<float> position;
         Vector2<float> tcoord;
     };
+
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    Vertex* vertex = vbuffer->Get<Vertex>();
-    vertex[0].position = { 0.0f, 0.0f, 0.0f };
-    vertex[0].tcoord = { 0.0f, 1.0f };
-    vertex[1].position = { 1.0f, 0.0f, 0.0f };
-    vertex[1].tcoord = { 1.0f, 1.0f };
-    vertex[2].position = { 0.0f, 1.0f, 0.0f };
-    vertex[2].tcoord = { 0.0f, 0.0f };
-    vertex[3].position = { 1.0f, 1.0f, 0.0f };
-    vertex[3].tcoord = { 1.0f, 0.0f };
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto* vertices = vbuffer->Get<Vertex>();
+    vertices[0].position = { 0.0f, 0.0f, 0.0f };
+    vertices[0].tcoord = { 0.0f, 1.0f };
+    vertices[1].position = { 1.0f, 0.0f, 0.0f };
+    vertices[1].tcoord = { 1.0f, 1.0f };
+    vertices[2].position = { 0.0f, 1.0f, 0.0f };
+    vertices[2].tcoord = { 0.0f, 0.0f };
+    vertices[3].position = { 1.0f, 1.0f, 0.0f };
+    vertices[3].tcoord = { 1.0f, 0.0f };
 
     // Create an indexless buffer for a triangle mesh with two triangles.
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
 
     // Create an effect for the vertex and pixel shaders.  The texture is
     // bilinearly filtered and the texture coordinates are clamped to [0,1]^2.
-    std::shared_ptr<ConstantBuffer> cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
+    auto cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
     program->GetVShader()->Set("PVWMatrix", cbuffer);
 
-    std::shared_ptr<PixelShader> pshader = program->GetPShader();
-    std::shared_ptr<Texture1Array> t1array = std::make_shared<Texture1Array>(2, DF_R8G8B8A8_UNORM, 2);
-    unsigned int* t1data = t1array->Get<unsigned int>();
+    auto pshader = program->GetPShader();
+    auto t1array = std::make_shared<Texture1Array>(2, DF_R8G8B8A8_UNORM, 2);
+    auto* t1data = t1array->Get<unsigned int>();
     t1data[0] = 0xFF000000;
     t1data[1] = 0xFFFFFFFF;
 
     auto stoneTexture = WICFileIO::Load(mEnvironment.GetPath("StoneWall.png"), false);
-    std::shared_ptr<Texture2Array> t2array = std::make_shared<Texture2Array>(2, DF_R8G8B8A8_UNORM, 256, 256);
+    auto t2array = std::make_shared<Texture2Array>(2, DF_R8G8B8A8_UNORM, 256, 256);
     unsigned char* t2data = t2array->Get<unsigned char>();
     size_t const numBytes = stoneTexture->GetNumBytes();
-    Memcpy(t2data, stoneTexture->GetData(), numBytes);
+    std::memcpy(t2data, stoneTexture->GetData(), numBytes);
     t2data += numBytes;
     for (size_t i = 0; i < numBytes; ++i)
     {
         *t2data++ = static_cast<unsigned char>(rand() % 256);
     }
 
-    std::shared_ptr<SamplerState> samplerState = std::make_shared<SamplerState>();
+    auto samplerState = std::make_shared<SamplerState>();
     samplerState->filter = SamplerState::MIN_L_MAG_L_MIP_P;
     samplerState->mode[0] = SamplerState::CLAMP;
     samplerState->mode[1] = SamplerState::CLAMP;
 
-    if (ProgramFactory::PF_GLSL == api)
-    {
-        pshader->Set("mySampler1", t1array);
-        pshader->Set("mySampler1", samplerState);
+    pshader->Set("myTexture1", t1array, "mySampler1", samplerState);
+    pshader->Set("myTexture2", t2array, "mySampler2", samplerState);
 
-        pshader->Set("mySampler2", t2array);
-        pshader->Set("mySampler2", samplerState);
-    }
-    else if (ProgramFactory::PF_HLSL == api)
-    {
-        pshader->Set("myTexture1", t1array);
-        pshader->Set("myTexture2", t2array);
-        pshader->Set("mySampler", samplerState);
-    }
-
-    std::shared_ptr<VisualEffect> effect = std::make_shared<VisualEffect>(program);
+    auto effect = std::make_shared<VisualEffect>(program);
 
     // Create the geometric object for drawing.  Translate it so that its
     // center of mass is at the origin.  This supports virtual trackball

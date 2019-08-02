@@ -56,6 +56,12 @@ namespace gte
         static std::shared_ptr<Texture2> Load(std::string const& filename,
             bool wantMipmaps);
 
+        // The resource-based loader takes the module parameter as a void*
+        // and casts it back to HMODULE internally to avoid having to include
+        // a bunch of Windows headers.
+        static std::shared_ptr<Texture2> Load(void* module, std::string const& rtype,
+            int resource, bool wantMipmaps);
+
         // Support for saving to PNG or JPEG.
         //
         // The supported DF_* formats for saving are the following with

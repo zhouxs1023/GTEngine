@@ -24,17 +24,25 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\WireMesh.hlsl">
+    <None Include="Shaders\WireMesh.gs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\WireMeshGS.glsl">
+    <None Include="Shaders\WireMesh.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\WireMeshPS.glsl">
+    <None Include="Shaders\WireMesh.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\WireMeshVS.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\WireMesh.gs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shaders\WireMesh.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\WireMesh.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

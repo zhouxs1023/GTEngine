@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #include "IntersectingBoxesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -114,25 +116,25 @@ void IntersectingBoxesWindow::CreateScene()
     // Effects for boxes, blue for nonintersecting and red for intersecting.
     Vector4<float> black{ 0.0f, 0.0f, 0.0f, 1.0f };
     Vector4<float> white{ 1.0f, 1.0f, 1.0f, 1.0f };
-    std::shared_ptr<Material> blueMaterial = std::make_shared<Material>();
+    auto blueMaterial = std::make_shared<Material>();
     blueMaterial->emissive = black;
     blueMaterial->ambient = { 0.25f, 0.25f, 0.25f, 1.0f };
     blueMaterial->diffuse = { 0.0f, 0.0f, 1.0f, 1.0f };
     blueMaterial->specular = black;
 
-    std::shared_ptr<Material> redMaterial = std::make_shared<Material>();
+    auto redMaterial = std::make_shared<Material>();
     redMaterial->emissive = black;
     redMaterial->ambient = { 0.25f, 0.25f, 0.25f, 1.0f };
     redMaterial->diffuse = { 1.0f, 0.0f, 0.0f, 1.0f };
     redMaterial->specular = black;
 
     // A light for the effects.
-    std::shared_ptr<Lighting> lighting = std::make_shared<Lighting>();
+    auto lighting = std::make_shared<Lighting>();
     lighting->ambient = white;
     lighting->diffuse = white;
     lighting->specular = black;
 
-    std::shared_ptr<LightCameraGeometry> geometry = std::make_shared<LightCameraGeometry>();
+    auto geometry = std::make_shared<LightCameraGeometry>();
     geometry->lightModelDirection =  { 0.0f, 0.0f, 1.0f, 0.0f };
 
     // Create visual representations of the boxes.
@@ -147,12 +149,12 @@ void IntersectingBoxesWindow::CreateScene()
         Vector3<float> center = 0.5f * (mBoxes[i].max + mBoxes[i].min);
         mBoxMesh[i] = mf.CreateBox(extent[0], extent[1], extent[2]);
         mBoxMesh[i]->GetVertexBuffer()->SetUsage(Resource::DYNAMIC_UPDATE);
-        std::shared_ptr<VertexBuffer> vbuffer = mBoxMesh[i]->GetVertexBuffer();
+        auto vbuffer = mBoxMesh[i]->GetVertexBuffer();
         unsigned int const numVertices = vbuffer->GetNumElements();
-        Vertex* vertex = vbuffer->Get<Vertex>();
+        auto vertices = vbuffer->Get<Vertex>();
         for (unsigned int j = 0; j < numVertices; ++j)
         {
-            vertex[j].position += center;
+            vertices[j].position += center;
         }
 
         mNoIntersectEffect[i] = std::make_shared<DirectionalLightEffect>(mProgramFactory,
@@ -229,16 +231,16 @@ void IntersectingBoxesWindow::ModifyMesh(int i)
     Vector3<float> yTerm = { 0.0f, extent[1], 0.0f };
     Vector3<float> zTerm = { 0.0f, 0.0f, extent[2] };
 
-    std::shared_ptr<VertexBuffer> vbuffer = mBoxMesh[i]->GetVertexBuffer();
-    Vertex* vertex = vbuffer->Get<Vertex>();
-    vertex[0].position = center - xTerm - yTerm - zTerm;
-    vertex[1].position = center + xTerm - yTerm - zTerm;
-    vertex[2].position = center - xTerm + yTerm - zTerm;
-    vertex[3].position = center + xTerm + yTerm - zTerm;
-    vertex[4].position = center - xTerm - yTerm + zTerm;
-    vertex[5].position = center + xTerm - yTerm + zTerm;
-    vertex[6].position = center - xTerm + yTerm + zTerm;
-    vertex[7].position = center + xTerm + yTerm + zTerm;
+    auto vbuffer = mBoxMesh[i]->GetVertexBuffer();
+    auto vertices = vbuffer->Get<Vertex>();
+    vertices[0].position = center - xTerm - yTerm - zTerm;
+    vertices[1].position = center + xTerm - yTerm - zTerm;
+    vertices[2].position = center - xTerm + yTerm - zTerm;
+    vertices[3].position = center + xTerm + yTerm - zTerm;
+    vertices[4].position = center - xTerm - yTerm + zTerm;
+    vertices[5].position = center + xTerm - yTerm + zTerm;
+    vertices[6].position = center - xTerm + yTerm + zTerm;
+    vertices[7].position = center + xTerm + yTerm + zTerm;
 
     mEngine->Update(vbuffer);
 }
@@ -249,7 +251,7 @@ void IntersectingBoxesWindow::PhysicsTick()
     {
         double currIdle = mSimulationTimer.GetSeconds();
         double diff = currIdle - mLastIdle;
-        if (diff >= 1.0 / 30.0)
+        if (30.0 * diff - 1.0 >= 0.0)
         {
             ModifyBoxes();
             mLastIdle = currIdle;

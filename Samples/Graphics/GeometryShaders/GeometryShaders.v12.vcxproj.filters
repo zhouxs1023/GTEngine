@@ -24,25 +24,40 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\RandomSquares.hlsl">
+    <None Include="Shaders\RandomSquaresDirect.gs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RandomSquaresIndirect.hlsl">
+    <None Include="Shaders\RandomSquaresDirect.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RandomSquaresDirectGS.glsl">
+    <None Include="Shaders\RandomSquaresDirect.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RandomSquaresDirectVS.glsl">
+    <None Include="Shaders\RandomSquaresIndirect.gs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RandomSquaresPS.glsl">
+    <None Include="Shaders\RandomSquaresIndirect.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RandomSquaresIndirectGS.glsl">
+    <None Include="Shaders\RandomSquaresIndirect.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RandomSquaresIndirectVS.glsl">
+    <None Include="Shaders\RandomSquaresDirect.gs.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\RandomSquaresDirect.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\RandomSquaresDirect.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\RandomSquaresIndirect.gs.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\RandomSquaresIndirect.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\RandomSquaresIndirect.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.5.2 (2019/03/04)
+// File Version: 3.5.3 (2019/04/23S)
 
 #include "DistanceAlignedBoxOrientedBoxWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -229,8 +231,7 @@ void DistanceAlignedBoxOrientedBoxWindow::Rotate(int direction, float delta)
     {
         if (i != direction)
         {
-            mBox1.axis[i] = HProject(
-                gte::Rotate(incr, HLift(mBox1.axis[i], 0.0f)));
+            mBox1.axis[i] = HProject(gte::Rotate(incr, HLift(mBox1.axis[i], 0.0f)));
         }
     }
     Quaternion<float> q;
@@ -258,7 +259,7 @@ void DistanceAlignedBoxOrientedBoxWindow::DoQuery()
         mPVWMatrices.Subscribe(mBox1Mesh->worldTransform, mBlueEffect->GetPVWMatrixConstant());
     }
 
-    Vector3<float>* vertices = mSegment->GetVertexBuffer()->Get<Vector3<float>>();
+    auto* vertices = mSegment->GetVertexBuffer()->Get<Vector3<float>>();
     vertices[0] = result.closestPoint[0];
     vertices[1] = result.closestPoint[1];
     mEngine->Update(mSegment->GetVertexBuffer());

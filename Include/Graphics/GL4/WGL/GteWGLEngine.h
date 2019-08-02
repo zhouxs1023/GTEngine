@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2017/06/23)
+// File Version: 3.0.3 (2019/04/13)
 
 #pragma once
 
@@ -25,7 +25,7 @@ public:
     // the comment in GteGL4Engine.h for 'MeetsRequirements()'.
     virtual ~WGLEngine();
     WGLEngine(HWND handle, bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
-    WGLEngine(bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
+    WGLEngine(bool useDepth24Stencil8 = true, bool saveDriverInfo = false, int requiredMajor = 4, int requiredMinor = 3);
 
     // Access to members that correspond to constructor inputs.
     inline HDC GetDevice() const;

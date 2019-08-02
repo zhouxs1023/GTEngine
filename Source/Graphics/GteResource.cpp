@@ -3,13 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/11/28)
+// File Version: 3.0.2 (2019/07/31)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
 #include <Graphics/GteResource.h>
 using namespace gte;
-
 
 Resource::~Resource()
 {
@@ -62,7 +61,7 @@ Resource::Resource(unsigned int numElements, size_t elementSize,
 
 void Resource::CreateStorage()
 {
-    if (mStorage.size() == 0)
+    if (mStorage.empty())
     {
         mStorage.resize(mNumBytes);
         if (!mData)
@@ -79,7 +78,7 @@ void Resource::DestroyStorage()
     // The 'clear' call sets the size to 0, but the capacity remains the
     // same; that is, the memory is not freed.  The 'shrink_to_fit' call
     // is required to free the memory.
-    if (mStorage.size() > 0 && mData == mStorage.data())
+    if (!mStorage.empty() && mData == mStorage.data())
     {
         mData = nullptr;
         mStorage.clear();
@@ -95,7 +94,9 @@ void Resource::SetOffset(unsigned int offset)
     }
     else
     {
-        LogWarning("Invalid offset.");
+        std::string message = "Invalid offset (" + std::to_string(offset) + ") for " +
+            mName + "; total elements = " + std::to_string(mNumElements) + ".";
+        LogWarning(message);
         mOffset = 0;
     }
 }
@@ -108,8 +109,13 @@ void Resource::SetNumActiveElements(unsigned int numActiveElements)
     }
     else
     {
+        std::string message = "Invalid number of active elements (" +
+            std::to_string(numActiveElements) + ") for " + mName +
+            "; offset = " + std::to_string(mOffset) + ", total elements = " +
+            std::to_string(mNumElements) + ".";
+        LogWarning(message);
+
         LogWarning("Invalid number of active elements.");
         mNumActiveElements = static_cast<unsigned int>(mNumElements - mOffset);
     }
 }
-

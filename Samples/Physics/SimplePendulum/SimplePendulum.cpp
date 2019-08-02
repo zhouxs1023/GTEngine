@@ -3,9 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.1 (2018/10/05)
+// File Version: 3.3.4 (2019/06/02)
 
-#include <GTEngine.h>
+#include <Applications/GteTextureIO.h>
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteTexture2.h>
+#include <Imagics/GteImageUtility2.h>
+#include <cmath>
+#include <cstring>
+#include <fstream>
 using namespace gte;
 
 int const gSize = 512;
@@ -19,7 +25,7 @@ std::function<void(int, int)> DrawPixel =
     if (0 <= x && x < gSize && 0 <= y && y < gSize)
     {
         unsigned int* pixels = gImage->Get<unsigned int>();
-        pixels[x + gSize * y] = 0;
+        pixels[x + gSize * y] = 0xFF000000;
     }
 };
 
@@ -43,7 +49,7 @@ void ImplicitEuler(float x0, float y0, float h)
     float const k0 = gPendulumConstant * h * h;
     for (int i = 0; i < gSize; ++i)
     {
-        float k1 = x0 + h*y0;
+        float k1 = x0 + h * y0;
         float x1 = x0;
         int const maxIteration = 32;
         for (int j = 0; j < maxIteration; ++j)
@@ -52,7 +58,7 @@ void ImplicitEuler(float x0, float y0, float h)
             float gDer = 1.0f + k0 * std::cos(x1);
             x1 -= g / gDer;
         }
-        float y1 = y0 - h * gPendulumConstant* std::sin(x1);
+        float y1 = y0 - h * gPendulumConstant * std::sin(x1);
 
         gOutput[i] = x1;
         x0 = x1;
@@ -122,7 +128,7 @@ void SolveODE(SolverFunction solver, std::string const& outImage, std::string co
     outFile.close();
 
     // Draw the approximate solution as an image.
-    memset(gImage->GetData(), 0xFF, gImage->GetNumBytes());
+    std::memset(gImage->GetData(), 0xFF, gImage->GetNumBytes());
     float y = 256.0f * (gOutput[0] + 3.0f) / 6.0f;
     int iY0 = gSize - 1 - static_cast<int>(y);
     for (int i = 1; i < gSize; ++i)
@@ -179,7 +185,7 @@ void Stiff1()
     outFile.close();
 
     // Draw the true solution.
-    memset(gImage->GetData(), 0xFF, gImage->GetNumBytes());
+    std::memset(gImage->GetData(), 0xFF, gImage->GetNumBytes());
     float y = 256.0f * (x0Save + 3.0f) / 6.0f;
     int iY0 = gSize - 1 - static_cast<int>(y);
     for (i = 1; i < gSize; ++i)
@@ -193,7 +199,7 @@ void Stiff1()
     WICFileIO::SaveToPNG("stiff1_true.png", gImage);
 
     // Draw the approximate solution as an image.
-    memset(gImage->GetData(), 0xFF, gImage->GetNumBytes());
+    std::memset(gImage->GetData(), 0xFF, gImage->GetNumBytes());
     y = 256.0f * (approx[0] + 3.0f) / 6.0f;
     iY0 = gSize - 1 - static_cast<int>(y);
     for (i = 1; i < gSize; ++i)
@@ -228,8 +234,8 @@ void Stiff2TrueSolution()
     int const maxIterations = 20;
     for (int i = 0; i <= maxIterations; ++i, t0 += h)
     {
-        float e0 = std::exp(-3.0f*t0);
-        float e1 = std::exp(-39.0f*t0);
+        float e0 = std::exp(-3.0f * t0);
+        float e1 = std::exp(-39.0f * t0);
         float cDiv3 = std::cos(t0) / 3.0f;
         x0 = 2.0f * e0 - e1 + cDiv3;
         y0 = -e0 + 2.0f * e1 - cDiv3;

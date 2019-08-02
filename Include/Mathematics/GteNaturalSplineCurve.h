@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/04/05)
+// File Version: 3.0.3 (2019/07/31)
 
 #pragma once
 
@@ -39,8 +39,16 @@ namespace gte
                 return;
             }
 
-            mA.resize(numPoints);
-            std::copy(points, points + numPoints, mA.begin());
+            auto const numSegments = numPoints - 1;
+            mCoefficients.resize(4 * numPoints + 1);
+            mA = &mCoefficients[0];
+            mB = mA + numPoints;
+            mC = mB + numSegments;
+            mD = mC + numSegments + 1;
+            for (int i = 0; i < numPoints; ++i)
+            {
+                mA[i] = points[i];
+            }
 
             if (isFree)
             {
@@ -66,21 +74,24 @@ namespace gte
                 return;
             }
 
-            mA.resize(numPoints);
-            std::copy(points, points + numPoints, mA.begin());
+            auto const numSegments = numPoints - 1;
+            mCoefficients.resize(numPoints + 3 * numSegments + 1);
+            mA = &mCoefficients[0];
+            for (int i = 0; i < numPoints; ++i)
+            {
+                mA[i] = points[i];
+            }
 
             CreateClamped(derivative0, derivative1);
             this->mConstructed = true;
         }
 
-        virtual ~NaturalSplineCurve()
-        {
-        }
+        virtual ~NaturalSplineCurve() = default;
 
         // Member access.
         inline int GetNumPoints() const
         {
-            return static_cast<int>(mA.size());
+            return static_cast<int>((mCoefficients.size() - 1) / 4);
         }
 
         inline Vector<N, Real> const* GetPoints() const
@@ -135,25 +146,24 @@ namespace gte
         void CreateFree()
         {
             int numSegments = GetNumPoints() - 1;
-            std::vector<Real> dt(numSegments);
+            WorkingData wd(numSegments);
             for (int i = 0; i < numSegments; ++i)
             {
-                dt[i] = this->mTime[i + 1] - this->mTime[i];
+                wd.dt[i] = this->mTime[i + 1] - this->mTime[i];
             }
 
             std::vector<Real> d2t(numSegments);
             for (int i = 1; i < numSegments; ++i)
             {
-                d2t[i] = this->mTime[i + 1] - this->mTime[i - 1];
+                wd.d2t[i] = this->mTime[i + 1] - this->mTime[i - 1];
             }
 
             std::vector<Vector<N, Real>> alpha(numSegments);
             for (int i = 1; i < numSegments; ++i)
             {
-                Vector<N, Real> numer = (Real)3 * (dt[i - 1] * mA[i + 1] -
-                    d2t[i] * mA[i] + dt[i] * mA[i - 1]);
-                Real invDenom = (Real)1 / (dt[i - 1] * dt[i]);
-                alpha[i] = invDenom * numer;
+                Vector<N, Real> numer = (Real)3 * (wd.dt[i - 1] * mA[i + 1] - wd.d2t[i] * mA[i] + wd.dt[i] * mA[i - 1]);
+                Real invDenom = (Real)1 / (wd.dt[i - 1] * wd.dt[i]);
+                wd.alpha[i] = invDenom * numer;
             }
 
             std::vector<Real> ell(numSegments + 1);
@@ -161,31 +171,26 @@ namespace gte
             std::vector<Vector<N, Real>> z(numSegments + 1);
             Real inv;
 
-            ell[0] = (Real)1;
-            mu[0] = (Real)0;
-            z[0].MakeZero();
+            wd.ell[0] = (Real)1;
+            wd.mu[0] = (Real)0;
+            wd.z[0].MakeZero();
             for (int i = 1; i < numSegments; ++i)
             {
-                ell[i] = (Real)2 * d2t[i] - dt[i - 1] * mu[i - 1];
-                inv = (Real)1 / ell[i];
-                mu[i] = inv * dt[i];
-                z[i] = inv * (alpha[i] - dt[i - 1] * z[i - 1]);
+                wd.ell[i] = (Real)2 * wd.d2t[i] - wd.dt[i - 1] * wd.mu[i - 1];
+                inv = (Real)1 / wd.ell[i];
+                wd.mu[i] = inv * wd.dt[i];
+                wd.z[i] = inv * (wd.alpha[i] - wd.dt[i - 1] * wd.z[i - 1]);
             }
-            ell[numSegments] = (Real)1;
-            z[numSegments].MakeZero();
-
-            mB.resize(numSegments);
-            mC.resize(numSegments + 1);
-            mD.resize(numSegments);
+            wd.ell[numSegments] = (Real)1;
+            wd.z[numSegments].MakeZero();
 
             Real const oneThird = (Real)1 / (Real)3;
             mC[numSegments].MakeZero();
             for (int i = numSegments - 1; i >= 0; --i)
             {
-                mC[i] = z[i] - mu[i] * mC[i + 1];
-                inv = (Real)1 / dt[i];
-                mB[i] = inv * (mA[i + 1] - mA[i]) - oneThird * dt[i] * (mC[i + 1] +
-                    (Real)2 * mC[i]);
+                mC[i] = wd.z[i] - wd.mu[i] * mC[i + 1];
+                inv = (Real)1 / wd.dt[i];
+                mB[i] = inv * (mA[i + 1] - mA[i]) - oneThird * wd.dt[i] * (mC[i + 1] + (Real)2 * mC[i]);
                 mD[i] = oneThird * inv * (mC[i + 1] - mC[i]);
             }
         }
@@ -219,7 +224,6 @@ namespace gte
             mat(numSegments, 1) = dt[0];
 
             // Construct right-hand side of system.
-            mC.resize(numSegments + 1);
             mC[0].MakeZero();
             Real inv0, inv1;
             for (int i = 1; i <= numSegments - 1; ++i)
@@ -252,13 +256,10 @@ namespace gte
             }
 
             Real const oneThird = (Real)1 / (Real)3;
-            mB.resize(numSegments);
-            mD.resize(numSegments);
             for (int i = 0; i < numSegments; ++i)
             {
                 inv0 = (Real)1 / dt[i];
-                mB[i] = inv0 * (mA[i + 1] - mA[i]) - oneThird * (mC[i + 1] +
-                    (Real)2 * mC[i]) * dt[i];
+                mB[i] = inv0 * (mA[i + 1] - mA[i]) - oneThird * (mC[i + 1] + (Real)2 * mC[i]) * dt[i];
                 mD[i] = oneThird * inv0 * (mC[i + 1] - mC[i]);
             }
         }
@@ -313,10 +314,6 @@ namespace gte
             z[numSegments] = inv * (alpha[numSegments] - dt[numSegments - 1] *
                 z[numSegments - 1]);
 
-            mB.resize(numSegments);
-            mC.resize(numSegments + 1);
-            mD.resize(numSegments);
-
             Real const oneThird = (Real)1 / (Real)3;
             mC[numSegments] = z[numSegments];
             for (int i = numSegments - 1; i >= 0; --i)
@@ -360,6 +357,35 @@ namespace gte
         // Polynomial coefficients.  mA are the points (constant coefficients of
         // polynomials.  mB are the degree 1 coefficients, mC are the degree 2
         // coefficients, and mD are the degree 3 coefficients.
-        std::vector<Vector<N, Real>> mA, mB, mC, mD;
+        Vector<N, Real>* mA;
+        Vector<N, Real>* mB;
+        Vector<N, Real>* mC;
+        Vector<N, Real>* mD;
+
+    private:
+        std::vector<Vector<N, Real>> mCoefficients;
+
+        struct WorkingData
+        {
+            WorkingData(int numSegments)
+            {
+                data.resize(4 * numSegments + 1 + N * (2 * numSegments + 1));
+                dt = &data[0];
+                d2t = dt + numSegments;
+                alpha = reinterpret_cast<Vector<N, Real>*>(d2t + numSegments);
+                ell = reinterpret_cast<Real*>(alpha + numSegments);
+                mu = ell + numSegments + 1;
+                z = reinterpret_cast<Vector<N, Real>*>(mu + numSegments);
+            }
+
+            Real* dt;
+            Real* d2t;
+            Vector<N, Real>* alpha;
+            Real* ell;
+            Real* mu;
+            Vector<N, Real>* z;
+
+            std::vector<Real> data;
+        };
     };
 }

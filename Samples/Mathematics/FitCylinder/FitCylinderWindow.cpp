@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.2 (2018/10/05)
+// File Version: 3.3.3 (2019/05/02)
 
 #include "FitCylinderWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
 #include <Mathematics/GteApprCylinder3.h>
 #include <iostream>
 
@@ -191,7 +194,7 @@ void FitCylinderWindow::CreateScene()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto* vertices = vbuffer->Get<Vector3<float>>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         for (unsigned int j = 0; j < 3; ++j)

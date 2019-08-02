@@ -3,9 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.18.0 (2018/10/30)
+// File Version: 3.18.1 (2019/05/02)
 
 #include "FitTorusWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Mathematics/GteApprTorus3.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -203,6 +208,7 @@ void FitTorusWindow::CreateGNTorus(std::vector<Vector3<double>> const& X,
     double const updateLengthTolerance = 1e-04;
     double const errorDifferenceTolerance = 1e-08;
     bool useTorusInputAsInitialGuess = false;
+
     auto result = fitter(static_cast<int>(X.size()), X.data(),
         maxIterations, updateLengthTolerance, errorDifferenceTolerance,
         useTorusInputAsInitialGuess, C, N, r0, r1);
@@ -220,6 +226,7 @@ void FitTorusWindow::CreateLMTorus(std::vector<Vector3<double>> const& X,
     double const lambdaAdjust = 10.0;
     size_t const maxAdjustments = 8;
     bool useTorusInputAsInitialGuess = false;
+
     auto result = fitter(static_cast<int>(X.size()), X.data(),
         maxIterations, updateLengthTolerance, errorDifferenceTolerance,
         lambdaFactor, lambdaAdjust, maxAdjustments, useTorusInputAsInitialGuess,
@@ -238,7 +245,7 @@ std::shared_ptr<Visual> FitTorusWindow::CreateTorusMesh(
 
     unsigned int const numCircleSamples = 16;
     unsigned int const numRadialSamples = 16;
-    auto torus =  mf.CreateTorus(numCircleSamples, numRadialSamples,
+    auto torus = mf.CreateTorus(numCircleSamples, numRadialSamples,
         static_cast<float>(r0), static_cast<float>(r1));
     torus->culling = CullingMode::CULL_ALWAYS;
 

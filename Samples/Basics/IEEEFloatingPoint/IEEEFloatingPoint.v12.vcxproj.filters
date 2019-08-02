@@ -15,10 +15,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\TestSubnormals.hlsl">
+    <None Include="Shaders\TestSubnormals.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\TestSubnormals.glsl">
+    <None Include="Shaders\TestSubnormals.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

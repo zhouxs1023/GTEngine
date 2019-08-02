@@ -3,9 +3,16 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.2 (2019/05/02)
 
 #include "MassSprings3DWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <random>
+
+#if defined(DO_CPU_MASS_SPRING)
+#include <Graphics/GteConstantColorEffect.h>
+#endif
 
 int main(int, char const*[])
 {
@@ -31,7 +38,7 @@ MassSprings3DWindow::MassSprings3DWindow(Parameters& parameters)
     mSimulationTime(0.0f),
     mSimulationDelta(0.001f)
 {
-    if (!SetEnvironment() || !CreateMassSpringSystem())
+    if (!SetEnvironment() || !CreateMassSpringSystem() || !CreateBoxFaces())
     {
         parameters.created = false;
         return;
@@ -40,7 +47,6 @@ MassSprings3DWindow::MassSprings3DWindow(Parameters& parameters)
     mWireState = std::make_shared<RasterizerState>();
     mWireState->fillMode = RasterizerState::FILL_WIREFRAME;
 
-    CreateBoxFaces();
     InitializeCamera(60.0f, GetAspectRatio(), 0.1f, 100.0f, 0.01f, 0.01f,
         { 4.0f, 0.0f, 0.0f }, { -1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f });
     mPVWMatrices.Update();
@@ -96,27 +102,22 @@ bool MassSprings3DWindow::SetEnvironment()
     }
 
     mEnvironment.Insert(path + "/Samples/Physics/MassSprings3D/Shaders/");
-#if defined(GTE_DEV_OPENGL)
     std::vector<std::string> inputs =
     {
-        "RungeKutta1a.glsl",
-        "RungeKutta1b.glsl",
-        "RungeKutta2a.glsl",
-        "RungeKutta2b.glsl",
-        "RungeKutta3a.glsl",
-        "RungeKutta3b.glsl",
-        "RungeKutta4a.glsl",
-        "RungeKutta4b.glsl",
-        "DrawUsingVertexIDPS.glsl",
-        "DrawUsingVertexIDVS.glsl"
-    };
-#else
-    std::vector<std::string> inputs =
-    {
-        "RungeKutta.hlsl",
-        "DrawUsingVertexID.hlsl"
-    };
+#if !defined(GTE_DEV_OPENGL)
+        "RungeKutta.cs.hlsli",
 #endif
+        DefaultShaderName("RungeKutta1a.cs"),
+        DefaultShaderName("RungeKutta1b.cs"),
+        DefaultShaderName("RungeKutta2a.cs"),
+        DefaultShaderName("RungeKutta2b.cs"),
+        DefaultShaderName("RungeKutta3a.cs"),
+        DefaultShaderName("RungeKutta3b.cs"),
+        DefaultShaderName("RungeKutta4a.cs"),
+        DefaultShaderName("RungeKutta4b.cs"),
+        DefaultShaderName("DrawUsingVertexID.vs"),
+        DefaultShaderName("DrawUsingVertexID.ps")
+    };
 
     for (auto const& input : inputs)
     {
@@ -179,7 +180,7 @@ bool MassSprings3DWindow::CreateMassSpringSystem()
                 {
                     mMassSprings->SetMass(c, r, s, 1.0f);
                     mMassSprings->SetVelocity(c, r, s,
-                        { 0.1f*rnd(mte), 0.1f*rnd(mte), 0.1f*rnd(mte) });
+                        { 0.1f * rnd(mte), 0.1f * rnd(mte), 0.1f * rnd(mte) });
                 }
                 else
                 {
@@ -240,7 +241,7 @@ bool MassSprings3DWindow::CreateMassSpringSystem()
     return true;
 }
 
-void MassSprings3DWindow::CreateBoxFaces()
+bool MassSprings3DWindow::CreateBoxFaces()
 {
     // The vertex buffer will use the mass-spring position array for its
     // CPU data.
@@ -261,8 +262,7 @@ void MassSprings3DWindow::CreateBoxFaces()
 
     // box face z = 1
     numTriangles = 2 * (mDimension[0] - 1) * (mDimension[1] - 1);
-    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles,
-        idxsize);
+    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, idxsize);
     for (y = 1, t = 0; y < mDimension[1] - 2; ++y)
     {
         for (x = 1; x < mDimension[0] - 2; ++x)
@@ -279,8 +279,7 @@ void MassSprings3DWindow::CreateBoxFaces()
 
     // box face z = dim2 - 2
     numTriangles = 2 * (mDimension[0] - 1) * (mDimension[1] - 1);
-    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles,
-        idxsize);
+    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, idxsize);
     for (y = 1, t = 0; y < mDimension[1] - 2; ++y)
     {
         for (x = 1; x < mDimension[0] - 2; ++x)
@@ -297,8 +296,7 @@ void MassSprings3DWindow::CreateBoxFaces()
 
     // box face y = 1
     numTriangles = 2 * (mDimension[0] - 1) * (mDimension[2] - 1);
-    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles,
-        idxsize);
+    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, idxsize);
     for (z = 1, t = 0; z < mDimension[2] - 2; ++z)
     {
         for (x = 1; x < mDimension[0] - 2; ++x)
@@ -315,8 +313,7 @@ void MassSprings3DWindow::CreateBoxFaces()
 
     // box face y = dim1 - 2
     numTriangles = 2 * (mDimension[0] - 1) * (mDimension[2] - 1);
-    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles,
-        idxsize);
+    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, idxsize);
     for (z = 1, t = 0; z < mDimension[2] - 2; ++z)
     {
         for (x = 1; x < mDimension[0] - 2; ++x)
@@ -333,8 +330,7 @@ void MassSprings3DWindow::CreateBoxFaces()
 
     // box face x = 1
     numTriangles = 2 * (mDimension[1] - 1) * (mDimension[2] - 1);
-    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles,
-        idxsize);
+    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, idxsize);
     for (z = 1, t = 0; z < mDimension[2] - 2; ++z)
     {
         for (y = 1; y < mDimension[1] - 2; ++y)
@@ -351,8 +347,7 @@ void MassSprings3DWindow::CreateBoxFaces()
 
     // box face x = dim0 - 2
     numTriangles = 2 * (mDimension[1] - 1) * (mDimension[2] - 1);
-    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles,
-        idxsize);
+    ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, idxsize);
     for (z = 1, t = 0; z < mDimension[2] - 2; ++z)
     {
         for (y = 1; y < mDimension[1] - 2; ++y)
@@ -384,12 +379,8 @@ void MassSprings3DWindow::CreateBoxFaces()
         mBoxFace[i]->SetEffect(mEffect[i]);
     }
 #else
-#if defined(GTE_DEV_OPENGL)
-    std::string pathVS = mEnvironment.GetPath("DrawUsingVertexIDVS.glsl");
-    std::string pathPS = mEnvironment.GetPath("DrawUsingVertexIDPS.glsl");
-#else
-    std::string path = mEnvironment.GetPath("DrawUsingVertexID.hlsl");
-#endif
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("DrawUsingVertexID.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("DrawUsingVertexID.ps"));
     std::shared_ptr<ConstantBuffer> pvwMatrixBuffer;
     std::shared_ptr<ConstantBuffer> colorBuffer;
     std::shared_ptr<VisualProgram> program;
@@ -400,12 +391,11 @@ void MassSprings3DWindow::CreateBoxFaces()
         pvwMatrixBuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
         colorBuffer = std::make_shared<ConstantBuffer>(sizeof(Vector4<float>), false);
         *colorBuffer->Get<Vector4<float>>() = color[i];
-        // TODO: Need to terminate application if 'program' is null.
-#if defined(GTE_DEV_OPENGL)
-        program = mProgramFactory->CreateFromFiles(pathVS, pathPS, "");
-#else
-        program = mProgramFactory->CreateFromFiles(path, path, "");
-#endif
+        program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
+        if (!program)
+        {
+            return false;
+        }
         vshader = program->GetVShader();
         vshader->Set("PVWMatrix", pvwMatrixBuffer);
         vshader->Set("ConstantColor", colorBuffer);
@@ -414,22 +404,17 @@ void MassSprings3DWindow::CreateBoxFaces()
         mBoxFace[i]->SetEffect(mEffect[i]);
     }
 #endif
+    return true;
 }
 
 void MassSprings3DWindow::UpdateTransforms()
 {
     Matrix4x4<float> pvMatrix = mCamera->GetProjectionViewMatrix();
+    Matrix4x4<float> wMatrix = mTrackball.GetOrientation();
+    Matrix4x4<float> pvwMatrix = DoTransform(pvMatrix, wMatrix);
     for (int i = 0; i < 6; ++i)
     {
-        Matrix4x4<float> pvwMatrix;
-#if defined(GTE_USE_MAT_VEC)
-        pvwMatrix = pvMatrix * mTrackball.GetOrientation();
-#else
-        pvwMatrix = mTrackball.GetOrientation() * pvMatrix;
-#endif
-
-        std::shared_ptr<ConstantBuffer> cbuffer =
-            mEffect[i]->GetVertexShader()->Get<ConstantBuffer>("PVWMatrix");
+        auto cbuffer = mEffect[i]->GetVertexShader()->Get<ConstantBuffer>("PVWMatrix");
         *cbuffer->Get<Matrix4x4<float>>() = pvwMatrix;
         mEngine->Update(cbuffer);
     }

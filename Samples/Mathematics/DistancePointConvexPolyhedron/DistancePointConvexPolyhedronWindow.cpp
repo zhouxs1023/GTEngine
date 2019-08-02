@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.5.2 (2019/03/04)
+// File Version: 3.5.4 (2019/05/03)
 
 #include "DistancePointConvexPolyhedronWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -169,11 +171,11 @@ void DistancePointConvexPolyhedronWindow::CreateScene()
     auto vbuffer = mPolyhedronMesh->GetVertexBuffer();
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
     mPolyhedron.vertices.resize(vbuffer->GetNumElements());
-    memcpy(mPolyhedron.vertices.data(), vbuffer->GetData(), vbuffer->GetNumBytes());
+    std::memcpy(mPolyhedron.vertices.data(), vbuffer->GetData(), vbuffer->GetNumBytes());
 
     auto ibuffer = mPolyhedronMesh->GetIndexBuffer();
     mPolyhedron.indices.resize(ibuffer->GetNumElements());
-    memcpy(mPolyhedron.indices.data(), ibuffer->GetData(), ibuffer->GetNumBytes());
+    std::memcpy(mPolyhedron.indices.data(), ibuffer->GetData(), ibuffer->GetNumBytes());
 
     mPolyhedronCenter = { 0.0f, 0.0f, 0.0f };
     mPolyhedron.GeneratePlanes();
@@ -204,7 +206,7 @@ void DistancePointConvexPolyhedronWindow::Translate(int direction, float delta)
     mPolyhedron.GenerateAlignedBox();
 
     auto vbuffer = mPolyhedronMesh->GetVertexBuffer();
-    memcpy(vbuffer->GetData(), mPolyhedron.vertices.data(), vbuffer->GetNumBytes());
+    std::memcpy(vbuffer->GetData(), mPolyhedron.vertices.data(), vbuffer->GetNumBytes());
     mEngine->Update(vbuffer);
 
     DoQuery();
@@ -223,7 +225,7 @@ void DistancePointConvexPolyhedronWindow::Rotate(int direction, float delta)
     mPolyhedron.GenerateAlignedBox();
 
     auto vbuffer = mPolyhedronMesh->GetVertexBuffer();
-    memcpy(vbuffer->GetData(), mPolyhedron.vertices.data(), vbuffer->GetNumBytes());
+    std::memcpy(vbuffer->GetData(), mPolyhedron.vertices.data(), vbuffer->GetNumBytes());
     mEngine->Update(vbuffer);
 
     DoQuery();
@@ -247,7 +249,7 @@ void DistancePointConvexPolyhedronWindow::DoQuery()
         mPVWMatrices.Subscribe(mPolyhedronMesh->worldTransform, mBlueEffect->GetPVWMatrixConstant());
     }
 
-    Vector3<float>* vertices = mSegment->GetVertexBuffer()->Get<Vector3<float>>();
+    auto* vertices = mSegment->GetVertexBuffer()->Get<Vector3<float>>();
     vertices[0] = result.closestPoint[0];
     vertices[1] = result.closestPoint[1];
     mEngine->Update(mSegment->GetVertexBuffer());

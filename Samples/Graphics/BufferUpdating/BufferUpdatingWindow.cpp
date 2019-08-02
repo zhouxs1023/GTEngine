@@ -3,13 +3,16 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/16)
 
 #include "BufferUpdatingWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
 
-//#define TEST_UPDATE
+#define TEST_UPDATE
 //#define TEST_COPY_CPU_TO_GPU
-#define TEST_COPY_GPU_TO_CPU
+//#define TEST_COPY_GPU_TO_CPU
 
 int main(int, char const*[])
 {
@@ -98,15 +101,18 @@ void BufferUpdatingWindow::OnIdle()
     {
         vertices[i + vbuffer->GetOffset()].position[2] = 1.0f;
     }
+
+    // All frame rates are reported for an NVIDIA GeForce GTX 1080.
 #if defined(TEST_UPDATE)
-    // 273 fps, NVIDIA Quadro K2200
+    // 280 fps (DX11), 1770 fps (OpenGL)
     mEngine->Update(vbuffer);
 #endif
 #if defined(TEST_COPY_CPU_TO_GPU)
-    // 260 fps, NVIDIA Quadro K2200
+    // 270 fps (DX11), 1810 fps (OpenGL)
     mEngine->CopyCpuToGpu(vbuffer);
 #endif
 #if defined(TEST_COPY_GPU_TO_CPU)
+    // 260 fps (DX11), 1750 fps (OpenGL)
     mEngine->CopyCpuToGpu(vbuffer);
     mEngine->CopyGpuToCpu(vbuffer);
     float invNumElements = 1.0f / static_cast<float>(vbuffer->GetNumActiveElements());

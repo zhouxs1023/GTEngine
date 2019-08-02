@@ -3,13 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/06/29)
+// File Version: 3.0.3 (2019/05/02)
 
-#include <GTEngine.h>
-#if defined(__LINUX__)
-#include <Graphics/GL4/GteGLSLProgramFactory.h>
-#include <Graphics/GL4/GLX/GteGLXEngine.h>
-#endif
+#include <Applications/GteEnvironment.h>
+#include <LowLevel/GteLogReporter.h>
+#include <GTGraphics.h>
 using namespace gte;
 
 union Float
@@ -30,19 +28,10 @@ class TestSubnormals
 public:
     TestSubnormals(std::string const& filename, std::string const& realname, Binary& result)
     {
-#if defined(GTE_DEV_OPENGL)
-#if defined(__MSWINDOWS__)
-        WGLEngine engine(true, false);
-#else
-        GLXEngine engine(true, false);
-#endif
-        GLSLProgramFactory factory;
-#else
-        DX11Engine engine;
-        HLSLProgramFactory factory;
-#endif
+        DefaultEngine engine;
+        DefaultProgramFactory factory;
 
-        std::shared_ptr<StructuredBuffer> inputBuffer = std::make_shared<StructuredBuffer>(2, sizeof(Real));
+        auto inputBuffer = std::make_shared<StructuredBuffer>(2, sizeof(Real));
         Real* input = inputBuffer->Get<Real>();
         Binary v0, v1;
         v0.encoding = 1;
@@ -51,14 +40,14 @@ public:
         input[1] = v1.number;  // Same as v0.
 
         // Compute v0+v1 and store in this buffer.
-        std::shared_ptr<StructuredBuffer> outputBuffer = std::make_shared<StructuredBuffer>(1, sizeof(Real));
+        auto outputBuffer = std::make_shared<StructuredBuffer>(1, sizeof(Real));
         outputBuffer->SetUsage(Resource::SHADER_OUTPUT);
         outputBuffer->SetCopyType(Resource::COPY_STAGING_TO_CPU);
         Real* output = outputBuffer->Get<Real>();
         output[0] = (Real)0;
 
         factory.defines.Set("REAL", realname);
-        std::shared_ptr<ComputeProgram> cprogram = factory.CreateFromFile(filename);
+        auto cprogram = factory.CreateFromFile(filename);
         if (!cprogram)
         {
             LogError("Cannot load or compile cshader.");
@@ -66,7 +55,7 @@ public:
             outputBuffer = nullptr;
             return;
         }
-        std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
+        auto cshader = cprogram->GetCShader();
         cshader->Set("inBuffer", inputBuffer);
         cshader->Set("outBuffer", outputBuffer);
 
@@ -100,11 +89,7 @@ int main(int, char const*[])
         return -1;
     }
     gtpath += "/Samples/Basics/IEEEFloatingPoint/Shaders/";
-#if defined(GTE_DEV_OPENGL)
-    gtpath += "TestSubnormals.glsl";
-#else
-    gtpath += "TestSubnormals.hlsl";
-#endif
+    gtpath += DefaultShaderName("TestSubnormals.cs");
 
     // With IEEE 754-2008 behavior that preserves subnormals, the output
     // fresult should have encoding 2 (number is 2^{-148}).  Instead

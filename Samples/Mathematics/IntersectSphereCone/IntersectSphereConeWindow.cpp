@@ -1,4 +1,13 @@
+// David Eberly, Geometric Tools, Redmond WA 98052
+// Copyright (c) 1998-2019
+// Distributed under the Boost Software License, Version 1.0.
+// http://www.boost.org/LICENSE_1_0.txt
+// http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
+// File Version: 3.22.2 (2019/06/22)
+
 #include "IntersectSphereConeWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -29,8 +38,7 @@ IntersectSphereConeWindow::IntersectSphereConeWindow(Parameters& parameters)
     mCone.ray.origin = { 0.0f, 0.0f, 0.0f };
     mCone.ray.direction = { 0.0f, 0.0f, 1.0f };
     mCone.SetAngle(0.25f);
-    mCone.minHeight = 4.0f;
-    mCone.maxHeight = 16.0f;
+    mCone.MakeConeFrustum(4.0f, 16.0f);
 
     mNoCullState = std::make_shared<RasterizerState>();
     mNoCullState->cullMode = RasterizerState::CULL_NONE;
@@ -173,15 +181,15 @@ void IntersectSphereConeWindow::CreateScene()
     mConeMesh = mf.CreateCylinderOpen(numAxial, numRadial, 1.0f, 1.0f);
     mConeMesh->localTransform.SetTranslation(mCone.ray.origin);
     auto vbuffer = mConeMesh->GetVertexBuffer();
-    auto vertex = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     for (unsigned int row = 0, i = 0; row < numAxial; ++row)
     {
-        float const height = mCone.minHeight + (mCone.maxHeight -mCone.minHeight)
+        float const height = mCone.GetMinHeight() + (mCone.GetMaxHeight() - mCone.GetMinHeight())
             * static_cast<float>(row) / static_cast<float>(numAxial - 1);
         float const radius = height * mCone.tanAngle;
         for (unsigned int col = 0; col <= numRadial; ++col, ++i)
         {
-            Vector3<float>& P = vertex[i];
+            Vector3<float>& P = vertices[i];
             float stretch = radius / std::sqrt(P[0] * P[0] + P[1] * P[1]);
             P[0] *= stretch;
             P[1] *= stretch;
@@ -193,14 +201,14 @@ void IntersectSphereConeWindow::CreateScene()
     mPVWMatrices.Subscribe(mConeMesh->worldTransform, mBlueEffect->GetPVWMatrixConstant());
 
     // Create visual representations of the disk caps for the cone.
-    mDiskMinMesh = mf.CreateDisk(16, 16, mCone.minHeight * mCone.tanAngle);
-    mDiskMinMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.minHeight * mCone.ray.direction);
+    mDiskMinMesh = mf.CreateDisk(16, 16, mCone.GetMinHeight() * mCone.tanAngle);
+    mDiskMinMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.GetMinHeight() * mCone.ray.direction);
     mDiskMinMesh->Update();
     mDiskMinMesh->SetEffect(mGreenEffect[0]);
     mPVWMatrices.Subscribe(mDiskMinMesh->worldTransform, mGreenEffect[0]->GetPVWMatrixConstant());
 
-    mDiskMaxMesh = mf.CreateDisk(16, 16, mCone.maxHeight * mCone.tanAngle);
-    mDiskMaxMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.maxHeight * mCone.ray.direction);
+    mDiskMaxMesh = mf.CreateDisk(16, 16, mCone.GetMaxHeight() * mCone.tanAngle);
+    mDiskMaxMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.GetMaxHeight() * mCone.ray.direction);
     mDiskMaxMesh->Update();
     mDiskMaxMesh->SetEffect(mGreenEffect[1]);
     mPVWMatrices.Subscribe(mDiskMaxMesh->worldTransform, mGreenEffect[1]->GetPVWMatrixConstant());
@@ -221,8 +229,8 @@ void IntersectSphereConeWindow::Translate(int direction, float delta)
 {
     mCone.ray.origin[direction] += delta;
     mConeMesh->localTransform.SetTranslation(mCone.ray.origin);
-    mDiskMinMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.minHeight * mCone.ray.direction);
-    mDiskMaxMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.maxHeight * mCone.ray.direction);
+    mDiskMinMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.GetMinHeight() * mCone.ray.direction);
+    mDiskMaxMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.GetMaxHeight() * mCone.ray.direction);
     mTrackball.Update();
     TestIntersection();
 }
@@ -243,8 +251,8 @@ void IntersectSphereConeWindow::Rotate(int direction, float delta)
     Matrix4x4<float> rot = mConeMesh->localTransform.GetRotation();
     mCone.ray.direction = HProject(rot.GetCol(2));
 
-    mDiskMinMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.minHeight * mCone.ray.direction);
-    mDiskMaxMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.maxHeight * mCone.ray.direction);
+    mDiskMinMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.GetMinHeight() * mCone.ray.direction);
+    mDiskMaxMesh->localTransform.SetTranslation(mCone.ray.origin + mCone.GetMaxHeight() * mCone.ray.direction);
 
     mTrackball.Update();
     TestIntersection();

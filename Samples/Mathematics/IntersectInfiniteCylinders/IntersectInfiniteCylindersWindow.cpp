@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.24.0 (2019/04/10)
+// File Version: 3.24.1 (2019/05/02)
 
 #include "IntersectInfiniteCylindersWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
 
 int main(int, char const*[])
 {
@@ -153,7 +156,7 @@ void IntersectInfiniteCylindersWindow::CreateScene()
     Vector4<float> green{ 0.0f, 0.5f, 0.0f, 1.0f };
 
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
-    auto* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         float theta = minTheta + multiplier * i;

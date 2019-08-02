@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.2 (2016/08/25)
+// File Version: 3.3.3 (2019/05/02)
 
 #include "GelatinCubeWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -181,7 +184,7 @@ void GelatinCubeWindow::CreateCube()
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
 
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto indices = ibuffer->Get<unsigned int>();
     unsigned int vBase = 0;
     CreateFaceIndices(mNumWSamples, mNumVSamples, false, vBase, indices);  // u = 0
     CreateFaceIndices(mNumWSamples, mNumVSamples, true, vBase, indices);  // u = 1
@@ -198,7 +201,7 @@ void GelatinCubeWindow::CreateCube()
     // transparency.
     auto texture = WICFileIO::Load(mEnvironment.GetPath("Water.png"), false);
     unsigned int numTexels = texture->GetNumElements();
-    unsigned int* texels = texture->Get<unsigned int>();
+    auto texels = texture->Get<unsigned int>();
     for (unsigned int i = 0; i < numTexels; ++i)
     {
         texels[i] = (texels[i] & 0x00FFFFFF) | 0x80000000;
@@ -411,7 +414,7 @@ void GelatinCubeWindow::UpdateFaces()
 {
     unsigned int permute[3];
     unsigned int index = 0;
-    Vertex* vertices = mCube->GetVertexBuffer()->Get<Vertex>();
+    auto vertices = mCube->GetVertexBuffer()->Get<Vertex>();
 
     // u faces (u = 0, u = 1)
     permute[0] = 1;

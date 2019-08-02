@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/15)
 
-#include <Applications/GteTextureIO.h>
 #include "BlendedTerrainEffect.h"
+#include <Applications/GteTextureIO.h>
+#include <Graphics/GteGraphicsDefaults.h>
 using namespace gte;
 
 BlendedTerrainEffect::BlendedTerrainEffect(std::shared_ptr<ProgramFactory> const& factory,
@@ -17,28 +18,10 @@ BlendedTerrainEffect::BlendedTerrainEffect(std::shared_ptr<ProgramFactory> const
 {
     created = false;
 
-    int api = factory->GetAPI();
-
     // Load and compile the shaders.
-#if defined(GTE_DEV_OPENGL)
-    auto pathVertexShader = environment.GetPath("BlendedTerrainVertex.glsl");
-    auto pathPixelShader = environment.GetPath("BlendedTerrainPixel.glsl");
-    mProgram = factory->CreateFromFiles(pathVertexShader, pathPixelShader, "");
-#else
-    auto hlslpath = environment.GetPath("BlendedTerrain.hlsl");
-
-    // The flags are chosen to allow you to debug the shaders through MSVS.
-    // The menu path is "Debug | Graphics | Start Diagnostics" (ALT+F5).
-    factory->PushFlags();
-    factory->flags =
-        D3DCOMPILE_ENABLE_STRICTNESS |
-        D3DCOMPILE_IEEE_STRICTNESS |
-        D3DCOMPILE_DEBUG |
-        D3DCOMPILE_SKIP_OPTIMIZATION;
-    mProgram = factory->CreateFromFiles(hlslpath, hlslpath, "");
-    factory->PopFlags();
-#endif
-
+    auto vsPath = environment.GetPath(DefaultShaderName("BlendedTerrain.vs"));
+    auto psPath = environment.GetPath(DefaultShaderName("BlendedTerrain.ps"));
+    mProgram = factory->CreateFromFiles(vsPath, psPath, "");
     if (!mProgram)
     {
         // The program factory will generate Log* messages.
@@ -94,33 +77,10 @@ BlendedTerrainEffect::BlendedTerrainEffect(std::shared_ptr<ProgramFactory> const
     vshader->Set("PVWMatrix", mPVWMatrixConstant);
     vshader->Set("FlowDirection", mFlowDirectionConstant);
     pshader->Set("PowerFactor", mPowerFactorConstant);
-    if (ProgramFactory::PF_GLSL == api)
-    {
-        pshader->Set("grassSampler", mGrassTexture);
-        pshader->Set("grassSampler", mCommonSampler);
-
-        pshader->Set("stoneSampler", mStoneTexture);
-        pshader->Set("stoneSampler", mCommonSampler);
-
-        pshader->Set("blendSampler", mBlendTexture);
-        pshader->Set("blendSampler", mBlendSampler);
-
-        pshader->Set("cloudSampler", mCloudTexture);
-        pshader->Set("cloudSampler", mCommonSampler);
-    }
-    else if (ProgramFactory::PF_HLSL == api)
-    {
-        pshader->Set("grassTexture", mGrassTexture);
-        pshader->Set("stoneTexture", mStoneTexture);
-        pshader->Set("blendTexture", mBlendTexture);
-        pshader->Set("cloudTexture", mCloudTexture);
-        pshader->Set("commonSampler", mCommonSampler);
-        pshader->Set("blendSampler", mBlendSampler);
-    }
-    else
-    {
-        LogError("Missing shader texture assignments for API=" + api);
-    }
+    pshader->Set("grassTexture", mGrassTexture, "grassSampler", mCommonSampler);
+    pshader->Set("stoneTexture", mStoneTexture, "stoneSampler", mCommonSampler);
+    pshader->Set("cloudTexture", mCloudTexture, "cloudSampler", mCommonSampler);
+    pshader->Set("blendTexture", mBlendTexture, "blendSampler", mBlendSampler);
 
     created = true;
 }

@@ -320,15 +320,17 @@
     <ClCompile Include="AppendConsumeBuffers.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\AppendConsume.glsl" />
-    <None Include="Shaders\AppendConsume.hlsl">
+    <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
+      <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\AppendConsume.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
-      <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
-    </ProjectReference>
+    <None Include="Shaders\AppendConsume.cs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

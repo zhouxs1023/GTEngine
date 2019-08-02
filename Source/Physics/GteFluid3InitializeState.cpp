@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/03)
 
 #include <GTEnginePCH.h>
 #include <Physics/GteFluid3InitializeState.h>
@@ -34,7 +34,7 @@ Fluid3InitializeState::Fluid3InitializeState(std::shared_ptr<ProgramFactory> con
     // Initial velocity values are zero.
     mVelocity = std::make_shared<Texture3>(DF_R32G32B32A32_FLOAT, xSize, ySize, zSize);
     mVelocity->SetUsage(Resource::SHADER_OUTPUT);
-    memset(mVelocity->GetData(), 0, mVelocity->GetNumBytes());
+    std::memset(mVelocity->GetData(), 0, mVelocity->GetNumBytes());
 
     mStateTm1 = std::make_shared<Texture3>(DF_R32G32B32A32_FLOAT, xSize, ySize, zSize);
     mStateTm1->SetUsage(Resource::SHADER_OUTPUT);

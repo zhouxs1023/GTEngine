@@ -304,7 +304,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\VolumeRender.hlsl">
+    <None Include="Shaders\VolumeRender.ps.glsl" />
+    <None Include="Shaders\VolumeRender.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\VolumeRender.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\VolumeRender.vs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

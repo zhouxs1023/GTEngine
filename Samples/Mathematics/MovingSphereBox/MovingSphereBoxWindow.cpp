@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.16.1 (2018/10/05)
+// File Version: 3.16.3 (2019/05/03)
 
 #include "MovingSphereBoxWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
 
 int main(int, char const*[])
 {
@@ -317,8 +320,8 @@ void MovingSphereBoxWindow::CreateRoundedBoxVertices()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, DENSITY * DENSITY);
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
-    memset(vbuffer->GetData(), 0, vbuffer->GetNumBytes());
+    auto vertices = vbuffer->Get<Vector3<float>>();
+    std::memset(vbuffer->GetData(), 0, vbuffer->GetNumBytes());
     for (int iv = 0; iv <= DENSITY - 1; ++iv)
     {
         float v = (float)iv / (float)(DENSITY - 1);
@@ -373,7 +376,7 @@ void MovingSphereBoxWindow::CreateRoundedBoxVertices()
 
     uint32_t numTriangles = (uint32_t)(indices.size() / 3);
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(int));
-    memcpy(ibuffer->GetData(), indices.data(), indices.size() * sizeof(int));
+    std::memcpy(ibuffer->GetData(), indices.data(), indices.size() * sizeof(int));
 
     Vector4<float> color[8] =
     {
@@ -456,7 +459,7 @@ void MovingSphereBoxWindow::CreateRoundedBoxEdges()
     auto visual = mf.CreateRectangle(DENSITY, DENSITY, 1.0f, 1.0f);
     auto vbuffer = visual->GetVertexBuffer();
     auto ibuffer = visual->GetIndexBuffer();
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     for (int row = 0; row < DENSITY; ++row)
     {
         float z = -1.0f + 2.0f * (float)row / (float)(DENSITY - 1);
@@ -764,8 +767,8 @@ void MovingSphereBoxWindow::CreateMotionCylinder()
 
 void MovingSphereBoxWindow::UpdateSphereVelocity()
 {
-    float angle0 = mSample0 * (float)GTE_C_TWO_PI / mNumSamples0;
-    float angle1 = mSample1 * (float)GTE_C_PI / mNumSamples1;
+    float angle0 = static_cast<float>(mSample0 * GTE_C_TWO_PI / mNumSamples0);
+    float angle1 = static_cast<float>(mSample1 * GTE_C_PI / mNumSamples1);
     float cs0 = std::cos(angle0), sn0 = std::sin(angle0);
     float cs1 = std::cos(angle1), sn1 = std::sin(angle1);
     mSphereVelocity = { cs0 * sn1, sn0 * sn1, cs1 };

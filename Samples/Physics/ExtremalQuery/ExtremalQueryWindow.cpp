@@ -3,9 +3,21 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #include "ExtremalQueryWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteVertexColorEffect.h>
+#include <Mathematics/GteArbitraryPrecision.h>
+#include <Mathematics/GteConvexHull3.h>
+#include <random>
+
+#if defined(MEASURE_TIMING_OF_QUERY)
+#include <LowLevel/GteTimer.h>
+#endif
 
 int main(int, char const*[])
 {
@@ -35,11 +47,7 @@ ExtremalQueryWindow::ExtremalQueryWindow(Parameters& parameters)
     // Set up an orthogonal camera.  This projection type is used to make it
     // clear that the displayed extreme points really are extreme; the
     // perspective projection is deceptive.
-#if defined(GTE_DEV_OPENGL)
-    mCamera = std::make_shared<Camera>(false, false);
-#else
-    mCamera = std::make_shared<Camera>(false, true);
-#endif
+    mCamera = std::make_shared<Camera>(false, DefaultDepthRange);
     mCamera->SetFrustum(1.0f, 1000.0f, -1.5f, 1.5f, -2.0, 2.0f);
     Vector4<float> camPosition{ 4.0f, 0.0f, 0.0f, 1.0f };
     Vector4<float> camDVector{ -1.0f, 0.0f, 0.0f, 0.0f };
@@ -100,12 +108,14 @@ void ExtremalQueryWindow::CreateScene()
 {
     mScene = std::make_shared<Node>();
 
-    // Create a convex polyhedron that is the hull of numVertices randomly generated points.
+    // Create a convex polyhedron that is the hull of numVertices randomly
+    // generated points.
     int const numVertices = 32;
     CreateConvexPolyhedron(numVertices);
     CreateVisualConvexPolyhedron();
 
-    // Use small spheres to show the extreme points in the camera's right direction.
+    // Use small spheres to show the extreme points in the camera's right
+    // direction.
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     MeshFactory mf;
@@ -115,9 +125,7 @@ void ExtremalQueryWindow::CreateScene()
     mMinSphere = mf.CreateSphere(8, 8, 0.05f);
 
     Vector4<float> black{ 0.0f, 0.0f, 0.0f, 1.0f };
-    std::shared_ptr<ConstantColorEffect> effect;
-    
-    effect = std::make_shared<ConstantColorEffect>(mProgramFactory, black);
+    auto effect = std::make_shared<ConstantColorEffect>(mProgramFactory, black);
     mMaxSphere->SetEffect(effect);
     mPVWMatrices.Subscribe(mMaxSphere->worldTransform, effect->GetPVWMatrixConstant());
 
@@ -136,8 +144,7 @@ void ExtremalQueryWindow::CreateScene()
 void ExtremalQueryWindow::CreateConvexPolyhedron(int numVertices)
 {
     // Create the convex hull of a randomly generated set of points on the unit sphere.
-    std::shared_ptr<std::vector<Vector3<float>>> vertexPool =
-        std::make_shared<std::vector<Vector3<float>>>(numVertices);
+    auto vertexPool = std::make_shared<std::vector<Vector3<float>>>(numVertices);
     auto& vertices = *vertexPool.get();
     std::mt19937 mte;
     std::uniform_real_distribution<float> rnd(-1.0f, 1.0f);
@@ -162,9 +169,9 @@ void ExtremalQueryWindow::CreateConvexPolyhedron(int numVertices)
     mConvexPolyhedron = std::make_unique<Polyhedron3<float>>(vertexPool, numIndices, indices, true);
 
 #ifdef USE_BSP_QUERY
-    mExtremalQuery = std::make_unique<ExtremalQuery3BSP<float>>(*mConvexPolyhedron.get());
+    mExtremalQuery = std::make_unique<ExtremalQuery3BSP<float>>(*mConvexPolyhedron);
 #else
-    mExtremalQuery = std::make_unique<ExtremalQuery3PRJ<float>>(*mConvexPolyhedron.get());
+    mExtremalQuery = std::make_unique<ExtremalQuery3PRJ<float>>(*mConvexPolyhedron);
 #endif
 
 #ifdef MEASURE_TIMING_OF_QUERY
@@ -209,13 +216,11 @@ void ExtremalQueryWindow::CreateVisualConvexPolyhedron()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_COLOR, DF_R32G32B32A32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(vformat, numIndices);
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numIndices);
+    auto vertices = vbuffer->Get<Vertex>();
 
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
-    int* indices = ibuffer->Get<int>();
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
+    auto indices = ibuffer->Get<int>();
     for (int i = 0; i < numIndices; ++i)
     {
         vertices[i].position = vertexPool[polyIndices[i]];
@@ -234,8 +239,7 @@ void ExtremalQueryWindow::CreateVisualConvexPolyhedron()
         }
     }
 
-    std::shared_ptr<VertexColorEffect> effect =
-        std::make_shared<VertexColorEffect>(mProgramFactory);
+    auto effect = std::make_shared<VertexColorEffect>(mProgramFactory);
 
     mConvexMesh = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mPVWMatrices.Subscribe(mConvexMesh->worldTransform, effect->GetPVWMatrixConstant());
@@ -244,11 +248,8 @@ void ExtremalQueryWindow::CreateVisualConvexPolyhedron()
 
 void ExtremalQueryWindow::UpdateExtremePoints()
 {
-#if defined(GTE_USE_MAT_VEC)
-    Vector4<float> rVector = mScene->worldTransform.GetHInverse() * mCamera->GetRVector();
-#else
-    Vector4<float> rVector = mCamera->GetRVector() * mScene->worldTransform.GetHInverse();
-#endif
+    Matrix4x4<float> invWMatrix = mScene->worldTransform.GetHInverse();
+    Vector4<float> rVector = DoTransform(invWMatrix, mCamera->GetRVector());
     Vector3<float> direction = HProject<4, float>(rVector);
 
     int posDir, negDir;

@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2019/05/02)
 
 #include "WireMeshWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -67,51 +69,38 @@ bool WireMeshWindow::SetEnvironment()
 
     mEnvironment.Insert(path + "/Samples/Graphics/WireMesh/Shaders/");
 
-#if defined(GTE_DEV_OPENGL)
-    if (mEnvironment.GetPath("WireMeshVS.glsl") == "")
+    std::vector<std::string> inputs =
     {
-        LogError("Cannot find file WireMeshVS.glsl.");
-        return false;
-    }
-    if (mEnvironment.GetPath("WireMeshPS.glsl") == "")
+        DefaultShaderName("WireMesh.vs"),
+        DefaultShaderName("WireMesh.ps"),
+        DefaultShaderName("WireMesh.gs")
+    };
+
+    for (auto const& input : inputs)
     {
-        LogError("Cannot find file WireMeshPS.glsl.");
-        return false;
+        if (mEnvironment.GetPath(input) == "")
+        {
+            LogError("Cannot find file " + input);
+            return false;
+        }
     }
-    if (mEnvironment.GetPath("WireMeshGS.glsl") == "")
-    {
-        LogError("Cannot find file WireMeshGS.glsl.");
-        return false;
-    }
-#else
-    if (mEnvironment.GetPath("WireMesh.hlsl") == "")
-    {
-        LogError("Cannot find file WireMesh.hlsl.");
-        return false;
-    }
-#endif
 
     return true;
 }
 
 bool WireMeshWindow::CreateScene()
 {
-#if defined(GTE_DEV_OPENGL)
-    std::string pathVS = mEnvironment.GetPath("WireMeshVS.glsl");
-    std::string pathPS = mEnvironment.GetPath("WireMeshPS.glsl");
-    std::string pathGS = mEnvironment.GetPath("WireMeshGS.glsl");
-    std::shared_ptr<VisualProgram> program = mProgramFactory->CreateFromFiles(pathVS, pathPS, pathGS);
-#else
-    std::string path = mEnvironment.GetPath("WireMesh.hlsl");
-    std::shared_ptr<VisualProgram> program = mProgramFactory->CreateFromFiles(path, path, path);
-#endif
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("WireMesh.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("WireMesh.ps"));
+    std::string gsPath = mEnvironment.GetPath(DefaultShaderName("WireMesh.gs"));
+    auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, gsPath);
     if (!program)
     {
         return false;
     }
 
-    std::shared_ptr<ConstantBuffer> parameters = std::make_shared<ConstantBuffer>(3 * sizeof(Vector4<float>), false);
-    Vector4<float>* data = parameters->Get<Vector4<float>>();
+    auto parameters = std::make_shared<ConstantBuffer>(3 * sizeof(Vector4<float>), false);
+    auto* data = parameters->Get<Vector4<float>>();
     data[0] = { 0.0f, 0.0f, 1.0f, 1.0f };  // mesh color
     data[1] = { 0.0f, 0.0f, 0.0f, 1.0f };  // edge color
     data[2] = { static_cast<float>(mXSize), static_cast<float>(mYSize), 0.0f, 0.0f };
@@ -119,10 +108,10 @@ bool WireMeshWindow::CreateScene()
     program->GetPShader()->Set("WireParameters", parameters);
     program->GetGShader()->Set("WireParameters", parameters);
 
-    std::shared_ptr<ConstantBuffer> cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
+    auto cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
     program->GetVShader()->Set("PVWMatrix", cbuffer);
 
-    std::shared_ptr<VisualEffect> effect = std::make_shared<VisualEffect>(program);
+    auto effect = std::make_shared<VisualEffect>(program);
 
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);

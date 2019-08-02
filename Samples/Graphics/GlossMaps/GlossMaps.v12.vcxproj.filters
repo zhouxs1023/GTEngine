@@ -30,7 +30,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\GlossMap.hlsl">
+    <None Include="Shaders\GlossMap.ps.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\GlossMap.vs.glsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\GlossMap.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\GlossMap.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

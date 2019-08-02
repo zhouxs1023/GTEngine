@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/05/06)
 
 #pragma once
 
@@ -68,7 +68,7 @@ public:
     // Reverse lookup of parameters from position.
     void GetParameters(Vector3<Real> const& X, Real& u, Real& v) const;
 
-    Vector3<float> center, direction0, direction1, normal;
+    Vector3<Real> center, direction0, direction1, normal;
     Real radius0, radius1;
 
 public:

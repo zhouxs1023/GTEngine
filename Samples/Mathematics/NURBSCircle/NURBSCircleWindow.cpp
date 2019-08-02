@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.18.0 (2018/10/22)
+// File Version: 3.18.1 (2019/05/02)
 
 #include "NURBSCircleWindow.h"
+#include <LowLevel/GteLogReporter.h>
 
 int main(int, char const*[])
 {
@@ -41,10 +42,13 @@ void NURBSCircleWindow::OnDisplay()
     int const dy = mYSize / 4;
     int const radius = mXSize / 8;
 
-    DrawCurve(&mQuarterCircleDegree2, (float)GTE_C_HALF_PI, dx, dy, radius);
-    DrawCurve(&mQuarterCircleDegree4, (float)GTE_C_HALF_PI, 3 * dx, dy, radius);
-    DrawCurve(&mHalfCircleDegree3, (float)GTE_C_PI, dx, 3 * dy, radius);
-    DrawCurve(&mFullCircleDegree3, (float)GTE_C_TWO_PI, 3 * dx, 3 * dy, radius);
+    float const halfPi = static_cast<float>(GTE_C_HALF_PI);
+    float const pi = static_cast<float>(GTE_C_PI);
+    float const twoPi = static_cast<float>(GTE_C_TWO_PI);
+    DrawCurve(&mQuarterCircleDegree2, halfPi, dx, dy, radius);
+    DrawCurve(&mQuarterCircleDegree4, halfPi, 3 * dx, dy, radius);
+    DrawCurve(&mHalfCircleDegree3, pi, dx, 3 * dy, radius);
+    DrawCurve(&mFullCircleDegree3, twoPi, 3 * dx, 3 * dy, radius);
 
     mScreenTextureNeedsUpdate = true;
     Window2::OnDisplay();
@@ -62,9 +66,10 @@ void NURBSCircleWindow::DrawCurve(NURBSCurve<2, float> const* curve, float maxAn
     int const numSamples = 1024;
     x0 = static_cast<int>(std::lrint(center[0] + radius));
     y0 = static_cast<int>(std::lrint(center[1]));
+    float const divisor = static_cast<float>(numSamples - 1);
     for (int i = 1; i < numSamples; ++i)
     {
-        float angle = maxAngle * i / (float)(numSamples - 1);
+        float angle = maxAngle * static_cast<float>(i) / divisor;
         float cs = std::cos(angle);
         float sn = std::sin(angle);
         x1 = static_cast<int>(std::lrint(center[0] + radius * cs));
@@ -81,7 +86,7 @@ void NURBSCircleWindow::DrawCurve(NURBSCurve<2, float> const* curve, float maxAn
     y0 = static_cast<int>(std::lrint(center[1] + radius * values[0][1]));
     for (int i = 1; i < numSamples; ++i)
     {
-        float t = (float)i / (float)(numSamples - 1);
+        float t = static_cast<float>(i) / divisor;
         curve->Evaluate(t, 0, values);
         x1 = static_cast<int>(std::lrint(center[0] + radius * values[0][0]));
         y1 = static_cast<int>(std::lrint(center[1] + radius * values[0][1]));

@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/05/03)
 
 #pragma once
 
 #include <LowLevel/GteRangeIteration.h>
-#include <LowLevel/GteWrapper.h>
 #include <algorithm>
 #include <cmath>
 #include <cstring>
@@ -395,7 +394,7 @@ void SingularValueDecomposition<Real>::GetSingularValues(
         {
             // Sorting was not requested.
             size_t numBytes = mNumCols*sizeof(Real);
-            Memcpy(singularValues, &mDiagonal[0], numBytes);
+            std::memcpy(singularValues, &mDiagonal[0], numBytes);
         }
     }
 }
@@ -625,7 +624,7 @@ void SingularValueDecomposition<Real>::GetUColumn(int index,
         Real* y = &mWVector[0];
 
         // Start with the Euclidean basis vector.
-        memset(x, 0, mNumRows * sizeof(Real));
+        std::memset(x, 0, mNumRows * sizeof(Real));
         if (index < mNumCols && mPermutation[0] >= 0)
         {
             // Sorting was requested.
@@ -681,7 +680,7 @@ void SingularValueDecomposition<Real>::GetUColumn(int index,
         if (x != uColumn)
         {
             size_t numBytes = mNumRows*sizeof(Real);
-            Memcpy(uColumn, x, numBytes);
+            std::memcpy(uColumn, x, numBytes);
         }
     }
 }
@@ -697,7 +696,7 @@ void SingularValueDecomposition<Real>::GetVColumn(int index,
         Real* y = &mWVector[0];
 
         // Start with the Euclidean basis vector.
-        memset(x, 0, mNumCols * sizeof(Real));
+        std::memset(x, 0, mNumCols * sizeof(Real));
         if (mPermutation[0] >= 0)
         {
             // Sorting was requested.
@@ -754,7 +753,7 @@ void SingularValueDecomposition<Real>::GetVColumn(int index,
         if (x != vColumn)
         {
             size_t numBytes = mNumCols*sizeof(Real);
-            Memcpy(vColumn, x, numBytes);
+            std::memcpy(vColumn, x, numBytes);
         }
     }
 }

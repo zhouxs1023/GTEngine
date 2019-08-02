@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/07)
+// File Version: 3.0.2 (2019/04/18)
 
 #include "DisplacementEffect.h"
 using namespace gte;
@@ -23,13 +23,9 @@ DisplacementEffect::DisplacementEffect(std::shared_ptr<ProgramFactory> const& fa
         mSampler->mode[0] = mode0;
         mSampler->mode[1] = mode1;
 
-        mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
-#if defined(GTE_DEV_OPENGL)
-        mProgram->GetVShader()->Set("displacementSampler", texture);
-#else
-        mProgram->GetVShader()->Set("displacementTexture", texture);
-#endif
-        mProgram->GetVShader()->Set("displacementSampler", mSampler);
+        auto vshader = mProgram->GetVShader();
+        vshader->Set("PVWMatrix", mPVWMatrixConstant);
+        vshader->Set("displacementTexture", texture, "displacementSampler", mSampler);
     }
 }
 

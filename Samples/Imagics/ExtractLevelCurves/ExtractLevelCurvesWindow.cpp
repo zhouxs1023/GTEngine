@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/11)
+// File Version: 3.23.2 (2019/05/03)
 
 #include "ExtractLevelCurvesWindow.h"
+#include <LowLevel/GteLogReporter.h>
 
 // Determine how large the window should be to draw an enlarged version of
 // the original image.  The pixel type is int16_t but only 10 bits are used
@@ -88,7 +89,7 @@ void ExtractLevelCurvesWindow::OnDisplay()
     // Copy the image as background.  Level curves are drawn on top of
     // this in color.
     auto texels = mScreenTexture->Get<uint32_t>();
-    memcpy(texels, mEnlarged.data(), mEnlarged.size() * sizeof(uint32_t));
+    std::memcpy(texels, mEnlarged.data(), mEnlarged.size() * sizeof(uint32_t));
 
     uint32_t const color = (mUseSquares ? 0xFF00FF00 : 0xFF0000FF);
     for (auto const& edge : mEdges)

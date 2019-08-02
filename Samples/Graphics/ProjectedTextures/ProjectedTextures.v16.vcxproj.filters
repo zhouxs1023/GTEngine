@@ -30,13 +30,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\ProjectedTexture.hlsl">
+    <None Include="Shaders\ProjectedTexture.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\ProjectedTextureVS.glsl">
+    <None Include="Shaders\ProjectedTexture.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\ProjectedTexturePS.glsl">
+    <None Include="Shaders\ProjectedTexture.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\ProjectedTexture.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

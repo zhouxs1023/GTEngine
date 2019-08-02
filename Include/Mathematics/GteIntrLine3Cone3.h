@@ -10,311 +10,471 @@
 #include <Mathematics/GteVector3.h>
 #include <Mathematics/GteCone.h>
 #include <Mathematics/GteLine.h>
+#include <Mathematics/GteQFNumber.h>
 #include <Mathematics/GteIntrIntervals.h>
 
-// The queries consider the cone to be single sided and solid.
+// The queries consider the cone to be single sided and solid.  The
+// cone height range is [hmin,hmax].  The cone can be infinite where
+// hmin = 0 and hmax = +infinity, infinite truncated where hmin > 0
+// and hmax = +infinity, finite where hmin = 0 and hmax < +infinity,
+// or a cone frustum where hmin > 0 and hmax < +infinity.  The
+// algorithm details are found in
+// https://www.geometrictools.com/Documentation/IntersectionLineCone.pdf
 
 namespace gte
 {
-
-template <typename Real>
-class FIQuery<Real, Line3<Real>, Cone3<Real>>
-{
-public:
-    struct Result
+    template <typename Real>
+    class FIQuery<Real, Line3<Real>, Cone3<Real>>
     {
-        // Default construction.  Set 'intersect' to false, 'type' to 0,
-        // 'parameter' to (0,0), and 'point' to (veczero,veczero).
-        Result();
+    public:
+        // The rational quadratic field type with elements x + y * sqrt(d).
+        // This type supports error-free computation.
+        using QFN1 = QFNumber<Real, 1>;
 
-        bool intersect;
+        // Convenient naming for interval find-intersection queries.
+        using IIQuery = FIIntervalInterval<QFN1>;
 
-        // Because the intersection of line and cone with infinite height
-        // h > 0 can be a ray or a line, we use a 'type' value that allows
-        // you to decide how to interpret the parameter[] and point[] values.
-        //   type  intersect  valid data
-        //   0     none       none
-        //   1     point      parameter[0] = parameter[1], finite
-        //                    point[0] = point[1]
-        //   2     segment    parameter[0] < parameter[1], finite
-        //                    point[0,1] valid
-        //   3     ray        parameter[0] finite, parameter[1] maxReal
-        //                    point[0] = rayOrigin, point[1] = lineDirection
-        //   4     ray        parameter[0] -maxReal, parameter[1] finite
-        //                    point[0] = rayOrigin, point[1] = -lineDirection
-        //   5     line       parameter[0] -maxReal, parameter[1] maxReal,
-        //                    point[0] = lineOrigin, point[1] = lineDirection
-        // If the cone height h is finite, only types 0, 1, or 2 can occur.
-        int type;
-        std::array<Real, 2> parameter;  // Relative to incoming line.
-        std::array<Vector3<Real>, 2> point;
-    };
-
-    Result operator()(Line3<Real> const& line, Cone3<Real> const& cone);
-
-protected:
-    void DoQuery(Vector3<Real> const& lineOrigin,
-        Vector3<Real> const& lineDirection, Cone3<Real> const& cone,
-        Result& result);
-};
-
-
-template <typename Real>
-FIQuery<Real, Line3<Real>, Cone3<Real>>::Result::Result()
-    :
-    intersect(false),
-    type(0)
-{
-    parameter.fill((Real)0);
-    point.fill({ (Real)0, (Real)0, (Real)0 });
-}
-
-template <typename Real>
-typename FIQuery<Real, Line3<Real>, Cone3<Real>>::Result
-FIQuery<Real, Line3<Real>, Cone3<Real>>::operator()(Line3<Real> const& line,
-    Cone3<Real> const& cone)
-{
-    Result result;
-    DoQuery(line.origin, line.direction, cone, result);
-    switch (result.type)
-    {
-    case 1:  // point
-        result.point[0] = line.origin + result.parameter[0] * line.direction;
-        result.point[1] = result.point[0];
-        break;
-    case 2:  // segment
-        result.point[0] = line.origin + result.parameter[0] * line.direction;
-        result.point[1] = line.origin + result.parameter[1] * line.direction;
-        break;
-    case 3:  // ray
-        result.point[0] = line.origin + result.parameter[0] * line.direction;
-        result.point[1] = line.direction;
-        break;
-    case 4:  // ray
-        result.point[0] = line.origin + result.parameter[1] * line.direction;
-        result.point[1] = -line.direction;
-        break;
-    case 5:  // line
-        result.point[0] = line.origin;
-        result.point[1] = line.direction;
-        break;
-    default:  // no intersection
-        break;
-    }
-    return result;
-}
-
-template <typename Real>
-void FIQuery<Real, Line3<Real>, Cone3<Real>>::DoQuery(
-    Vector3<Real> const& lineOrigin, Vector3<Real> const& lineDirection,
-    Cone3<Real> const& cone, Result& result)
-{
-    // The cone has vertex V, unit-length axis direction D, angle theta in
-    // (0,pi/2), and height h in (0,+infinity).  The line is P + t*U, where U
-    // is a unit-length direction vector.  Define g = cos(theta).  The cone
-    // is represented by
-    //   (X-V)^T * (D*D^T - g^2*I) * (X-V) = 0,  0 <= Dot(D,X-V) <= h
-    // The first equation defines a double-sided cone.  The first inequality
-    // in the second equation limits this to a single-sided cone containing
-    // the ray V + s*D with s >= 0.  We will call this the 'positive cone'.
-    // The single-sided cone containing ray V + s * t with s <= 0 is called
-    // the 'negative cone'.  The double-sided cone is the union of the
-    // positive cone and negative cone.  The second inequality in the second
-    // equation limits the single-sided cone to the region bounded by the
-    // height.  Setting X(t) = P + t*U, the equations are
-    //   c2*t^2 + 2*c1*t + c0 = 0,  0 <= Dot(D,U)*t + Dot(D,P-V) <= h
-    // where
-    //   c2 = Dot(D,U)^2 - g^2
-    //   c1 = Dot(D,U)*Dot(D,P-V) - g^2*Dot(U,P-V)
-    //   c0 = Dot(D,P-V)^2 - g^2*Dot(P-V,P-V)
-    // The following code computes the t-interval that satisfies the quadratic
-    // equation subject to the linear inequality constraints.
-
-    Vector3<Real> PmV = lineOrigin - cone.ray.origin;
-    Real DdU = Dot(cone.ray.direction, lineDirection);
-    Real DdPmV = Dot(cone.ray.direction, PmV);
-    Real UdPmV = Dot(lineDirection, PmV);
-    Real PmVdPmV = Dot(PmV, PmV);
-    Real cosAngleSqr = cone.cosAngle * cone.cosAngle;
-    Real c2 = DdU * DdU - cosAngleSqr;
-    Real c1 = DdU * DdPmV - cosAngleSqr * UdPmV;
-    Real c0 = DdPmV * DdPmV - cosAngleSqr * PmVdPmV;
-    Real t;
-
-    if (c2 != (Real)0)
-    {
-        Real discr = c1 * c1 - c0 * c2;
-        if (discr < (Real)0)
+        struct Result
         {
-            // The quadratic has no real-valued roots.  The line does not
-            // intersect the double-sided cone.
-            result.intersect = false;
-            result.type = 0;
-            return;
-        }
-        else if (discr > (Real)0)
-        {
-            // The quadratic has two distinct real-valued roots.  However, one
-            // or both of them might intersect the negative cone.  We are
-            // interested only in those intersections with the positive cone.
-            Real root = std::sqrt(discr);
-            Real invC2 = ((Real)1) / c2;
-            int numParameters = 0;
+            // Because the intersection of line and cone with infinite height
+            // can be a ray or a line, we use a 'type' value that allows you
+            // to decide how to interpret the t[] and P[] values.
 
-            t = (-c1 - root) * invC2;
-            if (DdU * t + DdPmV >= (Real)0)
+            // No interesection.
+            static int const isEmpty = 0;
+
+            // t[0] is finite, t[1] is set to t[0], P[0] is the point of
+            // intersection, P[1] is set to P[0].
+            static int const isPoint = 1;
+
+            // t[0] and t[1] are finite with t[0] < t[1], P[0] and P[1] are
+            // the endpoints of the segment of intersection.
+            static int const isSegment = 2;
+
+            // Dot(line.direction, cone.ray.direction) > 0:
+            // t[0] is finite, t[1] is +infinity (set to +1), P[0] is the ray
+            // origin, P[1] is the ray direction (set to line.direction).
+            // NOTE: The ray starts at P[0] and you walk away from it in the
+            // line direction.
+            static int const isRayPositive = 3;
+
+            // Dot(line.direction, cone.ray.direction) < 0:
+            // t[0] is -infinity (set to -1), t[1] is finite, P[0] is the ray
+            // endpoint, P[1] is the ray direction (set to line.direction).
+            // NOTE: The ray ends at P[1] and you walk towards it in the line
+            // direction.
+            static int const isRayNegative = 4;
+
+            Result()
+                :
+                intersect(false),
+                type(Result::isEmpty)
             {
-                result.parameter[numParameters++] = t;
+                // t[], h[] and P[] are initialized to zero via QFN1 constructors
             }
 
-            t = (-c1 + root) * invC2;
-            if (DdU * t + DdPmV >= (Real)0)
+            void ComputePoints(Vector3<Real> const& origin, Vector3<Real> const& direction)
             {
-                result.parameter[numParameters++] = t;
-            }
-
-            if (numParameters == 2)
-            {
-                // The line intersects the positive cone in two distinct
-                // points.
-                result.intersect = true;
-                result.type = 2;
-                if (result.parameter[0] > result.parameter[1])
+                switch (type)
                 {
-                    std::swap(result.parameter[0], result.parameter[1]);
+                case Result::isEmpty:
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        P[0][i] = QFN1();
+                        P[1][i] = P[0][i];
+                    }
+                    break;
+                case Result::isPoint:
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        P[0][i] = origin[i] + direction[i] * t[0];
+                        P[1][i] = P[0][i];
+                    }
+                    break;
+                case Result::isSegment:
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        P[0][i] = origin[i] + direction[i] * t[0];
+                        P[1][i] = origin[i] + direction[i] * t[1];
+                    }
+                    break;
+                case Result::isRayPositive:
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        P[0][i] = origin[i] + direction[i] * t[0];
+                        P[1][i] = QFN1(direction[i], 0, t[0].d);
+                    }
+                    break;
+                case Result::isRayNegative:
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        P[0][i] = origin[i] + direction[i] * t[1];
+                        P[1][i] = QFN1(direction[i], 0, t[1].d);
+                    }
+                    break;
+                default:
+                    LogError("Invalid case.");
+                    break;
                 }
             }
-            else if (numParameters == 1)
+
+            template <typename OutputType>
+            static void Convert(QFN1 const& input, OutputType& output)
             {
-                // The line intersects the positive cone in a single point and
-                // the negative cone in a single point.  We report only the
-                // intersection with the positive cone.
-                result.intersect = true;
-                if (DdU > (Real)0)
+                output = static_cast<Real>(input);
+            }
+
+            template <typename OutputType>
+            static void Convert(Vector3<QFN1> const& input, Vector3<OutputType>& output)
+            {
+                for (int i = 0; i < 3; ++i)
                 {
-                    result.type = 3;
-                    result.parameter[1] = std::numeric_limits<Real>::max();
+                    output[i] = static_cast<Real>(input[i]);
+                }
+            }
+
+            bool intersect;
+            int type;
+            std::array<QFN1, 2> t;
+            std::array<Vector3<QFN1>, 2> P;
+        };
+
+        Result operator()(Line3<Real> const& line, Cone3<Real> const& cone)
+        {
+            Result result;
+            DoQuery(line.origin, line.direction, cone, result);
+            result.ComputePoints(line.origin, line.direction);
+            result.intersect = (result.type != Result::isEmpty);
+            return result;
+        }
+
+    protected:
+        // The result.type and result.t[] values are computed by DoQuery. The
+        // result.P[] and result.intersect values are computed from them in
+        // the operator()(...) function.
+        void DoQuery(Vector3<Real> const& lineOrigin, Vector3<Real> const& lineDirection,
+            Cone3<Real> const& cone, Result& result)
+        {
+            // The algorithm implemented in DoQuery avoids extra branches if
+            // we choose a line whose direction forms an acute angle with the
+            // cone direction.
+            if (Dot(lineDirection, cone.ray.direction) >= (Real)0)
+            {
+                DoQuerySpecial(lineOrigin, lineDirection, cone, result);
+            }
+            else
+            {
+                DoQuerySpecial(lineOrigin, -lineDirection, cone, result);
+                result.t[0] = -result.t[0];
+                result.t[1] = -result.t[1];
+                std::swap(result.t[0], result.t[1]);
+                if (result.type == Result::isRayPositive)
+                {
+                    result.type = Result::isRayNegative;
+                }
+            }
+        }
+
+        void DoQuerySpecial(Vector3<Real> const& lineOrigin, Vector3<Real> const& lineDirection,
+            Cone3<Real> const& cone, Result& result)
+        {
+            // Compute the number of real-valued roots and represent them
+            // using rational quadratic field elements to support when Real
+            // is an exact rational arithmetic type. TODO: Adjust by noting
+            // that we should use D/|D| because a normalized floating-point
+            // D still might not have |D| = 1 (although it is close to 1).
+            Vector3<Real> PmV = lineOrigin - cone.ray.origin;
+            Real UdU = Dot(lineDirection, lineDirection);
+            Real DdU = Dot(cone.ray.direction, lineDirection);  // >= 0
+            Real DdPmV = Dot(cone.ray.direction, PmV);
+            Real UdPmV = Dot(lineDirection, PmV);
+            Real PmVdPmV = Dot(PmV, PmV);
+            Real c2 = DdU * DdU - cone.cosAngleSqr * UdU;
+            Real c1 = DdU * DdPmV - cone.cosAngleSqr * UdPmV;
+            Real c0 = DdPmV * DdPmV - cone.cosAngleSqr * PmVdPmV;
+
+            if (c2 != (Real)0)
+            {
+                Real discr = c1 * c1 - c0 * c2;
+                if (discr < (Real)0)
+                {
+                    CaseC2NotZeroDiscrNeg(result);
+                }
+                else if (discr > (Real)0)
+                {
+                    CaseC2NotZeroDiscrPos(c1, c2, discr, DdU, DdPmV, cone, result);
+                }
+                else // discr == 0
+                {
+                    CaseC2NotZeroDiscrZero(c1, c2, UdU, UdPmV, DdU, DdPmV, cone, result);
+                }
+            }
+            else if (c1 != (Real)0)
+            {
+                CaseC2ZeroC1NotZero(c0, c1, DdU, DdPmV, cone, result);
+            }
+            else
+            {
+                CaseC2ZeroC1Zero(c0, UdU, UdPmV, DdU, DdPmV, cone, result);
+            }
+        }
+
+        void CaseC2NotZeroDiscrNeg(Result& result)
+        {
+            // Block 0. The quadratic has no real-valued roots. The line does
+            // not intersect the double-sided cone.
+            SetEmpty(result);
+        }
+
+        void CaseC2NotZeroDiscrPos(Real const& c1, Real const& c2, Real const& discr,
+            Real const& DdU, Real const& DdPmV, Cone3<Real> const& cone, Result& result)
+        {
+            // The quadratic has two distinct real-valued roots, t[0] and t[1]
+            // with t[0] < t[1].
+            Real x = -c1 / c2;
+            Real y = (c2 > (Real)0 ? (Real)1 / c2 : (Real)-1 / c2);
+            std::array<QFN1, 2> t = { QFN1(x, -y, discr), QFN1(x, y, discr) };
+
+            // Compute the signed heights at the intersection points, h[0] and
+            // h[1] with h[0] <= h[1]. The ordering is guaranteed because we
+            // have arranged for the input line to satisfy Dot(D,U) >= 0.
+            std::array<QFN1, 2> h = { t[0] * DdU + DdPmV, t[1] * DdU + DdPmV };
+
+            QFN1 zero(0, 0, discr);
+            if (h[0] >= zero)
+            {
+                // Block 1. The line intersects the positive cone in two
+                // points.
+                SetSegmentClamp(t, h, DdU, DdPmV, cone, result);
+            }
+            else if (h[1] <= zero)
+            {
+                // Block 2. The line intersects the negative cone in two
+                // points.
+                SetEmpty(result);
+            }
+            else  // h[0] < 0 < h[1]
+            {
+                // Block 3. The line intersects the positive cone in a single
+                // point and the negative cone in a single point.
+                SetRayClamp(h[1], DdU, DdPmV, cone, result);
+            }
+        }
+
+        void CaseC2NotZeroDiscrZero(Real const& c1, Real const& c2,
+            Real const& UdU, Real const& UdPmV, Real const& DdU, Real const& DdPmV,
+            Cone3<Real> const& cone, Result& result)
+        {
+            Real t = -c1 / c2;
+            if (t * UdU + UdPmV == (Real)0)
+            {
+                // To get here, it must be that V = P + (-c1/c2) * U, where
+                // U is not necessarily a unit-length vector. The line
+                // intersects the cone vertex.
+                if (c2 < (Real)0)
+                {
+                    // Block 4. The line is outside the double-sided cone and
+                    // intersects it only at V.
+                    SetPointClamp(QFN1(t, 0, 0), QFN1(0, 0, 0), cone, result);
                 }
                 else
                 {
-                    result.type = 4;
-                    result.parameter[1] = result.parameter[0];
-                    result.parameter[0] = -std::numeric_limits<Real>::max();
-
+                    // Block 5. The line is inside the double-sided cone, so
+                    // the intersection is a ray with origin V.
+                    SetRayClamp(QFN1(0, 0, 0), DdU, DdPmV, cone, result);
                 }
             }
             else
             {
-                // The line intersects the negative cone in two distinct
-                // points, but we are interested only in the intersections
-                // with the positive cone.
-                result.intersect = false;
-                result.type = 0;
-                return;
+                // The line is tangent to the cone at a point different from
+                // the vertex.
+                Real h = t * DdU + DdPmV;
+                if (h >= (Real)0)
+                {
+                    // Block 6. The line is tangent to the positive cone.
+                    SetPointClamp(QFN1(t, 0, 0), QFN1(h, 0, 0), cone, result);
+                }
+                else
+                {
+                    // Block 7. The line is tangent to the negative cone.
+                    SetEmpty(result);
+                }
             }
         }
-        else  // discr == 0
+
+        void CaseC2ZeroC1NotZero(Real const& c0, Real const& c1, Real const& DdU,
+            Real const& DdPmV, Cone3<Real> const& cone, Result& result)
         {
-            // One repeated real root; the line is tangent to the double-sided
-            // cone at a single point.  Report only the point if it is on the
-            // positive cone.
-            t = -c1 / c2;
-            if (DdU * t + DdPmV >= (Real)0)
+            // U is a direction vector on the cone boundary. Compute the
+            // t-value for the intersection point and compute the
+            // corresponding height h to determine whether that point is on
+            // the positive cone or negative cone.
+            Real t = (Real)-0.5 * c0 / c1;
+            Real h = t * DdU + DdPmV;
+            if (h > (Real)0)
             {
-                result.intersect = true;
-                result.type = 1;
-                result.parameter[0] = t;
-                result.parameter[1] = t;
+                // Block 8. The line intersects the positive cone and the ray
+                // of intersection is interior to the positive cone. The
+                // intersection is a ray or segment.
+                SetRayClamp(QFN1(h, 0, 0), DdU, DdPmV, cone, result);
             }
             else
             {
-                result.intersect = false;
-                result.type = 0;
-                return;
+                // Block 9. The line intersects the negative cone and the ray
+                // of intersection is interior to the negative cone.
+                SetEmpty(result);
             }
         }
-    }
-    else if (c1 != (Real)0)
-    {
-        // c2 = 0, c1 != 0; U is a direction vector on the cone boundary
-        t = -((Real)0.5)*c0 / c1;
-        if (DdU * t + DdPmV >= (Real)0)
+
+        void CaseC2ZeroC1Zero(Real const& c0, Real const& UdU, Real const& UdPmV,
+            Real const& DdU, Real const& DdPmV, Cone3<Real> const& cone, Result& result)
         {
-            // The line intersects the positive cone and the ray of
-            // intersection is interior to the positive cone.
-            result.intersect = true;
-            if (DdU > (Real)0)
+            if (c0 != (Real)0)
             {
-                result.type = 3;
-                result.parameter[0] = t;
-                result.parameter[1] = std::numeric_limits<Real>::max();
+                // Block 10. The line does not intersect the double-sided
+                // cone.
+                SetEmpty(result);
             }
             else
             {
-                result.type = 4;
-                result.parameter[0] = -std::numeric_limits<Real>::max();
-                result.parameter[1] = t;
+                // Block 11. The line is on the cone boundary. The
+                // intersection with the positive cone is a ray that contains
+                // the cone vertex.  The intersection is either a ray or
+                // segment.
+                Real t = -UdPmV / UdU;
+                Real h = t * DdU + DdPmV;
+                SetRayClamp(QFN1(h, 0, 0), DdU, DdPmV, cone, result);
             }
         }
-        else
+
+        void SetEmpty(Result& result)
         {
-            // The line intersects the negative cone and the ray of
-            // intersection is interior to the positive cone.
-            result.intersect = false;
-            result.type = 0;
-            return;
+            result.type = Result::isEmpty;
+            result.t[0] = QFN1();
+            result.t[1] = QFN1();
         }
-    }
-    else if (c0 != (Real)0)
-    {
-        // c2 = c1 = 0, c0 != 0.  Cross(D,U) is perpendicular to Cross(P-V,U)
-        result.intersect = false;
-        result.type = 0;
-        return;
-    }
-    else
-    {
-        // c2 = c1 = c0 = 0; the line is on the cone boundary.
-        result.intersect = true;
-        result.type = 5;
-        result.parameter[0] = -std::numeric_limits<Real>::max();
-        result.parameter[1] = +std::numeric_limits<Real>::max();
-    }
 
-    if (cone.maxHeight < std::numeric_limits<Real>::max())
-    {
-        if (DdU != (Real)0)
+        void SetPoint(QFN1 const& t, Result& result)
         {
-            // Clamp the intersection to the height of the cone.
-            Real invDdU = ((Real)1) / DdU;
-            std::array<Real, 2> hInterval;
-            if (DdU >(Real)0)
-            {
-                hInterval[0] = -DdPmV * invDdU;
-                hInterval[1] = (cone.maxHeight - DdPmV) * invDdU;
-            }
-            else // (DdU < (Real)0)
-            {
-                hInterval[0] = (cone.maxHeight - DdPmV) * invDdU;
-                hInterval[1] = -DdPmV * invDdU;
-            }
-
-            FIIntervalInterval<Real> iiQuery;
-            auto iiResult = iiQuery(result.parameter, hInterval);
-            result.intersect = (iiResult.numIntersections > 0);
-            result.type = iiResult.numIntersections;
-            result.parameter = iiResult.overlap;
+            result.type = Result::isPoint;
+            result.t[0] = t;
+            result.t[1] = result.t[0];
         }
-        else if (result.intersect)
+
+        void SetSegment(QFN1 const& t0, QFN1 const& t1, Result& result)
         {
-            if (DdPmV > cone.maxHeight)
+            result.type = Result::isSegment;
+            result.t[0] = t0;
+            result.t[1] = t1;
+        }
+
+        void SetRayPositive(QFN1 const& t, Result& result)
+        {
+            result.type = Result::isRayPositive;
+            result.t[0] = t;
+            result.t[1] = QFN1(+1, 0, t.d);  // +infinity
+        }
+
+        void SetRayNegative(QFN1 const& t, Result& result)
+        {
+            result.type = Result::isRayNegative;
+            result.t[0] = QFN1(-1, 0, t.d);  // +infinity
+            result.t[1] = t;
+        }
+
+        void SetPointClamp(QFN1 const& t, QFN1 const& h,
+            Cone3<Real> const& cone, Result& result)
+        {
+            if (cone.HeightInRange(h.x[0]))
             {
-                result.intersect = false;
-                result.type = 0;
+                // P0.
+                SetPoint(t, result);
+            }
+            else
+            {
+                // P1.
+                SetEmpty(result);
             }
         }
-    }
-}
 
+        void SetSegmentClamp(std::array<QFN1, 2> const& t, std::array<QFN1, 2> const& h,
+            Real const& DdU, Real const& DdPmV, Cone3<Real> const& cone, Result& result)
+        {
+            std::array<QFN1, 2> hrange =
+            {
+                QFN1(cone.GetMinHeight(), 0, h[0].d),
+                QFN1(cone.GetMaxHeight(), 0, h[0].d)
+            };
 
+            if (h[1] > h[0])
+            {
+                auto iir = (cone.IsFinite() ? IIQuery()(h, hrange) : IIQuery()(h, hrange[0], true));
+                if (iir.numIntersections == 2)
+                {
+                    // S0.
+                    SetSegment((iir.overlap[0] - DdPmV) / DdU, (iir.overlap[1] - DdPmV) / DdU, result);
+                }
+                else if (iir.numIntersections == 1)
+                {
+                    // S1.
+                    SetPoint((iir.overlap[0] - DdPmV) / DdU, result);
+                }
+                else  // iir.numIntersections == 0
+                {
+                    // S2.
+                    SetEmpty(result);
+                }
+            }
+            else  // h[1] == h[0]
+            {
+                if (hrange[0] <= h[0] && (cone.IsFinite() ? h[0] <= hrange[1] : true))
+                {
+                    // S3. DdU > 0 and the line is not perpendicular to the
+                    // cone axis.
+                    SetSegment(t[0], t[1], result);
+                }
+                else
+                {
+                    // S4. DdU == 0 and the line is perpendicular to the
+                    // cone axis.
+                    SetEmpty(result);
+                }
+            }
+        }
+
+        void SetRayClamp(QFN1 const& h, Real const& DdU, Real const& DdPmV,
+            Cone3<Real> const& cone, Result& result)
+        {
+            std::array<QFN1, 2> hrange =
+            {
+                QFN1(cone.GetMinHeight(), 0, h.d),
+                QFN1(cone.GetMaxHeight(), 0, h.d)
+            };
+
+            if (cone.IsFinite())
+            {
+                auto iir = IIQuery()(hrange, h, true);
+                if (iir.numIntersections == 2)
+                {
+                    // R0.
+                    SetSegment((iir.overlap[0] - DdPmV) / DdU, (iir.overlap[1] - DdPmV) / DdU, result);
+                }
+                else if (iir.numIntersections == 1)
+                {
+                    // R1.
+                    SetPoint((iir.overlap[0] - DdPmV) / DdU, result);
+                }
+                else  // iir.numIntersections == 0
+                {
+                    // R2.
+                    SetEmpty(result);
+                }
+            }
+            else
+            {
+                // R3.
+                SetRayPositive((std::max(hrange[0], h) - DdPmV) / DdU, result);
+            }
+        }
+    };
 }

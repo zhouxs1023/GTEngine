@@ -27,7 +27,7 @@
 // a box1 face normal N1 are nearly parallel.  In this case, you may skip the
 // edge-edge directions, which is equivalent to projecting the boxes onto the
 // plane with normal N0 and applying a 2D separating axis test.  The ability
-// to do so involves choosing a small nonnegative epsilon .  It is used to
+// to do so involves choosing a small nonnegative epsilon.  It is used to
 // determine whether two face normals, one from each box, are nearly parallel:
 // |Dot(N0,N1)| >= 1 - epsilon.  If the input is negative, it is clamped to
 // zero.

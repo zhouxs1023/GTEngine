@@ -24,19 +24,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawIntersections.hlsl">
+    <None Include="Shaders\DrawIntersections.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneMeshIntersection.hlsl">
+    <None Include="Shaders\PlaneMeshIntersection.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawIntersections.glsl">
+    <None Include="Shaders\PlaneMeshIntersection.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneMeshIntersectionPS.glsl">
+    <None Include="Shaders\DrawIntersections.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PlaneMeshIntersectionVS.glsl">
+    <None Include="Shaders\PlaneMeshIntersection.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\PlaneMeshIntersection.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

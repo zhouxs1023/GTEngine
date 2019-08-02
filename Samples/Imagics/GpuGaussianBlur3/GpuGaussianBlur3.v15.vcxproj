@@ -320,24 +320,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\BoundaryDirichlet.glsl" />
-    <None Include="Shaders\BoundaryNeumann.glsl" />
-    <None Include="Shaders\DrawImage.glsl" />
-    <None Include="Shaders\GaussianBlur.glsl" />
+    <None Include="Shaders\BoundaryDirichlet.cs.glsl" />
+    <None Include="Shaders\BoundaryNeumann.cs.glsl" />
+    <None Include="Shaders\DrawImage.ps.glsl" />
+    <None Include="Shaders\GaussianBlur.cs.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\BoundaryDirichlet.hlsl">
+    <None Include="Shaders\BoundaryDirichlet.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\BoundaryNeumann.hlsl">
+    <None Include="Shaders\BoundaryNeumann.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\GaussianBlur.hlsl">
+    <None Include="Shaders\DrawImage.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\DrawImage.hlsl">
+    <None Include="Shaders\GaussianBlur.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

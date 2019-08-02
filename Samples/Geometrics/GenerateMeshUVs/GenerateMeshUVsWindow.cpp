@@ -3,11 +3,18 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/03/04)
+// File Version: 3.0.3 (2019/04/13)
 
 #define GTE_COMPUTE_MODEL_ALLOW_GPGPU
 #include "GenerateMeshUVsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <Mathematics/GteArbitraryPrecision.h>
+#include <Mathematics/GteGenerateMeshUV.h>
+#include <Mathematics/GtePlanarMesh.h>
 #include <iostream>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -133,7 +140,7 @@ void GenerateMeshUVsWindow::CreateMeshOriginal()
     mMeshOriginal = mf.CreateDisk(16, 16, 1.0f);
     float height = 0.25f;
     float radius = std::sqrt(1.0f - height*height);
-    std::shared_ptr<VertexBuffer> vbuffer = mMeshOriginal->GetVertexBuffer();
+    auto vbuffer = mMeshOriginal->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
     Vertex* vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
@@ -149,11 +156,9 @@ void GenerateMeshUVsWindow::CreateMeshOriginal()
     }
 
     std::string path = mEnvironment.GetPath("MedicineBag.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
-    std::shared_ptr<Texture2Effect> effect =
-        std::make_shared<Texture2Effect>(mProgramFactory, texture,
-        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP,
-        SamplerState::CLAMP);
+    auto texture = WICFileIO::Load(path, false);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
     mMeshOriginal->SetEffect(effect);
 
     mPVWMatrices.Subscribe(mMeshOriginal->worldTransform, effect->GetPVWMatrixConstant());
@@ -163,11 +168,11 @@ void GenerateMeshUVsWindow::CreateMeshOriginal()
 
 void GenerateMeshUVsWindow::CreateMeshResampled()
 {
-    std::shared_ptr<VertexBuffer> vbuffer = mMeshOriginal->GetVertexBuffer();
+    auto vbuffer = mMeshOriginal->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
     Vertex* vertices = vbuffer->Get<Vertex>();
 
-    std::shared_ptr<IndexBuffer> ibuffer = mMeshOriginal->GetIndexBuffer();
+    auto ibuffer = mMeshOriginal->GetIndexBuffer();
     int numIndices = (int)ibuffer->GetNumElements();
     int const* indices = ibuffer->Get<int>();
     std::vector<Vector3<double>> dvertices(numVertices);
@@ -245,9 +250,8 @@ void GenerateMeshUVsWindow::CreateMeshResampled()
     }
 
     std::string path = mEnvironment.GetPath("MedicineBag.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
-    std::shared_ptr<Texture2Effect> effect =
-        std::make_shared<Texture2Effect>(mProgramFactory, texture,
+    auto texture = WICFileIO::Load(path, false);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP,
         SamplerState::CLAMP);
     mMeshResampled->SetEffect(effect);

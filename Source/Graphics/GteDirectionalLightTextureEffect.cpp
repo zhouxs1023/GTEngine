@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/07)
+// File Version: 3.0.2 (2019/04/17)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteDirectionalLightTextureEffect.h>
@@ -32,15 +32,11 @@ DirectionalLightTextureEffect::DirectionalLightTextureEffect(std::shared_ptr<Pro
     mGeometryConstant = std::make_shared<ConstantBuffer>(sizeof(InternalGeometry), true);
     UpdateGeometryConstant();
 
-    mProgram->GetPShader()->Set("Material", mMaterialConstant);
-    mProgram->GetPShader()->Set("Lighting", mLightingConstant);
-    mProgram->GetPShader()->Set("LightCameraGeometry", mGeometryConstant);
-#if defined(GTE_DEV_OPENGL)
-    mProgram->GetPShader()->Set("baseSampler", mTexture);
-#else
-    mProgram->GetPShader()->Set("baseTexture", mTexture);
-#endif
-    mProgram->GetPShader()->Set("baseSampler", mSampler);
+    auto pshader = mProgram->GetPShader();
+    pshader->Set("Material", mMaterialConstant);
+    pshader->Set("Lighting", mLightingConstant);
+    pshader->Set("LightCameraGeometry", mGeometryConstant);
+    pshader->Set("baseTexture", mTexture, "baseSampler", mSampler);
 }
 
 void DirectionalLightTextureEffect::UpdateMaterialConstant()

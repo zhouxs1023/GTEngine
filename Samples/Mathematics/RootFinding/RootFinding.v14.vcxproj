@@ -316,8 +316,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\RootFinder.glsl" />
-    <None Include="Shaders\RootFinder.hlsl">
+    <None Include="Shaders\RootFinder.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\RootFinder.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

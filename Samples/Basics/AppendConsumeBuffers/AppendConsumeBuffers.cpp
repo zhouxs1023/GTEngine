@@ -3,13 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/20)
+// File Version: 3.0.4 (2019/05/02)
 
-#include <GTEngine.h>
-#if defined(__LINUX__)
-#include <Graphics/GL4/GteGLSLProgramFactory.h>
-#include <Graphics/GL4/GLX/GteGLXEngine.h>
-#endif
+#include <Applications/GteEnvironment.h>
+#include <LowLevel/GteLogReporter.h>
+#include <GTGraphics.h>
 using namespace gte;
 
 void TestAppendConsumeBuffer()
@@ -23,48 +21,24 @@ void TestAppendConsumeBuffer()
     }
     env.Insert(gtpath + "/Samples/Basics/AppendConsumeBuffers/Shaders/");
 
-#if defined(GTE_DEV_OPENGL)
-#if defined(__MSWINDOWS__)
-    WGLEngine engine(true, false);
-#else
-    GLXEngine engine(true, false);
-#endif
+    DefaultEngine engine;
 
-    // Create a shader that trims the initial set by half, consuming only
-    // the even-indexed particles.
-    std::string path = env.GetPath("AppendConsume.glsl");
+    // Create a shader that trims the initial set by half, consuming only the
+    // even-indexed particles.
+    std::string name = DefaultShaderName("AppendConsume.cs");
+    std::string path = env.GetPath(name);
     if (path == "")
     {
-        LogError("Cannot find AppendConsume.glsl.");
+        LogError("Cannot find " + name);
         return;
     }
 
-    GLSLProgramFactory factory;
+    DefaultProgramFactory factory;
     auto cprogram = factory.CreateFromFile(path);
     if (!cprogram)
     {
         return;
     }
-
-#else
-    DX11Engine engine(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0);
-
-    // Create a shader that trims the initial set by half, consuming only
-    // the even-indexed particles.
-    std::string path = env.GetPath("AppendConsume.hlsl");
-    if (path == "")
-    {
-        LogError("Cannot find AppendConsume.hlsl.");
-        return;
-    }
-
-    HLSLProgramFactory factory;
-    auto cprogram = factory.CreateFromFile(path);
-    if (!cprogram)
-    {
-        return;
-    }
-#endif
 
     // Create 32 particles, stored in currentState to be "consumed".
     struct Particle
@@ -72,8 +46,7 @@ void TestAppendConsumeBuffer()
         int location[2];
     };
     int const numInputs = 32;
-    std::shared_ptr<StructuredBuffer> currentState =
-        std::make_shared<StructuredBuffer>(numInputs, sizeof(Particle));
+    auto currentState = std::make_shared<StructuredBuffer>(numInputs, sizeof(Particle));
     currentState->MakeAppendConsume();
 
     Particle* particle = currentState->Get<Particle>();
@@ -84,8 +57,7 @@ void TestAppendConsumeBuffer()
     }
 
     // The next set of particles is created from the initial set.
-    std::shared_ptr<StructuredBuffer> nextState =
-        std::make_shared<StructuredBuffer>(numInputs, sizeof(Particle));
+    auto nextState = std::make_shared<StructuredBuffer>(numInputs, sizeof(Particle));
     nextState->MakeAppendConsume();
     nextState->SetCopyType(Resource::COPY_STAGING_TO_CPU);
 
@@ -135,14 +107,12 @@ void TestAppendConsumeBuffer()
 
 int main(int, char const*[])
 {
-#if defined(_DEBUG)
     LogReporter reporter(
         "LogReport.txt",
         Logger::Listener::LISTEN_FOR_ALL,
         Logger::Listener::LISTEN_FOR_ALL,
         Logger::Listener::LISTEN_FOR_ALL,
         Logger::Listener::LISTEN_FOR_ALL);
-#endif
 
     TestAppendConsumeBuffer();
     return 0;

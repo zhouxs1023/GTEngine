@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/03)
 
 #include <GTEnginePCH.h>
 #include <Physics/GteFluid2InitializeState.h>
@@ -32,7 +32,7 @@ Fluid2InitializeState::Fluid2InitializeState(std::shared_ptr<ProgramFactory> con
 
     // Initial velocity values are zero.
     mVelocity = std::make_shared<Texture2>(DF_R32G32_FLOAT, xSize, ySize);
-    memset(mVelocity->GetData(), 0, mVelocity->GetNumBytes());
+    std::memset(mVelocity->GetData(), 0, mVelocity->GetNumBytes());
 
     // The states at time 0 and time -dt are initialized by a compute shader.
     mStateTm1 = std::make_shared<Texture2>(DF_R32G32B32A32_FLOAT, xSize, ySize);

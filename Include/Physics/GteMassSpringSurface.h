@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/16)
 
 #pragma once
 
@@ -129,9 +129,9 @@ Vector<N, Real> const& position)
 
 template <int N, typename Real> inline
 void MassSpringSurface<N, Real>::SetVelocity(int r, int c,
-Vector<N, Real> const& position)
+Vector<N, Real> const& velocity)
 {
-    ParticleSystem<N, Real>::SetVelocity(GetIndex(r, c), position);
+    ParticleSystem<N, Real>::SetVelocity(GetIndex(r, c), velocity);
 }
 
 template <int N, typename Real> inline

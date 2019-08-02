@@ -3,13 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/03)
 
 #pragma once
 
 #include <LowLevel/GteLexicoArray2.h>
 #include <LowLevel/GteLogger.h>
-#include <LowLevel/GteWrapper.h>
 #include <cmath>
 #include <cstring>
 #include <vector>
@@ -257,11 +256,11 @@ void GaussianElimination<Real>::Set(int numElements, Real const* source,
         size_t numBytes = numElements * sizeof(Real);
         if (source)
         {
-            Memcpy(target, source, numBytes);
+            std::memcpy(target, source, numBytes);
         }
         else
         {
-            memset(target, 0, numBytes);
+            std::memset(target, 0, numBytes);
         }
     }
     else

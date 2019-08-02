@@ -3,10 +3,9 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/03)
 
 #include <GTEnginePCH.h>
-#include <LowLevel/GteWrapper.h>
 #include <Graphics/DX11/GteDX11Texture.h>
 using namespace gte;
 
@@ -50,7 +49,7 @@ bool DX11Texture::Update(ID3D11DeviceContext* context, unsigned int sri)
     unsigned int numDimensions = texture->GetNumDimensions();
     if (numDimensions == 1)
     {
-        Memcpy(sub.pData, sr.data, texture->GetNumBytesFor(sr.level));
+        std::memcpy(sub.pData, sr.data, texture->GetNumBytesFor(sr.level));
     }
     else if (numDimensions == 2)
     {
@@ -106,7 +105,7 @@ bool DX11Texture::CopyCpuToGpu(ID3D11DeviceContext* context,
     unsigned int numDimensions = texture->GetNumDimensions();
     if (numDimensions == 1)
     {
-        Memcpy(sub.pData, sr.data, texture->GetNumBytesFor(sr.level));
+        std::memcpy(sub.pData, sr.data, texture->GetNumBytesFor(sr.level));
     }
     else if (numDimensions == 2)
     {
@@ -176,7 +175,7 @@ bool DX11Texture::CopyGpuToCpu(ID3D11DeviceContext* context, unsigned int sri)
     unsigned int numDimensions = texture->GetNumDimensions();
     if (numDimensions == 1)
     {
-        Memcpy(sr.data, sub.pData, texture->GetNumBytesFor(sr.level));
+        std::memcpy(sr.data, sub.pData, texture->GetNumBytesFor(sr.level));
     }
     else if (numDimensions == 2)
     {
@@ -248,7 +247,7 @@ void DX11Texture::CopyPitched2(unsigned int numRows,
     if (srcRowPitch == trgRowPitch)
     {
         // The memory is contiguous.
-        Memcpy(trgData, srcData, trgRowPitch*numRows);
+        std::memcpy(trgData, srcData, trgRowPitch*numRows);
     }
     else
     {
@@ -259,7 +258,7 @@ void DX11Texture::CopyPitched2(unsigned int numRows,
         char* trgRow = static_cast<char*>(trgData);
         for (unsigned int row = 0; row < numRows; ++row)
         {
-            Memcpy(trgRow, srcRow, numRowBytes);
+            std::memcpy(trgRow, srcRow, numRowBytes);
             srcRow += srcRowPitch;
             trgRow += trgRowPitch;
         }
@@ -274,7 +273,7 @@ void DX11Texture::CopyPitched3(unsigned int numRows,
     if (srcRowPitch == trgRowPitch && srcSlicePitch == trgSlicePitch)
     {
         // The memory is contiguous.
-        Memcpy(trgData, srcData, trgSlicePitch*numSlices);
+        std::memcpy(trgData, srcData, trgSlicePitch*numSlices);
     }
     else
     {
@@ -289,7 +288,7 @@ void DX11Texture::CopyPitched3(unsigned int numRows,
             char* trgRow = trgSlice;
             for (unsigned int row = 0; row < numRows; ++row)
             {
-                Memcpy(trgRow, srcRow, numRowBytes);
+                std::memcpy(trgRow, srcRow, numRowBytes);
                 srcRow += srcRowPitch;
                 trgRow += trgRowPitch;
             }

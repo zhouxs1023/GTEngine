@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include "SphereMapsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -98,7 +101,7 @@ void SphereMapsWindow::CreateScene()
     mTorus = mf.CreateTorus(64, 64, 1.0f, 0.5f);
 
     std::string path = mEnvironment.GetPath("SphereMap.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
+    auto texture = WICFileIO::Load(path, false);
     mSMEffect = std::make_shared<SphereMapEffect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
 
@@ -116,13 +119,8 @@ void SphereMapsWindow::UpdateConstants()
     Matrix4x4<float> pvMatrix = mCamera->GetProjectionViewMatrix();
     Matrix4x4<float> vMatrix = mCamera->GetViewMatrix();
     Matrix4x4<float> wMatrix = mTorus->worldTransform.GetHMatrix();
-#if defined(GTE_USE_MAT_VEC)
-    Matrix4x4<float> pvwMatrix = pvMatrix * wMatrix;
-    Matrix4x4<float> vwMatrix = vMatrix * wMatrix;
-#else
-    Matrix4x4<float> pvwMatrix = wMatrix * pvMatrix;
-    Matrix4x4<float> vwMatrix = wMatrix * vMatrix;
-#endif
+    Matrix4x4<float> pvwMatrix = DoTransform(pvMatrix, wMatrix);
+    Matrix4x4<float> vwMatrix = DoTransform(vMatrix, wMatrix);
     mSMEffect->SetPVWMatrix(pvwMatrix);
     mSMEffect->SetVWMatrix(vwMatrix);
     mEngine->Update(mSMEffect->GetPVWMatrixConstant());

@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/04/15)
 
 #include "BspNodesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -169,20 +172,8 @@ void BspNodesWindow::CreateScene()
     mScene = std::make_shared<Node>();
     mTrackball.Attach(mScene);
 
-#if defined(GTE_USE_MAT_VEC)
-    Matrix4x4<float> rot({
-        0.982696891f, 0.181242809f, 0.0381834470f, 0.0f,
-        -0.173357248f, 0.972590029f, -0.154970810f, 0.0f,
-        -0.0652241856f, 0.145669952f, 0.987180948f, 0.0f,
-        0.0f, 0.0f, 0.0f, 1.0f });
-#else
-    Matrix4x4<float> rot({
-        0.982696891f, -0.173357248f, -0.0652241856f, 0.0f,
-        0.181242809f, 0.972590029f, 0.145669952f, 0.0f,
-        0.0381834470f, -0.154970810f, 0.987180948f, 0.0f,
-        0.0f, 0.0f, 0.0f, 1.0f });
-#endif
-    mScene->localTransform.SetRotation(rot);
+    Quaternion<float> q{ 0.0757066011f, 0.0260398518f, -0.0892945006f, 0.992782414f };
+    mScene->localTransform.SetRotation(q);
 
     // The scene consists of 6 opaque visuals, so create a visible set large
     // enough to store them.
@@ -196,6 +187,7 @@ void BspNodesWindow::CreateScene()
         Vector3<float> position;
         Vector2<float> tcoord;
     };
+
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
@@ -391,8 +383,7 @@ std::shared_ptr<BspNode> BspNodesWindow::CreateNode(int i,
     mRectangle[i]->SetEffect(mVCEffect[i]);
 
     // Set the position and orientation for the world-space plane.
-    Vector3<float> trn{ 0.5f*(v0[0] + v1[0]), 0.5f*(v0[1] + v1[1]),
-        yExtent + 0.001f };
+    Vector3<float> trn{ 0.5f*(v0[0] + v1[0]), 0.5f*(v0[1] + v1[1]), yExtent + 0.001f };
 
     Matrix4x4<float> zRotate = Rotation<4, float>(AxisAngle<4, float>(
         Vector4<float>::Unit(2), std::atan2(dir[1], dir[0])));
@@ -400,12 +391,7 @@ std::shared_ptr<BspNode> BspNodesWindow::CreateNode(int i,
     Matrix4x4<float> xRotate = Rotation<4, float>(AxisAngle<4, float>(
         Vector4<float>::Unit(0), (float)GTE_C_HALF_PI));
 
-#if defined(GTE_USE_MAT_VEC)
-    Matrix4x4<float> rotate = zRotate * xRotate;
-#else
-    // TODO: Probably needs angles negated in the axis-angle objects.
-    Matrix4x4<float> rotate = xRotate * zRotate;
-#endif
+    Matrix4x4<float> rotate = DoTransform(zRotate, xRotate);
 
     mRectangle[i]->localTransform.SetTranslation(trn);
     mRectangle[i]->localTransform.SetRotation(rotate);

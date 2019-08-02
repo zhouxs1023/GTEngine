@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2019/03/04)
+// File Version: 3.0.4 (2019/04/13)
 
 #include "TriangulationCDTWindow.h"
+#include <LowLevel/GteLogReporter.h>
 #include <iostream>
 
 int main(int, char const*[])

@@ -3,14 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/05)
+// File Version: 3.23.1 (2019/05/02)
 
 #include "IntersectTriangles2DWindow.h"
-
-namespace gte
-{
-    template class TIQuery<float, Triangle2<float>, Triangle2<float>>;
-}
+#include <LowLevel/GteLogReporter.h>
+#include <Mathematics/GteContPointInPolygon2.h>
 
 int main(int, char const*[])
 {
@@ -89,7 +86,8 @@ void IntersectTriangles2DWindow::OnDisplay()
 bool IntersectTriangles2DWindow::OnCharPress(unsigned char key, int x, int y)
 {
     float const trnDelta = 1.0f;
-    float const rotDelta = (float)(GTE_C_DEG_TO_RAD * 1.0);
+    double const degrees = 1.0;
+    float const rotDelta = static_cast<float>(GTE_C_DEG_TO_RAD * degrees);
 
     switch (key)
     {
@@ -241,8 +239,7 @@ void IntersectTriangles2DWindow::DrawIntersection()
     int xmax = static_cast<int>(std::ceil(vmax[0]));
     int ymax = static_cast<int>(std::ceil(vmax[1]));
 
-    PointInPolygon2<float> pip(static_cast<int>(mIntersection.size()),
-        mIntersection.data());
+    PointInPolygon2<float> pip(static_cast<int>(mIntersection.size()), mIntersection.data());
     Vector2<float> test;
     for (int y = ymin; y <= ymax; ++y)
     {

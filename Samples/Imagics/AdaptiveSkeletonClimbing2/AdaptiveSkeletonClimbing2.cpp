@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/18)
+// File Version: 3.23.2 (2019/05/03)
 
-#include <GTEngine.h>
+#include <GTGraphics.h>
+#include <Applications/GteTextureIO.h>
+#include <Imagics/GteAdaptiveSkeletonClimbing2.h>
+#include <Imagics/GteImageUtility2.h>
+#include <LowLevel/GteLogReporter.h>
 using namespace gte;
 
 static int gsImage[81] =
@@ -24,7 +28,7 @@ static int gsImage[81] =
 static void Test0()
 {
     std::vector<int> image(81);
-    memcpy(image.data(), gsImage, 81 * sizeof(int));
+    std::memcpy(image.data(), gsImage, 81 * sizeof(int));
 
     AdaptiveSkeletonClimbing2<int, float> climb(3, image.data());
     std::vector<std::array<float, 2>> vertices;

@@ -327,35 +327,37 @@
     <ClInclude Include="ShortestPathWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\InitializeDiagToCol.glsl" />
-    <None Include="Shaders\InitializeDiagToCol.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\InitializeDiagToRow.glsl" />
-    <None Include="Shaders\InitializeDiagToRow.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\PartialSumsDiagToCol.glsl" />
-    <None Include="Shaders\PartialSumsDiagToCol.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\PartialSumsDiagToRow.glsl" />
-    <None Include="Shaders\PartialSumsDiagToRow.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\UpdateShader.glsl" />
-    <None Include="Shaders\UpdateShader.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\WeightsShader.glsl" />
-    <None Include="Shaders\WeightsShader.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\InitializeDiagToCol.cs.glsl" />
+    <None Include="Shaders\InitializeDiagToRow.cs.glsl" />
+    <None Include="Shaders\PartialSumsDiagToCol.cs.glsl" />
+    <None Include="Shaders\PartialSumsDiagToRow.cs.glsl" />
+    <None Include="Shaders\UpdateShader.cs.glsl" />
+    <None Include="Shaders\WeightsShader.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\InitializeDiagToCol.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\InitializeDiagToRow.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\PartialSumsDiagToCol.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\PartialSumsDiagToRow.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\UpdateShader.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\WeightsShader.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

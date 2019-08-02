@@ -118,11 +118,19 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Texture2PNTPS.glsl">
+    <None Include="Shaders\Texture2PNT.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\Texture2PNTVS.glsl">
+    <None Include="Shaders\Texture2PNT.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Texture2PNT.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Texture2PNT.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2018/10/05)
+// File Version: 3.0.4 (2019/07/31)
 
 #pragma once
 
@@ -60,8 +60,10 @@ public:
 
     // Special vectors.
     void MakeZero();  // All components are 0.
+    void MakeOnes();  // All components are 1.
     void MakeUnit(int d);  // Component d is 1, all others are zero.
     static Vector Zero();
+    static Vector Ones();
     static Vector Unit(int d);
 
 protected:
@@ -280,6 +282,12 @@ void Vector<N, Real>::MakeZero()
 }
 
 template <int N, typename Real>
+void Vector<N, Real>::MakeOnes()
+{
+    std::fill(mTuple.begin(), mTuple.end(), (Real)1);
+}
+
+template <int N, typename Real>
 void Vector<N, Real>::MakeUnit(int d)
 {
     std::fill(mTuple.begin(), mTuple.end(), (Real)0);
@@ -305,7 +313,13 @@ Vector<N, Real> Vector<N, Real>::Unit(int d)
     return v;
 }
 
-
+template <int N, typename Real>
+Vector<N, Real> Vector<N, Real>::Ones()
+{
+    Vector<N, Real> v;
+    v.MakeOnes();
+    return v;
+}
 
 template <int N, typename Real>
 Vector<N, Real> operator+(Vector<N, Real> const& v)

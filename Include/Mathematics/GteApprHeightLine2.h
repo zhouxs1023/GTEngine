@@ -3,151 +3,97 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/07/30)
 
 #pragma once
 
 #include <Mathematics/GteMatrix2x2.h>
 #include <Mathematics/GteApprQuery.h>
 
-// Least-squares fit of a line to height data (x,f(x)).  The line is of the
+// Least-squares fit of a line to height data (x,f(x)). The line is of the
 // form: (y - yAvr) = a*(x - xAvr), where (xAvr,yAvr) is the average of the
-// sample points.  The return value of Fit is 'true' iff the fit is successful
-// (the input points are not degenerate to a single point).  The mParameters
-// values are ((xAvr,yAvr),(a,-1)) on success and ((0,0),(0,0)) on failure.
-// The error for (x0,y0) is [a*(x0-xAvr)-(y0-yAvr)]^2.
+// sample points. The return value of Fit is 'true' if and only if the fit is
+// successful (the input points are not degenerate to a single point). The
+// mParameters values are ((xAvr,yAvr),(a,-1)) on success and ((0,0),(0,0)) on
+// failure. The error for (x0,y0) is [a*(x0-xAvr)-(y0-yAvr)]^2.
 
 namespace gte
 {
-
-template <typename Real>
-class ApprHeightLine2
-    :
-    public ApprQuery<Real, ApprHeightLine2<Real>, Vector2<Real>>
-{
-public:
-    // Initialize the model parameters to zero.
-    ApprHeightLine2();
-
-    // Basic fitting algorithm.
-    bool Fit(int numPoints, Vector2<Real> const* points);
-    std::pair<Vector2<Real>, Vector2<Real>> const& GetParameters() const;
-
-    // Functions called by ApprQuery::RANSAC.  See GteApprQuery.h for a
-    // detailed description.
-    int GetMinimumRequired() const;
-    Real Error(Vector2<Real> const& observation) const;
-    bool Fit(std::vector<Vector2<Real>> const& observations,
-        std::vector<int> const& indices);
-
-private:
-    std::pair<Vector2<Real>, Vector2<Real>> mParameters;
-};
-
-
-template <typename Real>
-ApprHeightLine2<Real>::ApprHeightLine2()
-{
-    mParameters.first = Vector2<Real>::Zero();
-    mParameters.second = Vector2<Real>::Zero();
-}
-
-template <typename Real>
-bool ApprHeightLine2<Real>::Fit(int numPoints, Vector2<Real> const* points)
-{
-    if (numPoints >= GetMinimumRequired() && points)
+    template <typename Real>
+    class ApprHeightLine2 : public ApprQuery<Real, Vector2<Real>>
     {
-        // Compute the mean of the points.
-        Vector2<Real> mean = Vector2<Real>::Zero();
-        for (int i = 0; i < numPoints; ++i)
+    public:
+        // Initialize the model parameters to zero.
+        ApprHeightLine2()
         {
-            mean += points[i];
-        }
-        mean /= (Real)numPoints;
-
-        // Compute the covariance matrix of the points.
-        Real covar00 = (Real)0, covar01 = (Real)0;
-        for (int i = 0; i < numPoints; ++i)
-        {
-            Vector2<Real> diff = points[i] - mean;
-            covar00 += diff[0] * diff[0];
-            covar01 += diff[0] * diff[1];
+            mParameters.first = Vector2<Real>::Zero();
+            mParameters.second = Vector2<Real>::Zero();
         }
 
-        // Decompose the covariance matrix.
-        if (covar00 >(Real)0)
+        // Basic fitting algorithm. See ApprQuery.h for the various Fit(...)
+        // functions that you can call.
+        virtual bool FitIndexed(
+            size_t numPoints, Vector2<Real> const* points,
+            size_t numIndices, int const* indices) override
         {
-            mParameters.first = mean;
-            mParameters.second[0] = covar01 / covar00;
-            mParameters.second[1] = (Real)-1;
-            return true;
-        }
-    }
+            if (this->ValidIndices(numPoints, points, numIndices, indices))
+            {
+                // Compute the mean of the points.
+                Vector2<Real> mean = Vector2<Real>::Zero();
+                int const* currentIndex = indices;
+                for (size_t i = 0; i < numIndices; ++i)
+                {
+                    mean += points[*currentIndex++];
+                }
+                mean /= (Real)numIndices;
 
-    mParameters.first = Vector2<Real>::Zero();
-    mParameters.second = Vector2<Real>::Zero();
-    return false;
-}
+                if (std::isfinite(mean[0]) && std::isfinite(mean[1]))
+                {
+                    // Compute the covariance matrix of the points.
+                    Real covar00 = (Real)0, covar01 = (Real)0;
+                    currentIndex = indices;
+                    for (size_t i = 0; i < numIndices; ++i)
+                    {
+                        Vector2<Real> diff = points[*currentIndex++] - mean;
+                        covar00 += diff[0] * diff[0];
+                        covar01 += diff[0] * diff[1];
+                    }
 
-template <typename Real>
-std::pair<Vector2<Real>, Vector2<Real>> const&
-ApprHeightLine2<Real>::GetParameters() const
-{
-    return mParameters;
-}
+                    // Decompose the covariance matrix.
+                    if (covar00 > (Real)0)
+                    {
+                        mParameters.first = mean;
+                        mParameters.second[0] = covar01 / covar00;
+                        mParameters.second[1] = (Real)-1;
+                        return true;
+                    }
+                }
+            }
 
-template <typename Real>
-int ApprHeightLine2<Real>::GetMinimumRequired() const
-{
-    return 2;
-}
-
-template <typename Real>
-Real ApprHeightLine2<Real>::Error(Vector2<Real> const& observation) const
-{
-    Real d = Dot(observation - mParameters.first, mParameters.second);
-    Real error = d*d;
-    return error;
-}
-
-template <typename Real>
-bool ApprHeightLine2<Real>::Fit(
-    std::vector<Vector2<Real>> const& observations,
-    std::vector<int> const& indices)
-{
-    if (static_cast<int>(indices.size()) >= GetMinimumRequired())
-    {
-        // Compute the mean of the points.
-        Vector2<Real> mean = Vector2<Real>::Zero();
-        for (auto index : indices)
-        {
-            mean += observations[index];
-        }
-        mean /= (Real)indices.size();
-
-        // Compute the covariance matrix of the points.
-        Real covar00 = (Real)0, covar01 = (Real)0;
-        for (auto index : indices)
-        {
-            Vector2<Real> diff = observations[index] - mean;
-            covar00 += diff[0] * diff[0];
-            covar01 += diff[0] * diff[1];
+            mParameters.first = Vector2<Real>::Zero();
+            mParameters.second = Vector2<Real>::Zero();
+            return false;
         }
 
-        // Decompose the covariance matrix.
-        if (covar00 > (Real)0)
+        // Get the parameters for the best fit.
+        std::pair<Vector2<Real>, Vector2<Real>> const& GetParameters() const
         {
-            mParameters.first = mean;
-            mParameters.second[0] = covar01 / covar00;
-            mParameters.second[1] = (Real)-1;
-            return true;
+            return mParameters;
         }
-    }
 
-    mParameters.first = Vector2<Real>::Zero();
-    mParameters.second = Vector2<Real>::Zero();
-    return false;
-}
+        virtual size_t GetMinimumRequired() const override
+        {
+            return 2;
+        }
 
+        virtual Real Error(Vector2<Real> const& point) const override
+        {
+            Real d = Dot(point - mParameters.first, mParameters.second);
+            Real error = d * d;
+            return error;
+        }
 
+    private:
+        std::pair<Vector2<Real>, Vector2<Real>> mParameters;
+    };
 }

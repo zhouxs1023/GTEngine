@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/05/02)
 
 #include "BouncingBallWindow.h"
+#include <LowLevel/GteLogReporter.h>
 
 int main(int, char const*[])
 {
@@ -153,13 +154,13 @@ void BouncingBallWindow::CreateScene()
 void BouncingBallWindow::CreateBall()
 {
     std::string path = mEnvironment.GetPath("BallTexture.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+    auto texture = WICFileIO::Load(path, false);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
 
     mBall = std::make_unique<DeformableBall>(1.0f, 2.0f, effect);
     mBallNode = std::make_shared<Node>();
-    std::shared_ptr<Visual> mesh = mBall->GetMesh();
+    auto mesh = mBall->GetMesh();
     mBallNode->AttachChild(mesh);
     mPVWMatrices.Subscribe(mesh->worldTransform, effect->GetPVWMatrixConstant());
 }
@@ -170,26 +171,26 @@ void BouncingBallWindow::CreateFloor()
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
 
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto vertices = vbuffer->Get<Vertex>();
     float const xExtent = 8.0f, yExtent = 16.0f, zValue = 0.0f;
-    vertex[0].position = { -xExtent, -yExtent, zValue };
-    vertex[1].position = { +xExtent, -yExtent, zValue };
-    vertex[2].position = { +xExtent, +yExtent, zValue };
-    vertex[3].position = { -xExtent, +yExtent, zValue };
-    vertex[0].tcoord = { 0.0f, 0.0f };
-    vertex[1].tcoord = { 1.0f, 0.0f };
-    vertex[2].tcoord = { 1.0f, 1.0f };
-    vertex[3].tcoord = { 0.0f, 1.0f };
+    vertices[0].position = { -xExtent, -yExtent, zValue };
+    vertices[1].position = { +xExtent, -yExtent, zValue };
+    vertices[2].position = { +xExtent, +yExtent, zValue };
+    vertices[3].position = { -xExtent, +yExtent, zValue };
+    vertices[0].tcoord = { 0.0f, 0.0f };
+    vertices[1].tcoord = { 1.0f, 0.0f };
+    vertices[2].tcoord = { 1.0f, 1.0f };
+    vertices[3].tcoord = { 0.0f, 1.0f };
 
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
+    auto indices = ibuffer->Get<unsigned int>();
     indices[0] = 0;  indices[1] = 1;  indices[2] = 2;
     indices[3] = 0;  indices[4] = 2;  indices[5] = 3;
 
     std::string path = mEnvironment.GetPath("Floor.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+    auto texture = WICFileIO::Load(path, false);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
 
     mFloor = std::make_shared<Visual>(vbuffer, ibuffer, effect);
@@ -202,27 +203,27 @@ void BouncingBallWindow::CreateWall()
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
 
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto vertices = vbuffer->Get<Vertex>();
     float const xValue = -8.0f, yExtent = 16.0f, zExtent = 16.0f, maxTCoord = 4.0f;
 
-    vertex[0].position = { xValue, -yExtent, 0.0f };
-    vertex[1].position = { xValue, +yExtent, 0.0f };
-    vertex[2].position = { xValue, +yExtent, zExtent };
-    vertex[3].position = { xValue, -yExtent, zExtent };
-    vertex[0].tcoord = { 0.0f, 0.0f };
-    vertex[1].tcoord = { maxTCoord, 0.0f };
-    vertex[2].tcoord = { maxTCoord, maxTCoord };
-    vertex[3].tcoord = { 0.0f, maxTCoord };
+    vertices[0].position = { xValue, -yExtent, 0.0f };
+    vertices[1].position = { xValue, +yExtent, 0.0f };
+    vertices[2].position = { xValue, +yExtent, zExtent };
+    vertices[3].position = { xValue, -yExtent, zExtent };
+    vertices[0].tcoord = { 0.0f, 0.0f };
+    vertices[1].tcoord = { maxTCoord, 0.0f };
+    vertices[2].tcoord = { maxTCoord, maxTCoord };
+    vertices[3].tcoord = { 0.0f, maxTCoord };
 
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
+    auto indices = ibuffer->Get<unsigned int>();
     indices[0] = 0;  indices[1] = 1;  indices[2] = 2;
     indices[3] = 0;  indices[4] = 2;  indices[5] = 3;
 
     std::string path = mEnvironment.GetPath("Wall1.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+    auto texture = WICFileIO::Load(path, false);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::WRAP, SamplerState::WRAP);
 
     mWall = std::make_shared<Visual>(vbuffer, ibuffer, effect);
@@ -289,7 +290,7 @@ void BouncingBallWindow::PhysicsTick()
     mBallNode->localTransform.SetTranslation(0.0f, yTrn, zTrn);
 
     // Rotate the ball.
-    float angle = (1.0f + yTrn) * (float)GTE_C_HALF_PI / yMax;
+    float angle = (1.0f + yTrn) * static_cast<float>(GTE_C_HALF_PI) / yMax;
     mBallNode->localTransform.SetRotation(AxisAngle<4, float>(Vector4<float>::Unit(2), angle));
 
     // Update the scene graph.

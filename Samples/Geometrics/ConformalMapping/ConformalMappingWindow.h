@@ -3,11 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/18)
+// File Version: 3.23.1 (2019/04/13)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow3.h>
 using namespace gte;
 
 class ConformalMappingWindow : public Window3

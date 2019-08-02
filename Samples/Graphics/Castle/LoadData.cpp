@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/03)
 
 #include "CastleWindow.h"
 
@@ -96,7 +96,7 @@ std::shared_ptr<Visual> CastleWindow::LoadMeshPNT1(std::string const& name)
         index = remap[index];
     }
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
-    memcpy(ibuffer->GetData(), indices.data(), numIndices * sizeof(unsigned int));
+    std::memcpy(ibuffer->GetData(), indices.data(), numIndices * sizeof(unsigned int));
 
     std::shared_ptr<Visual> mesh = std::make_shared<Visual>(vbuffer, ibuffer);
     return mesh;
@@ -194,7 +194,7 @@ std::shared_ptr<Visual> CastleWindow::LoadMeshPNT2(std::string const& name)
         index = remap[index];
     }
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
-    memcpy(ibuffer->GetData(), indices.data(), numIndices * sizeof(unsigned int));
+    std::memcpy(ibuffer->GetData(), indices.data(), numIndices * sizeof(unsigned int));
 
     std::shared_ptr<Visual> mesh = std::make_shared<Visual>(vbuffer, ibuffer);
     return mesh;
@@ -303,7 +303,7 @@ std::vector<std::shared_ptr<Visual>> CastleWindow::LoadMeshPNT1Multi(std::string
             index = remap[index];
         }
         auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numIndices, sizeof(unsigned int));
-        memcpy(ibuffer->GetData(), indices[m].data(), numIndices * sizeof(unsigned int));
+        std::memcpy(ibuffer->GetData(), indices[m].data(), numIndices * sizeof(unsigned int));
         meshes[m] = std::make_shared<Visual>(vbuffer, ibuffer);
     }
 

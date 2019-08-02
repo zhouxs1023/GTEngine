@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/07)
+// File Version: 3.0.2 (20198/04/17)
 
 #include "ProjectedTextureEffect.h"
 using namespace gte;
@@ -32,21 +32,16 @@ ProjectedTextureEffect::ProjectedTextureEffect(
     mGeometryConstant = std::make_shared<ConstantBuffer>(sizeof(InternalGeometry), true);
     UpdateGeometryConstant();
 
-    mProjectorMatrixConstant =
-        std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
+    mProjectorMatrixConstant = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
 
     if (mProgram)
     {
-        mProgram->GetVShader()->Set("ProjectorMatrix", mProjectorMatrixConstant);
-        mProgram->GetVShader()->Set("Material", mMaterialConstant);
-        mProgram->GetVShader()->Set("Lighting", mLightingConstant);
-        mProgram->GetVShader()->Set("LightCameraGeometry", mGeometryConstant);
-#if defined(GTE_DEV_OPENGL)
-        mProgram->GetPShader()->Set("baseSampler", mTexture);
-#else
-        mProgram->GetPShader()->Set("baseTexture", mTexture);
-#endif
-        mProgram->GetPShader()->Set("baseSampler", mSampler);
+        auto vshader = mProgram->GetVShader();
+        vshader->Set("ProjectorMatrix", mProjectorMatrixConstant);
+        vshader->Set("Material", mMaterialConstant);
+        vshader->Set("Lighting", mLightingConstant);
+        vshader->Set("LightCameraGeometry", mGeometryConstant);
+        mProgram->GetPShader()->Set("baseTexture", mTexture, "baseSampler", mSampler);
     }
 }
 

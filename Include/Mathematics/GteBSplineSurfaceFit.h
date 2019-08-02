@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/04/05)
+// File Version: 3.0.2 (2019/05/03)
 
 #pragma once
 
@@ -127,7 +127,7 @@ namespace gte
             {
                 ATMat[dim] = Array2<Real>(mNumSamples[dim], mNumControls[dim]);
                 size_t numBytes = mNumControls[dim] * mNumSamples[dim] * sizeof(Real);
-                memset(ATMat[dim][0], 0, numBytes);
+                std::memset(ATMat[dim][0], 0, numBytes);
                 for (i0 = 0; i0 < mNumControls[dim]; ++i0)
                 {
                     for (i1 = 0; i1 < mNumSamples[dim]; ++i1)

@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.24.0 (2019/04/08)
+// File Version: 3.24.1 (2019/04/13)
 
 #include "PolygonBooleanOperationsWindow.h"
+#include <LowLevel/GteLogReporter.h>
 
 int main(int, char const*[])
 {
@@ -20,7 +21,7 @@ int main(int, char const*[])
 
     Window::Parameters parameters(L"PolygonBooleanOperationsWindow", 0, 0, 512, 512);
     auto window = TheWindowSystem.Create<PolygonBooleanOperationsWindow>(parameters);
-    TheWindowSystem.MessagePump(window, TheWindowSystem.DEFAULT_ACTION);
+    TheWindowSystem.MessagePump(window, TheWindowSystem.NO_IDLE_LOOP);
     TheWindowSystem.Destroy<PolygonBooleanOperationsWindow>(window);
     return 0;
 }

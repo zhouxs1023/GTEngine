@@ -322,7 +322,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\GlossMap.hlsl">
+    <None Include="Shaders\GlossMap.ps.glsl" />
+    <None Include="Shaders\GlossMap.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\GlossMap.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\GlossMap.vs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

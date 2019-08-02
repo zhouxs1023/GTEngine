@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.18.0 (2018/10/28)
+// File Version: 3.18.2 (2019/05/03)
 
 #include "NURBSSphereWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
 
 int main(int, char const*[])
 {
@@ -101,20 +104,21 @@ void NURBSSphereWindow::CreateScene()
 
 void NURBSSphereWindow::CreateEighthSphere()
 {
-    const int density = 32;
+    int const density = 32;
     Vector3<float> values[6];
 
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, density * density);
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
-    memset(vbuffer->GetData(), 0, vbuffer->GetNumBytes());
+    auto vertices = vbuffer->Get<Vector3<float>>();
+    std::memset(vbuffer->GetData(), 0, vbuffer->GetNumBytes());
+    float const divisor = static_cast<float>(density - 1);
     for (int iv = 0; iv <= density - 1; ++iv)
     {
-        float v = (float)iv / (float)(density - 1);
+        float v = static_cast<float>(iv) / divisor;
         for (int iu = 0; iu + iv <= density - 1; ++iu)
         {
-            float u = (float)iu / (float)(density - 1);
+            float u = static_cast<float>(iu) / divisor;
             mEighthSphere.Evaluate(u, v, 0, values);
             vertices[iu + density * iv] = values[0];
         }
@@ -148,9 +152,9 @@ void NURBSSphereWindow::CreateEighthSphere()
         indices.push_back(j2);
     }
 
-    uint32_t numTriangles = (uint32_t)(indices.size() / 3);
+    uint32_t numTriangles = static_cast<uint32_t>(indices.size() / 3);
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(int));
-    memcpy(ibuffer->GetData(), indices.data(), indices.size() * sizeof(int));
+    std::memcpy(ibuffer->GetData(), indices.data(), indices.size() * sizeof(int));
 
     auto effect = std::make_shared<ConstantColorEffect>(mProgramFactory,
         Vector4<float>{ 0.0f, 0.0f, 1.0f, 1.0f });
@@ -161,7 +165,7 @@ void NURBSSphereWindow::CreateEighthSphere()
 
 void NURBSSphereWindow::CreateHalfSphere()
 {
-    const int density = 32;
+    int const density = 32;
     Vector3<float> values[6];
 
     VertexFormat vformat;
@@ -171,13 +175,14 @@ void NURBSSphereWindow::CreateHalfSphere()
 
     mHalfSphereVisual = mf.CreateRectangle(density, density, 1.0f, 1.0f);
     auto vbuffer = mHalfSphereVisual->GetVertexBuffer();
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
+    float const divisor = static_cast<float>(density - 1);
     for (int iv = 0; iv < density; ++iv)
     {
-        float v = (float)iv / (float)(density - 1);
+        float v = static_cast<float>(iv) / divisor;
         for (int iu = 0; iu < density; ++iu)
         {
-            float u = (float)iu / (float)(density - 1);
+            float u = static_cast<float>(iu) / divisor;
             mHalfSphere.Evaluate(u, v, 0, values);
             vertices[iu + density * iv] = values[0];
         }
@@ -192,7 +197,7 @@ void NURBSSphereWindow::CreateHalfSphere()
 
 void NURBSSphereWindow::CreateFullSphere()
 {
-    const int density = 32;
+    int const density = 32;
     Vector3<float> values[6];
 
     VertexFormat vformat;
@@ -202,13 +207,14 @@ void NURBSSphereWindow::CreateFullSphere()
 
     mFullSphereVisual = mf.CreateRectangle(density, density, 1.0f, 1.0f);
     auto vbuffer = mFullSphereVisual->GetVertexBuffer();
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
+    float const divisor = static_cast<float>(density - 1);
     for (int iv = 0; iv < density; ++iv)
     {
-        float v = (float)iv / (float)(density - 1);
+        float v = static_cast<float>(iv) / divisor;
         for (int iu = 0; iu < density; ++iu)
         {
-            float u = (float)iu / (float)(density - 1);
+            float u = static_cast<float>(iu) / divisor;
             mFullSphere.Evaluate(u, v, 0, values);
             vertices[iu + density * iv] = values[0];
         }

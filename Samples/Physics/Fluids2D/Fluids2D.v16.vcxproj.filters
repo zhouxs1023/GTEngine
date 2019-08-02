@@ -24,10 +24,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawDensity.hlsl">
+    <FxCompile Include="Shaders\DrawDensity.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\DrawDensity.glsl">
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DrawDensity.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

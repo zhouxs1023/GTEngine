@@ -316,8 +316,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\AppendConsume.glsl" />
-    <None Include="Shaders\AppendConsume.hlsl">
+    <None Include="Shaders\AppendConsume.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\AppendConsume.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -3,15 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.3 (2019/08/01)
 
 #pragma once
 
-#include <LowLevel/GteWrapper.h>
 #include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdint>
+#include <cstring>
 #include <functional>
 #include <vector>
 
@@ -217,7 +217,7 @@ void UnsymmetricEigenvalues<Real>::GetEigenvalues(uint32_t& numEigenvalues, Real
     if (mSize > 0)
     {
         numEigenvalues = mNumEigenvalues;
-        Memcpy(eigenvalues, mEigenvalues.data(), numEigenvalues * sizeof(Real));
+        std::memcpy(eigenvalues, mEigenvalues.data(), numEigenvalues * sizeof(Real));
     }
     else
     {

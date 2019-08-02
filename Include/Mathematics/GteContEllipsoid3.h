@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/05/07)
 
 #pragma once
 
@@ -52,7 +52,7 @@ bool GetContainer(int numPoints, Vector3<Real> const* points,
         OrientedBox3<Real> box = fitter.GetParameters();
 
         // If either eigenvalue is nonpositive, adjust the D[] values so that
-        // we actually build an ellipse.
+        // we actually build an ellipsoid.
         for (int j = 0; j < 3; ++j)
         {
             if (box.extent[j] < (Real)0)

@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include "ProjectedTexturesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -97,32 +100,28 @@ void ProjectedTexturesWindow::CreateScene()
     mf.SetVertexFormat(vformat);
     mTorus = mf.CreateTorus(32, 32, 40.0f, 20.0f);
 
-    std::shared_ptr<Material> material = std::make_shared<Material>();
+    auto material = std::make_shared<Material>();
     material->emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
     material->ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
     material->diffuse = { 0.99607f, 0.83920f, 0.67059f, 1.0f };
     material->specular = { 0.8f, 0.8f, 0.8f, 0.0f };
 
-    std::shared_ptr<Lighting> lighting = std::make_shared<Lighting>();
+    auto lighting = std::make_shared<Lighting>();
     lighting->ambient = { 0.25f, 0.25f, 0.25f, 1.0f };
     lighting->diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
     lighting->specular = { 0.0f, 0.0f, 0.0f, 1.0f };
     lighting->attenuation = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    std::shared_ptr<LightCameraGeometry> geometry = std::make_shared<LightCameraGeometry>();
+    auto geometry = std::make_shared<LightCameraGeometry>();
     mLightWorldDirection = { 0.0f, 0.0f, 1.0f, 0.0f };
 
     std::string path = mEnvironment.GetPath("Magician.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
+    auto texture = WICFileIO::Load(path, false);
     mPTEffect = std::make_shared<ProjectedTextureEffect>(mProgramFactory, mUpdater,
         material, lighting, geometry, texture, SamplerState::MIN_L_MAG_L_MIP_P,
         SamplerState::CLAMP, SamplerState::CLAMP);
 
-#if defined(GTE_DEV_OPENGL)
-    mProjector = std::make_shared<Camera>(true, false);
-#else
-    mProjector = std::make_shared<Camera>(true, true);
-#endif
+    mProjector = std::make_shared<Camera>(true, DefaultDepthRange);
 
     mProjector->SetFrustum(1.0f, 10.0f, -0.4125f, 0.4125f, -0.55f, 0.55f);
     Vector4<float> prjDVector{ 0.0f, 0.0f, 1.0f, 0.0f };
@@ -163,16 +162,10 @@ void ProjectedTexturesWindow::UpdateConstants()
     Matrix4x4<float> projPVMatrix = mProjector->GetProjectionViewMatrix();
     Matrix4x4<float> invWMatrix = mTorus->worldTransform.GetHInverse();
     Vector4<float> cameraWorldPosition = mCamera->GetPosition();
-    std::shared_ptr<LightCameraGeometry> const& geometry = mPTEffect->GetGeometry();
-#if defined(GTE_USE_MAT_VEC)
-    Matrix4x4<float> projPVWMatrix = projPVMatrix * wMatrix;
-    geometry->cameraModelPosition = invWMatrix * cameraWorldPosition;
-    geometry->lightModelDirection = invWMatrix * mLightWorldDirection;
-#else
-    Matrix4x4<float> projPVWMatrix = wMatrix * projPVMatrix;
-    geometry->cameraModelPosition = cameraWorldPosition * invWMatrix;
-    geometry->lightModelDirection = mLightWorldDirection * invWMatrix;
-#endif
+    auto geometry = mPTEffect->GetGeometry();
+    Matrix4x4<float> projPVWMatrix = DoTransform(projPVMatrix, wMatrix);
+    geometry->cameraModelPosition = DoTransform(invWMatrix, cameraWorldPosition);
+    geometry->lightModelDirection = DoTransform(invWMatrix, mLightWorldDirection);
     mPTEffect->SetProjectorMatrix(projPVWMatrix);
     mPTEffect->UpdateProjectorMatrixConstant();
     mPTEffect->UpdateGeometryConstant();

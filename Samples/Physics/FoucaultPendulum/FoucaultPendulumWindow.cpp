@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.1 (2018/10/05)
+// File Version: 3.1.3 (2019/05/03)
 
 #include "FoucaultPendulumWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <Graphics/GteVertexColorEffect.h>
 
 int main(int, char const*[])
 {
@@ -172,7 +176,7 @@ void FoucaultPendulumWindow::CreatePath()
     unsigned int const numPoints = 8192;
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, numPoints);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    memset(vbuffer->GetData(), 0, vbuffer->GetNumBytes());
+    std::memset(vbuffer->GetData(), 0, vbuffer->GetNumBytes());
 
     auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYPOINT, numPoints);
     ibuffer->SetNumActivePrimitives(0);
@@ -203,7 +207,7 @@ void FoucaultPendulumWindow::CreatePendulum()
     rod->localTransform.SetTranslation(0.0f, 0.0f, 10.0f);
     auto vbuffer = rod->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
-    VertexPT* vertices = vbuffer->Get<VertexPT>();
+    auto vertices = vbuffer->Get<VertexPT>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         vertices[i].position[2] -= 16.0f;
@@ -237,7 +241,7 @@ void FoucaultPendulumWindow::CreatePendulum()
     unsigned int const height = 256;
     auto texture = std::make_shared<Texture2>(DF_R8G8B8A8_UNORM, 1, height);
     Vector4<float> color{ 0.99607f, 0.83920f, 0.67059f, 1.0f };
-    std::array<uint8_t, 4>* texels = texture->Get<std::array<uint8_t, 4>>();
+    auto texels = texture->Get<std::array<uint8_t, 4>>();
     float const multiplier = 255.0f / static_cast<float>(height - 1);
     for (unsigned int i = 0; i < height; ++i)
     {
@@ -275,7 +279,7 @@ void FoucaultPendulumWindow::PhysicsTick()
     // Draw only the active quantity of pendulum points for the initial
     // portion of the simulation.  Once all points are activated, then all
     // are drawn.
-    auto const& ibuffer = mPath->GetIndexBuffer();
+    auto ibuffer = mPath->GetIndexBuffer();
     unsigned int numActive = ibuffer->GetNumActivePrimitives() + 1;
     if (numActive > ibuffer->GetNumPrimitives())
     {
@@ -286,17 +290,14 @@ void FoucaultPendulumWindow::PhysicsTick()
     // Add the new pendulum point to the point system.  The initial color is
     // white.  All previously known points have their colors decremented to
     // cause them to become dim over time.
+    Matrix4x4<float> wMatrix = mPendulum->worldTransform;
     Vector4<float> translation{ 0.0f, 0.0f, -16.0f, 1.0f };
-#if defined(GTE_USE_MAT_VEC)
-    Vector4<float> proj = mPendulum->worldTransform * translation;
-#else
-    Vector4<float> proj = translation * mPendulum->worldTransform;
-#endif
+    Vector4<float> proj = DoTransform(wMatrix, translation);
     proj[2] = 0.0f;
 
-    auto const& vbuffer = mPath->GetVertexBuffer();
+    auto vbuffer = mPath->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    VertexPC* vertices = vbuffer->Get<VertexPC>();
+    auto vertices = vbuffer->Get<VertexPC>();
     vertices[mNextPoint].position = HProject(proj);
     vertices[mNextPoint].color = { 1.0f, 1.0f, 1.0f, 1.0f };
     for (unsigned int i = 0; i < numVertices; ++i)

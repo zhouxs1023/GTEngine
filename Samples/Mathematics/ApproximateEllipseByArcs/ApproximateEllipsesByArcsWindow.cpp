@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/04/23)
 
 #include "ApproximateEllipsesByArcsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Mathematics/GteApprEllipseByArcs.h>
 
 int main(int, char const*[])
 {
@@ -104,9 +106,12 @@ void ApproximateEllipsesByArcsWindow::OnDisplay()
 
     mScreenTextureNeedsUpdate = true;
     Window2::OnDisplay();
+}
+
+void ApproximateEllipsesByArcsWindow::DrawScreenOverlay()
+{
     std::string message = "number of arcs = " + std::to_string(mNumArcs);
     mEngine->Draw(8, mYSize - 8, { 0.0f, 0.0f, 0.0f, 1.0f }, message);
-    mEngine->DisplayColorBuffer(0);
 }
 
 bool ApproximateEllipsesByArcsWindow::OnCharPress(unsigned char key, int x, int y)

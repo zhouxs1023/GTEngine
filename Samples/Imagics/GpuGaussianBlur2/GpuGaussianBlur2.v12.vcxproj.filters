@@ -24,22 +24,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\BoundaryDirichlet.glsl">
+    <None Include="Shaders\BoundaryDirichlet.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\BoundaryNeumann.glsl">
+    <None Include="Shaders\BoundaryNeumann.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\GaussianBlur.glsl">
+    <None Include="Shaders\GaussianBlur.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\BoundaryDirichlet.hlsl">
+    <None Include="Shaders\BoundaryDirichlet.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\BoundaryNeumann.hlsl">
+    <None Include="Shaders\BoundaryNeumann.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\GaussianBlur.hlsl">
+    <None Include="Shaders\GaussianBlur.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

@@ -320,11 +320,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\TextureArrays.hlsl">
+    <None Include="Shaders\TextureArrays.ps.glsl" />
+    <None Include="Shaders\TextureArrays.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\TextureArrays.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\TextureArraysPixel.glsl" />
-    <None Include="Shaders\TextureArraysVertex.glsl" />
+    <None Include="Shaders\TextureArrays.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

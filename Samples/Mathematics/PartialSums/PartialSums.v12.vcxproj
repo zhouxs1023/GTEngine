@@ -301,8 +301,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\PartialSums.glsl" />
-    <None Include="Shaders\PartialSums.hlsl">
+    <None Include="Shaders\PartialSums.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\PartialSums.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

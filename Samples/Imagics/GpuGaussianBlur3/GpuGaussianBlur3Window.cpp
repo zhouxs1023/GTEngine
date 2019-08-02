@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/21)
+// File Version: 3.23.2 (2019/05/03)
 
 #include "GpuGaussianBlur3Window.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Applications/GteCommand.h>
+#include <Graphics/GteGraphicsDefaults.h>
 
 static bool gsUseDirichlet;
 
@@ -45,11 +48,7 @@ GpuGaussianBlur3Window::GpuGaussianBlur3Window(Parameters& parameters)
         return;
     }
 
-#if defined(GTE_DEV_OPENGL)
-    std::string path = mEnvironment.GetPath("DrawImage.glsl");
-#else
-    std::string path = mEnvironment.GetPath("DrawImage.hlsl");
-#endif
+    std::string path = mEnvironment.GetPath(DefaultShaderName("DrawImage.ps"));
     std::string psSource = ProgramFactory::GetStringFromFile(path);
 
     // Create an overlay that covers the entire window.  The blurred image
@@ -57,21 +56,13 @@ GpuGaussianBlur3Window::GpuGaussianBlur3Window(Parameters& parameters)
     mOverlay = std::make_shared<OverlayEffect>(mProgramFactory, mXSize,
         mYSize, mXSize, mYSize, psSource);
 
-    std::shared_ptr<SamplerState> nearestSampler = std::make_shared<SamplerState>();
+    auto nearestSampler = std::make_shared<SamplerState>();
     nearestSampler->filter = SamplerState::MIN_P_MAG_P_MIP_P;
     nearestSampler->mode[0] = SamplerState::CLAMP;
     nearestSampler->mode[1] = SamplerState::CLAMP;
-    std::shared_ptr<PixelShader> pshader = mOverlay->GetProgram()->GetPShader();
-#if defined(GTE_DEV_OPENGL)
-    pshader->Set("imageSampler", mImage[0]);
-    pshader->Set("imageSampler", nearestSampler);
-    pshader->Set("maskSampler", mMaskTexture);
-    pshader->Set("maskSampler", nearestSampler);
-#else
-    pshader->Set("inImage", mImage[0]);
-    pshader->Set("inMask", mMaskTexture);
-    pshader->Set("nearestSampler", nearestSampler);
-#endif
+    auto pshader = mOverlay->GetProgram()->GetPShader();
+    pshader->Set("inImage", mImage[0], "imageSampler", nearestSampler);
+    pshader->Set("inMask", mMaskTexture, "maskSampler", nearestSampler);
 }
 
 void GpuGaussianBlur3Window::OnIdle()
@@ -109,17 +100,10 @@ bool GpuGaussianBlur3Window::SetEnvironment()
     std::vector<std::string> inputs =
     {
         "Head_U16_X128_Y128_Z64.binary",
-#if defined(GTE_DEV_OPENGL)
-        "BoundaryDirichlet.glsl",
-        "BoundaryNeumann.glsl",
-        "GaussianBlur.glsl",
-        "DrawImage.glsl"
-#else
-        "BoundaryDirichlet.hlsl",
-        "BoundaryNeumann.hlsl",
-        "GaussianBlur.hlsl",
-        "DrawImage.hlsl"
-#endif
+        DefaultShaderName("BoundaryDirichlet.cs"),
+        DefaultShaderName("BoundaryNeumann.cs"),
+        DefaultShaderName("GaussianBlur.cs"),
+        DefaultShaderName("DrawImage.ps")
     };
 
     for (auto const& input : inputs)
@@ -321,7 +305,7 @@ bool GpuGaussianBlur3Window::CreateImages()
     // Create the offset texture for GaussianBlur.
     mZNeighborTexture = std::make_shared<Texture2>(DF_R32G32B32A32_SINT, mXSize, mYSize);
     auto* zneighbor = mZNeighborTexture->Get<std::array<int, 4>>();
-    memset(mZNeighborTexture->GetData(), 0, mZNeighborTexture->GetNumBytes());
+    std::memset(mZNeighborTexture->GetData(), 0, mZNeighborTexture->GetNumBytes());
 
     // Interior voxels.  The offsets at the boundary are all zero, so the
     // finite differences are incorrect at those locations.  However, the
@@ -364,26 +348,22 @@ bool GpuGaussianBlur3Window::CreateShaders()
     mProgramFactory->defines.Set("NUM_X_THREADS", mNumXThreads);
     mProgramFactory->defines.Set("NUM_Y_THREADS", mNumYThreads);
 
-    std::string ext;
-#if defined(GTE_DEV_OPENGL)
-    ext = ".glsl";
-#else
-    ext = ".hlsl";
-#endif
-
-    mGaussianBlurProgram = mProgramFactory->CreateFromFile(mEnvironment.GetPath("GaussianBlur" + ext));
+    std::string csPath = mEnvironment.GetPath(DefaultShaderName("GaussianBlur.cs"));
+    mGaussianBlurProgram = mProgramFactory->CreateFromFile(csPath);
     if (!mGaussianBlurProgram)
     {
         return false;
     }
 
-    mBoundaryDirichletProgram = mProgramFactory->CreateFromFile(mEnvironment.GetPath("BoundaryDirichlet" + ext));
+    csPath = mEnvironment.GetPath(DefaultShaderName("BoundaryDirichlet.cs"));
+    mBoundaryDirichletProgram = mProgramFactory->CreateFromFile(csPath);
     if (!mBoundaryDirichletProgram)
     {
         return false;
     }
 
-    mBoundaryNeumannProgram = mProgramFactory->CreateFromFile(mEnvironment.GetPath("BoundaryNeumann" + ext));
+    csPath = mEnvironment.GetPath(DefaultShaderName("BoundaryNeumann.cs"));
+    mBoundaryNeumannProgram = mProgramFactory->CreateFromFile(csPath);
     if (!mBoundaryNeumannProgram)
     {
         return false;

@@ -33,14 +33,19 @@
     <None Include="Geometry\Vertices82832.raw">
       <Filter>Geometry Files</Filter>
     </None>
-    <None Include="Shaders\VolumeRender.hlsl">
+    <None Include="Shaders\VolumeRender.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\VolumeRenderPS.glsl">
+    <None Include="Shaders\VolumeRender.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\VolumeRenderVS.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\VolumeRender.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shaders\VolumeRender.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -321,11 +321,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Displacement.hlsl">
+    <None Include="Shaders\Displacement.ps.glsl" />
+    <None Include="Shaders\Displacement.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Displacement.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\DisplacementPS.glsl" />
-    <None Include="Shaders\DisplacementVS.glsl" />
+    <None Include="Shaders\Displacement.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

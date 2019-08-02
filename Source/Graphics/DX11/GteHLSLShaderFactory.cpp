@@ -3,10 +3,9 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/09/12)
+// File Version: 3.0.2 (2019/05/03)
 
 #include <GTEnginePCH.h>
-#include <LowLevel/GteWrapper.h>
 #include <Graphics/DX11/GteHLSLShaderFactory.h>
 using namespace gte;
 
@@ -56,7 +55,7 @@ HLSLShader HLSLShaderFactory::CreateFromBytecode(
         return HLSLShader();
     }
 
-    Memcpy(compiledCode->GetBufferPointer(), bytecode, numBytes);
+    std::memcpy(compiledCode->GetBufferPointer(), bytecode, numBytes);
 
     HLSLShader shader;
     if (!ReflectShader(name, entry, target, compiledCode, shader))

@@ -319,11 +319,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\StructuredBuffers.hlsl">
+    <None Include="Shaders\StructuredBuffers.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\StructuredBuffersPS.glsl" />
-    <None Include="Shaders\StructuredBuffersVS.glsl" />
+    <None Include="Shaders\StructuredBuffers.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\StructuredBuffers.ps.glsl" />
+    <None Include="Shaders\StructuredBuffers.vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

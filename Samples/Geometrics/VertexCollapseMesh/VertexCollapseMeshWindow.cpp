@@ -3,10 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.3 (2019/05/03)
 
 #include "VertexCollapseMeshWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteVertexColorEffect.h>
 #include <iostream>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -44,13 +48,13 @@ VertexCollapseMeshWindow::VertexCollapseMeshWindow(Parameters& parameters)
     format.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     MeshFactory mf;
     mf.SetVertexFormat(format);
-    std::shared_ptr<Visual> cylinder = mf.CreateCylinderOpen(8, 8, 1.0f, 2.0f);
+    auto cylinder = mf.CreateCylinderOpen(8, 8, 1.0f, 2.0f);
     unsigned int numPositions = cylinder->GetVertexBuffer()->GetNumElements();
     mPositions.resize(numPositions);
-    memcpy(mPositions.data(), cylinder->GetVertexBuffer()->GetData(), numPositions * sizeof(Vector3<float>));
+    std::memcpy(mPositions.data(), cylinder->GetVertexBuffer()->GetData(), numPositions * sizeof(Vector3<float>));
     unsigned int numTriangles = cylinder->GetIndexBuffer()->GetNumPrimitives();
     mTriangles.resize(numTriangles);
-    memcpy(mTriangles.data(), cylinder->GetIndexBuffer()->GetData(), numTriangles * 3 * sizeof(int));
+    std::memcpy(mTriangles.data(), cylinder->GetIndexBuffer()->GetData(), numTriangles * 3 * sizeof(int));
 
     mVCMesh = std::make_shared<VertexCollapseMesh<float>>(numPositions, &mPositions[0],
         3 * numTriangles, (int const*)&mTriangles[0]);
@@ -63,9 +67,8 @@ VertexCollapseMeshWindow::VertexCollapseMeshWindow(Parameters& parameters)
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_COLOR, DF_R32G32B32A32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(vformat, numPositions);
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numPositions);
+    auto* vertex = vbuffer->Get<Vertex>();
     std::mt19937 mte;
     std::uniform_real_distribution<float> rnd(0.0f, 1.0f);
     Vector3<float> average{ 0.0f, 0.0f, 0.0f };
@@ -80,8 +83,7 @@ VertexCollapseMeshWindow::VertexCollapseMeshWindow(Parameters& parameters)
     }
     average /= (float)numPositions;
 
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(int));
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(int));
     int* index = ibuffer->Get<int>();
     for (auto const& element : mVCMesh->GetMesh().GetTriangles())
     {
@@ -90,8 +92,7 @@ VertexCollapseMeshWindow::VertexCollapseMeshWindow(Parameters& parameters)
         *index++ = element.first.V[2];
     }
 
-    std::shared_ptr<VertexColorEffect> effect =
-        std::make_shared<VertexColorEffect>(mProgramFactory);
+    auto effect = std::make_shared<VertexColorEffect>(mProgramFactory);
     mSurface = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mSurface->localTransform.SetTranslation(-average);
     mTrackball.Attach(mSurface);
@@ -141,10 +142,8 @@ bool VertexCollapseMeshWindow::OnCharPress(unsigned char key, int x, int y)
         {
             std::cout << "v = " << record.vertex << " rs = " << record.removed.size() << " is = " << record.inserted.size() << std::endl;
             auto const& mesh = mVCMesh->GetMesh();
-            unsigned int const numTriangles =
-                static_cast<unsigned int>(mesh.GetTriangles().size());
-            std::shared_ptr<IndexBuffer> ibuffer =
-                std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
+            unsigned int const numTriangles = static_cast<unsigned int>(mesh.GetTriangles().size());
+            auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
             unsigned int* index = ibuffer->Get<unsigned int>();
             for (auto const& element : mesh.GetTriangles())
             {

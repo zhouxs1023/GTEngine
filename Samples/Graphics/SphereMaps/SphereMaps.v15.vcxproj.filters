@@ -30,14 +30,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\SphereMap.hlsl">
+    <None Include="Shaders\SphereMap.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\SphereMapPS.glsl">
+    <None Include="Shaders\SphereMap.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\SphereMapVS.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\SphereMap.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shaders\SphereMap.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

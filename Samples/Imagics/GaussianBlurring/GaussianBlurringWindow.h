@@ -3,16 +3,16 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/19)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow2.h>
 using namespace gte;
 
 //#define SAVE_RENDERING_TO_DISK
 
-class GaussianBlurringWindow : public Window
+class GaussianBlurringWindow : public Window2
 {
 public:
     GaussianBlurringWindow(Parameters& parameters);

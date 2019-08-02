@@ -10,96 +10,98 @@
 #include <Mathematics/GteRay.h>
 #include <Mathematics/GteIntrLine3Cone3.h>
 
-// The queries consider the cone to be single sided and solid.
+// The queries consider the cone to be single sided and solid.  The
+// cone height range is [hmin,hmax].  The cone can be infinite where
+// hmin = 0 and hmax = +infinity, infinite truncated where hmin > 0
+// and hmax = +infinity, finite where hmin = 0 and hmax < +infinity,
+// or a cone frustum where hmin > 0 and hmax < +infinity.  The
+// algorithm details are found in
+// https://www.geometrictools.com/Documentation/IntersectionLineCone.pdf
 
 namespace gte
 {
-
-template <typename Real>
-class FIQuery<Real, Ray3<Real>, Cone3<Real>>
-    :
-    public FIQuery<Real, Line3<Real>, Cone3<Real>>
-{
-public:
-    struct Result
+    template <typename Real>
+    class FIQuery<Real, Ray3<Real>, Cone3<Real>>
         :
-        public FIQuery<Real, Line3<Real>, Cone3<Real>>::Result
+        public FIQuery<Real, Line3<Real>, Cone3<Real>>
     {
-        // No additional information to compute.
+    public:
+        struct Result
+            :
+            public FIQuery<Real, Line3<Real>, Cone3<Real>>::Result
+        {
+            // No additional information to compute.
+        };
+
+        Result operator()(Ray3<Real> const& ray, Cone3<Real> const& cone)
+        {
+            // Execute the line-cone query.
+            Result result;
+            this->DoQuery(ray.origin, ray.direction, cone, result);
+
+            // Adjust the t-interval depending on whether the line-cone
+            // t-interval overlaps the ray interval [0,+infinity).  The block
+            // numbers are a continuation of those in GteIntrLine3Cone3.h.
+            if (result.type != Result::isEmpty)
+            {
+                using QFN1 = typename FIQuery<Real, Line3<Real>, Cone3<Real>>::QFN1;
+                QFN1 zero(0, 0, result.t[0].d);
+
+                if (result.type == Result::isPoint)
+                {
+                    if (result.t[0] < zero)
+                    {
+                        // Block 12.
+                        this->SetEmpty(result);
+                    }
+                    // else: Block 13.
+                }
+                else if (result.type == Result::isSegment)
+                {
+                    if (result.t[1] > zero)
+                    {
+                        // Block 14.
+                        this->SetSegment(std::max(result.t[0], zero), result.t[1], result);
+                    }
+                    else if (result.t[1] < zero)
+                    {
+                        // Block 15.
+                        this->SetEmpty(result);
+                    }
+                    else  // result.t[1] == zero
+                    {
+                        // Block 16.
+                        this->SetPoint(zero, result);
+                    }
+                }
+                else if (result.type == Result::isRayPositive)
+                {
+                    // Block 17.
+                    this->SetRayPositive(std::max(result.t[0], zero), result);
+                }
+                else  // result.type == Result::isRayNegative
+                {
+                    if (result.t[1] > zero)
+                    {
+                        // Block 18.
+                        this->SetSegment(zero, result.t[1], result);
+                    }
+                    else if (result.t[1] < zero)
+                    {
+                        // Block 19.
+                        this->SetEmpty(result);
+                    }
+                    else  // result.t[1] == zero
+                    {
+                        // Block 20.
+                        this->SetPoint(zero, result);
+                    }
+                }
+            }
+
+            result.ComputePoints(ray.origin, ray.direction);
+            result.intersect = (result.type != Result::isEmpty);
+            return result;
+        }
     };
-
-    Result operator()(Ray3<Real> const& ray, Cone3<Real> const& cone);
-
-protected:
-    void DoQuery(Vector3<Real> const& rayOrigin,
-        Vector3<Real> const& rayDirection, Cone3<Real> const& cone,
-        Result& result);
-};
-
-
-template <typename Real>
-typename FIQuery<Real, Ray3<Real>, Cone3<Real>>::Result
-FIQuery<Real, Ray3<Real>, Cone3<Real>>::operator()(Ray3<Real> const& ray,
-    Cone3<Real> const& cone)
-{
-    Result result;
-    DoQuery(ray.origin, ray.direction, cone, result);
-    switch (result.type)
-    {
-    case 1:  // point
-        result.point[0] = ray.origin + result.parameter[0] * ray.direction;
-        result.point[1] = result.point[0];
-        break;
-    case 2:  // segment
-        result.point[0] = ray.origin + result.parameter[0] * ray.direction;
-        result.point[1] = ray.origin + result.parameter[1] * ray.direction;
-        break;
-    case 3:  // ray
-        result.point[0] = ray.origin + result.parameter[0] * ray.direction;
-        result.point[1] = ray.direction;
-        break;
-    default:  // no intersection
-        break;
-    }
-    return result;
-}
-
-template <typename Real>
-void FIQuery<Real, Ray3<Real>, Cone3<Real>>::DoQuery(
-    Vector3<Real> const& rayOrigin, Vector3<Real> const& rayDirection,
-    Cone3<Real> const& cone, Result& result)
-{
-    FIQuery<Real, Line3<Real>, Cone3<Real>>::DoQuery(rayOrigin,
-        rayDirection, cone, result);
-
-    if (result.intersect)
-    {
-        // The line containing the ray intersects the cone; the t-interval
-        // is [t0,t1].  The ray intersects the cone as long as [t0,t1]
-        // overlaps the ray t-interval [0,+infinity).
-        std::array<Real, 2> rayInterval = {
-            (Real)0, std::numeric_limits<Real>::max() };
-        FIIntervalInterval<Real> iiQuery;
-        auto iiResult = iiQuery(result.parameter, rayInterval);
-        if (iiResult.intersect)
-        {
-            result.parameter = iiResult.overlap;
-            if (result.parameter[1] < std::numeric_limits<Real>::max())
-            {
-                result.type = iiResult.numIntersections;
-            }
-            else
-            {
-                result.type = 3;
-            }
-        }
-        else
-        {
-            result.intersect = false;
-            result.type = 0;
-        }
-    }
-}
-
-
 }

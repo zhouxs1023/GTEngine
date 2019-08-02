@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.4 (2019/04/05)
+// File Version: 3.0.5 (2019/05/03)
 
 #pragma once
 
@@ -254,7 +254,7 @@ namespace gte
             for (int i = 0; i < 4; ++i)
             {
                 mJet[i] = Array2<Real>(numCols, numRows);
-                memset(mJet[i][0], 0, numBytes);
+                std::memset(mJet[i][0], 0, numBytes);
             }
 
             mConstructed = true;

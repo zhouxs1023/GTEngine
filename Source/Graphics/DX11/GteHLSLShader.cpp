@@ -3,11 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2016/09/12)
+// File Version: 3.0.2 (2019/05/03)
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
-#include <LowLevel/GteWrapper.h>
 #include <Graphics/DX11/GteHLSLShader.h>
 #include <algorithm>
 #include <iomanip>
@@ -148,7 +147,7 @@ void HLSLShader::Insert(HLSLResourceBindInfo const& rbinfo)
 void HLSLShader::SetCompiledCode(size_t numBytes, void const* buffer)
 {
     mCompiledCode.resize(numBytes);
-    Memcpy(&mCompiledCode[0], buffer, numBytes);
+    std::memcpy(&mCompiledCode[0], buffer, numBytes);
 }
 
 HLSLShader::Description const& HLSLShader::GetDescription() const

@@ -3,9 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.2 (2018/02/17)
+// File Version: 3.1.3 (2019/05/02)
 
 #include "FreeFormDeformationWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <LowLevel/GteArray3.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -73,7 +79,7 @@ void FreeFormDeformationWindow::OnIdle()
     {
         // Deform the mesh no faster than 30 frames per second.
         double time = mMotionTimer.GetSeconds();
-        if (30.0*(time - mLastUpdateTime) >= 1.0)
+        if (30.0 * (time - mLastUpdateTime) >= 1.0)
         {
             mLastUpdateTime = time;
             DoRandomControlPoints();
@@ -224,7 +230,7 @@ void FreeFormDeformationWindow::CreateBSplineVolume()
     // Compute a bounding box of the form [xmin,xmax]x[ymin,ymax]x[zmin,zmax].
     auto vbuffer = mMesh->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     mMin = vertices[0].position;
     mMax = mMin;
     for (unsigned int i = 1; i < numVertices; ++i)
@@ -365,7 +371,7 @@ void FreeFormDeformationWindow::CreateBoxes()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, 8);
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     vertices[0] = { -halfWidth, -halfWidth, -halfWidth };
     vertices[1] = { +halfWidth, -halfWidth, -halfWidth };
     vertices[2] = { +halfWidth, +halfWidth, -halfWidth };
@@ -376,7 +382,7 @@ void FreeFormDeformationWindow::CreateBoxes()
     vertices[7] = { -halfWidth, +halfWidth, +halfWidth };
 
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 12, sizeof(unsigned int));
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto indices = ibuffer->Get<unsigned int>();
     indices[0] = 0;  indices[1] = 2;  indices[2] = 1;
     indices[3] = 0;  indices[4] = 3;  indices[5] = 2;
     indices[6] = 4;  indices[7] = 5;  indices[8] = 6;
@@ -419,7 +425,7 @@ void FreeFormDeformationWindow::UpdateMesh()
 {
     auto vbuffer = mMesh->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     Vector3<float> values[10];
     for (unsigned int i = 0; i < numVertices; ++i)
     {

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/05/07)
 
 #pragma once
 
@@ -14,13 +14,13 @@
 namespace gte
 {
 
-// The input points are fit with a Gaussian distribution.  The center C of the
-// ellipsoid is chosen to be the mean of the distribution.  The axes of the
-// ellipsoid are chosen to be the eigenvectors of the covariance matrix M.
-// The shape of the ellipsoid is determined by the absolute values of the
-// eigenvalues.  NOTE: The construction is ill-conditioned if the points are
-// (nearly) collinear.  In this case M has a (nearly) zero eigenvalue, so
-// inverting M can be a problem numerically.
+// The input points are fit with a Gaussian distribution.  The center C of
+// the ellipse is chosen to be the mean of the distribution.  The axes of
+// the ellipse are chosen to be the eigenvectors of the covariance matrix
+// M.  The shape of the ellipse is determined by the absolute values of
+// the eigenvalues.  NOTE: The construction is ill-conditioned if the
+// points are (nearly) collinear.  In this case M has a (nearly) zero
+// eigenvalue, so inverting M can be a problem numerically.
 template <typename Real>
 bool GetContainer(int numPoints, Vector2<Real> const* points,
     Ellipse2<Real>& ellipse);

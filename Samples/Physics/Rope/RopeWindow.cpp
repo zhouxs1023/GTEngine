@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.4 (2019/03/04)
+// File Version: 3.0.5 (2019/05/02)
 
 #include "RopeWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -184,7 +186,7 @@ void RopeWindow::CreateSprings()
     }
 
     // Initial position on a horizontal line segment.
-    float factor = 1.0f / (float)(numParticles - 1);
+    float factor = 1.0f / static_cast<float>(numParticles - 1);
     for (int i = 0; i < numParticles; ++i)
     {
         mModule->SetPosition(i, { i * factor, 0.0f, 1.0f });
@@ -198,7 +200,7 @@ void RopeWindow::CreateSprings()
 
     // Springs are at rest in the initial horizontal configuration.
     int numSprings = numParticles - 1;
-    float restLength = 1.0f / (float)numSprings;
+    float restLength = 1.0f / static_cast<float>(numSprings);
     for (int i = 0; i < numSprings; ++i)
     {
         mModule->SetConstant(i, 10.0f);
@@ -215,7 +217,7 @@ void RopeWindow::CreateRope()
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, desc.numVertices);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, desc.numTriangles, sizeof(unsigned int));
 
     desc.vertexAttributes =
@@ -232,10 +234,9 @@ void RopeWindow::CreateRope()
         [](float){ return 0.025f; }, false, false, Vector3<float>{ 0.0f, 0.0f, 1.0f });
 
     std::string path = mEnvironment.GetPath("Rope.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, true);
+    auto texture = WICFileIO::Load(path, true);
     texture->AutogenerateMipmaps();
-    std::shared_ptr<Texture2Effect> effect =
-        std::make_shared<Texture2Effect>(mProgramFactory, texture,
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP,
         SamplerState::WRAP);
 

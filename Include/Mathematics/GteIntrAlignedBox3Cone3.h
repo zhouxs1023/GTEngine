@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/11/29)
+// File Version: 3.0.3 (2019/06/22)
 
 #pragma once
 
@@ -25,6 +25,15 @@
 // plane and just touches the disk capping the cone, either at a single
 // point, a line segment of points or a polygon of points, no intersection
 // is reported.
+
+// TODO: These queries were designed when an infinite cone was defined
+// by choosing maxHeight of std::numeric_limits<Real>::max(). The Cone<N,Real>
+// class has been redesigned not to use std::numeric_limits to allow for
+// arithmetic systems that do not have representations for infinities
+// (such as BSNumber and BSRational).  The intersection queries need to be
+// rewritten for the new class design.  FOR NOW, the queries will work with
+// float/double when you create a cone using the cone-frustum constructor
+// Cone(ray, angle, minHeight, std::numeric_limits<Real>::max()).
 
 namespace gte
 {
@@ -172,7 +181,9 @@ namespace gte
             // computed.
             Real boxMinHeight(0), boxMaxHeight(0);
             ComputeBoxHeightInterval(box, cone, boxMinHeight, boxMaxHeight);
-            if (boxMaxHeight <= cone.minHeight || boxMinHeight >= cone.maxHeight)
+            // TODO: See the comments at the beginning of this file.
+            Real coneMaxHeight = (cone.IsFinite() ? cone.GetMaxHeight() : std::numeric_limits<Real>::max());
+            if (boxMaxHeight <= cone.GetMinHeight() || boxMinHeight >= coneMaxHeight)
             {
                 // There is no volumetric overlap of the box and the cone. The
                 // box is clipped entirely.
@@ -306,11 +317,11 @@ namespace gte
 
         static bool ConeAxisIntersectsBox(AlignedBox<3, Real> const& box, Cone<3, Real> const& cone)
         {
-            if (cone.maxHeight < std::numeric_limits<Real>::max())
+            if (cone.IsFinite())
             {
                 Segment<3, Real> segment;
-                segment.p[0] = cone.ray.origin + cone.minHeight * cone.ray.direction;
-                segment.p[1] = cone.ray.origin + cone.maxHeight * cone.ray.direction;
+                segment.p[0] = cone.ray.origin + cone.GetMinHeight() * cone.ray.direction;
+                segment.p[1] = cone.ray.origin + cone.GetMaxHeight() * cone.ray.direction;
                 auto sbResult = TIQuery<Real, Segment<3, Real>, AlignedBox<3, Real>>()(segment, box);
                 if (sbResult.intersect)
                 {
@@ -320,7 +331,7 @@ namespace gte
             else
             {
                 Ray<3, Real> ray;
-                ray.origin = cone.ray.origin + cone.minHeight * cone.ray.direction;
+                ray.origin = cone.ray.origin + cone.GetMinHeight() * cone.ray.direction;
                 ray.direction = cone.ray.direction;
                 auto rbResult = TIQuery<Real, Ray<3, Real>, AlignedBox<3, Real>>()(ray, box);
                 if (rbResult.intersect)
@@ -347,7 +358,8 @@ namespace gte
                 mVertices[i] -= cone.ray.origin;
             }
 
-            if (cone.minHeight <= boxMinHeight && boxMaxHeight <= cone.maxHeight)
+            Real coneMaxHeight = (cone.IsFinite() ? cone.GetMaxHeight() : std::numeric_limits<Real>::max());
+            if (cone.GetMinHeight() <= boxMinHeight && boxMaxHeight <= coneMaxHeight)
             {
                 // The box is fully inside, so no clipping is necessary.
                 std::copy(mEdges.begin(), mEdges.end(), mCandidateEdges.begin());
@@ -431,8 +443,9 @@ namespace gte
             for (size_t i = 0; i < NUM_BOX_VERTICES; ++i)
             {
                 Real h = Dot(cone.ray.direction, mVertices[i]);
-                mProjectionMin[i] = cone.minHeight - h;
-                mProjectionMax[i] = h - cone.maxHeight;
+                Real coneMaxHeight = (cone.IsFinite() ? cone.GetMaxHeight() : std::numeric_limits<Real>::max());
+                mProjectionMin[i] = cone.GetMinHeight() - h;
+                mProjectionMax[i] = h - coneMaxHeight;
             }
 
             size_t v0 = VERTEX_MIN_BASE, v1 = VERTEX_MAX_BASE;

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/01/31)
+// File Version: 3.0.2 (2019/04/16)
 
 #include "CastleWindow.h"
 
@@ -141,11 +141,7 @@ void CastleWindow::CreateFrontHall()
         AxisAngle<4, float>(Vector4<float>::Unit(2), angle));
     Matrix4x4<float> rotate1 = Rotation<4, float>(
         AxisAngle<4, float>(Vector4<float>::Unit(0), -angle));
-#if defined(GTE_USE_MAT_VEC)
-    local.SetRotation(rotate0 * rotate1);
-#else
-    local.SetRotation(rotate1 * rotate0);
-#endif
+    local.SetRotation(DoTransform(rotate0, rotate1));
 
     std::string name[7] =
     {
@@ -283,11 +279,7 @@ void CastleWindow::CreateCylinder02()
         AxisAngle<4, float>(Vector4<float>::Unit(2), angle));
     Matrix4x4<float> rotate1 = Rotation<4, float>(
         AxisAngle<4, float>(Vector4<float>::Unit(0), -angle));
-#if defined(GTE_USE_MAT_VEC)
-    local.SetRotation(rotate0 * rotate1);
-#else
-    local.SetRotation(rotate1 * rotate0);
-#endif
+    local.SetRotation(DoTransform(rotate0, rotate1));
 
     std::shared_ptr<Material> materials[2] =
     {
@@ -530,11 +522,7 @@ void CastleWindow::CreateWoodShield(int i)
     float angle1 = msWoodShieldXRotate[i] * (float)GTE_C_DEG_TO_RAD;
     Matrix4x4<float> rotate1 = Rotation<4, float>(
         AxisAngle<4, float>(Vector4<float>::Unit(0), angle1));
-#if defined(GTE_USE_MAT_VEC)
-    mesh->localTransform.SetRotation(rotate0 * rotate1);
-#else
-    mesh->localTransform.SetRotation(rotate1 * rotate0);
-#endif
+    mesh->localTransform.SetRotation(DoTransform(rotate0, rotate1));
 
     auto effect = CreateTextureEffect(mShield);
     mesh->SetEffect(effect);
@@ -939,11 +927,8 @@ void CastleWindow::CreateBarrel(int i)
         AxisAngle<4, float>(Vector4<float>::Unit(1), angle1));
     Matrix4x4<float> rotate2 = Rotation<4, float>(
         AxisAngle<4, float>(Vector4<float>::Unit(0), angle2));
-#if defined(GTE_USE_MAT_VEC)
-    barrelNode->localTransform.SetRotation(rotate0 * rotate1 * rotate2);
-#else
-    barrelNode->localTransform.SetRotation(rotate2 * rotate1 * rotate0);
-#endif
+    Matrix4x4<float> rotate = DoTransform(DoTransform(rotate0, rotate1), rotate2);
+    barrelNode->localTransform.SetRotation(rotate);
     mScene->AttachChild(barrelNode);
 
     std::shared_ptr<Visual> barMesh = std::make_shared<Visual>(

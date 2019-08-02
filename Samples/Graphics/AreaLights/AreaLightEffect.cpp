@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/07)
+// File Version: 3.0.2 (2019/04/15)
 
-#include <Graphics/GteMaterial.h>
 #include "AreaLightEffect.h"
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteMaterial.h>
 using namespace gte;
 
 AreaLightEffect::AreaLightEffect(std::shared_ptr<ProgramFactory> const& factory,
@@ -16,15 +17,9 @@ AreaLightEffect::AreaLightEffect(std::shared_ptr<ProgramFactory> const& factory,
     created = false;
 
     // Load and compile the shaders.
-#if defined(GTE_DEV_OPENGL)
-    std::string pathVS = environment.GetPath("AreaLightVS.glsl");
-    std::string pathPS = environment.GetPath("AreaLightPS.glsl");
-    mProgram = factory->CreateFromFiles(pathVS, pathPS, "");
-#else
-    std::string path = environment.GetPath("AreaLight.hlsl");
-    mProgram = factory->CreateFromFiles(path, path, "");
-#endif
-
+    std::string vsPath = environment.GetPath(DefaultShaderName("AreaLight.vs"));
+    std::string psPath = environment.GetPath(DefaultShaderName("AreaLight.ps"));
+    mProgram = factory->CreateFromFiles(vsPath, psPath, "");
     if (!mProgram)
     {
         // The program factory will generate Log* messages.
@@ -52,16 +47,8 @@ AreaLightEffect::AreaLightEffect(std::shared_ptr<ProgramFactory> const& factory,
     pshader->Set("Material", mMaterialConstant);
     pshader->Set("Camera", mCameraConstant);
     pshader->Set("AreaLight", mAreaLightConstant);
-#if defined(GTE_DEV_OPENGL)
-    pshader->Set("baseSampler", mBaseTexture);
-    pshader->Set("baseSampler", mCommonSampler);
-    pshader->Set("normalSampler", mNormalTexture);
-    pshader->Set("normalSampler", mCommonSampler);
-#else
-    pshader->Set("baseTexture", mBaseTexture);
-    pshader->Set("normalTexture", mNormalTexture);
-    pshader->Set("commonSampler", mCommonSampler);
-#endif
+    pshader->Set("baseTexture", mBaseTexture, "baseSampler", mCommonSampler);
+    pshader->Set("normalTexture", mNormalTexture, "normalSampler", mCommonSampler);
 
     created = true;
 }

@@ -36,40 +36,40 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\InitializeDiagToCol.hlsl">
+    <None Include="Shaders\InitializeDiagToCol.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\InitializeDiagToRow.hlsl">
+    <None Include="Shaders\InitializeDiagToRow.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PartialSumsDiagToCol.hlsl">
+    <None Include="Shaders\PartialSumsDiagToCol.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PartialSumsDiagToRow.hlsl">
+    <None Include="Shaders\PartialSumsDiagToRow.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\UpdateShader.hlsl">
+    <None Include="Shaders\UpdateShader.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\WeightsShader.hlsl">
+    <None Include="Shaders\WeightsShader.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\InitializeDiagToCol.glsl">
+    <None Include="Shaders\InitializeDiagToCol.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\InitializeDiagToRow.glsl">
+    <None Include="Shaders\InitializeDiagToRow.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PartialSumsDiagToCol.glsl">
+    <None Include="Shaders\PartialSumsDiagToCol.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PartialSumsDiagToRow.glsl">
+    <None Include="Shaders\PartialSumsDiagToRow.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\UpdateShader.glsl">
+    <None Include="Shaders\UpdateShader.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\WeightsShader.glsl">
+    <None Include="Shaders\WeightsShader.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

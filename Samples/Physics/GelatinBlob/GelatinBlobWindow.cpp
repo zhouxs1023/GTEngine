@@ -3,9 +3,15 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.1.1 (2016/07/10)
+// File Version: 3.1.2 (2019/05/02)
 
 #include "GelatinBlobWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <Mathematics/GteEdgeKey.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -150,7 +156,7 @@ void GelatinBlobWindow::CreateIcosahedron()
     // transparency.
     auto texture = WICFileIO::Load(mEnvironment.GetPath("Water.png"), false);
     unsigned int numTexels = texture->GetNumElements();
-    unsigned int* texels = texture->Get<unsigned int>();
+    auto texels = texture->Get<unsigned int>();
     for (unsigned int i = 0; i < numTexels; ++i)
     {
         texels[i] = (texels[i] & 0x00FFFFFF) | 0x80000000;
@@ -211,7 +217,7 @@ void GelatinBlobWindow::CreateSprings()
     std::set<EdgeKey<false>> edgeSet;
     auto ibuffer = mIcosahedron->GetIndexBuffer();
     unsigned int const numTriangles = ibuffer->GetNumPrimitives();
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto indices = ibuffer->Get<unsigned int>();
     for (unsigned int t = 0; t < numTriangles; ++t)
     {
         int v0 = *indices++;
@@ -267,7 +273,7 @@ void GelatinBlobWindow::CreateSegments()
 
         auto vbuffer = std::make_shared<VertexBuffer>(vformat, 2);
         vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-        Vector3<float>* positions = vbuffer->Get<Vector3<float>>();
+        auto positions = vbuffer->Get<Vector3<float>>();
         positions[0] = mModule->GetPosition(spring.particle0);
         positions[1] = mModule->GetPosition(spring.particle1);
 
@@ -287,7 +293,7 @@ void GelatinBlobWindow::PhysicsTick()
     // Update icosahedron.  The particle system and icosahedron maintain
     // their own copy of the vertices, so this update is necessary.
     auto vbuffer = mIcosahedron->GetVertexBuffer();
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     for (int i = 0; i < 12; ++i)
     {
         vertices[i].position = mModule->GetPosition(i);
@@ -302,7 +308,7 @@ void GelatinBlobWindow::PhysicsTick()
 
         auto segment = std::static_pointer_cast<Visual>(mSegmentRoot->GetChild(index));
         vbuffer = segment->GetVertexBuffer();
-        Vector3<float>* positions = vbuffer->Get<Vector3<float>>();
+        auto positions = vbuffer->Get<Vector3<float>>();
         positions[0] = mModule->GetPosition(spring.particle0);
         positions[1] = mModule->GetPosition(spring.particle1);
         mEngine->Update(vbuffer);

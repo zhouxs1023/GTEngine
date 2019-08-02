@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/15)
 
 #include "AreaLightsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteMaterial.h>
 
 int main(int, char const*[])
 {
@@ -74,12 +77,8 @@ bool AreaLightsWindow::SetEnvironment()
     {
         "Bricks.png",
         "BricksNormal.png",
-#if defined(GTE_DEV_OPENGL)
-        "AreaLightVS.glsl",
-        "AreaLightPS.glsl"
-#else
-        "AreaLight.hlsl"
-#endif
+        DefaultShaderName("AreaLight.vs"),
+        DefaultShaderName("AreaLight.ps")
     };
 
     for (auto const& input : inputs)
@@ -132,11 +131,8 @@ void AreaLightsWindow::CreateAreaLightEffect()
 
     mSurface->SetEffect(mALEffect);
 
-    Material& surfaceMaterial =
-        *mALEffect->GetMaterialConstant()->Get<Material>();
-
-    AreaLightEffect::Parameters& areaLight =
-        *mALEffect->GetAreaLightConstant()->Get<AreaLightEffect::Parameters>();
+    auto& surfaceMaterial = *mALEffect->GetMaterialConstant()->Get<Material>();
+    auto& areaLight = *mALEffect->GetAreaLightConstant()->Get<AreaLightEffect::Parameters>();
 
     // Gray material with tight specular.
     surfaceMaterial.emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -164,26 +160,15 @@ void AreaLightsWindow::CreateAreaLightEffect()
 
 void AreaLightsWindow::UpdateConstants()
 {
-    AreaLightEffect::Parameters& areaLight =
-        *mALEffect->GetAreaLightConstant()->Get<AreaLightEffect::Parameters>();
-
-    Vector4<float>& cameraModelPosition =
-        *mALEffect->GetCameraConstant()->Get<Vector4<float>>();
+    auto& areaLight = *mALEffect->GetAreaLightConstant()->Get<AreaLightEffect::Parameters>();
+    auto& cameraModelPosition = *mALEffect->GetCameraConstant()->Get<Vector4<float>>();
 
     Matrix4x4<float> hinverse = mSurface->worldTransform.GetHInverse();
-#if defined(GTE_USE_MAT_VEC)
-    areaLight.position = hinverse * mALWorldPosition;
-    areaLight.normal = hinverse * mALWorldNormal;
-    areaLight.axis0 = hinverse * mALWorldAxis0;
-    areaLight.axis1 = hinverse * mALWorldAxis1;
-    cameraModelPosition = hinverse * mCamera->GetPosition();
-#else
-    areaLight.position = mALWorldPosition * hinverse;
-    areaLight.normal = mALWorldNormal * hinverse;
-    areaLight.axis0 = mALWorldAxis0 * hinverse;
-    areaLight.axis1 = mALWorldAxis1 * hinverse;
-    cameraModelPosition = mCamera->GetPosition() * hinverse;
-#endif
+    areaLight.position = DoTransform(hinverse, mALWorldPosition);
+    areaLight.normal = DoTransform(hinverse, mALWorldNormal);
+    areaLight.axis0 = DoTransform(hinverse, mALWorldAxis0);
+    areaLight.axis1 = DoTransform(hinverse, mALWorldAxis1);
+    cameraModelPosition = DoTransform(hinverse, mCamera->GetPosition());
 
     mEngine->Update(mALEffect->GetAreaLightConstant());
     mEngine->Update(mALEffect->GetCameraConstant());

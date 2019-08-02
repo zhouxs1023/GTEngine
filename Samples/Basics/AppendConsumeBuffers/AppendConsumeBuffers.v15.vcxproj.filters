@@ -15,11 +15,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\AppendConsume.hlsl">
+    <None Include="Shaders\AppendConsume.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\AppendConsume.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\AppendConsume.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

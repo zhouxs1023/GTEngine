@@ -3,24 +3,21 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/02/07)
+// File Version: 3.0.3 (2019/07/31)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteDistLineSegment.h>
 #include <Mathematics/GteDistPointLine.h>
 #include <Mathematics/GteIntrLine3Triangle3.h>
 #include <Graphics/GtePicker.h>
+#include <thread>
 using namespace gte;
 
 PickRecord const Picker::msInvalid;
 
-
-Picker::~Picker()
-{
-}
-
-Picker::Picker()
+Picker::Picker(unsigned int numThreads)
     :
+    mNumThreads(numThreads > 1 ? numThreads : 1),
     mMaxDistance(0.0f),
     mOrigin({ 0.0f, 0.0f, 0.0f, 1.0f }),
     mDirection({ 0.0f, 0.0f, 0.0f, 0.0f}),
@@ -252,12 +249,59 @@ void Picker::ExecuteRecursive(std::shared_ptr<Spatial> const& object)
 void Picker::PickTriangles(std::shared_ptr<Visual> const& visual, char const* positions,
     unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line)
 {
+    // Partition the items for multiple threads.
+    auto const firstTriangle = ibuffer->GetFirstPrimitive();
+    auto const numTriangles = ibuffer->GetNumActivePrimitives();
+    auto const numThreads = std::min(numTriangles, mNumThreads);
+
+    if (numThreads > 1)
+    {
+        auto const numPerThread = numTriangles / numThreads;
+        std::vector<int> imin(numThreads), imax(numThreads);
+        for (unsigned int t = 0; t < numThreads; ++t)
+        {
+            imin[t] = firstTriangle + t * numPerThread;
+            imax[t] = imin[t] + numPerThread - 1;
+        }
+        imax[numThreads - 1] = firstTriangle + numTriangles - 1;
+
+        // Process blocks of items in multiple threads.
+        std::vector<std::thread> process(numThreads);
+        std::vector<std::vector<PickRecord>> threadOutputs(numThreads);
+        for (unsigned int t = 0; t < numThreads; ++t)
+        {
+            auto const i0 = imin[t];
+            auto const i1 = imax[t];
+            process[t] = std::thread(
+                [this, t, visual, positions, vstride, ibuffer, line, i0, i1, &threadOutputs]()
+                {
+                    PickTriangles(visual, positions, vstride, ibuffer, line,
+                        i0, i1, threadOutputs[t]);
+                });
+        }
+
+        // Wait for all threads to finish.
+        for (unsigned int t = 0; t < numThreads; ++t)
+        {
+            process[t].join();
+            std::copy(threadOutputs[t].begin(), threadOutputs[t].end(), std::back_inserter(records));
+        }
+    }
+    else
+    {
+        PickTriangles(visual, positions, vstride, ibuffer, line,
+            firstTriangle, firstTriangle + numTriangles - 1, records);
+    }
+}
+
+void Picker::PickTriangles(std::shared_ptr<Visual> const& visual, char const* positions,
+    unsigned int vstride, IndexBuffer* ibuffer, Line3<float> const& line,
+    unsigned int i0, unsigned int i1, std::vector<PickRecord>& output) const
+{
     // Compute intersections with the model-space triangles.
-    unsigned int const firstTriangle = ibuffer->GetFirstPrimitive();
-    unsigned int const numTriangles = ibuffer->GetNumActivePrimitives();
     bool isIndexed = ibuffer->IsIndexed();
     IPType primitiveType = ibuffer->GetPrimitiveType();
-    for (unsigned int i = firstTriangle; i < numTriangles; ++i)
+    for (unsigned int i = i0; i <= i1; ++i)
     {
         // Get the vertex indices for the triangle.
         unsigned int v0, v1, v2;
@@ -290,7 +334,9 @@ void Picker::PickTriangles(std::shared_ptr<Visual> const& visual, char const* po
         // Compute line-triangle intersection.
         FIQuery<float, Line3<float>, Triangle3<float>> query;
         auto result = query(line, triangle);
-        if (result.intersect && mTMin <= result.parameter && result.parameter <= mTMax)
+        if (result.intersect
+            && mTMin <= result.parameter
+            && result.parameter <= mTMax)
         {
             PickRecord record;
             record.visual = visual;
@@ -319,7 +365,7 @@ void Picker::PickTriangles(std::shared_ptr<Visual> const& visual, char const* po
             record.distanceBetweenLinePrimitive =
                 Length(record.linePoint - record.primitivePoint);
 
-            records.push_back(record);
+            output.push_back(record);
         }
     }
 }
@@ -332,7 +378,7 @@ void Picker::PickSegments(std::shared_ptr<Visual> const& visual, char const* pos
     unsigned int const numSegments = ibuffer->GetNumActivePrimitives();
     bool isIndexed = ibuffer->IsIndexed();
     IPType primitiveType = ibuffer->GetPrimitiveType();
-    for (unsigned int i = firstSegment; i < numSegments; ++i)
+    for (unsigned int i = firstSegment; i < firstSegment + numSegments; ++i)
     {
         // Get the vertex indices for the segment.
         unsigned int v0, v1;
@@ -403,7 +449,7 @@ void Picker::PickPoints(std::shared_ptr<Visual> const& visual, char const* posit
     unsigned int const firstPoint = ibuffer->GetFirstPrimitive();
     unsigned int const numPoints = ibuffer->GetNumActivePrimitives();
     bool isIndexed = ibuffer->IsIndexed();
-    for (unsigned int i = firstPoint; i < numPoints; ++i)
+    for (unsigned int i = firstPoint; i < firstPoint + numPoints; ++i)
     {
         // Get the vertex index for the point.
         unsigned int v;

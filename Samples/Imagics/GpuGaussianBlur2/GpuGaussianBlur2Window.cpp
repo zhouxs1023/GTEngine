@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/20)
+// File Version: 3.23.1 (2019/04/19)
 
 #include "GpuGaussianBlur2Window.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Applications/GteCommand.h>
+#include <Graphics/GteGraphicsDefaults.h>
 
 static bool gsUseDirichlet;
 
@@ -33,7 +36,7 @@ int main(int numArguments, char const* arguments[])
 
 GpuGaussianBlur2Window::GpuGaussianBlur2Window(Parameters& parameters)
     :
-    Window3(parameters),
+    Window2(parameters),
     mNumXThreads(8),
     mNumYThreads(8),
     mNumXGroups(mXSize / mNumXThreads),
@@ -88,15 +91,9 @@ bool GpuGaussianBlur2Window::SetEnvironment()
     std::vector<std::string> inputs =
     {
         "Head_U16_X256_Y256.binary",
-#if defined(GTE_DEV_OPENGL)
-        "BoundaryDirichlet.glsl",
-        "BoundaryNeumann.glsl",
-        "GaussianBlur.glsl"
-#else
-        "BoundaryDirichlet.hlsl",
-        "BoundaryNeumann.hlsl",
-        "GaussianBlur.hlsl"
-#endif
+        DefaultShaderName("BoundaryDirichlet.cs"),
+        DefaultShaderName("BoundaryNeumann.cs"),
+        DefaultShaderName("GaussianBlur.cs")
     };
 
     for (auto const& input : inputs)
@@ -202,26 +199,22 @@ bool GpuGaussianBlur2Window::CreateShaders()
     mProgramFactory->defines.Set("NUM_X_THREADS", mNumXThreads);
     mProgramFactory->defines.Set("NUM_Y_THREADS", mNumYThreads);
 
-    std::string ext;
-#if defined(GTE_DEV_OPENGL)
-    ext = ".glsl";
-#else
-    ext = ".hlsl";
-#endif
-
-    mGaussianBlurProgram = mProgramFactory->CreateFromFile(mEnvironment.GetPath("GaussianBlur" + ext));
+    std::string csPath = mEnvironment.GetPath(DefaultShaderName("GaussianBlur.cs"));
+    mGaussianBlurProgram = mProgramFactory->CreateFromFile(csPath);
     if (!mGaussianBlurProgram)
     {
         return false;
     }
 
-    mBoundaryDirichletProgram = mProgramFactory->CreateFromFile(mEnvironment.GetPath("BoundaryDirichlet" + ext));
+    csPath = mEnvironment.GetPath(DefaultShaderName("BoundaryDirichlet.cs"));
+    mBoundaryDirichletProgram = mProgramFactory->CreateFromFile(csPath);
     if (!mBoundaryDirichletProgram)
     {
         return false;
     }
 
-    mBoundaryNeumannProgram = mProgramFactory->CreateFromFile(mEnvironment.GetPath("BoundaryNeumann" + ext));
+    csPath = mEnvironment.GetPath(DefaultShaderName("BoundaryNeumann.cs"));
+    mBoundaryNeumannProgram = mProgramFactory->CreateFromFile(csPath);
     if (!mBoundaryNeumannProgram)
     {
         return false;

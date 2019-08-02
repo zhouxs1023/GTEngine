@@ -244,6 +244,15 @@
     <Filter Include="Files\Mathematics\Intersection\1D">
       <UniqueIdentifier>{213007a6-fb7f-4619-88ce-ebf77b83735e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Files\Applications\GLX">
+      <UniqueIdentifier>{8f4ac042-ca2e-4b2f-99be-95c9e0ccf0eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Graphics\OpenGL4\GLX">
+      <UniqueIdentifier>{4a9fff4f-8e01-4faf-b805-35e198b1c42b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Graphics\OpenGL4\GL">
+      <UniqueIdentifier>{ea1ea741-7234-43cd-b081-32371b3a5f3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Applications\GteCommand.h">
@@ -676,9 +685,6 @@
       <Filter>Files\LowLevel\DataTypes</Filter>
     </ClInclude>
     <ClInclude Include="Include\LowLevel\GteThreadSafeQueue.h">
-      <Filter>Files\LowLevel\DataTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\LowLevel\GteWrapper.h">
       <Filter>Files\LowLevel\DataTypes</Filter>
     </ClInclude>
     <ClInclude Include="Include\Physics\GteFluid2.h">
@@ -2094,9 +2100,6 @@
     <ClInclude Include="Include\Mathematics\GteArbitraryPrecision.h">
       <Filter>Files\Mathematics\Arithmetic</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteQuadraticField.h">
-      <Filter>Files\Mathematics\Arithmetic</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Mathematics\GteContAlignedBox.h">
       <Filter>Files\Mathematics\Containment</Filter>
     </ClInclude>
@@ -2256,12 +2259,6 @@
     <ClInclude Include="Include\Mathematics\GteIntrIntervals.h">
       <Filter>Files\Mathematics\Intersection\1D</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteIntervalSet.h">
-      <Filter>Files\Mathematics\Intersection\1D</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Mathematics\GteRectangleSet.h">
-      <Filter>Files\Mathematics\Intersection\2D</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Mathematics\GteDisjointIntervals.h">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
     </ClInclude>
@@ -2282,6 +2279,63 @@
     </ClInclude>
     <ClInclude Include="Include\Mathematics\GteCLODPolyline.h">
       <Filter>Files\Mathematics\ComputationalGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GTGraphicsShared.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Applications\GLX\GteWICFileIO.h">
+      <Filter>Files\Applications\GLX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Applications\GLX\GteWindow.h">
+      <Filter>Files\Applications\GLX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Applications\GLX\GteWindowSystem.h">
+      <Filter>Files\Applications\GLX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GLX\GteGLXEngine.h">
+      <Filter>Files\Graphics\OpenGL4\GLX</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteGraphicsDefaults.h">
+      <Filter>Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteQFNumber.h">
+      <Filter>Files\Mathematics\Arithmetic</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\LowLevel\GteStringUtility.h">
+      <Filter>Files\LowLevel\DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteFontArialW700H18.h">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteFontArialW700H16.h">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteFontArialW400H16.h">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteFontArialW700H14.h">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteFontArialW400H14.h">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteFontArialW700H12.h">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GteFontArialW400H12.h">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GL\glcorearb.h">
+      <Filter>Files\Graphics\OpenGL4\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GL\glext.h">
+      <Filter>Files\Graphics\OpenGL4\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GL\glxext.h">
+      <Filter>Files\Graphics\OpenGL4\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Graphics\GL4\GL\wglext.h">
+      <Filter>Files\Graphics\OpenGL4\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2690,9 +2744,6 @@
     <ClCompile Include="Source\LowLevel\GteTimer.cpp">
       <Filter>Files\LowLevel\Timer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LowLevel\GteWrapper.cpp">
-      <Filter>Files\LowLevel\DataTypes</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Mathematics\GteBitHacks.cpp">
       <Filter>Files\Mathematics\Arithmetic</Filter>
     </ClCompile>
@@ -3031,6 +3082,42 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\GteTrackObject.cpp">
       <Filter>Files\Graphics\SceneGraph\Hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Applications\GLX\GteWICFileIO.cpp">
+      <Filter>Files\Applications\GLX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Applications\GLX\GteWindow.cpp">
+      <Filter>Files\Applications\GLX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Applications\GLX\GteWindowSystem.cpp">
+      <Filter>Files\Applications\GLX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GLX\GteGLXEngine.cpp">
+      <Filter>Files\Graphics\OpenGL4\GLX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GL4\GLX\GteGLXExtensions.cpp">
+      <Filter>Files\Graphics\OpenGL4\GLX</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteFontArialW700H18.cpp">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteFontArialW700H16.cpp">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteFontArialW400H16.cpp">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteFontArialW700H14.cpp">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteFontArialW400H14.cpp">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteFontArialW700H12.cpp">
+      <Filter>Files\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\GteFontArialW400H12.cpp">
+      <Filter>Files\Graphics\Effects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

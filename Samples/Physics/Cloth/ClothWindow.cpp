@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.4 (2019/03/04)
+// File Version: 3.0.5 (2019/05/02)
 
 #include "ClothWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteTexture2Effect.h>
 
 //#define SINGLE_STEP
 
@@ -149,30 +151,29 @@ void ClothWindow::CreateSprings()
     }
 
     // Initial position on a vertical axis-aligned rectangle, zero velocity.
-    float rowFactor = 1.0f / (float)(numRows - 1);
-    float colFactor = 1.0f / (float)(numCols - 1);
+    float rowFactor = 1.0f / static_cast<float>(numRows - 1);
+    float colFactor = 1.0f / static_cast<float>(numCols - 1);
     for (r = 0; r < numRows; ++r)
     {
         for (c = 0; c < numCols; ++c)
         {
-            float x = c*colFactor;
-            float z = r*rowFactor;
+            float x = c * colFactor;
+            float z = r * rowFactor;
             mModule->SetPosition(r, c, { x, 0.0f, z });
             mModule->SetVelocity(r, c, { 0.0f, 0.0f, 0.0f });
         }
     }
 
     // Springs are at rest in the initial configuration.
-    float rowConstant = 1000.0f;
-    float bottomConstant = 100.0f;
+    float const rowConstant = 1000.0f;
+    float const bottomConstant = 100.0f;
     Vector3<float> diff;
     for (r = 0; r < numRows; ++r)
     {
         for (c = 0; c < numCols - 1; ++c)
         {
             mModule->SetConstantC(r, c, rowConstant);
-            diff = mModule->GetPosition(r, c + 1) -
-                mModule->GetPosition(r, c);
+            diff = mModule->GetPosition(r, c + 1) - mModule->GetPosition(r, c);
             mModule->SetLengthC(r, c, Length(diff));
         }
     }
@@ -182,8 +183,7 @@ void ClothWindow::CreateSprings()
         for (c = 0; c < numCols; ++c)
         {
             mModule->SetConstantR(r, c, bottomConstant);
-            diff = mModule->GetPosition(r, c) -
-                mModule->GetPosition(r + 1, c);
+            diff = mModule->GetPosition(r, c) - mModule->GetPosition(r + 1, c);
             mModule->SetLengthR(r, c, Length(diff));
         }
     }
@@ -198,7 +198,7 @@ void ClothWindow::CreateCloth()
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, desc.numVertices);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, desc.numTriangles, sizeof(unsigned int));
 
     desc.vertexAttributes =
@@ -218,7 +218,7 @@ void ClothWindow::CreateCloth()
     mSurface = std::make_unique<RectanglePatchMesh<float>>(desc, mSpline);
 
     std::string path = mEnvironment.GetPath("Cloth.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, true);
+    auto texture = WICFileIO::Load(path, true);
     texture->AutogenerateMipmaps();
     auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP, SamplerState::WRAP);

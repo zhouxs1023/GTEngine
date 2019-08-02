@@ -316,10 +316,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DistanceSeg3Seg3.glsl" />
+    <None Include="Shaders\DistanceSeg3Seg3.cs.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DistanceSeg3Seg3.hlsl">
+    <None Include="Shaders\DistanceSeg3Seg3.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

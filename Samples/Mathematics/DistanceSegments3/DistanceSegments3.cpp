@@ -3,22 +3,20 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2018/10/05)
+// File Version: 3.0.4 (2019/04/23)
 
-#include <GTEngine.h>
-#if defined(__LINUX__)
-#include <Graphics/GL4/GteGLSLProgramFactory.h>
-#include <Graphics/GL4/GLX/GteGLXEngine.h>
-#endif
+#include <Applications/GteEnvironment.h>
+#include <LowLevel/GteLogReporter.h>
+#include <LowLevel/GteTimer.h>
+#include <GTGraphics.h>
+#include <Mathematics/GteArbitraryPrecision.h>
+#include <Mathematics/GteDistSegmentSegment.h>
+#include <Mathematics/GteDistSegmentSegmentExact.h>
 #include <iostream>
 using namespace gte;
 
 Environment gEnvironment;
-#if defined(GTE_DEV_OPENGL)
-std::string gShaderFile = "DistanceSeg3Seg3.glsl";
-#else
-std::string gShaderFile = "DistanceSeg3Seg3.hlsl";
-#endif
+std::string gShaderFile = DefaultShaderName("DistanceSeg3Seg3.cs");
 
 // The function dist3D_Segment_to_Segment is from Dan Sunday's website:
 //   http://geomalgorithms.com/a07-_distance.html
@@ -28,7 +26,7 @@ std::string gShaderFile = "DistanceSeg3Seg3.hlsl";
 // as arguments to the function.  The SMALL_NUM macro was replaced by a 
 // 'const' declaration.  The modified code computes the closest points.  See
 // the revised document (as of 2014/11/05)
-//   http://www.geometrictools.com/Documentation/DistanceLine3Line3.pdf
+//   https://www.geometrictools.com/Documentation/DistanceLine3Line3.pdf
 // that describes an algorithm that is robust, particularly for nearly
 // segments, and that uses floating-point arithmetic.  An example in this PDF
 // shows that there is a problem with the logic of Sunday's algorithm when
@@ -119,6 +117,50 @@ typedef BSRational<UIntegerFP32<128>> Rational;
 typedef DCPQuery<double, Segment<3, double>, Segment<3, double>> RobustQuery;
 typedef DistanceSegmentSegmentExact<3, Rational> RationalQuery;
 
+template <int N>
+void LoadInput(bool testNonparallel, unsigned int numInputs, Segment<N, double>* segment)
+{
+    int numChannels = N;
+
+    if (testNonparallel)
+    {
+        std::ifstream input("InputNonparallel.binary", std::ios::binary);
+        for (unsigned int i = 0; i < numInputs; ++i)
+        {
+            for (int j = 0; j < 3; ++j)
+            {
+                input.read((char*)& segment[i].p[0][j], sizeof(double));
+                input.read((char*)& segment[i].p[1][j], sizeof(double));
+            }
+            if (numChannels == 4)
+            {
+                segment[i].p[0][3] = 1.0;
+                segment[i].p[1][3] = 1.0;
+            }
+        }
+        input.close();
+    }
+    else
+    {
+        std::ifstream input("InputParallel.binary", std::ios::binary);
+        for (unsigned int i = 0; i < numInputs; ++i)
+        {
+            input.read((char*)& segment[i].p[0][0], sizeof(double));
+            input.read((char*)& segment[i].p[0][1], sizeof(double));
+            input.read((char*)& segment[i].p[0][2], sizeof(double));
+            input.read((char*)& segment[i].p[1][0], sizeof(double));
+            input.read((char*)& segment[i].p[1][1], sizeof(double));
+            input.read((char*)& segment[i].p[1][2], sizeof(double));
+            if (numChannels == 4)
+            {
+                segment[i].p[0][3] = 1.0;
+                segment[i].p[1][3] = 1.0;
+            }
+        }
+        input.close();
+    }
+}
+
 void CPUAccuracyTest(bool compareUsingExact, bool testNonparallel)
 {
     // NOTE:  When comparing to exact arithmetic results, the number of inputs
@@ -132,32 +174,7 @@ void CPUAccuracyTest(bool compareUsingExact, bool testNonparallel)
     unsigned int const numBlocks = 16;
     std::vector<Segment<3, double>> segment(numInputs);
 
-    std::mt19937 mte;
-    if (testNonparallel)
-    {
-        std::uniform_real_distribution<double> rnd(-1.0, 1.0);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            for (int j = 0; j < 3; ++j)
-            {
-                segment[i].p[0][j] = rnd(mte);
-                segment[i].p[1][j] = rnd(mte);
-            }
-        }
-    }
-    else
-    {
-        std::uniform_real_distribution<double> rnd(0.9, 1.1);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            segment[i].p[0][0] = -rnd(mte);
-            segment[i].p[0][1] = 0.0;
-            segment[i].p[0][2] = 1e-06 * rnd(mte);
-            segment[i].p[1][0] = rnd(mte);
-            segment[i].p[1][1] = 0.0;
-            segment[i].p[1][2] = -1e-06 * rnd(mte);
-        }
-    }
+    LoadInput(testNonparallel, numInputs, segment.data());
 
     double maxError01 = 0.0, maxError02 = 0.0, maxError12 = 0.0, error;
     unsigned int xmax01 = 0, ymax01 = 0;
@@ -182,8 +199,7 @@ void CPUAccuracyTest(bool compareUsingExact, bool testNonparallel)
             // Sunday's query
             double sqrDistance0, s0, t0;
             Vector3<double> closest0[2];
-            dist3D_Segment_to_Segment(P0, P1, Q0, Q1, sqrDistance0,
-                s0, t0, closest0);
+            dist3D_Segment_to_Segment(P0, P1, Q0, Q1, sqrDistance0, s0, t0, closest0);
             double distance0 = std::sqrt(sqrDistance0);
 
             // robust query
@@ -245,38 +261,12 @@ void CPUPerformanceTest(int select, bool testNonparallel)
     unsigned int const numInputs = (select == PERF_RATIONAL ? 1024 : 16384);
     std::vector<Segment<3, double>> segment(numInputs);
 
-    std::mt19937 mte;
-    if (testNonparallel)
-    {
-        std::uniform_real_distribution<double> rnd(-1.0, 1.0);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            for (int j = 0; j < 3; ++j)
-            {
-                segment[i].p[0][j] = rnd(mte);
-                segment[i].p[1][j] = rnd(mte);
-            }
-        }
-    }
-    else
-    {
-        std::uniform_real_distribution<double> rnd(0.9, 1.1);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            segment[i].p[0][0] = -rnd(mte);
-            segment[i].p[0][1] = 0.0;
-            segment[i].p[0][2] = 1e-06 * rnd(mte);
-            segment[i].p[1][0] = rnd(mte);
-            segment[i].p[1][1] = 0.0;
-            segment[i].p[1][2] = -1e-06 * rnd(mte);
-        }
-    }
+    LoadInput(testNonparallel, numInputs, segment.data());
 
     Timer timer;
 
     if (select == PERF_SUNDAY)
     {
-        // 7.43 seconds (134209536 queries, 5.536119e-8 seconds/query)
         double sqrDistance0, s0, t0;
         Vector3<double> closest0[2];
         for (unsigned int y = 0; y < numInputs; ++y)
@@ -292,7 +282,6 @@ void CPUPerformanceTest(int select, bool testNonparallel)
     }
     else if (select == PERF_ROBUST)
     {
-        // 9.18 seconds (134209536 queries, 6.840050e-8 seconds/query)
         RobustQuery query;
         RobustQuery::Result result;
         for (unsigned int y = 0; y < numInputs; ++y)
@@ -305,9 +294,6 @@ void CPUPerformanceTest(int select, bool testNonparallel)
     }
     else  // select == PERF_RATIONAL
     {
-        // 11.00 seconds (523776 queries, 2.100134e-05 seconds/query,
-        // approximately 307 times longer per query for exact rational,
-        // so 134209536 queries takes on the order of 47 minutes)
         RationalQuery query;
         RationalQuery::Result result;
         Vector3<Rational> RP0, RP1, RQ0, RQ1;
@@ -333,7 +319,6 @@ void CPUPerformanceTest(int select, bool testNonparallel)
     std::cout << timer.GetSeconds() << std::endl;
 }
 
-#if defined(GTE_DEV_OPENGL)
 void GPUAccuracyTest(bool getClosest, bool testNonparallel)
 {
     unsigned int const numInputs = 16384;
@@ -342,77 +327,43 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
     unsigned int const numThreads = 8;
     unsigned int const numGroups = blockSize / numThreads;
 
-#if defined(__MSWINDOWS__)
-    WGLEngine engine(true, false);
-#else
-    GLXEngine engine(true, false);
-#endif
-    GLSLProgramFactory factory;
+    DefaultEngine engine;
+    DefaultProgramFactory factory;
     factory.defines.Set("NUM_X_THREADS", numThreads);
     factory.defines.Set("NUM_Y_THREADS", numThreads);
     factory.defines.Set("BLOCK_SIZE", blockSize);
     factory.defines.Set("REAL", "double");
+#if defined(GTE_DEV_OPENGL)
     factory.defines.Set("VECREAL", "dvec4");
+#else
+    factory.defines.Set("VECREAL", "double4");
+#endif
     factory.defines.Set("GET_CLOSEST", (getClosest ? 1 : 0));
 
-    std::shared_ptr<ComputeProgram> cprogram =
-        factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
-    std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
-    std::shared_ptr<ConstantBuffer> block =
-        std::make_shared<ConstantBuffer>(2 * sizeof(uint32_t), true);
+    auto cprogram = factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
+    auto cshader = cprogram->GetCShader();
+    auto block = std::make_shared<ConstantBuffer>(2 * sizeof(uint32_t), true);
     cshader->Set("Block", block);
-    uint32_t* origin = block->Get<uint32_t>();
+    auto* origin = block->Get<uint32_t>();
 
-    std::shared_ptr<StructuredBuffer> input =
-        std::make_shared<StructuredBuffer>(numInputs, sizeof(Segment<4, double>));
+    auto input = std::make_shared<StructuredBuffer>(numInputs, sizeof(Segment<4, double>));
     input->SetUsage(Resource::DYNAMIC_UPDATE);
     cshader->Set("inSegment", input);
-    Segment<4, double>* segment = input->Get<Segment<4, double>>();
+    auto* segment = input->Get<Segment<4, double>>();
 
-    std::mt19937 mte;
-    if (testNonparallel)
-    {
-        std::uniform_real_distribution<double> rnd(-1.0, 1.0);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            for (int j = 0; j < 3; ++j)
-            {
-                segment[i].p[0][j] = rnd(mte);
-                segment[i].p[1][j] = rnd(mte);
-            }
-            segment[i].p[0][3] = 1.0;
-            segment[i].p[1][3] = 1.0;
-        }
-    }
-    else
-    {
-        std::uniform_real_distribution<double> rnd(0.9, 1.1);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            segment[i].p[0][0] = -rnd(mte);
-            segment[i].p[0][1] = 0.0;
-            segment[i].p[0][2] = 1e-06 * rnd(mte);
-            segment[i].p[0][3] = 1.0;
-            segment[i].p[1][0] = rnd(mte);
-            segment[i].p[1][1] = 0.0;
-            segment[i].p[1][2] = -1e-06 * rnd(mte);
-            segment[i].p[1][3] = 1.0;
-        }
-    }
+    LoadInput(testNonparallel, numInputs, segment);
 
-    // AMD 7970 (not overclocked), use 'double':
-    //   Get s, t:  0.99 seconds
-    //   Get closest0, closest1:  2.86785 seconds
     std::shared_ptr<StructuredBuffer> output;
     double maxError = 0.0;
     int xmax = 0, ymax = 0;
     if (getClosest)
     {
+        // GLSL wants closest[] to be aligned on a dvec4 boundary, so
+        // parameter[2] is padding.
         struct Result
         {
             double sqrDistance;
-            double parameter[2];
-            double _unused;  // GLSL padding so that dvec4 starts on 32-byte boundary
+            double parameter[3];
             Vector4<double> closest[2];
         };
 
@@ -467,10 +418,12 @@ void GPUAccuracyTest(bool getClosest, bool testNonparallel)
     }
     else
     {
+        // GLSL wants closest[] to be aligned on a dvec4 boundary, so
+        // parameter[2] is padding.
         struct Result
         {
             double sqrDistance;
-            double parameter[2];
+            double parameter[3];
         };
 
         output = std::make_shared<StructuredBuffer>(blockSize * blockSize, sizeof(Result));
@@ -541,76 +494,42 @@ void GPUPerformanceTest(bool getClosest, bool testNonparallel)
     unsigned int const numThreads = 8;
     unsigned int const numGroups = blockSize / numThreads;
 
-#if defined(__MSWINDOWS__)
-    WGLEngine engine(true, false);
-#else
-    GLXEngine engine(true, false);
-#endif
-    GLSLProgramFactory factory;
+    DefaultEngine engine;
+    DefaultProgramFactory factory;
     factory.defines.Set("NUM_X_THREADS", numThreads);
     factory.defines.Set("NUM_Y_THREADS", numThreads);
     factory.defines.Set("BLOCK_SIZE", blockSize);
     factory.defines.Set("REAL", "double");
+#if defined(GTE_DEV_OPENGL)
     factory.defines.Set("VECREAL", "dvec4");
+#else
+    factory.defines.Set("VECREAL", "double4");
+#endif
     factory.defines.Set("GET_CLOSEST", (getClosest ? 1 : 0));
-    std::shared_ptr<ComputeProgram> cprogram =
-        factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
-    std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
+    auto cprogram = factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
+    auto cshader = cprogram->GetCShader();
 
-    std::shared_ptr<ConstantBuffer> block =
-        std::make_shared<ConstantBuffer>(2 * sizeof(uint32_t), true);
+    auto block = std::make_shared<ConstantBuffer>(2 * sizeof(uint32_t), true);
     cshader->Set("Block", block);
-    uint32_t* origin = block->Get<uint32_t>();
+    auto* origin = block->Get<uint32_t>();
 
-    std::shared_ptr<StructuredBuffer> input =
-        std::make_shared<StructuredBuffer>(numInputs, sizeof(Segment<4, double>));
+    auto input = std::make_shared<StructuredBuffer>(numInputs, sizeof(Segment<4, double>));
     input->SetUsage(Resource::DYNAMIC_UPDATE);
     cshader->Set("inSegment", input);
     Segment<4, double>* segment = input->Get<Segment<4, double>>();
 
-    std::mt19937 mte;
-    if (testNonparallel)
-    {
-        std::uniform_real_distribution<double> rnd(-1.0, 1.0);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            for (int j = 0; j < 3; ++j)
-            {
-                segment[i].p[0][j] = rnd(mte);
-                segment[i].p[1][j] = rnd(mte);
-            }
-            segment[i].p[0][3] = 1.0;
-            segment[i].p[1][3] = 1.0;
-        }
-    }
-    else
-    {
-        std::uniform_real_distribution<double> rnd(0.9, 1.1);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            segment[i].p[0][0] = -rnd(mte);
-            segment[i].p[0][1] = 0.0;
-            segment[i].p[0][2] = 1e-06 * rnd(mte);
-            segment[i].p[0][3] = 1.0;
-            segment[i].p[1][0] = rnd(mte);
-            segment[i].p[1][1] = 0.0;
-            segment[i].p[1][2] = -1e-06 * rnd(mte);
-            segment[i].p[1][3] = 1.0;
-        }
-    }
+    LoadInput(testNonparallel, numInputs, segment);
 
-    // AMD 7970 (not overclocked), use 'double':
-    //   Get s, t:  1.04 seconds
-    //   Get closest0, closest1:  2.85 seconds
     Timer timer;
     std::shared_ptr<StructuredBuffer> output;
     if (getClosest)
     {
+        // GLSL wants closest[] to be aligned on a dvec4 boundary, so
+        // parameter[2] is padding.
         struct Result
         {
             double sqrDistance;
-            double parameter[2];
-            double _unused;  // GLSL padding so that dvec4 starts on 32-byte boundary
+            double parameter[3];
             Vector3<double> closest[2];
         };
 
@@ -634,10 +553,12 @@ void GPUPerformanceTest(bool getClosest, bool testNonparallel)
     }
     else
     {
+        // GLSL wants closest[] to be aligned on a dvec4 boundary, so
+        // parameter[2] is padding.
         struct Result
         {
             double sqrDistance;
-            double parameter[2];
+            double parameter[3];
         };
 
         output = std::make_shared<StructuredBuffer>(blockSize * blockSize, sizeof(Result));
@@ -665,321 +586,6 @@ void GPUPerformanceTest(bool getClosest, bool testNonparallel)
     cshader = nullptr;
     cprogram = nullptr;
 }
-#else
-void GPUAccuracyTest(bool getClosest, bool testNonparallel)
-{
-    unsigned int const numInputs = 16384;
-    unsigned int const blockSize = 1024;
-    unsigned int const numBlocks = numInputs / blockSize;
-    unsigned int const numThreads = 8;
-    unsigned int const numGroups = blockSize / numThreads;
-
-    DX11Engine engine;
-    HLSLProgramFactory factory;
-    factory.defines.Set("NUM_X_THREADS", numThreads);
-    factory.defines.Set("NUM_Y_THREADS", numThreads);
-    factory.defines.Set("BLOCK_SIZE", blockSize);
-    factory.defines.Set("REAL", "double");
-    factory.defines.Set("VECREAL", "double3");
-    factory.defines.Set("GET_CLOSEST", (getClosest ? 1 : 0));
-
-    std::shared_ptr<ComputeProgram> cprogram =
-        factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
-    std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
-    std::shared_ptr<ConstantBuffer> block =
-        std::make_shared<ConstantBuffer>(2 * sizeof(uint32_t), true);
-    cshader->Set("Block", block);
-    uint32_t* origin = block->Get<uint32_t>();
-
-    std::shared_ptr<StructuredBuffer> input =
-        std::make_shared<StructuredBuffer>(numInputs, sizeof(Segment<3, double>));
-    input->SetUsage(Resource::DYNAMIC_UPDATE);
-    cshader->Set("inSegment", input);
-    Segment<3, double>* segment = input->Get<Segment<3, double>>();
-
-    std::mt19937 mte;
-    if (testNonparallel)
-    {
-        std::uniform_real_distribution<double> rnd(-1.0, 1.0);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            for (int j = 0; j < 3; ++j)
-            {
-                segment[i].p[0][j] = rnd(mte);
-                segment[i].p[1][j] = rnd(mte);
-            }
-        }
-    }
-    else
-    {
-        std::uniform_real_distribution<double> rnd(0.9, 1.1);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            segment[i].p[0][0] = -rnd(mte);
-            segment[i].p[0][1] = 0.0;
-            segment[i].p[0][2] = 1e-06 * rnd(mte);
-            segment[i].p[1][0] = rnd(mte);
-            segment[i].p[1][1] = 0.0;
-            segment[i].p[1][2] = -1e-06 * rnd(mte);
-        }
-    }
-
-    // AMD 7970 (not overclocked), use 'double':
-    //   Get s, t:  0.99 seconds
-    //   Get closest0, closest1:  2.86785 seconds
-    std::shared_ptr<StructuredBuffer> output;
-    double maxError = 0.0;
-    int xmax = 0, ymax = 0;
-    if (getClosest)
-    {
-        struct Result
-        {
-            double sqrDistance;
-            double parameter[2];
-            Vector3<double> closest[2];
-        };
-
-        output = std::make_shared<StructuredBuffer>(blockSize * blockSize, sizeof(Result));
-        output->SetUsage(Resource::SHADER_OUTPUT);
-        output->SetCopyType(Resource::COPY_STAGING_TO_CPU);
-        Result* gpuResult = output->Get<Result>();
-        cshader->Set("outResult", output);
-
-        for (unsigned int y = 0, i = 0; y < numBlocks; ++y)
-        {
-            std::cout << "block = " << y << std::endl;
-            origin[1] = y * blockSize;
-            for (unsigned int x = y; x < numBlocks; ++x, ++i)
-            {
-                origin[0] = x * blockSize;
-                engine.Update(block);
-                engine.Execute(cprogram, numGroups, numGroups, 1);
-                engine.CopyGpuToCpu(output);
-
-                for (unsigned int r = 0; r < blockSize; ++r)
-                {
-                    int sy = origin[1] + r;
-                    Vector3<double> Q0 = segment[sy].p[0];
-                    Vector3<double> Q1 = segment[sy].p[1];
-
-                    unsigned int cmin = (x != y ? 0 : r + 1);
-                    for (unsigned int c = cmin; c < blockSize; ++c)
-                    {
-                        int sx = origin[0] + c;
-                        Vector3<double> P0 = segment[sx].p[0];
-                        Vector3<double> P1 = segment[sx].p[1];
-
-                        Result result0 = gpuResult[c + blockSize * r];
-                        double distance0 = std::sqrt(result0.sqrDistance);
-
-                        RobustQuery query1;
-                        auto result1 = query1(P0, P1, Q0, Q1);
-                        double distance1 = result1.distance;
-
-                        double error = std::abs(distance0 - distance1);
-                        if (error > maxError)
-                        {
-                            maxError = error;
-                            xmax = sx;
-                            ymax = sy;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        struct Result
-        {
-            double sqrDistance;
-            double parameter[2];
-        };
-
-        output = std::make_shared<StructuredBuffer>(blockSize * blockSize, sizeof(Result));
-        output->SetUsage(Resource::SHADER_OUTPUT);
-        output->SetCopyType(Resource::COPY_STAGING_TO_CPU);
-        Result* gpuResult = output->Get<Result>();
-        cshader->Set("outResult", output);
-
-        for (unsigned int y = 0, i = 0; y < numBlocks; ++y)
-        {
-            std::cout << "block = " << y << std::endl;
-            origin[1] = y * blockSize;
-            for (unsigned int x = y; x < numBlocks; ++x, ++i)
-            {
-                origin[0] = x * blockSize;
-                engine.Update(block);
-                engine.Execute(cprogram, numGroups, numGroups, 1);
-                engine.CopyGpuToCpu(output);
-
-                for (unsigned int r = 0; r < blockSize; ++r)
-                {
-                    int sy = origin[1] + r;
-                    Vector3<double> Q0 = segment[sy].p[0];
-                    Vector3<double> Q1 = segment[sy].p[1];
-
-                    unsigned int cmin = (x != y ? 0 : r + 1);
-                    for (unsigned int c = cmin; c < blockSize; ++c)
-                    {
-                        int sx = origin[0] + c;
-                        Vector3<double> P0 = segment[sx].p[0];
-                        Vector3<double> P1 = segment[sx].p[1];
-
-                        Result result0 = gpuResult[c + blockSize * r];
-                        double distance0 = std::sqrt(result0.sqrDistance);
-
-                        RobustQuery query1;
-                        auto result1 = query1(P0, P1, Q0, Q1);
-                        double distance1 = result1.distance;
-
-                        double error = std::abs(distance0 - distance1);
-                        if (error > maxError)
-                        {
-                            maxError = error;
-                            xmax = sx;
-                            ymax = sy;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    std::cout << "max error = " << maxError << std::endl;
-    std::cout << "x, y = " << xmax << " " << ymax << std::endl;
-
-    output = nullptr;
-    input = nullptr;
-    block = nullptr;
-    cprogram = nullptr;
-    cshader = nullptr;
-}
-
-void GPUPerformanceTest(bool getClosest, bool testNonparallel)
-{
-    unsigned int const numInputs = 16384;
-    unsigned int const blockSize = 1024;
-    unsigned int const numBlocks = numInputs / blockSize;
-    unsigned int const numThreads = 8;
-    unsigned int const numGroups = blockSize / numThreads;
-
-    DX11Engine engine;
-    HLSLProgramFactory factory;
-    factory.defines.Set("NUM_X_THREADS", numThreads);
-    factory.defines.Set("NUM_Y_THREADS", numThreads);
-    factory.defines.Set("BLOCK_SIZE", blockSize);
-    factory.defines.Set("REAL", "double");
-    factory.defines.Set("VECREAL", "double3");
-    factory.defines.Set("GET_CLOSEST", (getClosest ? 1 : 0));
-    std::shared_ptr<ComputeProgram> cprogram =
-        factory.CreateFromFile(gEnvironment.GetPath(gShaderFile));
-    std::shared_ptr<ComputeShader> cshader = cprogram->GetCShader();
-
-    std::shared_ptr<ConstantBuffer> block =
-        std::make_shared<ConstantBuffer>(2 * sizeof(uint32_t), true);
-    cshader->Set("Block", block);
-    uint32_t* origin = block->Get<uint32_t>();
-
-    std::shared_ptr<StructuredBuffer> input =
-        std::make_shared<StructuredBuffer>(numInputs, sizeof(Segment<3, double>));
-    input->SetUsage(Resource::DYNAMIC_UPDATE);
-    cshader->Set("inSegment", input);
-    Segment<3, double>* segment = input->Get<Segment<3, double>>();
-
-    std::mt19937 mte;
-    if (testNonparallel)
-    {
-        std::uniform_real_distribution<double> rnd(-1.0, 1.0);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            for (int j = 0; j < 3; ++j)
-            {
-                segment[i].p[0][j] = rnd(mte);
-                segment[i].p[1][j] = rnd(mte);
-            }
-        }
-    }
-    else
-    {
-        std::uniform_real_distribution<double> rnd(0.9, 1.1);
-        for (unsigned int i = 0; i < numInputs; ++i)
-        {
-            segment[i].p[0][0] = -rnd(mte);
-            segment[i].p[0][1] = 0.0;
-            segment[i].p[0][2] = 1e-06 * rnd(mte);
-            segment[i].p[1][0] = rnd(mte);
-            segment[i].p[1][1] = 0.0;
-            segment[i].p[1][2] = -1e-06 * rnd(mte);
-        }
-    }
-
-    // AMD 7970 (not overclocked), use 'double':
-    //   Get s, t:  1.04 seconds
-    //   Get closest0, closest1:  2.85 seconds
-    Timer timer;
-    std::shared_ptr<StructuredBuffer> output;
-    if (getClosest)
-    {
-        struct Result
-        {
-            double sqrDistance;
-            double parameter[2];
-            Vector3<double> closest[2];
-        };
-
-        output = std::make_shared<StructuredBuffer>(blockSize * blockSize, sizeof(Result));
-        output->SetUsage(Resource::SHADER_OUTPUT);
-        output->SetCopyType(Resource::COPY_STAGING_TO_CPU);
-        cshader->Set("outResult", output);
-
-        for (unsigned int y = 0, i = 0; y < numBlocks; ++y)
-        {
-            origin[1] = y * blockSize;
-            for (unsigned int x = y; x < numBlocks; ++x, ++i)
-            {
-                origin[0] = x * blockSize;
-                engine.Update(block);
-                engine.Execute(cprogram, numGroups, numGroups, 1);
-                engine.CopyGpuToCpu(output);
-            }
-        }
-
-    }
-    else
-    {
-        struct Result
-        {
-            double sqrDistance;
-            double parameter[2];
-        };
-
-        output = std::make_shared<StructuredBuffer>(blockSize * blockSize, sizeof(Result));
-        output->SetUsage(Resource::SHADER_OUTPUT);
-        output->SetCopyType(Resource::COPY_STAGING_TO_CPU);
-        cshader->Set("outResult", output);
-
-        for (unsigned int y = 0, i = 0; y < numBlocks; ++y)
-        {
-            origin[1] = y * blockSize;
-            for (unsigned int x = y; x < numBlocks; ++x, ++i)
-            {
-                origin[0] = x * blockSize;
-                engine.Update(block);
-                engine.Execute(cprogram, numGroups, numGroups, 1);
-                engine.CopyGpuToCpu(output);
-            }
-        }
-    }
-    std::cout << "seconds = " << timer.GetSeconds() << std::endl;
-
-    output = nullptr;
-    input = nullptr;
-    block = nullptr;
-    cshader = nullptr;
-    cprogram = nullptr;
-}
-#endif
 
 int main(int, char const*[])
 {
@@ -1012,27 +618,77 @@ int main(int, char const*[])
         return -2;
     }
 
-    //CPUAccuracyTest(true, true);
-    //CPUAccuracyTest(true, false);
-    //CPUAccuracyTest(false, true);
-    //CPUAccuracyTest(false, false);
+    // The experiments were run on an Intel Core i7-6700 CPU @ 3.40 GHz and an
+    // NVIDIA GeForce GTX 1080.  The CPU runs are single-threaded.  The times
+    // are for the Release build run without a debugger attached.  The GPU
+    // tests use the robust algorithm, so the times must be compared to those
+    // of the CPU PERF_ROBUST.
 
-    //CPUPerformanceTest(PERF_SUNDAY, true);
-    //CPUPerformanceTest(PERF_SUNDAY, false);
-    //CPUPerformanceTest(PERF_ROBUST, true);
-    //CPUPerformanceTest(PERF_ROBUST, false);
-    //CPUPerformanceTest(PERF_RATIONAL, true);
-    //CPUPerformanceTest(PERF_RATIONAL, false);
+    // max error02 = 4.44089e-16 at (x,y) = (346,1)
+    // max error12 = 4.44089e-16 at (x,y) = (346,1)
+    // max error01 = 6.66134e-16 at (x,y) = (520,288)
+    CPUAccuracyTest(true, true);
 
+    // max error02 = 3.52850e-07 at (x,y) = (362,283)
+    // max error12 = 4.17519e-08 at (x,y) = (994,186)
+    // max error01 = 3.51795e-07 at (x,y) = (722,362)
+    CPUAccuracyTest(true, false);
+
+    // max error01 = 6.66134e-16 at (x,y) = (520,288)
+    CPUAccuracyTest(false, true);
+
+    // max error01 = 1.09974e-06 at (x,y) = (1024,569)
+    CPUAccuracyTest(false, false);
+
+    // time = 4.022 seconds, 134209536 queries, 2.996806e-08 seconds/query
+    CPUPerformanceTest(PERF_SUNDAY, true);
+
+    // time = 2.863 seconds, 134209536 queries, 2.133231e-08 seconds/query
+    CPUPerformanceTest(PERF_SUNDAY, false);
+
+    // time = 6.290 seconds, 134209536 queries, 4.686701e-08 seconds/query
+    CPUPerformanceTest(PERF_ROBUST, true);
+
+    // time = 6.227 seconds, 134209536 queries, 4.639760e-08 seconds/query
+    CPUPerformanceTest(PERF_ROBUST, false);
+
+    // time = 6.782 seconds,    523776 queries, 1.294828e-05 seconds/query
+    CPUPerformanceTest(PERF_RATIONAL, true);
+
+    // time = 3.250 seconds,    523776 queries, 6.204943e-05 seconds/query
+    CPUPerformanceTest(PERF_RATIONAL, false);
+
+    // DX11,   max error = 0 at (x,y) = (0,0)
+    // OpenGL, max error = 8.88178e-16 at (x,y) = (12279,89)
     GPUAccuracyTest(true, true);
-    //GPUAccuracyTest(true, false);
-    //GPUAccuracyTest(false, true);
-    //GPUAccuracyTest(false, false);
 
-    //GPUPerformanceTest(true, true);
-    //GPUPerformanceTest(true, false);
-    //GPUPerformanceTest(false, true);
-    //GPUPerformanceTest(false, false);
+    // DX11,   max error = 0 at (x,y) = (0,0)
+    // OpenGL, max error = 4.62039e-08 at (x,y) = (15035,106)
+    GPUAccuracyTest(true, false);
+
+    // DX11,   max error = 0 at (x,y) = (0,0)
+    // OpenGL, max error = 8.88178e-16 at (x,y) = (12279,89)
+    GPUAccuracyTest(false, true);
+
+    // DX11,   max error = 0 at (x,y) = (0,0)
+    // OpenGL, max error = 4.62039e-08 at (x,y) = (15035,106)
+    GPUAccuracyTest(false, false);
+
+    // DX11,   time = 3.903 seconds, 134209536 queries, 2.421586e-08 seconds/query
+    // OpenGL, time = 4.055 seconds, 134209536 queries, 3.021395e-08 seconds/query
+    GPUPerformanceTest(true, true);
+
+    // DX11,   time = 3.858 seconds, 134209536 queries, 2.874609e-08 seconds/query
+    // OpenGL, time = 3.962 seconds, 134209536 queries, 2.952100e-08 seconds/query
+    GPUPerformanceTest(true, false);
+
+    // DX11,   time = 1.864 seconds, 134209536 queries, 1.388873e-08 seconds/query
+    // OpenGL, time = 1.866 seconds, 134209536 queries, 1.390363e-08 seconds/query
+    GPUPerformanceTest(false, true);
+
+    // DX11,   time = 1.693 seconds, 134209536 queries, 1.261460e-08 seconds/query
+    // OpenGL, time = 1.721 seconds, 134209536 queries, 1.282323e-08 seconds/query
+    GPUPerformanceTest(false, false);
 
     return 0;
 }

@@ -15,11 +15,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\PartialSums.hlsl">
+    <None Include="Shaders\PartialSums.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\PartialSums.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\PartialSums.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

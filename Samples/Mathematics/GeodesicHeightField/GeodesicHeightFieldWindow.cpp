@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/22)
+// File Version: 3.23.2 (2019/05/03)
 
 #include "GeodesicHeightFieldWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Imagics/GteImageUtility2.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteDirectionalLightTextureEffect.h>
 #include <sstream>
 #include <iomanip>
 
@@ -118,7 +122,7 @@ void GeodesicHeightFieldWindow::OnIdle()
         }
 
         // Clear the base-level mipmap of the texture image to white.
-        memset(mTexture->GetDataFor(0), 0xFF, mTexture->GetNumBytesFor(0));
+        std::memset(mTexture->GetDataFor(0), 0xFF, mTexture->GetNumBytesFor(0));
 
         // Draw the approximate path.
         int bound0 = mTexture->GetDimensionFor(0, 0);
@@ -227,7 +231,7 @@ bool GeodesicHeightFieldWindow::OnMouseClick(MouseButton button, MouseState stat
 
             // Clear the texture image to white.
             auto texels = mTexture->GetFor<uint8_t>(0);
-            memset(texels, 0xFF, mTexture->GetNumBytesFor(0));
+            std::memset(texels, 0xFF, mTexture->GetNumBytesFor(0));
 
             // Get an endpoint.
             int bound0 = mTexture->GetDimensionFor(0, 0);
@@ -382,7 +386,7 @@ void GeodesicHeightFieldWindow::CreateScene()
     mTexture = std::make_shared<Texture2>(DF_R8G8B8A8_UNORM, 512, 512, true);
     mTexture->AutogenerateMipmaps();
     mTexture->SetCopyType(Resource::COPY_CPU_TO_STAGING);
-    memset(mTexture->GetDataFor(0), 0xFF, mTexture->GetNumBytesFor(0));
+    std::memset(mTexture->GetDataFor(0), 0xFF, mTexture->GetNumBytesFor(0));
 
     auto effect = std::make_shared<DirectionalLightTextureEffect>(mProgramFactory,
         mUpdater, material, lighting, geometry, mTexture,

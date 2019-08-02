@@ -3,9 +3,16 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/19)
+// File Version: 3.23.2 (2019/05/03)
 
-#include <GTEngine.h>
+#include <Applications/GteEnvironment.h>
+#include <Applications/GteTextureIO.h>
+#include <LowLevel/GteLogReporter.h>
+#include <Imagics/GteImage2.h>
+#include <Mathematics/GteVector2.h>
+#include <Mathematics/GteSymmetricEigensolver2x2.h>
+#include <cstring>
+#include <fstream>
 #include <iostream>
 using namespace gte;
 
@@ -209,7 +216,7 @@ int main()
 
     auto texture = std::make_shared<Texture2>(DF_R8G8B8A8_UNORM,
         image.GetDimension(0), image.GetDimension(1));
-    memcpy(texture->GetData(), result.GetPixels().data(), texture->GetNumBytes());
+    std::memcpy(texture->GetData(), result.GetPixels().data(), texture->GetNumBytes());
     WICFileIO::SaveToPNG("ridges.png", texture);
 
     return 0;

@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.15.1 (2018/10/05)
+// File Version: 3.15.2 (2019/05/02)
 
 #include "MovingCircleRectangleWindow.h"
+#include <LowLevel/GteLogReporter.h>
 
 int main(int, char const*[])
 {
@@ -61,78 +62,86 @@ void MovingCircleRectangleWindow::OnDisplay()
     uint32_t const blue = 0xFFFF0000;
     uint32_t const orange = 0xFF0080FF;
 
-    int bx0 = (int)mBox.center[0];
-    int bx1 = (int)mBox.center[1];
+    int bx0 = static_cast<int>(mBox.center[0]);
+    int bx1 = static_cast<int>(mBox.center[1]);
 
     // K = { C-e0*U0-e1*U1, C+e0*U0-e1*U1, C-e0*U0+e1*U1, C+e0*U0+e1*U1 }
     std::array<Vector2<double>, 4> K;
     mBox.GetVertices(K);
 
-    int cx0 = (int)mCircle.center[0];
-    int cy0 = (int)mCircle.center[1];
-    int r = (int)mCircle.radius;
+    int cx0 = static_cast<int>(mCircle.center[0]);
+    int cy0 = static_cast<int>(mCircle.center[1]);
+    int r = static_cast<int>(mCircle.radius);
 
     ClearScreen(white);
 
     // Draw the rounded rectangle.
     for (int i = 0; i < 4; ++i)
     {
-        DrawCircle((int)K[i][0], (int)K[i][1], r, gray, true);
+        DrawCircle(static_cast<int>(K[i][0]), static_cast<int>(K[i][1]), r, gray, true);
     }
 
     Vector2<double> T0 = K[0] - mCircle.radius * mBox.axis[1];
     Vector2<double> T1 = K[1] - mCircle.radius * mBox.axis[1];
-    DrawLine((int)T0[0], (int)T0[1], (int)T1[0], (int)T1[1], gray);
+    DrawLine(static_cast<int>(T0[0]), static_cast<int>(T0[1]),
+        static_cast<int>(T1[0]), static_cast<int>(T1[1]), gray);
     T0 = K[2] + mCircle.radius * mBox.axis[1];
     T1 = K[3] + mCircle.radius * mBox.axis[1];
-    DrawLine((int)T0[0], (int)T0[1], (int)T1[0], (int)T1[1], gray);
+    DrawLine(static_cast<int>(T0[0]), static_cast<int>(T0[1]),
+        static_cast<int>(T1[0]), static_cast<int>(T1[1]), gray);
     T0 = K[0] - mCircle.radius * mBox.axis[0];
     T1 = K[2] - mCircle.radius * mBox.axis[0];
-    DrawLine((int)T0[0], (int)T0[1], (int)T1[0], (int)T1[1], gray);
+    DrawLine(static_cast<int>(T0[0]), static_cast<int>(T0[1]),
+        static_cast<int>(T1[0]), static_cast<int>(T1[1]), gray);
     T0 = K[1] + mCircle.radius * mBox.axis[0];
     T1 = K[3] +mCircle.radius * mBox.axis[0];
-    DrawLine((int)T0[0], (int)T0[1], (int)T1[0], (int)T1[1], gray);
+    DrawLine(static_cast<int>(T0[0]), static_cast<int>(T0[1]),
+        static_cast<int>(T1[0]), static_cast<int>(T1[1]), gray);
     DrawFloodFill4(bx0, bx1, gray, white);
 
     // Draw the rectangle.
-    DrawLine((int)K[0][0], (int)K[0][1], (int)K[1][0], (int)K[1][1], blue);
-    DrawLine((int)K[1][0], (int)K[1][1], (int)K[3][0], (int)K[3][1], blue);
-    DrawLine((int)K[3][0], (int)K[3][1], (int)K[2][0], (int)K[2][1], blue);
-    DrawLine((int)K[2][0], (int)K[2][1], (int)K[0][0], (int)K[0][1], blue);
+    DrawLine(static_cast<int>(K[0][0]), static_cast<int>(K[0][1]),
+        static_cast<int>(K[1][0]), static_cast<int>(K[1][1]), blue);
+    DrawLine(static_cast<int>(K[1][0]), static_cast<int>(K[1][1]),
+        static_cast<int>(K[3][0]), static_cast<int>(K[3][1]), blue);
+    DrawLine(static_cast<int>(K[3][0]), static_cast<int>(K[3][1]),
+        static_cast<int>(K[2][0]), static_cast<int>(K[2][1]), blue);
+    DrawLine(static_cast<int>(K[2][0]), static_cast<int>(K[2][1]),
+        static_cast<int>(K[0][0]), static_cast<int>(K[0][1]), blue);
 
     // Draw the initial circle.
     DrawCircle(cx0, cy0, r, red, false);
 
     // Draw velocity ray with origin at the circle center.
-    int cx1 = cx0 + (int)((2 * mXSize) * mCircleVelocity[0]);
-    int cy1 = cy0 + (int)((2 * mXSize) * mCircleVelocity[1]);
+    int cx1 = cx0 + static_cast<int>((2 * mXSize) * mCircleVelocity[0]);
+    int cy1 = cy0 + static_cast<int>((2 * mXSize) * mCircleVelocity[1]);
     DrawLine(cx0, cy0, cx1, cy1, green);
 
     // Draw parallel velocity rays that are tangent to the circle.
     Vector2<double> vPerp = UnitPerp(mCircleVelocity);
     Vector2<double> origin = mCircle.center + mCircle.radius * vPerp;
-    cx0 = (int)origin[0];
-    cy0 = (int)origin[1];
-    cx1 = cx0 + (int)((2 * mXSize) * mCircleVelocity[0]);
-    cy1 = cy0 + (int)((2 * mXSize) * mCircleVelocity[1]);
+    cx0 = static_cast<int>(origin[0]);
+    cy0 = static_cast<int>(origin[1]);
+    cx1 = cx0 + static_cast<int>((2 * mXSize) * mCircleVelocity[0]);
+    cy1 = cy0 + static_cast<int>((2 * mXSize) * mCircleVelocity[1]);
     DrawLine(cx0, cy0, cx1, cy1, orange);
 
     origin = mCircle.center - mCircle.radius * vPerp;
-    cx0 = (int)origin[0];
-    cy0 = (int)origin[1];
-    cx1 = cx0 + (int)((2 * mXSize) * mCircleVelocity[0]);
-    cy1 = cy0 + (int)((2 * mXSize) * mCircleVelocity[1]);
+    cx0 = static_cast<int>(origin[0]);
+    cy0 = static_cast<int>(origin[1]);
+    cx1 = cx0 + static_cast<int>((2 * mXSize) * mCircleVelocity[0]);
+    cy1 = cy0 + static_cast<int>((2 * mXSize) * mCircleVelocity[1]);
     DrawLine(cx0, cy0, cx1, cy1, orange);
 
     if (mHasIntersection)
     {
         // Draw the circle at time of contact.
-        cx0 = (int)(mCircle.center[0] + mContactTime * mCircleVelocity[0]);
-        cy0 = (int)(mCircle.center[1] + mContactTime * mCircleVelocity[1]);
+        cx0 = static_cast<int>(mCircle.center[0] + mContactTime * mCircleVelocity[0]);
+        cy0 = static_cast<int>(mCircle.center[1] + mContactTime * mCircleVelocity[1]);
         DrawCircle(cx0, cy0, r, black, false);
 
-        int px = (int)mContactPoint[0];
-        int py = (int)mContactPoint[1];
+        int px = static_cast<int>(mContactPoint[0]);
+        int py = static_cast<int>(mContactPoint[1]);
         DrawThickPixel(px, py, 1, black);
     }
 
@@ -225,18 +234,18 @@ void MovingCircleRectangleWindow::DoQuery()
 
 void MovingCircleRectangleWindow::ModifyVelocity(int x, int y)
 {
-    int cx = (int)mCircle.center[0];
-    int cy = (int)mCircle.center[1];
-    mCircleVelocity[0] = double(x - cx);
-    mCircleVelocity[1] = double(y - cy);
+    int cx = static_cast<int>(mCircle.center[0]);
+    int cy = static_cast<int>(mCircle.center[1]);
+    mCircleVelocity[0] = static_cast<double>(x - cx);
+    mCircleVelocity[1] = static_cast<double>(y - cy);
     Normalize(mCircleVelocity);
     DoQuery();
 }
 
 void MovingCircleRectangleWindow::ModifyCircle(int x, int y)
 {
-    mCircle.center[0] = (double)x;
-    mCircle.center[1] = (double)y;
+    mCircle.center[0] = static_cast<double>(x);
+    mCircle.center[1] = static_cast<double>(y);
     DoQuery();
 }
 

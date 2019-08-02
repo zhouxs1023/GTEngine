@@ -115,7 +115,7 @@ bool WGLEngine::Initialize(int requiredMajor, int requiredMinor, bool useDepth24
 
     // Select the format for the drawing surface.
     PIXELFORMATDESCRIPTOR pfd;
-    memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+    std::memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
     pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
     pfd.nVersion = 1;
     pfd.dwFlags =

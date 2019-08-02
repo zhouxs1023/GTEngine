@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.1 (2018/10/05)
+// File Version: 3.3.3 (2019/06/02)
 
 #include "SimplePendulumFrictionWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -59,9 +62,7 @@ void SimplePendulumFrictionWindow::OnIdle()
         mPVWMatrices.Update();
     }
 
-#if !defined(SIMPLE_PENDULUM_FRICTION_SINGLE_STEP)
     PhysicsTick();
-#endif
     GraphicsTick();
 
     mTimer.UpdateFrameCount();
@@ -97,13 +98,6 @@ bool SimplePendulumFrictionWindow::OnCharPress(unsigned char key, int x, int y)
         mMotionType = 2;
         InitializeModule();
         return true;
-
-#if defined(SIMPLE_PENDULUM_FRICTION_SINGLE_STEP)
-    case 'g':
-    case 'G':
-        PhysicsTick();
-        return true;
-#endif
     }
     return Window3::OnCharPress(key, x, y);
 }
@@ -149,11 +143,7 @@ void SimplePendulumFrictionWindow::InitializeModule()
     }
 
     float time = 0.0f;
-#if defined(_DEBUG)
     float deltaTime = 0.001f;
-#else
-    float deltaTime = 0.0001f;
-#endif
     float theta = 0.75f;
     float thetaDot = 0.0f;
     mModule.Initialize(time, deltaTime, theta, thetaDot);
@@ -208,7 +198,7 @@ void SimplePendulumFrictionWindow::CreatePendulum()
     rod->localTransform.SetTranslation(0.0f, 0.0f, 10.0f);
     auto vbuffer = rod->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         vertices[i].position[2] -= 16.0f;
@@ -242,7 +232,7 @@ void SimplePendulumFrictionWindow::CreatePendulum()
     unsigned int const height = 256;
     auto texture = std::make_shared<Texture2>(DF_R8G8B8A8_UNORM, 1, height);
     Vector4<float> color{ 0.99607f, 0.83920f, 0.67059f, 1.0f };
-    std::array<uint8_t, 4>* texels = texture->Get<std::array<uint8_t, 4>>();
+    auto texels = texture->Get<std::array<uint8_t, 4>>();
     float const multiplier = 255.0f / static_cast<float>(height - 1);
     for (unsigned int i = 0; i < height; ++i)
     {

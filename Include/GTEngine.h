@@ -9,25 +9,8 @@
 
 #include <GTLowLevel.h>
 #include <GTMathematics.h>
-#include <GTImagics.h>
-
-#if !defined(__APPLE__)
-#include <GTGraphics.h>
 #include <GTPhysics.h>
-#endif
-
-#if defined(__MSWINDOWS__)
-#if defined(GTE_DEV_OPENGL)
-#include <GTGraphicsGL4.h>
-#else
-#include <GTGraphicsDX11.h>
-#endif
-#endif
-
-#if defined(__LINUX__)
-#include <GTGraphicsGL4.h>
-#endif
-
-#if !defined(__APPLE__)
+#include <GTImagics.h>
+#include <GTGraphicsShared.h>
+#include <GTGraphics.h>
 #include <GTApplications.h>
-#endif

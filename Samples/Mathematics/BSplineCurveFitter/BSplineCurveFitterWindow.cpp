@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/03/04)
+// File Version: 3.0.3 (2019/04/23)
 
 #include "BSplineCurveFitterWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteVertexColorEffect.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -166,20 +169,17 @@ void BSplineCurveFitterWindow::CreateScene()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_COLOR, DF_R32G32B32A32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(vformat, numSamples);
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numSamples);
+    auto* vertex = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numSamples; ++i)
     {
         vertex[i].position = mSamples[i];
         vertex[i].color = { rnd(mte), rnd(mte), rnd(mte), 1.0f };
     }
 
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_POLYSEGMENT_CONTIGUOUS, numSamples - 1);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYSEGMENT_CONTIGUOUS, numSamples - 1);
 
-    std::shared_ptr<VertexColorEffect> effect =
-        std::make_shared<VertexColorEffect>(mProgramFactory);
+    auto effect = std::make_shared<VertexColorEffect>(mProgramFactory);
 
     mHelix = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mPVWMatrices.Subscribe(mHelix->worldTransform, effect->GetPVWMatrixConstant());
@@ -209,8 +209,8 @@ void BSplineCurveFitterWindow::CreateBSplinePolyline()
 
     unsigned int numSamples = (unsigned int)mSamples.size();
     float multiplier = 1.0f / (numSamples - 1.0f);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, numSamples);
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numSamples);
+    auto* vertex = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numSamples; ++i)
     {
         float t = multiplier * i;
@@ -218,10 +218,9 @@ void BSplineCurveFitterWindow::CreateBSplinePolyline()
         vertex[i].color = { 0.0f, 0.0f, 0.0f, 1.0f };
     }
 
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(
-        IP_POLYSEGMENT_CONTIGUOUS, numSamples - 1);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYSEGMENT_CONTIGUOUS, numSamples - 1);
 
-    std::shared_ptr<VertexColorEffect> effect = std::make_shared<VertexColorEffect>(mProgramFactory);
+    auto effect = std::make_shared<VertexColorEffect>(mProgramFactory);
 
     mPolyline = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mPVWMatrices.Subscribe(mPolyline->worldTransform, effect->GetPVWMatrixConstant());
@@ -237,8 +236,9 @@ void BSplineCurveFitterWindow::CreateBSplinePolyline()
         float length = std::sqrt(sqrLength);
         mAvrError += length;
     }
-    mAvrError /= (float)numSamples;
-    mRmsError /= (float)numSamples;
+    float invNumSamples = 1.0f / static_cast<float>(numSamples);
+    mAvrError *= invNumSamples;
+    mRmsError *= invNumSamples;
     mRmsError = std::sqrt(mRmsError);
 
     mTrackball.Attach(mPolyline);

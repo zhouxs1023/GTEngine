@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/18)
 
 #include "VertexTexturesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
 
 int main(int, char const*[])
 {
@@ -94,7 +96,7 @@ void VertexTexturesWindow::CreateMesh()
     mHeightMesh = mf.CreateRectangle(32, 32, 1.0f, 1.0f);
 
     std::string path = mEnvironment.GetPath("HeightField.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, false);
+    auto texture = WICFileIO::Load(path, false);
     mEffect = std::make_shared<DisplacementEffect>(mProgramFactory, texture,
         SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
     mHeightMesh->SetEffect(mEffect);

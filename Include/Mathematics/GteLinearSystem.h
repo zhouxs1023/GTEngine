@@ -3,11 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/05/03)
 
 #pragma once
 
-#include <LowLevel/GteWrapper.h>
 #include <Mathematics/GteMatrix2x2.h>
 #include <Mathematics/GteMatrix3x3.h>
 #include <Mathematics/GteMatrix4x4.h>
@@ -243,10 +242,10 @@ unsigned int LinearSystem<Real>::SolveSymmetricCG(int N, Real const* A,
     Real* P = &tmpP[0];
     Real* W = &tmpW[0];
     size_t numBytes = N * sizeof(Real);
-    memset(X, 0, numBytes);
-    Memcpy(R, B, numBytes);
+    std::memset(X, 0, numBytes);
+    std::memcpy(R, B, numBytes);
     Real rho0 = Dot(N, R, R);
-    Memcpy(P, R, numBytes);
+    std::memcpy(P, R, numBytes);
     Mul(N, A, P, W);
     Real alpha = rho0 / Dot(N, P, W);
     UpdateX(N, X, alpha, P);
@@ -288,10 +287,10 @@ unsigned int LinearSystem<Real>::SolveSymmetricCG(int N,
     Real* P = &tmpP[0];
     Real* W = &tmpW[0];
     size_t numBytes = N * sizeof(Real);
-    memset(X, 0, numBytes);
-    Memcpy(R, B, numBytes);
+    std::memset(X, 0, numBytes);
+    std::memcpy(R, B, numBytes);
     Real rho0 = Dot(N, R, R);
-    Memcpy(P, R, numBytes);
+    std::memcpy(P, R, numBytes);
     Mul(N, A, P, W);
     Real alpha = rho0 / Dot(N, P, W);
     UpdateX(N, X, alpha, P);
@@ -342,7 +341,7 @@ void LinearSystem<Real>::Mul(int N, Real const* A, Real const* X, Real* P)
     LexicoArray2<false, Real> matA(N, N, const_cast<Real*>(A));
 #endif
 
-    memset(P, 0, N * sizeof(Real));
+    std::memset(P, 0, N * sizeof(Real));
     for (int row = 0; row < N; ++row)
     {
         for (int col = 0; col < N; ++col)
@@ -356,7 +355,7 @@ template <typename Real>
 void LinearSystem<Real>::Mul(int N, SparseMatrix const& A, Real const* X,
     Real* P)
 {
-    memset(P, 0, N * sizeof(Real));
+    std::memset(P, 0, N * sizeof(Real));
     for (auto const& element : A)
     {
         int i = element.first[0];

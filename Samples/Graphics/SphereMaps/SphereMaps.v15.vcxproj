@@ -322,11 +322,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\SphereMap.hlsl">
+    <None Include="Shaders\SphereMap.ps.glsl" />
+    <None Include="Shaders\SphereMap.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\SphereMap.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\SphereMapPS.glsl" />
-    <None Include="Shaders\SphereMapVS.glsl" />
+    <None Include="Shaders\SphereMap.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

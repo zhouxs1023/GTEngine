@@ -3,10 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.2 (2019/04/16)
 
 #include "BumpMapsWindow.h"
 #include "SimpleBumpMapEffect.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -31,7 +34,7 @@ BumpMapsWindow::BumpMapsWindow(Parameters& parameters)
     Window3(parameters),
     mUseBumpMap(true)
 {
-    if (!SetEnvironment() || !CreateScene())
+    if (!SetEnvironment() || !CreateBumpMapEffect())
     {
         parameters.created = false;
         return;
@@ -39,8 +42,8 @@ BumpMapsWindow::BumpMapsWindow(Parameters& parameters)
 
     InitializeCamera(60.0f, GetAspectRatio(), 0.1f, 100.0f, 0.01f, 0.001f,
         { 0.0f, -0.25f, -2.5f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
-    mPVWMatrices.Update();
-    UpdateBumpMap();
+
+    CreateScene();
 }
 
 void BumpMapsWindow::OnIdle()
@@ -53,7 +56,16 @@ void BumpMapsWindow::OnIdle()
     }
 
     mEngine->ClearBuffers();
-    mEngine->Draw(mTorus);
+
+    if (mUseBumpMap)
+    {
+        mEngine->Draw(mBumpMappedTorus);
+    }
+    else
+    {
+        mEngine->Draw(mTexturedTorus);
+    }
+
     mEngine->Draw(8, mYSize - 8, { 0.0f, 0.0f, 0.0f, 1.0f }, mTimer.GetFPS());
     mEngine->DisplayColorBuffer(0);
 
@@ -68,13 +80,6 @@ bool BumpMapsWindow::OnCharPress(unsigned char key, int x, int y)
     case 'B':
     {
         mUseBumpMap = !mUseBumpMap;
-        mPVWMatrices.Unsubscribe(mTorus->worldTransform);
-        Transform save = mTorus->localTransform;
-        CreateTorus();
-        mTorus->localTransform = save;
-        mScene->SetChild(0, mTorus);
-        mTrackball.Update();
-        mPVWMatrices.Update();
         UpdateBumpMap();
         return true;
     }
@@ -121,25 +126,35 @@ bool BumpMapsWindow::SetEnvironment()
     return true;
 }
 
-bool BumpMapsWindow::CreateScene()
+bool BumpMapsWindow::CreateBumpMapEffect()
 {
-    if (CreateTorus())
-    {
-        mScene = std::make_shared<Node>();
-        mTorus->localTransform.SetRotation(
-            AxisAngle<4, float>(Vector4<float>::Unit(0), (float)GTE_C_QUARTER_PI));
-        mScene->AttachChild(mTorus);
-        mTrackball.Attach(mScene);
-        mTrackball.Update();
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    bool created = false;
+    mBumpMapEffect = std::make_shared<SimpleBumpMapEffect>(mProgramFactory,
+        mEnvironment, created);
+    LogAssert(created, "Failed to create the bump map effect.");
+    return created;
 }
 
-bool BumpMapsWindow::CreateTorus()
+void BumpMapsWindow::CreateScene()
+{
+    CreateBumpMappedTorus();
+    CreateTexturedTorus();
+
+    mScene = std::make_shared<Node>();
+    mScene->AttachChild(mBumpMappedTorus);
+    mScene->AttachChild(mTexturedTorus);
+    mTrackball.Attach(mScene);
+
+    AxisAngle<4, float> aa(Vector4<float>::Unit(0), (float)GTE_C_QUARTER_PI);
+    mBumpMappedTorus->localTransform.SetRotation(aa);
+    mTexturedTorus->localTransform.SetRotation(aa);
+
+    mTrackball.Update();
+    mPVWMatrices.Update();
+    UpdateBumpMap();
+}
+
+void BumpMapsWindow::CreateBumpMappedTorus()
 {
     struct Vertex
     {
@@ -160,52 +175,59 @@ bool BumpMapsWindow::CreateTorus()
     MeshFactory mf;
     mf.SetVertexFormat(vformat);
     mf.SetVertexBufferUsage(Resource::DYNAMIC_UPDATE);
-    mTorus = mf.CreateTorus(32, 32, 1.0f, 0.4f);
-    std::shared_ptr<VertexBuffer> vbuffer = mTorus->GetVertexBuffer();
+    mBumpMappedTorus = mf.CreateTorus(32, 32, 1.0f, 0.4f);
+    auto vbuffer = mBumpMappedTorus->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto* vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
-        vertex[i].baseTCoord *= 4.0f;
+        vertices[i].baseTCoord *= 4.0f;
         if (mUseBumpMap)
         {
-            vertex[i].normalTCoord *= 4.0f;
+            vertices[i].normalTCoord *= 4.0f;
         }
     }
 
-    if (mUseBumpMap)
+    mBumpMappedTorus->SetEffect(mBumpMapEffect);
+    mPVWMatrices.Subscribe(mBumpMappedTorus->worldTransform, mBumpMapEffect->GetPVWMatrixConstant());
+
+    mLightDirection = Vector4<float>::Unit(2);
+    SimpleBumpMapEffect::ComputeLightVectors(mBumpMappedTorus, mLightDirection);
+}
+
+void BumpMapsWindow::CreateTexturedTorus()
+{
+    struct Vertex
     {
-        bool created = false;
-        std::shared_ptr<SimpleBumpMapEffect> effect =
-            std::make_shared<SimpleBumpMapEffect>(mProgramFactory,
-            mEnvironment, created);
-        if (!created)
-        {
-            LogError("Failed to create the bump map effect.");
-            return false;
-        }
+        Vector3<float> position;
+        Vector2<float> tcoord;
+    };
 
-        mTorus->SetEffect(effect);
-        mPVWMatrices.Subscribe(mTorus->worldTransform, effect->GetPVWMatrixConstant());
+    VertexFormat vformat;
+    vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
+    vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
 
-        mLightDirection = Vector4<float>::Unit(2);
-        SimpleBumpMapEffect::ComputeLightVectors(mTorus, mLightDirection);
-    }
-    else
+    MeshFactory mf;
+    mf.SetVertexFormat(vformat);
+    mf.SetVertexBufferUsage(Resource::DYNAMIC_UPDATE);
+    mTexturedTorus = mf.CreateTorus(32, 32, 1.0f, 0.4f);
+    auto vbuffer = mTexturedTorus->GetVertexBuffer();
+    unsigned int const numVertices = vbuffer->GetNumElements();
+    auto* vertices = vbuffer->Get<Vertex>();
+    for (unsigned int i = 0; i < numVertices; ++i)
     {
-        std::string baseName = mEnvironment.GetPath("Bricks.png");
-        std::shared_ptr<Texture2> baseTexture = WICFileIO::Load(baseName, true);
-        baseTexture->AutogenerateMipmaps();
-
-        std::shared_ptr<Texture2Effect> effect =
-            std::make_shared<Texture2Effect>(mProgramFactory, baseTexture,
-            SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP, SamplerState::WRAP);
-
-        mTorus->SetEffect(effect);
-        mPVWMatrices.Subscribe(mTorus->worldTransform, effect->GetPVWMatrixConstant());
+        vertices[i].tcoord *= 4.0f;
     }
 
-    return true;
+    std::string baseName = mEnvironment.GetPath("Bricks.png");
+    std::shared_ptr<Texture2> baseTexture = WICFileIO::Load(baseName, true);
+    baseTexture->AutogenerateMipmaps();
+
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, baseTexture,
+        SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP, SamplerState::WRAP);
+
+    mTexturedTorus->SetEffect(effect);
+    mPVWMatrices.Subscribe(mTexturedTorus->worldTransform, effect->GetPVWMatrixConstant());
 }
 
 void BumpMapsWindow::UpdateBumpMap()
@@ -214,7 +236,7 @@ void BumpMapsWindow::UpdateBumpMap()
     {
         // The scene graph transformations have been updated, which means the
         // tangent-space light vectors need updating.
-        SimpleBumpMapEffect::ComputeLightVectors(mTorus, mLightDirection);
-        mEngine->Update(mTorus->GetVertexBuffer());
+        SimpleBumpMapEffect::ComputeLightVectors(mBumpMappedTorus, mLightDirection);
+        mEngine->Update(mBumpMappedTorus->GetVertexBuffer());
     }
 }

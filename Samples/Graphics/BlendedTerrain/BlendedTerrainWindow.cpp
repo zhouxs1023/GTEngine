@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.3 (2019/05/29)
 
 #include "BlendedTerrainWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -85,13 +87,13 @@ bool BlendedTerrainWindow::OnCharPress(unsigned char key, int x, int y)
 
     case 'p':
     case 'P':
-        mTerrainEffect->SetPowerFactor(mTerrainEffect->GetPowerFactor()*mPowerDelta);
+        mTerrainEffect->SetPowerFactor(mTerrainEffect->GetPowerFactor() * mPowerDelta);
         mEngine->Update(mTerrainEffect->GetPowerFactorConstant());
         return true;
 
     case 'm':
     case 'M':
-        mTerrainEffect->SetPowerFactor(mTerrainEffect->GetPowerFactor()/mPowerDelta);
+        mTerrainEffect->SetPowerFactor(mTerrainEffect->GetPowerFactor() / mPowerDelta);
         mEngine->Update(mTerrainEffect->GetPowerFactorConstant());
         return true;
     }
@@ -148,7 +150,7 @@ bool BlendedTerrainWindow::CreateTerrain()
 
     // Create the vertex buffer for terrain.
     unsigned int const numSamples0 = 64, numSamples1 = 64;
-    unsigned int const numVertices = numSamples0*numSamples1;
+    unsigned int const numVertices = numSamples0 * numSamples1;
 
     struct TerrainVertex
     {
@@ -162,8 +164,7 @@ bool BlendedTerrainWindow::CreateTerrain()
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32_FLOAT, 1);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 2);
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(vformat, numVertices);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
 
     // Generate the geometry for a flat height field.
     TerrainVertex* vertex = vbuffer->Get<TerrainVertex>();
@@ -209,14 +210,13 @@ bool BlendedTerrainWindow::CreateTerrain()
     // Generate the index array for a regular grid of squares, each square a
     // pair of triangles.
     unsigned int const numTriangles = 2 * (numSamples0 - 1) * (numSamples1 - 1);
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
     unsigned int* indices = ibuffer->Get<unsigned int>();
     for (i1 = 0, i = 0; i1 < numSamples1 - 1; ++i1)
     {
         for (i0 = 0; i0 < numSamples0 - 1; ++i0)
         {
-            int v0 = i0 + numSamples0*i1;
+            int v0 = i0 + numSamples0 * i1;
             int v1 = v0 + 1;
             int v2 = v1 + numSamples0;
             int v3 = v0 + numSamples0;
@@ -251,28 +251,25 @@ void BlendedTerrainWindow::CreateSkyDome()
         Vector3<float> position;
         Vector2<float> tcoord;
     };
+
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
 
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(vformat, numVertices);
-    SkyDomeVertex* vertex = vbuffer->Get<SkyDomeVertex>();
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
+    auto* vertices = vbuffer->Get<SkyDomeVertex>();
     for (i = 0; i < numVertices; ++i)
     {
-        Vector3<float> position;
-        Vector2<float> tcoord;
-        inFile >> vertex[i].position[0];
-        inFile >> vertex[i].position[1];
-        inFile >> vertex[i].position[2];
-        inFile >> vertex[i].tcoord[0];
-        inFile >> vertex[i].tcoord[1];
+        inFile >> vertices[i].position[0];
+        inFile >> vertices[i].position[1];
+        inFile >> vertices[i].position[2];
+        inFile >> vertices[i].tcoord[0];
+        inFile >> vertices[i].tcoord[1];
     }
 
-    int const numTriangles = numIndices/3;
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
-    int* indices = ibuffer->Get<int>();
+    int const numTriangles = numIndices / 3;
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
+    auto* indices = ibuffer->Get<int>();
     for (i = 0; i < numIndices; ++i, ++indices)
     {
         inFile >> *indices;
@@ -282,7 +279,7 @@ void BlendedTerrainWindow::CreateSkyDome()
 
     // Load the sky texture.
     name = mEnvironment.GetPath("SkyDome.png");
-    std::shared_ptr<Texture2> sky = WICFileIO::Load(name, true);
+    auto sky = WICFileIO::Load(name, true);
     sky->AutogenerateMipmaps();
 
     // Create the visual effect.

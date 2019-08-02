@@ -3,9 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/03/04)
+// File Version: 3.0.4 (2019/05/30)
 
 #include "LightsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteDirectionalLightEffect.h>
+#include <Graphics/GtePointLightEffect.h>
+#include <Graphics/GteSpotLightEffect.h>
 
 int main(int, char const*[])
 {
@@ -98,19 +103,24 @@ bool LightsWindow::OnCharPress(unsigned char key, int x, int y)
         UseLightType(LSPT);
         return true;
 
+    // NOTE:  The lighting constant buffer is shared between vertex and pixel
+    // shaders.  Therefore, the modification of a lighting member must occur
+    // only once.  This is the case for cases 'i', 'I', 'a', 'A', 'e' and 'E'.
+
     case 'i':   // decrease light intensity
         for (int lt = 0; lt < LNUM; ++lt)
         {
             for (int gt = 0; gt < GNUM; ++gt)
             {
-                for (int st = 0; st < SNUM; ++st)
-                {
-                    auto effect = mEffect[lt][gt][st];
-                    auto lighting = effect->GetLighting();
-                    lighting->attenuation[3] -= 0.125f;
-                    lighting->attenuation[3] = std::max(lighting->attenuation[3], 0.0f);
-                    effect->UpdateLightingConstant();
-                }
+                auto effect0 = mEffect[lt][gt][0];
+                auto lighting0 = effect0->GetLighting();
+                lighting0->attenuation[3] -= 0.125f;
+                lighting0->attenuation[3] = std::max(lighting0->attenuation[3], 0.0f);
+                effect0->UpdateLightingConstant();
+                auto effect1 = mEffect[lt][gt][1];
+                auto lighting1 = effect1->GetLighting();
+                lighting1->attenuation = lighting0->attenuation;
+                effect1->UpdateLightingConstant();
             }
         }
         return true;
@@ -120,14 +130,15 @@ bool LightsWindow::OnCharPress(unsigned char key, int x, int y)
         {
             for (int gt = 0; gt < GNUM; ++gt)
             {
-                for (int st = 0; st < SNUM; ++st)
-                {
-                    auto effect = mEffect[lt][gt][st];
-                    auto lighting = effect->GetLighting();
-                    lighting->attenuation[3] += 0.125f;
-                    lighting->attenuation[3] = std::min(lighting->attenuation[3], 1.0f);
-                    effect->UpdateLightingConstant();
-                }
+                auto effect0 = mEffect[lt][gt][0];
+                auto lighting0 = effect0->GetLighting();
+                lighting0->attenuation[3] += 0.125f;
+                lighting0->attenuation[3] = std::max(lighting0->attenuation[3], 0.0f);
+                effect0->UpdateLightingConstant();
+                auto effect1 = mEffect[lt][gt][1];
+                auto lighting1 = effect1->GetLighting();
+                lighting1->attenuation = lighting0->attenuation;
+                effect1->UpdateLightingConstant();
             }
         }
         return true;
@@ -135,58 +146,62 @@ bool LightsWindow::OnCharPress(unsigned char key, int x, int y)
     case 'a':   // decrease spot angle
         for (int gt = 0; gt < GNUM; ++gt)
         {
-            for (int st = 0; st < SNUM; ++st)
-            {
-                auto effect = mEffect[LSPT][gt][st];
-                auto lighting = effect->GetLighting();
-                lighting->spotCutoff[0] -= 0.1f;
-                lighting->spotCutoff[0] = std::max(lighting->spotCutoff[0], 0.0f);
-                lighting->spotCutoff[1] = std::cos(lighting->spotCutoff[0]);
-                lighting->spotCutoff[2] = std::sin(lighting->spotCutoff[0]);
-                effect->UpdateLightingConstant();
-            }
+            auto effect0 = mEffect[LSPT][gt][0];
+            auto lighting0 = effect0->GetLighting();
+            lighting0->spotCutoff[0] -= 0.1f;
+            lighting0->spotCutoff[0] = std::max(lighting0->spotCutoff[0], 0.0f);
+            lighting0->spotCutoff[1] = std::cos(lighting0->spotCutoff[0]);
+            lighting0->spotCutoff[2] = std::sin(lighting0->spotCutoff[0]);
+            effect0->UpdateLightingConstant();
+            auto effect1 = mEffect[LSPT][gt][1];
+            auto lighting1 = effect0->GetLighting();
+            lighting1->spotCutoff = lighting0->spotCutoff;
+            effect1->UpdateLightingConstant();
         }
         return true;
 
     case 'A':   // increase spot angle
         for (int gt = 0; gt < GNUM; ++gt)
         {
-            for (int st = 0; st < SNUM; ++st)
-            {
-                auto effect = mEffect[LSPT][gt][st];
-                auto lighting = effect->GetLighting();
-                lighting->spotCutoff[0] -= 0.1f;
-                lighting->spotCutoff[0] = std::min(lighting->spotCutoff[0], (float)GTE_C_HALF_PI);
-                lighting->spotCutoff[1] = std::cos(lighting->spotCutoff[0]);
-                lighting->spotCutoff[2] = std::sin(lighting->spotCutoff[0]);
-                effect->UpdateLightingConstant();
-            }
+            auto effect0 = mEffect[LSPT][gt][0];
+            auto lighting0 = effect0->GetLighting();
+            lighting0->spotCutoff[0] += 0.1f;
+            lighting0->spotCutoff[0] = std::max(lighting0->spotCutoff[0], 0.0f);
+            lighting0->spotCutoff[1] = std::cos(lighting0->spotCutoff[0]);
+            lighting0->spotCutoff[2] = std::sin(lighting0->spotCutoff[0]);
+            effect0->UpdateLightingConstant();
+            auto effect1 = mEffect[LSPT][gt][1];
+            auto lighting1 = effect0->GetLighting();
+            lighting1->spotCutoff = lighting0->spotCutoff;
+            effect1->UpdateLightingConstant();
         }
         return true;
 
     case 'e':   // decrease spot exponent
         for (int gt = 0; gt < GNUM; ++gt)
         {
-            for (int st = 0; st < SNUM; ++st)
-            {
-                auto effect = mEffect[LSPT][gt][st];
-                auto lighting = effect->GetLighting();
-                lighting->spotCutoff[3] *= 0.5f;
-                effect->UpdateLightingConstant();
-            }
+            auto effect0 = mEffect[LSPT][gt][0];
+            auto lighting0 = effect0->GetLighting();
+            lighting0->spotCutoff[3] *= 0.5f;
+            effect0->UpdateLightingConstant();
+            auto effect1 = mEffect[LSPT][gt][1];
+            auto lighting1 = effect1->GetLighting();
+            lighting1->spotCutoff = lighting0->spotCutoff;
+            effect1->UpdateLightingConstant();
         }
         return true;
 
     case 'E':   // increase spot exponent
         for (int gt = 0; gt < GNUM; ++gt)
         {
-            for (int st = 0; st < SNUM; ++st)
-            {
-                auto effect = mEffect[LSPT][gt][st];
-                auto lighting = effect->GetLighting();
-                lighting->spotCutoff[3] *= 2.0f;
-                effect->UpdateLightingConstant();
-            }
+            auto effect0 = mEffect[LSPT][gt][0];
+            auto lighting0 = effect0->GetLighting();
+            lighting0->spotCutoff[3] *= 2.0f;
+            effect0->UpdateLightingConstant();
+            auto effect1 = mEffect[LSPT][gt][1];
+            auto lighting1 = effect1->GetLighting();
+            lighting1->spotCutoff = lighting0->spotCutoff;
+            effect1->UpdateLightingConstant();
         }
         return true;
     }
@@ -266,7 +281,10 @@ void LightsWindow::CreateScene()
     lighting[LSPT][GSPH]->ambient = darkGray;
     lighting[LSPT][GSPH]->spotCutoff = lightSpotCutoff;
 
-    // Create the effects.
+    // Create the effects.  Note that the material, lighting and geometry
+    // constant buffers are shared by the vertex and pixel shaders.  This
+    // is important to remember when processing keystroked; see the comments
+    // in OnCharPress.
     for (int gt = 0; gt < GNUM; ++gt)
     {
         for (int st = 0; st < SNUM; ++st)
@@ -350,17 +368,10 @@ void LightsWindow::UpdateConstants()
     // Compute the model-to-world transforms for the planes and spheres.
     Matrix4x4<float> wMatrix[GNUM][SNUM];
     Matrix4x4<float> rotate = mTrackball.GetOrientation();
-#if defined(GTE_USE_MAT_VEC)
-    wMatrix[GPLN][SVTX] = rotate * mPlane[SVTX]->worldTransform;
-    wMatrix[GPLN][SPXL] = rotate * mPlane[SPXL]->worldTransform;
-    wMatrix[GSPH][SVTX] = rotate * mSphere[SVTX]->worldTransform;
-    wMatrix[GSPH][SPXL] = rotate * mSphere[SPXL]->worldTransform;
-#else
-    wMatrix[GPLN][SVTX] = mPlane[SVTX]->worldTransform * rotate;
-    wMatrix[GPLN][SPXL] = mPlane[SPXL]->worldTransform * rotate;
-    wMatrix[GSPH][SVTX] = mSphere[SVTX]->worldTransform * rotate;
-    wMatrix[GSPH][SPXL] = mSphere[SPXL]->worldTransform * rotate;
-#endif
+    wMatrix[GPLN][SVTX] = DoTransform(rotate, mPlane[SVTX]->worldTransform.GetHMatrix());
+    wMatrix[GPLN][SPXL] = DoTransform(rotate, mPlane[SPXL]->worldTransform.GetHMatrix());
+    wMatrix[GSPH][SVTX] = DoTransform(rotate, mSphere[SVTX]->worldTransform.GetHMatrix());
+    wMatrix[GSPH][SPXL] = DoTransform(rotate, mSphere[SPXL]->worldTransform.GetHMatrix());
 
     // Compute the world-to-model transforms for the planes and spheres.
     Matrix4x4<float> invWMatrix[GNUM][SNUM];
@@ -383,16 +394,9 @@ void LightsWindow::UpdateConstants()
                 auto lighting = mEffect[lt][gt][st]->GetLighting();
                 auto geometry = mEffect[lt][gt][st]->GetGeometry();
                 auto const& invwmat = invWMatrix[gt][st];
-
-#if defined(GTE_USE_MAT_VEC)
-                geometry->lightModelPosition = invwmat * mLightWorldPosition[st];
-                geometry->lightModelDirection = invwmat * mLightWorldDirection;
-                geometry->cameraModelPosition = invwmat * cameraWorldPosition;
-#else
-                geometry->lightModelPosition = mLightWorldPosition[st] * invwmat;
-                geometry->lightModelDirection = mLightWorldDirection * invwmat;
-                geometry->cameraModelPosition = cameraWorldPosition * invwmat;
-#endif
+                geometry->lightModelPosition = DoTransform(invwmat, mLightWorldPosition[st]);
+                geometry->lightModelDirection = DoTransform(invwmat, mLightWorldDirection);
+                geometry->cameraModelPosition = DoTransform(invwmat, cameraWorldPosition);
                 effect->UpdateGeometryConstant();
             }
         }

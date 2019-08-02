@@ -3,13 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/20)
+// File Version: 3.0.4 (2019/05/03)
 
-#include <GTEngine.h>
-#if defined(__LINUX__)
-#include <Graphics/GL4/GteGLSLProgramFactory.h>
-#include <Graphics/GL4/GLX/GteGLXEngine.h>
-#endif
+#include <Applications/GteEnvironment.h>
+#include <LowLevel/GteLogReporter.h>
+#include <GTGraphics.h>
+#include <random>
 #include <iomanip>
 using namespace gte;
 
@@ -23,33 +22,16 @@ void TestPartialSums()
         return;
     }
     env.Insert(path + "/Samples/Mathematics/PartialSums/Shaders/");
-#if defined(GTE_DEV_OPENGL)
-    path = env.GetPath("PartialSums.glsl");
+
+    path = env.GetPath(DefaultShaderName("PartialSums.cs"));
     if (path == "")
     {
-        LogError("Cannot find file PartialSums.glsl.");
+        LogError("Cannot find file " + DefaultShaderName("PartialSums.cs"));
         return;
     }
 
-    // Create an engine for compute shaders.
-#if defined(__MSWINDOWS__)
-    WGLEngine engine(true, false);
-#else
-    GLXEngine engine(true, false);
-#endif
-    GLSLProgramFactory factory;
-#else
-    path = env.GetPath("PartialSums.hlsl");
-    if (path == "")
-    {
-        LogError("Cannot find file PartialSums.hlsl.");
-        return;
-    }
-
-    // Create an engine for compute shaders.
-    DX11Engine engine(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0);
-    HLSLProgramFactory factory;
-#endif
+    DefaultEngine engine;
+    DefaultProgramFactory factory;
 
     // Compute partial sums of 8 numbers.
     int const LOGN = 3;
@@ -57,17 +39,17 @@ void TestPartialSums()
 
     // Use a Mersenne twister engine for random numbers.
     std::mt19937 mte;
-    std::uniform_real_distribution<float> unitRandom(0.0f, 1.0f);
+    std::uniform_real_distribution<float> urd(0.0f, 1.0f);
 
     // Select random numbers and store as the diagonal of an n-by-n texture.
-    std::shared_ptr<Texture2> sum = std::make_shared<Texture2>(DF_R32_FLOAT, n, n);
+    auto sum = std::make_shared<Texture2>(DF_R32_FLOAT, n, n);
     sum->SetUsage(Resource::SHADER_OUTPUT);
     sum->SetCopyType(Resource::COPY_STAGING_TO_CPU);
-    float* data = sum->Get<float>();
-    memset(data, 0, sum->GetNumBytes());
+    auto data = sum->Get<float>();
+    std::memset(data, 0, sum->GetNumBytes());
     for (int i = 0; i < n; ++i)
     {
-        data[i + n*i] = unitRandom(mte);
+        data[i + n*i] = urd(mte);
     }
 
     // Create the shader for each p with 1 <= p <= log(n).

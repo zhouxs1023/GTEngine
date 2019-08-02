@@ -3,9 +3,18 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.2 (2019/05/02)
 
 #include "Interpolation2DWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Mathematics/GteIntpAkimaUniform2.h>
+#include <Mathematics/GteIntpBicubic2.h>
+#include <Mathematics/GteIntpBilinear2.h>
+#include <Mathematics/GteIntpLinearNonuniform2.h>
+#include <Mathematics/GteIntpQuadraticNonuniform2.h>
+#include <Mathematics/GteIntpThinPlateSpline2.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -232,7 +241,7 @@ void Interpolation2DWindow::CreateBilinearMesh()
     mf.SetVertexFormat(vformat);
     int const numSamples = 64;
     mMesh = mf.CreateRectangle(numSamples, numSamples, 1.0f, 1.0f);
-    Vertex* vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
+    auto vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
     for (int y = 0, i = 0; y < numSamples; ++y)
     {
         float fy = vertices[i].position[1];
@@ -271,7 +280,7 @@ void Interpolation2DWindow::CreateBicubicMesh(bool catmullRom)
     mf.SetVertexFormat(vformat);
     int const numSamples = 64;
     mMesh = mf.CreateRectangle(numSamples, numSamples, 1.0f, 1.0f);
-    Vertex* vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
+    auto vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
     for (int y = 0, i = 0; y < numSamples; ++y)
     {
         float fy = vertices[i].position[1];
@@ -303,7 +312,7 @@ void Interpolation2DWindow::CreateAkimaUniformMesh()
     mf.SetVertexFormat(vformat);
     int const numSamples = 64;
     mMesh = mf.CreateRectangle(numSamples, numSamples, 1.0f, 1.0f);
-    Vertex* vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
+    auto vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
     for (int y = 0, i = 0; y < numSamples; ++y)
     {
         float fy = vertices[i].position[1];
@@ -359,7 +368,7 @@ void Interpolation2DWindow::CreateThinPlateSplineMesh(float smooth)
     mf.SetVertexFormat(vformat);
     int const numSamples = 64;
     mMesh = mf.CreateRectangle(numSamples, numSamples, 1.0f, 1.0f);
-    Vertex* vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
+    auto vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
     for (int y = 0, i = 0; y < numSamples; ++y)
     {
         float fy = vertices[i].position[1];
@@ -389,7 +398,7 @@ void Interpolation2DWindow::CreateLinearNonuniform()
     mf.SetVertexFormat(vformat);
     int const numSamples = 64;
     mMesh = mf.CreateTriangle(numSamples, 1.0f, 1.0f);
-    Vertex* vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
+    auto vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
     Vector2<float> P;
     float F;
     for (int y = 0, i = 0; y < numSamples; ++y)
@@ -449,7 +458,7 @@ void Interpolation2DWindow::CreateQuadraticNonuniform(bool useGradients)
     mf.SetVertexFormat(vformat);
     int const numSamples = 128;
     mMesh = mf.CreateTriangle(numSamples, 1.0f, 1.0f);
-    Vertex* vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
+    auto vertices = mMesh->GetVertexBuffer()->Get<Vertex>();
     Vector2<float> P;
     float F, FX, FY;
     int i = 0;

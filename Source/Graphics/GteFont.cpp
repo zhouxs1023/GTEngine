@@ -3,11 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/02/17)
+// File Version: 3.0.4 (2019/07/31)
 
 #include <GTEnginePCH.h>
 #include <Mathematics/GteVector2.h>
-#include <LowLevel/GteWrapper.h>
 #include <Graphics/GteFont.h>
 #include <cstring>
 using namespace gte;
@@ -86,11 +85,38 @@ Font::Font(std::shared_ptr<ProgramFactory> const& factory, unsigned int width, u
 
     // Create a texture from the specified monochrome bitmap.
     mTexture = std::make_shared<Texture2>(DF_R8_UNORM, width, height);
-    Memcpy(mTexture->GetData(), texels, mTexture->GetNumBytes());
-    Memcpy(mCharacterData, characterData, 257 * sizeof(float));
+    std::memcpy(mTexture->GetData(), texels, mTexture->GetNumBytes());
+    std::memcpy(mCharacterData, characterData, 257 * sizeof(float));
 
     // Create an effect for drawing text.
     mTextEffect = std::make_shared<TextEffect>(factory, mTexture);
+}
+
+int Font::GetHeight() const
+{
+    return (mTexture ? mTexture->GetHeight() : 0);
+}
+
+int Font::GetWidth(std::string const& message) const
+{
+    // Get texture information.
+    float const tw = static_cast<float>(mTexture->GetWidth());
+
+    float width = 0.0f;
+    unsigned int const length = std::min(
+        static_cast<unsigned int>(message.length()), mMaxMessageLength);
+    for (unsigned int i = 0; i < length; ++i)
+    {
+        // Get character data.
+        int const c = static_cast<int>(message[i]);
+        float const tx0 = mCharacterData[c];
+        float const tx1 = mCharacterData[c + 1];
+        float const charWidthM1 = (tx1 - tx0) * tw - 1.0f;  // in pixels
+
+        width += charWidthM1;
+    }
+
+    return static_cast<int>(std::ceil(width));
 }
 
 void Font::Typeset(int viewportWidth, int viewportHeight, int x, int y,

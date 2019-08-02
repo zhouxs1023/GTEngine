@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/07/30)
 
 #pragma once
 
@@ -12,191 +12,119 @@
 #include <Mathematics/GteOrientedBox.h>
 #include <Mathematics/GteSymmetricEigensolver3x3.h>
 
-// Fit points with a Gaussian distribution.  The center is the mean of the
-// points, the axes are the eigenvectors of the covariance matrix, and the
+// Fit points with a Gaussian distribution. The center is the mean of the
+// points, the axes are the eigenvectors of the covariance matrix and the
 // extents are the eigenvalues of the covariance matrix and are returned in
-// increasing order.  An oriented box is used to store the mean, axes, and
+// increasing order. An oriented box is used to store the mean, axes and
 // extents.
 
 namespace gte
 {
-
-template <typename Real>
-class ApprGaussian3
-    :
-    public ApprQuery<Real, ApprGaussian3<Real>, Vector3<Real>>
-{
-public:
-    // Initialize the model parameters to zero.
-    ApprGaussian3();
-
-    // Basic fitting algorithm.
-    bool Fit(int numPoints, Vector3<Real> const* points);
-    OrientedBox3<Real> const& GetParameters() const;
-
-    // Functions called by ApprQuery::RANSAC.  See GteApprQuery.h for a
-    // detailed description.
-    int GetMinimumRequired() const;
-    Real Error(Vector3<Real> const& observation) const;
-    bool Fit(std::vector<Vector3<Real>> const& observations,
-        std::vector<int> const& indices);
-
-private:
-    OrientedBox3<Real> mParameters;
-};
-
-
-template <typename Real>
-ApprGaussian3<Real>::ApprGaussian3()
-{
-    mParameters.center = Vector3<Real>::Zero();
-    mParameters.axis[0] = Vector3<Real>::Zero();
-    mParameters.axis[1] = Vector3<Real>::Zero();
-    mParameters.axis[2] = Vector3<Real>::Zero();
-    mParameters.extent = Vector3<Real>::Zero();
-}
-
-template <typename Real>
-bool ApprGaussian3<Real>::Fit(int numPoints, Vector3<Real> const* points)
-{
-    if (numPoints >= GetMinimumRequired() && points)
+    template <typename Real>
+    class ApprGaussian3 : public ApprQuery<Real, Vector3<Real>>
     {
-        // Compute the mean of the points.
-        Vector3<Real> mean = Vector3<Real>::Zero();
-        for (int i = 0; i < numPoints; ++i)
+    public:
+        // Initialize the model parameters to zero.
+        ApprGaussian3()
         {
-            mean += points[i];
+            mParameters.center = Vector3<Real>::Zero();
+            mParameters.axis[0] = Vector3<Real>::Zero();
+            mParameters.axis[1] = Vector3<Real>::Zero();
+            mParameters.axis[2] = Vector3<Real>::Zero();
+            mParameters.extent = Vector3<Real>::Zero();
         }
-        Real invSize = ((Real)1) / (Real)numPoints;
-        mean *= invSize;
 
-        // Compute the covariance matrix of the points.
-        Real covar00 = (Real)0, covar01 = (Real)0, covar02 = (Real)0;
-        Real covar11 = (Real)0, covar12 = (Real)0, covar22 = (Real)0;
-        for (int i = 0; i < numPoints; ++i)
+        // Basic fitting algorithm. See ApprQuery.h for the various Fit(...)
+        // functions that you can call.
+        virtual bool FitIndexed(
+            size_t numPoints, Vector3<Real> const* points,
+            size_t numIndices, int const* indices) override
         {
-            Vector3<Real> diff = points[i] - mean;
-            covar00 += diff[0] * diff[0];
-            covar01 += diff[0] * diff[1];
-            covar02 += diff[0] * diff[2];
-            covar11 += diff[1] * diff[1];
-            covar12 += diff[1] * diff[2];
-            covar22 += diff[2] * diff[2];
+            if (this->ValidIndices(numPoints, points, numIndices, indices))
+            {
+                // Compute the mean of the points.
+                Vector3<Real> mean = Vector3<Real>::Zero();
+                int const* currentIndex = indices;
+                for (size_t i = 0; i < numIndices; ++i)
+                {
+                    mean += points[*currentIndex++];
+                }
+                Real invSize = (Real)1 / (Real)numIndices;
+                mean *= invSize;
+
+                if (std::isfinite(mean[0]) && std::isfinite(mean[1]))
+                {
+                    // Compute the covariance matrix of the points.
+                    Real covar00 = (Real)0, covar01 = (Real)0, covar02 = (Real)0;
+                    Real covar11 = (Real)0, covar12 = (Real)0, covar22 = (Real)0;
+                    currentIndex = indices;
+                    for (size_t i = 0; i < numIndices; ++i)
+                    {
+                        Vector3<Real> diff = points[*currentIndex++] - mean;
+                        covar00 += diff[0] * diff[0];
+                        covar01 += diff[0] * diff[1];
+                        covar02 += diff[0] * diff[2];
+                        covar11 += diff[1] * diff[1];
+                        covar12 += diff[1] * diff[2];
+                        covar22 += diff[2] * diff[2];
+                    }
+                    covar00 *= invSize;
+                    covar01 *= invSize;
+                    covar02 *= invSize;
+                    covar11 *= invSize;
+                    covar12 *= invSize;
+                    covar22 *= invSize;
+
+                    // Solve the eigensystem.
+                    SymmetricEigensolver3x3<Real> es;
+                    std::array<Real, 3> eval;
+                    std::array<std::array<Real, 3>, 3> evec;
+                    es(covar00, covar01, covar02, covar11, covar12, covar22,
+                        false, +1, eval, evec);
+                    mParameters.center = mean;
+                    mParameters.axis[0] = evec[0];
+                    mParameters.axis[1] = evec[1];
+                    mParameters.axis[2] = evec[2];
+                    mParameters.extent = eval;
+                    return true;
+                }
+            }
+
+            mParameters.center = Vector3<Real>::Zero();
+            mParameters.axis[0] = Vector3<Real>::Zero();
+            mParameters.axis[1] = Vector3<Real>::Zero();
+            mParameters.axis[2] = Vector3<Real>::Zero();
+            mParameters.extent = Vector3<Real>::Zero();
+            return false;
         }
-        covar00 *= invSize;
-        covar01 *= invSize;
-        covar02 *= invSize;
-        covar11 *= invSize;
-        covar12 *= invSize;
-        covar22 *= invSize;
 
-        // Solve the eigensystem.
-        SymmetricEigensolver3x3<Real> es;
-        std::array<Real, 3> eval;
-        std::array<std::array<Real, 3>, 3> evec;
-        es(covar00, covar01, covar02, covar11, covar12, covar22, false, +1,
-            eval, evec);
-        mParameters.center = mean;
-        mParameters.axis[0] = evec[0];
-        mParameters.axis[1] = evec[1];
-        mParameters.axis[2] = evec[2];
-        mParameters.extent = eval;
-        return true;
-    }
-
-    mParameters.center = Vector3<Real>::Zero();
-    mParameters.axis[0] = Vector3<Real>::Zero();
-    mParameters.axis[1] = Vector3<Real>::Zero();
-    mParameters.axis[2] = Vector3<Real>::Zero();
-    mParameters.extent = Vector3<Real>::Zero();
-    return false;
-}
-
-template <typename Real>
-OrientedBox3<Real> const& ApprGaussian3<Real>::GetParameters() const
-{
-    return mParameters;
-}
-
-template <typename Real>
-int ApprGaussian3<Real>::GetMinimumRequired() const
-{
-    return 2;
-}
-
-template <typename Real>
-Real ApprGaussian3<Real>::Error(Vector3<Real> const& observation) const
-{
-    Vector3<Real> diff = observation - mParameters.center;
-    Real error = (Real)0;
-    for (int i = 0; i < 3; ++i)
-    {
-        if (mParameters.extent[i] >(Real)0)
+        // Get the parameters for the best fit.
+        OrientedBox3<Real> const& GetParameters() const
         {
-            Real ratio = Dot(diff, mParameters.axis[i]) /
-                mParameters.extent[i];
-            error += ratio * ratio;
+            return mParameters;
         }
-    }
-    return error;
-}
 
-template <typename Real>
-bool ApprGaussian3<Real>::Fit(
-    std::vector<Vector3<Real>> const& observations,
-    std::vector<int> const& indices)
-{
-    if (static_cast<int>(indices.size()) >= GetMinimumRequired())
-    {
-        // Compute the mean of the points.
-        Vector3<Real> mean = Vector3<Real>::Zero();
-        for (auto index : indices)
+        virtual size_t GetMinimumRequired() const override
         {
-            mParameters.center += observations[index];
+            return 2;
         }
-        Real invSize = ((Real)1) / (Real)indices.size();
-        mean *= invSize;
 
-        // Compute the covariance matrix of the points.
-        Real covar00 = (Real)0, covar01 = (Real)0, covar02 = (Real)0;
-        Real covar11 = (Real)0, covar12 = (Real)0, covar22 = (Real)0;
-        for (auto index : indices)
+        virtual Real Error(Vector3<Real> const& point) const override
         {
-            Vector3<Real> diff = observations[index] - mean;
-            covar00 += diff[0] * diff[0];
-            covar01 += diff[0] * diff[1];
-            covar02 += diff[0] * diff[2];
-            covar11 += diff[1] * diff[1];
-            covar12 += diff[1] * diff[2];
-            covar22 += diff[2] * diff[2];
+            Vector3<Real> diff = point - mParameters.center;
+            Real error = (Real)0;
+            for (int i = 0; i < 3; ++i)
+            {
+                if (mParameters.extent[i] > (Real)0)
+                {
+                    Real ratio = Dot(diff, mParameters.axis[i]) / mParameters.extent[i];
+                    error += ratio * ratio;
+                }
+            }
+            return error;
         }
-        covar00 *= invSize;
-        covar01 *= invSize;
-        covar02 *= invSize;
-        covar11 *= invSize;
-        covar12 *= invSize;
-        covar22 *= invSize;
 
-        // Solve the eigensystem.
-        SymmetricEigensolver3x3<Real> es;
-        std::array<Real, 3> eval;
-        std::array<std::array<Real, 3>, 3> evec;
-        es(covar00, covar01, covar02, covar11, covar12, covar22, false, +1,
-            eval, evec);
-        mParameters.center = mean;
-        mParameters.axis[0] = evec[0];
-        mParameters.axis[1] = evec[1];
-        mParameters.axis[2] = evec[2];
-        mParameters.extent = eval;
-    }
-
-    mParameters.center = Vector3<Real>::Zero();
-    mParameters.axis[0] = Vector3<Real>::Zero();
-    mParameters.axis[1] = Vector3<Real>::Zero();
-    mParameters.axis[2] = Vector3<Real>::Zero();
-    mParameters.extent = Vector3<Real>::Zero();
-    return false;
-}
-
-
+    private:
+        OrientedBox3<Real> mParameters;
+    };
 }

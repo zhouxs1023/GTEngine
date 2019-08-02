@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.21.0 (2019/01/21)
+// File Version: 3.21.1 (2019/05/02)
 
 #include "MovingSphereTriangleWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
 
 int main(int, char const*[])
 {
@@ -214,7 +217,7 @@ void MovingSphereTriangleWindow::CreateTriangleFaces()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, 3);
-    auto* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     vertices[0] = mTriangle.v[0];
     vertices[1] = mTriangle.v[1];
     vertices[2] = mTriangle.v[2];
@@ -273,13 +276,14 @@ void MovingSphereTriangleWindow::CreateHalfCylinder(int i, Vector3<float> const&
     mEdgeVisual[i] = mf.CreateRectangle(density, density, 1.0f, 1.0f);
     auto vbuffer = mEdgeVisual[i]->GetVertexBuffer();
     auto ibuffer = mEdgeVisual[i]->GetIndexBuffer();
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
+    float const divisor = static_cast<float>(density - 1);
     for (unsigned int row = 0; row < density; ++row)
     {
-        float z = (float)row / ((float)density - 1.0f);
+        float z = static_cast<float>(row) / divisor;
         for (unsigned int col = 0; col < density; ++col)
         {
-            float angle = (float)GTE_C_PI * (float)col / ((float)density - 1.0f);
+            float angle = static_cast<float>(GTE_C_PI) * static_cast<float>(col) / divisor;
             float cs = std::cos(angle), sn = std::sin(angle);
             Vector3<float> P = P0 + z * E + radius * (cs * normal + sn * V);
             *vertices++ = P;
@@ -360,8 +364,8 @@ void MovingSphereTriangleWindow::CreateMotionCylinder()
 
 void MovingSphereTriangleWindow::UpdateSphereVelocity()
 {
-    float angle0 = mSample0 * (float)GTE_C_TWO_PI / mNumSamples0;
-    float angle1 = mSample1 * (float)GTE_C_PI / mNumSamples1;
+    float angle0 = static_cast<float>(mSample0 * GTE_C_TWO_PI / mNumSamples0);
+    float angle1 = static_cast<float>(mSample1 * GTE_C_PI / mNumSamples1);
     float cs0 = std::cos(angle0), sn0 = std::sin(angle0);
     float cs1 = std::cos(angle1), sn1 = std::sin(angle1);
     mSphereVelocity = { cs0 * sn1, sn0 * sn1, cs1 };

@@ -3,18 +3,24 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/01/31)
+// File Version: 3.0.2 (2019/04/16)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow3.h>
+#include <Graphics/GteLight.h>
+#include <Graphics/GteMaterial.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteDirectionalLightTextureEffect.h>
+#include <Graphics/GtePointLightTextureEffect.h>
+#include <Graphics/GtePicker.h>
 #include "TexturePNT1Effect.h"
 using namespace gte;
 
-// When exposed, turns off lighting so that the scene is unlit (texturing only).
-// TODO: This is a hack to make the light-texture effect become just a texture
-// effect.  We need to determine the lighting model that was used in 3D Studio
-// Max to create the castle scene.
+// When exposed, turns off lighting so that the scene is unlit (texturing
+// only).  TODO: This is a hack to make the light-texture effect become
+// just a texture effect.  We need to determine the lighting model that
+// was used in 3D Studio Max to create the castle scene.
 #define DISABLE_LIGHTING
 
 // When exposed, use a directional light to modulate the textures.  When not
@@ -61,7 +67,8 @@ private:
 
     std::shared_ptr<Visual> mSkyDome;
 
-    // Picking support to allow collision avoidance and to display mesh information.
+    // Picking support to allow collision avoidance and to display mesh
+    // information.
     std::string mPickMessage;
     Picker mPicker;
 

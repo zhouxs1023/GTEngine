@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/03)
 
 #include <GTEnginePCH.h>
 #include <Physics/GteFluid2InitializeSource.h>
@@ -78,7 +78,7 @@ void Fluid2InitializeSource::Execute(std::shared_ptr<GraphicsEngine> const& engi
     // Compute the velocity one vortex at a time.  After the loop terminates,
     // the final velocity is stored in mVelocity0.
     std::shared_ptr<ComputeShader> cshader = mGenerateVortex->GetCShader();
-    memset(mVelocity0->GetData(), 0, mVelocity0->GetNumBytes());
+    std::memset(mVelocity0->GetData(), 0, mVelocity0->GetNumBytes());
     Vortex& v = *mVortex->Get<Vortex>();
     for (int i = 0; i < NUM_VORTICES; ++i)
     {

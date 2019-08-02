@@ -18,7 +18,7 @@ TextureBuffer::TextureBuffer(DFType format, unsigned int numElements,
 {
     mType = GT_TEXTURE_BUFFER;
     mUsage = (allowDynamicUpdate ? DYNAMIC_UPDATE : IMMUTABLE);
-    memset(mData, 0, mNumBytes);
+    std::memset(mData, 0, mNumBytes);
 }
 
 DFType TextureBuffer::GetFormat() const

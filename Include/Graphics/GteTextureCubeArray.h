@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/17)
 
 #pragma once
 
@@ -44,7 +44,10 @@ public:
 
     // Subresource indexing:  index = numLevels*item + level
     // where item = cube*6 + face
-    inline unsigned int GetIndex(unsigned int cube, unsigned int face, unsigned int level) const;
+    inline unsigned int GetIndex(unsigned int cube, unsigned int face, unsigned int level) const
+    {
+        return mNumLevels * (6 * cube + face) + level;
+    }
 
 private:
     unsigned int mNumCubes;

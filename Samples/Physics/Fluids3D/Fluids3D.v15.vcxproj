@@ -320,11 +320,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\VolumeRender.hlsl">
+    <None Include="Shaders\VolumeRender.ps.glsl" />
+    <None Include="Shaders\VolumeRender.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\VolumeRender.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\VolumeRenderPS.glsl" />
-    <None Include="Shaders\VolumeRenderVS.glsl" />
+    <None Include="Shaders\VolumeRender.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -30,13 +30,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\AreaLightPS.glsl">
+    <None Include="Shaders\AreaLight.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\AreaLightVS.glsl">
+    <None Include="Shaders\AreaLight.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\AreaLight.hlsl">
+    <None Include="Shaders\AreaLight.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\AreaLight.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

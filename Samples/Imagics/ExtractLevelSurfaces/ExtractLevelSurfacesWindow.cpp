@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/11)
+// File Version: 3.23.2 (2019/05/03)
 
 #include "ExtractLevelSurfacesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Imagics/GteSurfaceExtractorCubes.h>
+#include <Imagics/GteSurfaceExtractorTetrahedra.h>
 
 int main(int, char const*[])
 {
@@ -190,7 +193,7 @@ void ExtractLevelSurfacesWindow::CreateMeshCubes()
 
     unsigned int numTriangles = static_cast<unsigned int>(esTriangles.size());
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
-    memcpy(ibuffer->GetData(), &esTriangles[0], ibuffer->GetNumBytes());
+    std::memcpy(ibuffer->GetData(), &esTriangles[0], ibuffer->GetNumBytes());
 
     auto geometry = std::make_shared<LightCameraGeometry>();
     mLightEffectCubes = std::make_shared<DirectionalLightEffect>(mProgramFactory,
@@ -241,7 +244,7 @@ void ExtractLevelSurfacesWindow::CreateMeshTetrahedra()
 
     unsigned int numTriangles = static_cast<unsigned int>(esTriangles.size());
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
-    memcpy(ibuffer->GetData(), &esTriangles[0], ibuffer->GetNumBytes());
+    std::memcpy(ibuffer->GetData(), &esTriangles[0], ibuffer->GetNumBytes());
 
     auto geometry = std::make_shared<LightCameraGeometry>();
     mLightEffectTetrahedra = std::make_shared<DirectionalLightEffect>(mProgramFactory,
@@ -259,27 +262,15 @@ void ExtractLevelSurfacesWindow::UpdateConstants()
 
     Matrix4x4<float> invWMatrix = mMeshCubes->worldTransform.GetHInverse();
     auto geometry = mLightEffectCubes->GetGeometry();
-#if defined(GTE_USE_MAT_VEC)
-    geometry->cameraModelPosition = invWMatrix * cameraWorldPosition;
-    geometry->lightModelDirection = invWMatrix * mLightWorldDirection;
+    geometry->cameraModelPosition = DoTransform(invWMatrix, cameraWorldPosition);
+    geometry->lightModelDirection = DoTransform(invWMatrix, mLightWorldDirection);
     mLightEffectCubes->UpdateGeometryConstant();
-#else
-    geometry->cameraModelPosition = cameraWorldPosition * invWMatrix;
-    geometry->lightModelDirection = mLightWorldDirection * invWMatrix;
-    mLightEffectCubes->UpdateGeometryConstant();
-#endif
 
     invWMatrix = mMeshTetrahedra->worldTransform.GetHInverse();
     geometry = mLightEffectTetrahedra->GetGeometry();
-#if defined(GTE_USE_MAT_VEC)
-    geometry->cameraModelPosition = invWMatrix * cameraWorldPosition;
-    geometry->lightModelDirection = invWMatrix * mLightWorldDirection;
+    geometry->cameraModelPosition = DoTransform(invWMatrix, cameraWorldPosition);
+    geometry->lightModelDirection = DoTransform(invWMatrix, mLightWorldDirection);
     mLightEffectTetrahedra->UpdateGeometryConstant();
-#else
-    geometry->cameraModelPosition = cameraWorldPosition * invWMatrix;
-    geometry->lightModelDirection = mLightWorldDirection * invWMatrix;
-    mLightEffectTetrahedra->UpdateGeometryConstant();
-#endif
 
     mTrackball.Update();
     mPVWMatrices.Update();

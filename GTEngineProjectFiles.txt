@@ -1,14 +1,21 @@
 ==============
 GTEngine Files
 ==============
-Files (13)
-    Applications (13)
+Files (14)
+    Applications (14)
+        GLX (6)
+            GteWICFileIO.cpp
+            GteWICFileIO.h
+            GteWindow.cpp
+            GteWindow.h
+            GteWindowSystem.cpp
+            GteWindowSystem.h
         MSW (6)
             DX11 (3)
                 GteWindow.cpp
                 GteWindow.h
                 GteWindowSystem.cpp
-            WGL (30)
+            WGL (3)
                 GteWindow.cpp
                 GteWindow.h
                 GteWindowSystem.cpp
@@ -31,7 +38,7 @@ Files (13)
         GteWindow3.h
         GteWindowBase.cpp
         GteWindowBase.h
-    Graphics (9)
+    Graphics (10)
         DirectX11 (0)
             DX11 (7)
                 InputLayout (4)
@@ -161,7 +168,7 @@ Files (13)
                 HLSLI (2)
                     GteFloatFunction.hlsli
                     GteSqrtEstimate.hlsli
-        Effects (40)
+        Effects (54)
             GteAmbientLightEffect.cpp
             GteAmbientLightEffect.h
             GteConstantColorEffect.cpp
@@ -172,8 +179,22 @@ Files (13)
             GteDirectionalLightTextureEffect.h
             GteFont.cpp
             GteFont.h
+            GteFontArialW400H12.cpp
+            GteFontArialW400H12.h
+            GteFontArialW400H14.cpp
+            GteFontArialW400H14.h
+            GteFontArialW400H16.cpp
+            GteFontArialW400H16.h
             GteFontArialW400H18.cpp
             GteFontArialW400H18.h
+            GteFontArialW700H12.cpp
+            GteFontArialW700H12.h
+            GteFontArialW700H14.cpp
+            GteFontArialW700H14.h
+            GteFontArialW700H16.cpp
+            GteFontArialW700H16.h
+            GteFontArialW700H18.cpp
+            GteFontArialW700H18.h
             GteLightCameraGeometry.cpp
             GteLightCameraGeometry.h
             GteLighting.cpp
@@ -203,6 +224,15 @@ Files (13)
             GteVisualEffect.cpp
             GteVisualEffect.h
         OpenGL4 (8)
+            GL (4)
+                glcorearb.h
+                glext.h
+                glxext.h
+                wglext.h
+            GLX (3)
+                GteGLXEngine.cpp
+                GteGLXEngine.h
+                GteGLXExtensions.cpp
             InputLayout (4)
                 GteGL4InputLayout.cpp
                 GteGL4InputLayout.h
@@ -449,6 +479,7 @@ Files (13)
         GteGEInputLayoutManager.h
         GteGEObject.cpp
         GteGEObject.h
+        GteGraphicsDefaults.h
         GteGraphicsEngine.cpp
         GteGraphicsEngine.h
     Imagics (0)
@@ -496,7 +527,7 @@ Files (13)
             GteImageUtility3.cpp
             GteImageUtility3.h
     LowLevel (0)
-        DataTypes (14)
+        DataTypes (13)
             GteArray2.h
             GteArray3.h
             GteArray4.h
@@ -506,11 +537,10 @@ Files (13)
             GteMinHeap.h
             GteRangeIteration.h
             GteSharedPtrComparison.h
+            GteStringUtility.h
             GteThreadSafeMap.h
             GteThreadSafeQueue.h
             GteWeakPtrCompare.h
-            GteWrapper.cpp
-            GteWrapper.h
         Logger (10)
             MSW (4)
                 GteLogToMessageBox.cpp
@@ -588,7 +618,7 @@ Files (13)
             GteIEEEBinary16.cpp
             GteIEEEBinary16.h
             GteMath.h
-            GteQuadraticField.h
+            GteQFNumber.h
             GteUIntegerALU32.h
             GteUIntegerAP32.cpp
             GteUIntegerAP32.h
@@ -646,7 +676,7 @@ Files (13)
             GteVETManifoldMesh.h
             GteVETNonmanifoldMesh.cpp
             GteVETNonmanifoldMesh.h
-        Containment (16)
+        Containment (17)
             GteContAlignedBox.h
             GteContCapsule3.h
             GteContCircle2.h
@@ -945,10 +975,6 @@ Files (13)
                 GteIntelSSE.cpp
                 GteIntelSSE.h
     Physics (0)
-        CollisionDetection (3)
-            GteBoundingVolumeTree.h
-            GteCollisionGroup.h
-            GteCollisionRecord.h
         Fluid2 (17)
             GteFluid2.cpp
             GteFluid2.h
@@ -1008,32 +1034,9 @@ Files (13)
     GTGraphics.h
     GTGraphicsDX11.h
     GTGraphicsGL4.h
+	GTGraphicsShared.h
     GTImagics.h
     GTLowLevel.h
     GTMathematics.h
     GTPhysics.h
     GTWindows.h
-
-================================
-GLX Files and OpenGL ARB headers
-================================
-Files
-    Applications
-        GLX
-            GteWICFileIO.cpp
-            GteWICFileIO.h
-            GteWindow.cpp
-            GteWindow.h
-            GteWindowSystem.cpp
-            GteWindowSystem.h
-    Graphics
-        GL4
-            GL
-                glcorearb.h
-                glext.h
-                glxext.h
-                wglext.h
-            GLX
-                GteGLXEngine.cpp
-                GteGLXEngine.h
-                GteGLXExtensions.cpp

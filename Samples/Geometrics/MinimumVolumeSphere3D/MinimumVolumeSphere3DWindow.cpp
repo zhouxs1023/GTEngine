@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.2 (2019/04/13)
 
 #include "MinimumVolumeSphere3DWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
 
 int main(int, char const*[])
 {
@@ -101,16 +104,16 @@ void MinimumVolumeSphere3DWindow::CreateScene()
     mf.SetVertexFormat(vformat);
 
     std::shared_ptr<ConstantColorEffect> effect;
+    Vector4<float> gray{ 0.5f, 0.5f, 0.5f, 1.0f };
     for (int i = 0; i < NUM_POINTS; ++i)
     {
         mPoints[i] = mf.CreateSphere(6, 6, 0.01f);
-        effect = std::make_shared<ConstantColorEffect>(mProgramFactory,
-            Vector4<float>({ 0.5f, 0.5f, 0.5f, 1.0f }));
+        effect = std::make_shared<ConstantColorEffect>(mProgramFactory, gray);
         mPoints[i]->SetEffect(effect);
         mPVWMatrices.Subscribe(mPoints[i]->worldTransform, effect->GetPVWMatrixConstant());
 
-        std::shared_ptr<VertexBuffer> vbuffer = mPoints[i]->GetVertexBuffer();
-        Vector3<float>* vertex = vbuffer->Get<Vector3<float>>();
+        auto vbuffer = mPoints[i]->GetVertexBuffer();
+        auto* vertex = vbuffer->Get<Vector3<float>>();
         Vector3<float> offset = mVertices[i];
         for (unsigned int j = 0; j < vbuffer->GetNumElements(); ++j)
         {
@@ -119,13 +122,11 @@ void MinimumVolumeSphere3DWindow::CreateScene()
     }
 
     // Create the segments.
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(vformat, 12);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 12);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_POLYSEGMENT_DISJOINT, 6);
-    effect = std::make_shared<ConstantColorEffect>(mProgramFactory,
-        Vector4<float>({ 0.5f, 0.0f, 0.0f, 1.0f }));
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYSEGMENT_DISJOINT, 6);
+    Vector4<float> red{ 0.5f, 0.0f, 0.0f, 1.0f };
+    effect = std::make_shared<ConstantColorEffect>(mProgramFactory, red);
     mSegments = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mPVWMatrices.Subscribe(mSegments->worldTransform, effect->GetPVWMatrixConstant());
     mSegments->Update();
@@ -133,8 +134,8 @@ void MinimumVolumeSphere3DWindow::CreateScene()
     // Create the sphere.
     mSphere = mf.CreateSphere(16, 16, 1.0f);
 
-    effect = std::make_shared<ConstantColorEffect>(mProgramFactory,
-        Vector4<float>({ 0.0f, 0.0f, 0.5f, 1.0f }));
+    Vector4<float> blue{ 0.0f, 0.0f, 0.5f, 1.0f };
+    effect = std::make_shared<ConstantColorEffect>(mProgramFactory, blue);
 
     mSphere->SetEffect(effect);
     mPVWMatrices.Subscribe(mSphere->worldTransform, effect->GetPVWMatrixConstant());
@@ -143,9 +144,9 @@ void MinimumVolumeSphere3DWindow::CreateScene()
 void MinimumVolumeSphere3DWindow::UpdateScene()
 {
     // Update the segments.
-    std::shared_ptr<VertexBuffer> vbuffer = mSegments->GetVertexBuffer();
-    Vector3<float>* vertex = vbuffer->Get<Vector3<float>>();
-    std::shared_ptr<IndexBuffer> ibuffer = mSegments->GetIndexBuffer();
+    auto vbuffer = mSegments->GetVertexBuffer();
+    auto* vertex = vbuffer->Get<Vector3<float>>();
+    auto ibuffer = mSegments->GetIndexBuffer();
 
     int numSupport = mMVS3.GetNumSupport();
     std::array<int, 4> support = mMVS3.GetSupport();

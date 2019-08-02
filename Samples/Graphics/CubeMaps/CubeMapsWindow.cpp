@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/09/16)
+// File Version: 3.0.3 (2019/05/03)
 
 #include "CubeMapsWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -135,12 +139,8 @@ bool CubeMapsWindow::SetEnvironment()
         "YpFace.png",
         "ZmFace.png",
         "ZpFace.png",
-#if defined(GTE_DEV_OPENGL)
-        "CubeMapVS.glsl",
-        "CubeMapPS.glsl"
-#else
-        "CubeMap.hlsl"
-#endif
+        DefaultShaderName("CubeMap.vs"),
+        DefaultShaderName("CubeMap.ps")
     };
 
     for (auto const& input : inputs)
@@ -175,7 +175,7 @@ bool CubeMapsWindow::CreateCubeMapItems()
     {
         std::string textureName = mEnvironment.GetPath(name[face]);
         auto texture = WICFileIO::Load(textureName, true);
-        memcpy(mCubeTexture->GetDataFor(face, 0), texture->GetData(), texture->GetNumBytes());
+        std::memcpy(mCubeTexture->GetDataFor(face, 0), texture->GetData(), texture->GetNumBytes());
     }
 
     bool created = false;
@@ -197,7 +197,7 @@ void CubeMapsWindow::CreateScene()
 
     // Create the walls of the cube room.  Each of the six texture images is
     // RGBA 64-by-64.
-    std::shared_ptr<Node> room = std::make_shared<Node>();
+    auto room = std::make_shared<Node>();
     mScene->AttachChild(room);
 
     // The vertex format shared by the room walls.
@@ -211,14 +211,13 @@ void CubeMapsWindow::CreateScene()
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
 
     // The index buffer shared by the room walls.
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH,
-        2, sizeof(unsigned int));
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
+    auto* indices = ibuffer->Get<unsigned int>();
     indices[0] = 0;  indices[1] = 1;  indices[2] = 3;
     indices[3] = 0;  indices[4] = 3;  indices[5] = 2;
 
     std::shared_ptr<VertexBuffer> vbuffer;
-    Vertex* vertex;
+    Vertex* vertices;
     std::shared_ptr<Texture2> texture;
     std::shared_ptr<Texture2Effect> effect;
     std::shared_ptr<Visual> wall;
@@ -227,11 +226,11 @@ void CubeMapsWindow::CreateScene()
 
     // +x wall
     vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    vertex = vbuffer->Get<Vertex>();
-    vertex[0] = { { +1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f } };
-    vertex[1] = { { +1.0f, -1.0f, +1.0f }, { 0.0f, 1.0f } };
-    vertex[2] = { { +1.0f, +1.0f, -1.0f }, { 1.0f, 0.0f } };
-    vertex[3] = { { +1.0f, +1.0f, +1.0f }, { 0.0f, 0.0f } };
+    vertices = vbuffer->Get<Vertex>();
+    vertices[0] = { { +1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f } };
+    vertices[1] = { { +1.0f, -1.0f, +1.0f }, { 0.0f, 1.0f } };
+    vertices[2] = { { +1.0f, +1.0f, -1.0f }, { 1.0f, 0.0f } };
+    vertices[3] = { { +1.0f, +1.0f, +1.0f }, { 0.0f, 0.0f } };
     texture = WICFileIO::Load(mEnvironment.GetPath("XpFace.png"), true);
     effect = std::make_shared<Texture2Effect>(mProgramFactory, texture, filter, mode, mode);
     wall = std::make_shared<Visual>(vbuffer, ibuffer, effect);
@@ -242,11 +241,11 @@ void CubeMapsWindow::CreateScene()
 
     // -x wall
     vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    vertex = vbuffer->Get<Vertex>();
-    vertex[0] = { { -1.0f, -1.0f, +1.0f },{ 1.0f, 1.0f } };
-    vertex[1] = { { -1.0f, -1.0f, -1.0f },{ 0.0f, 1.0f } };
-    vertex[2] = { { -1.0f, +1.0f, +1.0f },{ 1.0f, 0.0f } };
-    vertex[3] = { { -1.0f, +1.0f, -1.0f },{ 0.0f, 0.0f } };
+    vertices = vbuffer->Get<Vertex>();
+    vertices[0] = { { -1.0f, -1.0f, +1.0f },{ 1.0f, 1.0f } };
+    vertices[1] = { { -1.0f, -1.0f, -1.0f },{ 0.0f, 1.0f } };
+    vertices[2] = { { -1.0f, +1.0f, +1.0f },{ 1.0f, 0.0f } };
+    vertices[3] = { { -1.0f, +1.0f, -1.0f },{ 0.0f, 0.0f } };
     texture = WICFileIO::Load(mEnvironment.GetPath("XmFace.png"), true);
     effect = std::make_shared<Texture2Effect>(mProgramFactory, texture, filter, mode, mode);
     wall = std::make_shared<Visual>(vbuffer, ibuffer, effect);
@@ -257,11 +256,11 @@ void CubeMapsWindow::CreateScene()
 
     // +y wall
     vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    vertex = vbuffer->Get<Vertex>();
-    vertex[0] = { { +1.0f, +1.0f, +1.0f },{ 1.0f, 1.0f } };
-    vertex[1] = { { -1.0f, +1.0f, +1.0f },{ 0.0f, 1.0f } };
-    vertex[2] = { { +1.0f, +1.0f, -1.0f },{ 1.0f, 0.0f } };
-    vertex[3] = { { -1.0f, +1.0f, -1.0f },{ 0.0f, 0.0f } };
+    vertices = vbuffer->Get<Vertex>();
+    vertices[0] = { { +1.0f, +1.0f, +1.0f },{ 1.0f, 1.0f } };
+    vertices[1] = { { -1.0f, +1.0f, +1.0f },{ 0.0f, 1.0f } };
+    vertices[2] = { { +1.0f, +1.0f, -1.0f },{ 1.0f, 0.0f } };
+    vertices[3] = { { -1.0f, +1.0f, -1.0f },{ 0.0f, 0.0f } };
     texture = WICFileIO::Load(mEnvironment.GetPath("YpFace.png"), true);
     effect = std::make_shared<Texture2Effect>(mProgramFactory, texture, filter, mode, mode);
     wall = std::make_shared<Visual>(vbuffer, ibuffer, effect);
@@ -272,11 +271,11 @@ void CubeMapsWindow::CreateScene()
 
     // -y wall
     vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    vertex = vbuffer->Get<Vertex>();
-    vertex[0] = { { +1.0f, -1.0f, -1.0f },{ 1.0f, 1.0f } };
-    vertex[1] = { { -1.0f, -1.0f, -1.0f },{ 0.0f, 1.0f } };
-    vertex[2] = { { +1.0f, -1.0f, +1.0f },{ 1.0f, 0.0f } };
-    vertex[3] = { { -1.0f, -1.0f, +1.0f },{ 0.0f, 0.0f } };
+    vertices = vbuffer->Get<Vertex>();
+    vertices[0] = { { +1.0f, -1.0f, -1.0f },{ 1.0f, 1.0f } };
+    vertices[1] = { { -1.0f, -1.0f, -1.0f },{ 0.0f, 1.0f } };
+    vertices[2] = { { +1.0f, -1.0f, +1.0f },{ 1.0f, 0.0f } };
+    vertices[3] = { { -1.0f, -1.0f, +1.0f },{ 0.0f, 0.0f } };
     texture = WICFileIO::Load(mEnvironment.GetPath("YmFace.png"), true);
     effect = std::make_shared<Texture2Effect>(mProgramFactory, texture, filter, mode, mode);
     wall = std::make_shared<Visual>(vbuffer, ibuffer, effect);
@@ -287,11 +286,11 @@ void CubeMapsWindow::CreateScene()
 
     // +z wall
     vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    vertex = vbuffer->Get<Vertex>();
-    vertex[0] = { { +1.0f, -1.0f, +1.0f },{ 1.0f, 1.0f } };
-    vertex[1] = { { -1.0f, -1.0f, +1.0f },{ 0.0f, 1.0f } };
-    vertex[2] = { { +1.0f, +1.0f, +1.0f },{ 1.0f, 0.0f } };
-    vertex[3] = { { -1.0f, +1.0f, +1.0f },{ 0.0f, 0.0f } };
+    vertices = vbuffer->Get<Vertex>();
+    vertices[0] = { { +1.0f, -1.0f, +1.0f },{ 1.0f, 1.0f } };
+    vertices[1] = { { -1.0f, -1.0f, +1.0f },{ 0.0f, 1.0f } };
+    vertices[2] = { { +1.0f, +1.0f, +1.0f },{ 1.0f, 0.0f } };
+    vertices[3] = { { -1.0f, +1.0f, +1.0f },{ 0.0f, 0.0f } };
     texture = WICFileIO::Load(mEnvironment.GetPath("ZpFace.png"), true);
     effect = std::make_shared<Texture2Effect>(mProgramFactory, texture, filter, mode, mode);
     wall = std::make_shared<Visual>(vbuffer, ibuffer, effect);
@@ -302,11 +301,11 @@ void CubeMapsWindow::CreateScene()
 
     // -z wall
     vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    vertex = vbuffer->Get<Vertex>();
-    vertex[0] = { { -1.0f, -1.0f, -1.0f },{ 1.0f, 1.0f } };
-    vertex[1] = { { +1.0f, -1.0f, -1.0f },{ 0.0f, 1.0f } };
-    vertex[2] = { { -1.0f, +1.0f, -1.0f },{ 1.0f, 0.0f } };
-    vertex[3] = { { +1.0f, +1.0f, -1.0f },{ 0.0f, 0.0f } };
+    vertices = vbuffer->Get<Vertex>();
+    vertices[0] = { { -1.0f, -1.0f, -1.0f },{ 1.0f, 1.0f } };
+    vertices[1] = { { +1.0f, -1.0f, -1.0f },{ 0.0f, 1.0f } };
+    vertices[2] = { { -1.0f, +1.0f, -1.0f },{ 1.0f, 0.0f } };
+    vertices[3] = { { +1.0f, +1.0f, -1.0f },{ 0.0f, 0.0f } };
     texture = WICFileIO::Load(mEnvironment.GetPath("ZmFace.png"), true);
     effect = std::make_shared<Texture2Effect>(mProgramFactory, texture, filter, mode, mode);
     wall = std::make_shared<Visual>(vbuffer, ibuffer, effect);
@@ -332,7 +331,7 @@ void CubeMapsWindow::CreateScene()
     mSphere->UpdateModelBound();
     room->AttachChild(mSphere);
 
-    // Generate random vertex colors for the sphere.  The StandardMesh class
+    // Generate random vertex colors for the sphere.  The MeshFactory class
     // produces a sphere with duplicated vertices along a longitude line.
     // This allows texture coordinates to be assigned in a manner that treats
     // the sphere as if it were a rectangle mesh.  For vertex colors, we want

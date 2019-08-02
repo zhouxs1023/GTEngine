@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.2 (2019/04/15)
 
 #include "BillboardNodesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -65,7 +68,7 @@ void BillboardNodesWindow::OnIdle()
 #if defined(DEMONSTRATE_VIEWPORT_BOUNDING_RECTANGLE)
     ComputeTorusBoundingRectangle();
     mEngine->SetBlendState(mBlendState);
-    std::shared_ptr<RasterizerState> rstate = mEngine->GetRasterizerState();
+    auto rstate = mEngine->GetRasterizerState();
     mEngine->SetRasterizerState(mNoCullState);
     mEngine->Draw(mOverlay);
     mEngine->SetRasterizerState(rstate);
@@ -163,19 +166,17 @@ void BillboardNodesWindow::CreateScene()
     // to enhance the wrap-around.
     mGround = mf.CreateRectangle(2, 2, 16.0f, 16.0f);
     mScene->AttachChild(mGround);
-    std::shared_ptr<VertexBuffer> vbuffer = mGround->GetVertexBuffer();
+    auto vbuffer = mGround->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto* vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
-        vertex[i].tcoord *= 128.0f;
+        vertices[i].tcoord *= 128.0f;
     }
 
     // Create a texture effect for the ground.
-    std::shared_ptr<Texture2Effect> groundEffect =
-        std::make_shared<Texture2Effect>(mProgramFactory, mGroundTexture,
-        SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP,
-        SamplerState::WRAP);
+    auto groundEffect = std::make_shared<Texture2Effect>(mProgramFactory, mGroundTexture,
+        SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP, SamplerState::WRAP);
     mGround->SetEffect(groundEffect);
 
     // Create a rectangle mesh.  The mesh is in the xy-plane.  Do not apply
@@ -184,10 +185,8 @@ void BillboardNodesWindow::CreateScene()
     mRectangle = mf.CreateRectangle(2, 2, 0.125f, 0.25f);
 
     // Create a texture effect for the rectangle.
-    std::shared_ptr<Texture2Effect> rectEffect =
-        std::make_shared<Texture2Effect>(mProgramFactory, mSkyTexture,
-        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP,
-        SamplerState::CLAMP);
+    auto rectEffect = std::make_shared<Texture2Effect>(mProgramFactory, mSkyTexture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
     mRectangle->SetEffect(rectEffect);
 
     // Create a torus mesh.  Do not apply local transformations to the mesh.
@@ -197,10 +196,8 @@ void BillboardNodesWindow::CreateScene()
     mTorus->localTransform.SetUniformScale(0.1f);
 
     // Create a texture effect for the torus.
-    std::shared_ptr<Texture2Effect> torusEffect =
-        std::make_shared<Texture2Effect>(mProgramFactory, mSkyTexture,
-        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP,
-        SamplerState::CLAMP);
+    auto torusEffect = std::make_shared<Texture2Effect>(mProgramFactory, mSkyTexture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
     mTorus->SetEffect(torusEffect);
 
     // Create a billboard node that causes a rectangle always to be facing the
@@ -251,8 +248,7 @@ void BillboardNodesWindow::CreateScene()
     mOverlay = std::make_shared<OverlayEffect>(mProgramFactory, mXSize,
         mYSize, 1, 1, SamplerState::MIN_P_MAG_P_MIP_P, SamplerState::CLAMP,
         SamplerState::CLAMP, true);
-    std::shared_ptr<Texture2> overlayTexture = std::make_shared<Texture2>(
-        DF_R8G8B8A8_UNORM, 1, 1);
+    auto overlayTexture = std::make_shared<Texture2>(DF_R8G8B8A8_UNORM, 1, 1);
     mOverlay->SetTexture(overlayTexture);
     unsigned int& texel = *overlayTexture->Get<unsigned int>();
     texel = 0x40FF0000;  // (r,g,b,a) = (0,0,255,64)
@@ -272,15 +268,12 @@ void BillboardNodesWindow::CreateScene()
 void BillboardNodesWindow::ComputeTorusBoundingRectangle()
 {
     Matrix4x4<float> pvMatrix = mCamera->GetProjectionViewMatrix();
-#if defined(GTE_USE_MAT_VEC)
-    Matrix4x4<float> pvwMatrix = pvMatrix * mTorus->worldTransform;
-#else
-    Matrix4x4<float> pvwMatrix = mTorus->worldTransform * pvMatrix;
-#endif
+    Matrix4x4<float> wMatrix = mTorus->worldTransform;
+    Matrix4x4<float> pvwMatrix = DoTransform(pvMatrix, wMatrix);
 
-    std::shared_ptr<VertexBuffer> vbuffer = mTorus->GetVertexBuffer();
+    auto vbuffer = mTorus->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
-    Vertex const* vertex = vbuffer->Get<Vertex>();
+    auto const* vertex = vbuffer->Get<Vertex>();
 
     // Compute the extremes of the normalized display coordinates.
     float const maxFloat = std::numeric_limits<float>::max();
@@ -289,11 +282,8 @@ void BillboardNodesWindow::ComputeTorusBoundingRectangle()
     for (unsigned int i = 0; i < numVertices; ++i, ++vertex)
     {
         Vector4<float> input{ vertex->position[0], vertex->position[1], vertex->position[2], 1.0f };
-#if defined(GTE_USE_MAT_VEC)
-        Vector4<float> output = pvwMatrix * input;
-#else
-        Vector4<float> output = input * pvwMatrix;
-#endif
+        Vector4<float> output = DoTransform(pvwMatrix, input);
+
         // Reflect the y-values because the normalized display coordinates
         // are right-handed but the overlay rectangle coordinates are
         // left-handed.

@@ -322,11 +322,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\AreaLight.hlsl">
+    <None Include="Shaders\AreaLight.ps.glsl" />
+    <None Include="Shaders\AreaLight.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\AreaLight.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\AreaLightPS.glsl" />
-    <None Include="Shaders\AreaLightVS.glsl" />
+    <None Include="Shaders\AreaLight.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

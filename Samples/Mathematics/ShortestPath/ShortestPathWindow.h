@@ -3,21 +3,21 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/05/02)
 
 #pragma once
 
-#include <GTEngine.h>
-using namespace gte;
-
 //#define USE_CPU_SHORTEST_PATH
+
+#include <Applications/GteWindow2.h>
 #if defined(USE_CPU_SHORTEST_PATH)
 #include "CpuShortestPath.h"
 #else
 #include "GpuShortestPath.h"
 #endif
+using namespace gte;
 
-class ShortestPathWindow : public Window
+class ShortestPathWindow : public Window2
 {
 public:
     // The application window is square and the height field for the
@@ -30,11 +30,11 @@ public:
 
     ShortestPathWindow(Parameters& parameters);
 
-    virtual void OnIdle() override;
+    virtual void OnDisplay() override;
 
 private:
     bool SetEnvironment();
-    void CreateWeightsShader();
+    bool CreateWeightsShader();
     void GenerateWeights();
     std::shared_ptr<ConstantBuffer> CreateBicubicMatrix();
     void DrawPath(std::stack<std::pair<int, int>>& path);

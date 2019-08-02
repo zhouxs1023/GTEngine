@@ -321,11 +321,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\ProjectedTexture.hlsl">
+    <None Include="Shaders\ProjectedTexture.ps.glsl" />
+    <None Include="Shaders\ProjectedTexture.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\ProjectedTexture.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ProjectedTexturePS.glsl" />
-    <None Include="Shaders\ProjectedTextureVS.glsl" />
+    <None Include="Shaders\ProjectedTexture.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,28 +24,34 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\ExtractSurfaceIndirect.hlsl">
+    <None Include="Shaders\DrawSurfaceIndirect.gs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawSurfaceIndirect.hlsl">
+    <None Include="Shaders\DrawSurfaceIndirect.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\ExtractSurface.hlsl">
+    <None Include="Shaders\DrawSurfaceIndirect.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawSurfaceIndirectGS.glsl">
+    <None Include="Shaders\ExtractSurface.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawSurfaceIndirectVS.glsl">
+    <None Include="Shaders\ExtractSurfaceIndirect.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawSurfaceIndirectPS.glsl">
+    <None Include="Shaders\DrawSurfaceIndirect.gs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\ExtractSurfaceIndirect.glsl">
+    <None Include="Shaders\DrawSurfaceIndirect.ps.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\ExtractSurface.glsl">
+    <None Include="Shaders\DrawSurfaceIndirect.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\ExtractSurface.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\ExtractSurfaceIndirect.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

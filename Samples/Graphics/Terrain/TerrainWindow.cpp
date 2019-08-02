@@ -3,10 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.22.0 (2019/01/31)
+// File Version: 3.22.1 (2019/04/17)
 
 #include "TerrainWindow.h"
 #include "TerrainEffect.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -119,26 +122,15 @@ bool TerrainWindow::SetEnvironment()
     mEnvironment.Insert(path + "/Samples/Graphics/Terrain/Data/");
     mEnvironment.Insert(path + "/Samples/Graphics/Terrain/Shaders/");
 
-#if defined(GTE_DEV_OPENGL)
     std::vector<std::string> inputs =
     {
-        "BaseMulDetailFogExpSqrVS.glsl",
-        "BaseMulDetailFogExpSqrPS.glsl",
+        DefaultShaderName("BaseMulDetailFogExpSqr.vs"),
+        DefaultShaderName("BaseMulDetailFogExpSqr.ps"),
         "SkyDome.txt",
         "SkyDome.png",
         "Detail.png",
         "height.information.txt"
     };
-#else
-    std::vector<std::string> inputs =
-    {
-        "BaseMulDetailFogExpSqr.hlsl",
-        "SkyDome.txt",
-        "SkyDome.png",
-        "Detail.png",
-        "height.information.txt"
-    };
-#endif
 
     for (auto const& input : inputs)
     {
@@ -227,13 +219,8 @@ void TerrainWindow::CreateTerrain()
 
     Vector4<float> fogColorDensity{ 0.5686f, 0.7255f, 0.8353f, 0.0015f };
 
-#if defined(GTE_DEV_OPENGL)
-    std::string programPathVS = mEnvironment.GetPath("BaseMulDetailFogExpSqrVS.glsl");
-    std::string programPathPS = mEnvironment.GetPath("BaseMulDetailFogExpSqrPS.glsl");
-#else
-    std::string programPathVS = mEnvironment.GetPath("BaseMulDetailFogExpSqr.hlsl");
-    std::string programPathPS = programPathVS;
-#endif
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("BaseMulDetailFogExpSqr.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("BaseMulDetailFogExpSqr.ps"));
 
     // Attach an effect to each terrain page.  Preload all resouces to video
     // memory to avoid frame-rate stalls when new terrain pages are
@@ -252,8 +239,7 @@ void TerrainWindow::CreateTerrain()
             colorTexture->AutogenerateMipmaps();
             mEngine->Bind(colorTexture);
 
-            std::shared_ptr<VisualProgram> program =
-                mProgramFactory->CreateFromFiles(programPathVS, programPathPS, "");
+            auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
 
             auto terrainEffect = std::make_shared<TerrainEffect>(program, colorTexture,
                 detailTexture, fogColorDensity);
@@ -343,11 +329,7 @@ void TerrainWindow::UpdateScene()
             auto const& vwMatrixConstant = effect->GetVWMatrixConstant();
             Matrix4x4<float> vMatrix = mCamera->GetViewMatrix();
             Matrix4x4<float> wMatrix = visual->worldTransform.GetHMatrix();
-#if defined(GTE_USE_MAT_VEC)
-            *vwMatrixConstant->Get<Matrix4x4<float>>() = vMatrix * wMatrix;
-#else
-            *vwMatrixConstant->Get<Matrix4x4<float>>() = wMatrix * vMatrix;
-#endif
+            *vwMatrixConstant->Get<Matrix4x4<float>>() = DoTransform(vMatrix, wMatrix);
             mEngine->Update(vwMatrixConstant);
         }
     }

@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2018/10/05)
+// File Version: 3.0.4 (2019/05/02)
 
 #include "FlowingSkirtWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <random>
 
 //#define SINGLE_STEP
 
@@ -153,9 +156,9 @@ void FlowingSkirtWindow::CreateScene()
 
     unsigned int numVertices = 2 * mNumCtrl;
     std::vector<Vector3<float>> positions(numVertices);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     int i, j;
     for (i = 0, j = mNumCtrl; i < mNumCtrl; ++i, ++j)
     {
@@ -163,7 +166,7 @@ void FlowingSkirtWindow::CreateScene()
         float angle = ratio * static_cast<float>(GTE_C_TWO_PI);
         float sn = std::sin(angle);
         float cs = std::cos(angle);
-        float v = 1.0f - std::abs(2.0f * ratio - 1.0f);
+        float v = 1.0f - std::fabs(2.0f * ratio - 1.0f);
 
         // Set a vertex for the skirt top.
         positions[i] = { mATop * cs, 4.0f, mBTop * sn };
@@ -198,9 +201,8 @@ void FlowingSkirtWindow::CreateScene()
 
     // Generate the triangle connectivity (cylinder connectivity).
     unsigned int numTriangles = numVertices;
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(
-        IP_TRIMESH, numTriangles, sizeof(unsigned int));
-    unsigned int* indices = ibuffer->Get<unsigned int>();
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numTriangles, sizeof(unsigned int));
+    auto indices = ibuffer->Get<unsigned int>();
     int i0 = 0, i1 = 1, i2 = mNumCtrl, i3 = mNumCtrl + 1;
     for (i = 0; i1 < mNumCtrl; i0 = i1++, i2 = i3++)
     {
@@ -219,11 +221,10 @@ void FlowingSkirtWindow::CreateScene()
     indices[i++] = 2 * mNumCtrl - 1;
 
     std::string path = mEnvironment.GetPath("Flower.png");
-    std::shared_ptr<Texture2> texture = WICFileIO::Load(path, true);
+    auto texture = WICFileIO::Load(path, true);
     texture->AutogenerateMipmaps();
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(
-        mProgramFactory, texture, SamplerState::MIN_L_MAG_L_MIP_L,
-        SamplerState::CLAMP, SamplerState::CLAMP);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, texture,
+        SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::CLAMP, SamplerState::CLAMP);
 
     mSkirt = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mSkirt->UpdateModelBound();
@@ -237,8 +238,8 @@ void FlowingSkirtWindow::CreateScene()
 
 void FlowingSkirtWindow::UpdateSkirt()
 {
-    std::shared_ptr<VertexBuffer> vbuffer = mSkirt->GetVertexBuffer();
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vbuffer = mSkirt->GetVertexBuffer();
+    auto vertices = vbuffer->Get<Vertex>();
     for (int i = 0, j = mNumCtrl; i < mNumCtrl; ++i, ++j)
     {
         float t = static_cast<float>(i) / static_cast<float>(mNumCtrl);

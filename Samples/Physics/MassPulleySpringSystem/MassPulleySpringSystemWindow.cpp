@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.3.1 (2018/10/05)
+// File Version: 3.3.2 (2019/05/02)
 
 #include "MassPulleySpringSystemWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteConstantColorEffect.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -240,7 +244,7 @@ void MassPulleySpringSystemWindow::CreateFloor()
     mFloor = mf.CreateRectangle(2, 2, 1024.0f, 1024.0f);
     auto vbuffer = mFloor->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         Vector3<float> position = vertices[i].position;
@@ -263,7 +267,7 @@ void MassPulleySpringSystemWindow::CreateCable()
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, desc.numVertices);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, desc.numTriangles, sizeof(unsigned int));
 
     desc.vertexAttributes =
@@ -332,7 +336,7 @@ void MassPulleySpringSystemWindow::CreatePulley()
     mPlate1->localTransform.SetTranslation(0.0f, 0.0f, 0.5f * thickness);
     auto vbuffer = mPlate1->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         vertices[i].position[0] = -vertices[i].position[0];
@@ -365,7 +369,7 @@ void MassPulleySpringSystemWindow::CreateSpring()
     mSide0 = mf.CreateBox(xExtent, yExtent, zExtent);
     auto vbuffer = mSide0->GetVertexBuffer();
     unsigned int numVertices = vbuffer->GetNumElements();
-    Vector3<float>* vertices = vbuffer->Get<Vector3<float>>();
+    auto vertices = vbuffer->Get<Vector3<float>>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
         vertices[i][1] -= 0.5f * mModule.radius;
@@ -417,7 +421,7 @@ void MassPulleySpringSystemWindow::CreateHelix()
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
     auto vbuffer = std::make_shared<VertexBuffer>(vformat, desc.numVertices);
     vbuffer->SetUsage(Resource::DYNAMIC_UPDATE);
-    Vertex* vertices = vbuffer->Get<Vertex>();
+    auto vertices = vbuffer->Get<Vertex>();
     auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, desc.numTriangles, sizeof(unsigned int));
 
     desc.vertexAttributes =

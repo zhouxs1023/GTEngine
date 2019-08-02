@@ -15,11 +15,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\RootFinder.hlsl">
+    <None Include="Shaders\RootFinder.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RootFinder.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\RootFinder.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
   </ItemGroup>
 </Project>

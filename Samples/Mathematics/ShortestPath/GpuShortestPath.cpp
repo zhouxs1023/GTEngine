@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2019/05/03)
 
 #include "GpuShortestPath.h"
-#include "Mathematics/GteBitHacks.h"
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Mathematics/GteBitHacks.h>
 
 GpuShortestPath::GpuShortestPath(std::shared_ptr<ProgramFactory> const& factory,
     std::shared_ptr<Texture2> const& weights, Environment const& env,
@@ -19,7 +20,7 @@ GpuShortestPath::GpuShortestPath(std::shared_ptr<ProgramFactory> const& factory,
 
     mDistance = std::make_shared<Texture2>(DF_R32_FLOAT, mSize, mSize);
     mDistance->SetUsage(Resource::SHADER_OUTPUT);
-    memset(mDistance->GetData(), 0, mDistance->GetNumBytes());
+    std::memset(mDistance->GetData(), 0, mDistance->GetNumBytes());
 
     mPrevious = std::make_shared<Texture2>(DF_R32G32_SINT, mSize, mSize);
     mPrevious->SetUsage(Resource::SHADER_OUTPUT);
@@ -27,25 +28,21 @@ GpuShortestPath::GpuShortestPath(std::shared_ptr<ProgramFactory> const& factory,
 
     mSegment = std::make_shared<ConstantBuffer>(3 * sizeof(int), true);
 
-#if defined(GTE_DEV_OPENGL)
-    std::string ext = ".glsl";
-#else
-    std::string ext = ".hlsl";
-#endif
-
     factory->PushDefines();
     factory->defines.Set("ISIZE", mSize);
-    mInitializeDiagToRow = factory->CreateFromFile(env.GetPath("InitializeDiagToRow" + ext));
+    std::string csPath = env.GetPath(DefaultShaderName("InitializeDiagToRow.cs"));
+    mInitializeDiagToRow = factory->CreateFromFile(csPath);
     if (!mInitializeDiagToRow)
     {
         return;
     }
-    std::shared_ptr<ComputeShader> cshader = mInitializeDiagToRow->GetCShader();
+    auto cshader = mInitializeDiagToRow->GetCShader();
     cshader->Set("weights", weights);
     cshader->Set("previous", mPrevious);
     cshader->Set("sum", mDistance);
 
-    mInitializeDiagToCol = factory->CreateFromFile(env.GetPath("InitializeDiagToCol" + ext));
+    csPath = env.GetPath(DefaultShaderName("InitializeDiagToCol.cs"));
+    mInitializeDiagToCol = factory->CreateFromFile(csPath);
     if (!mInitializeDiagToCol)
     {
         return;
@@ -63,14 +60,16 @@ GpuShortestPath::GpuShortestPath(std::shared_ptr<ProgramFactory> const& factory,
         factory->defines.Set("NUM_Y_THREADS", (1 << i));
         factory->defines.Set("TWO_P", (1 << p));
         factory->defines.Set("TWO_PM1", (1 << i));
-        mPartialSumDiagToRow[i] = factory->CreateFromFile(env.GetPath("PartialSumsDiagToRow" + ext));
+        csPath = env.GetPath(DefaultShaderName("PartialSumsDiagToRow.cs"));
+        mPartialSumDiagToRow[i] = factory->CreateFromFile(csPath);
         if (!mPartialSumDiagToRow[i])
         {
             return;
         }
         mPartialSumDiagToRow[i]->GetCShader()->Set("sum", mDistance);
 
-        mPartialSumDiagToCol[i] = factory->CreateFromFile(env.GetPath("PartialSumsDiagToCol" + ext));
+        csPath = env.GetPath(DefaultShaderName("PartialSumsDiagToCol.cs"));
+        mPartialSumDiagToCol[i] = factory->CreateFromFile(csPath);
         if (!mPartialSumDiagToCol[i])
         {
             return;
@@ -78,7 +77,8 @@ GpuShortestPath::GpuShortestPath(std::shared_ptr<ProgramFactory> const& factory,
         mPartialSumDiagToCol[i]->GetCShader()->Set("sum", mDistance);
     }
 
-    mUpdate = factory->CreateFromFile(env.GetPath("UpdateShader" + ext));
+    csPath = env.GetPath(DefaultShaderName("UpdateShader.cs"));
+    mUpdate = factory->CreateFromFile(csPath);
     if (!mUpdate)
     {
         return;
@@ -109,7 +109,7 @@ void GpuShortestPath::Compute(std::shared_ptr<GraphicsEngine> const& engine,
         engine->Execute(mPartialSumDiagToCol[i], 1, 1, 1);
     }
 
-    int* segment = mSegment->Get<int>();
+    auto segment = mSegment->Get<int>();
     for (int z = 2, numPixels = z - 1; z < mSize; ++z, ++numPixels)
     {
         segment[0] = 1;
@@ -131,7 +131,7 @@ void GpuShortestPath::Compute(std::shared_ptr<GraphicsEngine> const& engine,
 
     // Read back the path from GPU memory.
     engine->CopyGpuToCpu(mPrevious);
-    std::array<int, 2>* location = mPrevious->Get<std::array<int, 2>>();
+    auto location = mPrevious->Get<std::array<int, 2>>();
 
     // Create the path by starting at (mXSize-1,mYSize-1) and following the
     // previous links.
@@ -139,7 +139,7 @@ void GpuShortestPath::Compute(std::shared_ptr<GraphicsEngine> const& engine,
     while (x != -1 && y != -1)
     {
         path.push(std::make_pair(x, y));
-        std::array<int, 2> prev = location[x + mSize*y];
+        std::array<int, 2> prev = location[x + mSize * y];
         x = prev[0];
         y = prev[1];
     }

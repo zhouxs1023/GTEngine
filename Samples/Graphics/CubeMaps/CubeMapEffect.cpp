@@ -3,17 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/09/07)
+// File Version: 3.0.2 (2019/04/16)
 
 #include "CubeMapEffect.h"
 #include <Mathematics/GteVector2.h>
+#include <GTGraphics.h>
 #include <Graphics/GteTexture2Effect.h>
-
-#if defined(GTE_DEV_OPENGL)
-#include <Graphics/GL4/GteGL4Engine.h>
-#else
-#include <Graphics/DX11/GteDX11Engine.h>
-#endif
 
 using namespace gte;
 
@@ -27,14 +22,9 @@ CubeMapEffect::CubeMapEffect(std::shared_ptr<ProgramFactory> const& factory,
     created = false;
 
     // Load and compile the shaders.
-#if defined(GTE_DEV_OPENGL)
-    std::string pathVS = environment.GetPath("CubeMapVS.glsl");
-    std::string pathPS = environment.GetPath("CubeMapPS.glsl");
-    mProgram = factory->CreateFromFiles(pathVS, pathPS, "");
-#else
-    std::string path = environment.GetPath("CubeMap.hlsl");
-    mProgram = factory->CreateFromFiles(path, path, "");
-#endif
+    std::string vsPath = environment.GetPath(DefaultShaderName("CubeMap.vs"));
+    std::string psPath = environment.GetPath(DefaultShaderName("CubeMap.ps"));
+    mProgram = factory->CreateFromFiles(vsPath, psPath, "");
     if (!mProgram)
     {
         // The program factory will generate Log* messages.
@@ -64,12 +54,7 @@ CubeMapEffect::CubeMapEffect(std::shared_ptr<ProgramFactory> const& factory,
     vshader->Set("WMatrix", mWMatrixConstant);
     vshader->Set("CameraWorldPosition", mCameraWorldPositionConstant);
     pshader->Set("Reflectivity", mReflectivityConstant);
-#if defined(GTE_DEV_OPENGL)
-    pshader->Set("cubeSampler", mCubeTexture);
-#else
-    pshader->Set("cubeTexture", mCubeTexture);
-#endif
-    pshader->Set("cubeSampler", mCubeSampler);
+    pshader->Set("cubeTexture", mCubeTexture, "cubeSampler", mCubeSampler);
 
     created = true;
 }
@@ -77,11 +62,7 @@ CubeMapEffect::CubeMapEffect(std::shared_ptr<ProgramFactory> const& factory,
 void CubeMapEffect::UseDynamicUpdates(float dmin, float dmax)
 {
     // Create the camera used to draw each of the 6 faces of the cube.
-#if defined(GTE_DEV_OPENGL)
-    mCamera = std::make_shared<Camera>(true, false);
-#else
-    mCamera = std::make_shared<Camera>(true, true);
-#endif
+    mCamera = std::make_shared<Camera>(true, DefaultDepthRange);
     mCamera->SetFrustum(90.0f, 1.0f, dmin, dmax);
 
     // Create a draw target for the faces.
@@ -155,11 +136,8 @@ void CubeMapEffect::UpdateFaces(std::shared_ptr<GraphicsEngine> const& engine,
                 // Compute the new projection-view-world matrix.  The matrix
                 // *element.first is the model-to-world matrix for the associated
                 // object.
-#if defined(GTE_USE_MAT_VEC)
-                Matrix4x4<float> pvwMatrix = pvMatrix * visual->worldTransform;
-#else
-                Matrix4x4<float> pvwMatrix = visual->worldTransform * pvMatrix;
-#endif
+                Matrix4x4<float> wMatrix = visual->worldTransform;
+                Matrix4x4<float> pvwMatrix = DoTransform(pvMatrix, wMatrix);
                 effect->SetPVWMatrix(pvwMatrix);
                 engine->Update(effect->GetPVWMatrixConstant());
             }

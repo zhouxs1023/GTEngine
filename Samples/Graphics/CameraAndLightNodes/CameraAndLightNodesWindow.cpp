@@ -3,9 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/02/17)
+// File Version: 3.0.2 (2019/04/16)
 
 #include "CameraAndLightNodesWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <Graphics/GteMeshFactory.h>
+#include <Graphics/GteTexture2Effect.h>
+#include <Graphics/GteLight.h>
 
 int main(int, char const*[])
 {
@@ -50,7 +55,7 @@ CameraAndLightNodesWindow::CameraAndLightNodesWindow(Parameters& parameters)
     mWireState->fillMode = RasterizerState::FILL_WIREFRAME;
 
     std::string path = mEnvironment.GetPath("RedSky.png");
-    std::shared_ptr<Texture2> skyTexture = WICFileIO::Load(path, false);
+    auto skyTexture = WICFileIO::Load(path, false);
     mOverlay = std::make_shared<OverlayEffect>(mProgramFactory, mXSize, mYSize, mXSize, mYSize,
         SamplerState::MIN_P_MAG_P_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP, true);
     mOverlay->SetTexture(skyTexture);
@@ -190,11 +195,7 @@ void CameraAndLightNodesWindow::InitializeCameraNode()
     {
         auto const& invWMatrix = mGround->worldTransform.GetHInverse();
         auto const& cameraWorldPosition = cameraNode->GetViewVolume()->GetPosition();
-#if defined(GTE_USE_MAT_VEC)
-        mCameraModelPosition = invWMatrix *cameraWorldPosition;
-#else
-        mCameraModelPosition = cameraWorldPosition * invWMatrix;
-#endif
+        mCameraModelPosition = DoTransform(invWMatrix, cameraWorldPosition);
     });
     mCameraNodeRig.SetCameraNode(mCameraNode);
 
@@ -222,12 +223,12 @@ void CameraAndLightNodesWindow::CreateScene()
     mScene->AttachChild(mCameraNode);
 
     AxisAngle<4, float> aa(Vector4<float>::Unit(0), (float)-GTE_C_HALF_PI);
-    std::shared_ptr<Node> lightFixture0 = CreateLightFixture(0);
+    auto lightFixture0 = CreateLightFixture(0);
     lightFixture0->localTransform.SetTranslation(25.0f, -5.75f, 6.0f);
     lightFixture0->localTransform.SetRotation(aa);
     mCameraNode->AttachChild(lightFixture0);
 
-    std::shared_ptr<Node> lightFixture1 = CreateLightFixture(1);
+    auto lightFixture1 = CreateLightFixture(1);
     lightFixture1->localTransform.SetTranslation(25.0f, -5.75f, -6.0f);
     lightFixture1->localTransform.SetRotation(aa);
     mCameraNode->AttachChild(lightFixture1);
@@ -245,39 +246,37 @@ std::shared_ptr<Visual> CameraAndLightNodesWindow::CreateGround()
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
 
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    Vertex* vertex = vbuffer->Get<Vertex>();
-    vertex[0].position = Vector3<float>{ -100.0f, -100.0f, 0.0f };
-    vertex[1].position = Vector3<float>{ +100.0f, -100.0f, 0.0f };
-    vertex[2].position = Vector3<float>{ +100.0f, +100.0f, 0.0f };
-    vertex[3].position = Vector3<float>{ -100.0f, +100.0f, 0.0f };
-    vertex[0].tcoord = Vector2<float>{ 0.0f, 0.0f };
-    vertex[1].tcoord = Vector2<float>{ 8.0f, 0.0f };
-    vertex[2].tcoord = Vector2<float>{ 8.0f, 8.0f };
-    vertex[3].tcoord = Vector2<float>{ 0.0f, 8.0f };
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto* vertices = vbuffer->Get<Vertex>();
+    vertices[0].position = { -100.0f, -100.0f, 0.0f };
+    vertices[1].position = { +100.0f, -100.0f, 0.0f };
+    vertices[2].position = { +100.0f, +100.0f, 0.0f };
+    vertices[3].position = { -100.0f, +100.0f, 0.0f };
+    vertices[0].tcoord = { 0.0f, 0.0f };
+    vertices[1].tcoord = { 8.0f, 0.0f };
+    vertices[2].tcoord = { 8.0f, 8.0f };
+    vertices[3].tcoord = { 0.0f, 8.0f };
 
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(
-        IP_TRIMESH, 2, sizeof(unsigned int));
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, 2, sizeof(unsigned int));
     ibuffer->SetTriangle(0, 0, 1, 2);
     ibuffer->SetTriangle(1, 0, 2, 3);
 
     std::string path = mEnvironment.GetPath("Gravel.png");
-    std::shared_ptr<Texture2> gravelTexture = WICFileIO::Load(path, true);
+    auto gravelTexture = WICFileIO::Load(path, true);
     gravelTexture->AutogenerateMipmaps();
 
     // Darken the gravel.
-    unsigned int* texels = gravelTexture->Get<unsigned int>();
+    auto* texels = gravelTexture->Get<unsigned int>();
     for (unsigned int i = 0; i < gravelTexture->GetNumElements(); ++i)
     {
-        unsigned int r = (unsigned int)(0.2f * (texels[i] & 0x000000FF));
-        unsigned int g = (unsigned int)(0.2f * ((texels[i] & 0x0000FF00) >> 8));
-        unsigned int b = (unsigned int)(0.2f * ((texels[i] & 0x00FF0000) >> 16));
+        unsigned int r = static_cast<unsigned int>(0.2f * (texels[i] & 0x000000FF));
+        unsigned int g = static_cast<unsigned int>(0.2f * ((texels[i] & 0x0000FF00) >> 8));
+        unsigned int b = static_cast<unsigned int>(0.2f * ((texels[i] & 0x00FF0000) >> 16));
         texels[i] = r | (g << 8) | (b << 16) | 0xFF000000;
     }
 
-    std::shared_ptr<Texture2Effect> effect = std::make_shared<Texture2Effect>(
-        mProgramFactory, gravelTexture, SamplerState::MIN_L_MAG_L_MIP_L,
-        SamplerState::WRAP, SamplerState::WRAP);
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, gravelTexture,
+        SamplerState::MIN_L_MAG_L_MIP_L, SamplerState::WRAP, SamplerState::WRAP);
 
     mGround = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     mPVWMatrices.Subscribe(mGround->worldTransform, effect->GetPVWMatrixConstant());
@@ -286,17 +285,13 @@ std::shared_ptr<Visual> CameraAndLightNodesWindow::CreateGround()
 
 std::shared_ptr<Node> CameraAndLightNodesWindow::CreateLightFixture(int i)
 {
-    std::shared_ptr<Node> lightFixture = std::make_shared<Node>();
+    auto lightFixture = std::make_shared<Node>();
 
     // A point light illuminates the target.  Create a semitransparent
     // material for the patch.
-    std::shared_ptr<Material> material = std::make_shared<Material>();
-    std::shared_ptr<LightCameraGeometry> geometry = std::make_shared<LightCameraGeometry>();
-#if defined(GTE_DEV_OPENGL)
-    std::shared_ptr<Light> light = std::make_shared<Light>(true, false);
-#else
-    std::shared_ptr<Light> light = std::make_shared<Light>(true, true);
-#endif
+    auto material = std::make_shared<Material>();
+    auto geometry = std::make_shared<LightCameraGeometry>();
+    auto light = std::make_shared<Light>(true, DefaultDepthRange);
     light->lighting = std::make_shared<Lighting>();
 
     material->emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -355,15 +350,15 @@ std::shared_ptr<Visual> CameraAndLightNodesWindow::CreateLightTarget()
     // Create a flat surface.
     MeshFactory mf;
     mf.SetVertexFormat(vformat);
-    std::shared_ptr<Visual> mesh = mf.CreateRectangle(64, 64, 8.0f, 8.0f);
+    auto mesh = mf.CreateRectangle(64, 64, 8.0f, 8.0f);
 
     // Adjust the heights to form a paraboloid.
-    std::shared_ptr<VertexBuffer> vbuffer = mesh->GetVertexBuffer();
+    auto vbuffer = mesh->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumActiveElements();
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto* vertices = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
-        Vector3<float>& pos = vertex[i].position;
+        Vector3<float>& pos = vertices[i].position;
         pos[2] = 1.0f - (pos[0] * pos[0] + pos[1] * pos[1]) / 128.0f;
     }
     mesh->UpdateModelNormals();
@@ -401,35 +396,19 @@ void CameraAndLightNodesWindow::CameraNodeRig::MoveBackward()
 void CameraAndLightNodesWindow::CameraNodeRig::TurnRight()
 {
     Matrix4x4<float> rotate = mCameraNode->localTransform.GetRotation();
-#if defined(GTE_USE_MAT_VEC)
-    Vector4<float> uVector = rotate.GetCol(1);
-#else
-    Vector4<float> uVector = rotate.GetRow(1);
-#endif
+    Vector4<float> uVector = GetBasis(rotate, 1);
     AxisAngle<4, float> aa(uVector, -mRotationSpeed);
     Matrix4x4<float> increment = Rotation<4, float>(aa);
-#if defined(GTE_USE_MAT_VEC)
-    mCameraNode->localTransform.SetRotation(increment * rotate);
-#else
-    mCameraNode->localTransform.SetRotation(rotate * increment);
-#endif
+    mCameraNode->localTransform.SetRotation(DoTransform(increment, rotate));
     mCameraNode->Update();
 }
 
 void CameraAndLightNodesWindow::CameraNodeRig::TurnLeft()
 {
     Matrix4x4<float> rotate = mCameraNode->localTransform.GetRotation();
-#if defined(GTE_USE_MAT_VEC)
-    Vector4<float> uVector = rotate.GetCol(1);
-#else
-    Vector4<float> uVector = rotate.GetRow(1);
-#endif
+    Vector4<float> uVector = GetBasis(rotate, 1);
     AxisAngle<4, float> aa(uVector, +mRotationSpeed);
     Matrix4x4<float> increment = Rotation<4, float>(aa);
-#if defined(GTE_USE_MAT_VEC)
-    mCameraNode->localTransform.SetRotation(increment * rotate);
-#else
-    mCameraNode->localTransform.SetRotation(rotate * increment);
-#endif
+    mCameraNode->localTransform.SetRotation(DoTransform(increment, rotate));
     mCameraNode->Update();
 }

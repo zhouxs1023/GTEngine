@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/07/30)
 
 #pragma once
 
@@ -32,6 +32,10 @@
 #include <Mathematics/GteLine.h>
 #include <algorithm>
 #include <vector>
+
+// Uncomment this to assert when an infinite loop is encountered in
+// ConvexHull2::GetTangent.
+//#define GTE_ASSERT_ON_CONVEXHULL2_INFINITE_LOOP
 
 namespace gte
 {
@@ -401,8 +405,10 @@ void ConvexHull2<InputType, ComputeType>::GetTangent(int j0, int j1, int j2, int
         break;
     }
 
+#if defined(GTE_ASSERT_ON_CONVEXHULL2_INFINITE_LOOP)
     // Detect an "infinite loop" caused by floating point round-off errors.
     LogAssert(i < imax, "Unexpected condition.");
+#endif
 }
 
 

@@ -36,41 +36,70 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawUsingVertexID.hlsl">
+    <None Include="Shaders\DrawUsingVertexID.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta.hlsl">
+    <None Include="Shaders\DrawUsingVertexID.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawUsingVertexIDPS.glsl">
+    <None Include="Shaders\RungeKutta.cs.hlsli">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawUsingVertexIDVS.glsl">
+    <None Include="Shaders\RungeKutta1a.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta1a.glsl">
+    <None Include="Shaders\RungeKutta1b.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta1b.glsl">
+    <None Include="Shaders\RungeKutta2a.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta2a.glsl">
+    <None Include="Shaders\RungeKutta2b.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta2b.glsl">
+    <None Include="Shaders\RungeKutta3a.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta3a.glsl">
+    <None Include="Shaders\RungeKutta3b.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta3b.glsl">
+    <None Include="Shaders\RungeKutta4a.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta4a.glsl">
+    <None Include="Shaders\RungeKutta4b.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\RungeKutta4b.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\DrawUsingVertexID.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shaders\DrawUsingVertexID.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RungeKutta1a.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RungeKutta1b.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RungeKutta2a.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RungeKutta2b.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RungeKutta3a.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RungeKutta3b.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RungeKutta4a.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\RungeKutta4b.cs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

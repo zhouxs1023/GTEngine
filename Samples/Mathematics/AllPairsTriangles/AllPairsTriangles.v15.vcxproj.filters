@@ -30,35 +30,43 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawUsingVertexID.hlsl">
+    <None Include="Shaders\DrawUsingVertexID.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\InitializeColors.hlsl">
+    <None Include="Shaders\DrawUsingVertexID.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\TriangleIntersection.hlsl">
+    <None Include="Shaders\InitializeColors.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\VertexColorIndexed.hlsl">
+    <None Include="Shaders\TriangleIntersection.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawUsingVertexIDPS.glsl">
+    <None Include="Shaders\VertexColorIndexed.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DrawUsingVertexIDVS.glsl">
+    <None Include="Shaders\VertexColorIndexed.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\InitializeColors.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\DrawUsingVertexID.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\TriangleIntersection.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\DrawUsingVertexID.vs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\VertexColorIndexedPS.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\InitializeColors.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
-    <None Include="Shaders\VertexColorIndexedVS.glsl">
+    </FxCompile>
+    <FxCompile Include="Shaders\TriangleIntersection.cs.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shaders\VertexColorIndexed.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\VertexColorIndexed.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -24,14 +24,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\MultipleRenderTargets.hlsl">
+    <None Include="Shaders\MultipleRenderTargets.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\MultipleRenderTargetsPixel.glsl">
+    <None Include="Shaders\MultipleRenderTargets.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\MultipleRenderTargetsVertex.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\MultipleRenderTargets.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shaders\MultipleRenderTargets.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

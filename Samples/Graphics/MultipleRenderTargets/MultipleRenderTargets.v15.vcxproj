@@ -320,11 +320,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\MultipleRenderTargets.hlsl">
+    <None Include="Shaders\MultipleRenderTargets.ps.glsl" />
+    <None Include="Shaders\MultipleRenderTargets.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\MultipleRenderTargets.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\MultipleRenderTargetsPixel.glsl" />
-    <None Include="Shaders\MultipleRenderTargetsVertex.glsl" />
+    <None Include="Shaders\MultipleRenderTargets.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

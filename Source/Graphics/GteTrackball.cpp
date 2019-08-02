@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/03/18)
+// File Version: 3.0.3 (2019/04/15)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteTrackball.h>
@@ -134,7 +134,7 @@ void Trackball::OnSetFinalPoint()
 #if defined(GTE_USE_MAT_VEC)
         rotate = trnParWRotate * incrRotate * parWRotate * mInitialOrientation;
 #else
-        rotate = mInitialOrientation * parWROtate * incrRotate * trnParWRotate;
+        rotate = mInitialOrientation * parWRotate * incrRotate * trnParWRotate;
 #endif
     }
     else

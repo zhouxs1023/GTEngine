@@ -3,9 +3,13 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.3 (2019/05/03)
 
 #include "ConvexHull3DWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Mathematics/GteArbitraryPrecision.h>
+#include <Mathematics/GteConvexHull3.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -204,8 +208,7 @@ bool ConvexHull3DWindow::LoadData()
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_COLOR, DF_R32G32B32A32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer =
-        std::make_shared<VertexBuffer>(vformat, numVertices);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numVertices);
     Vertex* vertex = vbuffer->Get<Vertex>();
     for (unsigned int i = 0; i < numVertices; ++i)
     {
@@ -217,9 +220,8 @@ bool ConvexHull3DWindow::LoadData()
     }
 
     unsigned int numPrimitives = static_cast<unsigned int>(triangles.size());
-    std::shared_ptr<IndexBuffer> ibuffer =
-        std::make_shared<IndexBuffer>(IP_TRIMESH, numPrimitives, sizeof(unsigned int));
-    Memcpy(ibuffer->GetData(), &triangles[0], ibuffer->GetNumBytes());
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRIMESH, numPrimitives, sizeof(unsigned int));
+    std::memcpy(ibuffer->GetData(), &triangles[0], ibuffer->GetNumBytes());
 
     // Update all information associated with the mesh transforms.
     if (mMesh)

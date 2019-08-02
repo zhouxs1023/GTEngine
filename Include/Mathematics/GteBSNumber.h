@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.3 (2019/01/17)
+// File Version: 3.0.4 (2019/07/10)
 
 #pragma once
 
@@ -840,6 +840,24 @@ namespace gte
         // needed only internally.
         friend class BSRational<UIntegerType>;
         friend class UnitTestBSNumber;
+
+    public:
+        // FOR INTERNAL USE ONLY. These functions support the std::ldexp
+        // and std::frexp functions for BSNumber.
+        inline void SetSign(int32_t sign)
+        {
+            mSign = sign;
+        }
+
+        inline void SetBiasedExponent(int32_t biasedExponent)
+        {
+            mBiasedExponent = biasedExponent;
+        }
+
+        inline void SetExponent(int32_t exponent)
+        {
+            mBiasedExponent = exponent - mUInteger.GetNumBits() + 1;
+        }
     };
 }
 
@@ -941,13 +959,26 @@ namespace std
     template <typename UIntegerType>
     inline gte::BSNumber<UIntegerType> frexp(gte::BSNumber<UIntegerType> const& x, int* exponent)
     {
-        return (gte::BSNumber<UIntegerType>)std::frexp((double)x, exponent);
+        if (x.GetSign() != 0)
+        {
+            gte::BSNumber<UIntegerType> result = x;
+            *exponent = result.GetExponent() + 1;
+            result.SetExponent(-1);
+            return result;
+        }
+        else
+        {
+            *exponent = 0;
+            return gte::BSNumber<UIntegerType>(0);
+        }
     }
 
     template <typename UIntegerType>
     inline gte::BSNumber<UIntegerType> ldexp(gte::BSNumber<UIntegerType> const& x, int exponent)
     {
-        return (gte::BSNumber<UIntegerType>)std::ldexp((double)x, exponent);
+        gte::BSNumber<UIntegerType> result = x;
+        result.SetBiasedExponent(result.GetBiasedExponent() + exponent);
+        return result;
     }
 
     template <typename UIntegerType>

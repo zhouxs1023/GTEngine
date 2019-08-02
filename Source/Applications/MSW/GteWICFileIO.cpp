@@ -7,6 +7,7 @@
 
 #include <GTEnginePCH.h>
 #include <LowLevel/GteLogger.h>
+#include <LowLevel/GteStringUtility.h>
 #include <Applications/GteEnvironment.h>
 #include <Applications/MSW/GteWICFileIO.h>
 #include <memory>
@@ -142,6 +143,197 @@ std::shared_ptr<Texture2> WICFileIO::Load(std::string const& filename, bool want
     // Copy the pixels from the decoder to the texture.
     hr = wicBitmapSource->CopyPixels(nullptr, stride, imageSize,
         texture->Get<BYTE>());
+    if (FAILED(hr))
+    {
+        LogError("wicBitmapSource->CopyPixels failed.");
+        return nullptr;
+    }
+
+    return texture;
+}
+
+std::shared_ptr<Texture2> WICFileIO::Load(void* module, std::string const& rtype,
+    int resource, bool wantMipmaps)
+{
+    auto hModule = reinterpret_cast<HMODULE>(module);
+
+    // Start COM and create WIC.
+    ComInitializer comInitializer;
+    if (!comInitializer.IsInitialized())
+    {
+        LogError("Unable to initialize COM for WIC.");
+        return nullptr;
+    }
+
+    // Create a WIC imaging factory.
+    ComObject<IWICImagingFactory> wicFactory;
+    HRESULT hr = ::CoCreateInstance(CLSID_WICImagingFactory, nullptr,
+        CLSCTX_INPROC_SERVER, IID_IWICImagingFactory,
+        reinterpret_cast<LPVOID*>(&wicFactory));
+    if (FAILED(hr))
+    {
+        LogError("Unable to create WIC imaging factory.");
+        return nullptr;
+    }
+
+    // WIC interface pointers.
+    IWICStream* pIWICStream = NULL;
+    IWICBitmapDecoder* pIDecoder = NULL;
+    IWICBitmapFrameDecode* pIDecoderFrame = NULL;
+
+    // Resource management.
+    HRSRC imageResHandle = NULL;
+    HGLOBAL imageResDataHandle = NULL;
+    void* pImageFile = NULL;
+    DWORD imageFileSize = 0;
+
+    // Locate the resource in the application's executable.
+    auto const wrtype = ConvertNarrowToWide(rtype);
+    imageResHandle = FindResource(hModule, MAKEINTRESOURCE(resource), wrtype.c_str());
+    if (!imageResHandle)
+    {
+        LogError("FindResource failed.");
+        return nullptr;
+    }
+
+    imageResDataHandle = LoadResource(hModule, imageResHandle);
+    if (!imageResDataHandle)
+    {
+        LogError("LoadResource failed.");
+        return nullptr;
+    }
+
+    // Lock the resource to retrieve memory pointer.
+    pImageFile = LockResource(imageResDataHandle);
+    if (!pImageFile)
+    {
+        LogError("LockResource failed.");
+        return nullptr;
+    }
+
+    // Calculate the size.
+    imageFileSize = SizeofResource(hModule, imageResHandle);
+    if (!imageFileSize)
+    {
+        LogError("SizeofResource failed.");
+        return nullptr;
+    }
+
+    // Create a WIC stream to map onto the memory.
+    hr = wicFactory->CreateStream(&pIWICStream);
+    if (FAILED(hr))
+    {
+        LogError("wicFactory->CreateStream failed.");
+        return nullptr;
+    }
+
+    // Initialize the stream with the memory pointer and size.
+    hr = pIWICStream->InitializeFromMemory(
+        reinterpret_cast<BYTE*>(pImageFile),
+        imageFileSize);
+    if (FAILED(hr))
+    {
+        LogError("wicFactory->InitializeFromMemory failed.");
+        return nullptr;
+    }
+
+    // Create a decoder for the stream.
+    hr = wicFactory->CreateDecoderFromStream(
+        pIWICStream,                   // stream for creating the decoder
+        NULL,                          // do not prefer a particular vendor
+        WICDecodeMetadataCacheOnLoad,  // cache metadata when needed
+        &pIDecoder);                   // pointer to the decoder
+    if (FAILED(hr))
+    {
+        LogError("wicFactory->CreateDecoderFromStream failed.");
+        return nullptr;
+    }
+
+    hr = pIDecoder->GetFrame(0, &pIDecoderFrame);
+    if (FAILED(hr))
+    {
+        LogError("pIDecoder->GetFrame failed.");
+        return nullptr;
+    }
+
+    // Get the pixel format of the image.
+    WICPixelFormatGUID wicSourceGUID;
+    hr = pIDecoderFrame->GetPixelFormat(&wicSourceGUID);
+    if (FAILED(hr))
+    {
+        LogError("wicFrameDecode->GetPixelFormat failed.");
+        return nullptr;
+    }
+
+    // Find the supported WIC input pixel format that matches a Texture2
+    // format.  If a matching format is not found, the returned texture
+    // is an R8G8B8A8 format with texels converted from the source format.
+    WICPixelFormatGUID wicConvertGUID = GUID_WICPixelFormat32bppRGBA;
+    DFType gtformat = DF_R8G8B8A8_UNORM;
+    for (int i = 0; i < NUM_LOAD_FORMATS; ++i)
+    {
+        if (IsEqualGUID(wicSourceGUID, *msLoadFormatMap[i].wicInputGUID))
+        {
+            // Determine whether there is a conversion format.
+            if (msLoadFormatMap[i].wicConvertGUID)
+            {
+                wicConvertGUID = *msLoadFormatMap[i].wicConvertGUID;
+            }
+            else
+            {
+                wicConvertGUID = *msLoadFormatMap[i].wicInputGUID;
+            }
+            gtformat = msLoadFormatMap[i].gtFormat;
+            break;
+        }
+    }
+
+    // The wicFrameDecode value is used for no conversion.  If the decoder
+    // does not support the format in the texture, then a conversion is
+    // required.
+    IWICBitmapSource* wicBitmapSource = pIDecoderFrame;
+    ComObject<IWICFormatConverter> wicFormatConverter;
+    if (!IsEqualGUID(wicSourceGUID, wicConvertGUID))
+    {
+        // Create a WIC format converter.
+        hr = wicFactory->CreateFormatConverter(&wicFormatConverter);
+        if (FAILED(hr))
+        {
+            LogError("wicFactory->CreateFormatConverter failed.");
+            return nullptr;
+        }
+
+        // Initialize format converter to convert the input texture format
+        // to the nearest format supported by the decoder.
+        hr = wicFormatConverter->Initialize(pIDecoderFrame, wicConvertGUID,
+            WICBitmapDitherTypeNone, nullptr, 0.0,
+            WICBitmapPaletteTypeCustom);
+        if (FAILED(hr))
+        {
+            LogError("wicFormatConverter->Initialize failed.");
+            return nullptr;
+        }
+
+        // Use the format converter.
+        wicBitmapSource = wicFormatConverter;
+    }
+
+    // Get the image dimensions.
+    UINT width, height;
+    hr = wicBitmapSource->GetSize(&width, &height);
+    if (FAILED(hr))
+    {
+        LogError("wicBitmapSource->GetSize failed.");
+        return nullptr;
+    }
+
+    // Create the 2D texture and compute the stride and image size.
+    auto texture = std::make_shared<Texture2>(gtformat, width, height, wantMipmaps);
+    UINT const stride = width * texture->GetElementSize();
+    UINT const imageSize = stride * height;
+
+    // Copy the pixels from the decoder to the texture.
+    hr = wicBitmapSource->CopyPixels(nullptr, stride, imageSize, texture->Get<BYTE>());
     if (FAILED(hr))
     {
         LogError("wicBitmapSource->CopyPixels failed.");

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/09/07)
+// File Version: 3.0.3 (2019/04/17)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteTexture3Effect.h>
@@ -27,12 +27,7 @@ Texture3Effect::Texture3Effect(std::shared_ptr<ProgramFactory> const& factory,
         mSampler->mode[2] = mode2;
 
         mProgram->GetVShader()->Set("PVWMatrix", mPVWMatrixConstant);
-#if defined(GTE_DEV_OPENGL)
-        mProgram->GetPShader()->Set("baseSampler", mTexture);
-#else
-        mProgram->GetPShader()->Set("baseTexture", mTexture);
-#endif
-        mProgram->GetPShader()->Set("baseSampler", mSampler);
+        mProgram->GetPShader()->Set("baseTexture", mTexture, "baseSampler", mSampler);
     }
 }
 

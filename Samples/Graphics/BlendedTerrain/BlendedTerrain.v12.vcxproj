@@ -306,11 +306,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\BlendedTerrain.hlsl">
+    <None Include="Shaders\BlendedTerrain.ps.glsl" />
+    <None Include="Shaders\BlendedTerrain.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\BlendedTerrain.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\BlendedTerrainPixel.glsl" />
-    <None Include="Shaders\BlendedTerrainVertex.glsl" />
+    <None Include="Shaders\BlendedTerrain.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

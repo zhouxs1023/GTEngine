@@ -323,31 +323,29 @@
     <ClInclude Include="GpuGaussianBlur3Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\BoundaryDirichlet.glsl" />
-    <None Include="Shaders\BoundaryNeumann.glsl" />
-    <None Include="Shaders\DrawImage.glsl" />
-    <None Include="Shaders\GaussianBlur.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\BoundaryDirichlet.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\BoundaryNeumann.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\GaussianBlur.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\DrawImage.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\BoundaryDirichlet.cs.glsl" />
+    <None Include="Shaders\BoundaryNeumann.cs.glsl" />
+    <None Include="Shaders\DrawImage.ps.glsl" />
+    <None Include="Shaders\GaussianBlur.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\BoundaryDirichlet.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\BoundaryNeumann.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\DrawImage.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\GaussianBlur.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

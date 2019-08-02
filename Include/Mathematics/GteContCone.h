@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.19.0 (2018/11/30)
+// File Version: 3.19.1 (2019/06/22)
 
 #pragma once
 
@@ -17,6 +17,6 @@ namespace gte
     {
         Vector<N, Real> diff = point - cone.ray.origin;
         Real h = Dot(cone.ray.direction, diff);
-        return cone.minHeight <= h && h <= cone.maxHeight && h >= cone.cosAngle * Length(diff);
+        return cone.HeightInRange(h) && h >= cone.cosAngleSqr * Dot(diff, diff);
     }
 }

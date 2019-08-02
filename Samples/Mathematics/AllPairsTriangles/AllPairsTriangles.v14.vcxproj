@@ -321,24 +321,32 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawUsingVertexID.hlsl">
+    <None Include="Shaders\DrawUsingVertexID.ps.glsl" />
+    <None Include="Shaders\DrawUsingVertexID.vs.glsl" />
+    <None Include="Shaders\InitializeColors.cs.glsl" />
+    <None Include="Shaders\TriangleIntersection.cs.glsl" />
+    <None Include="Shaders\VertexColorIndexed.ps.glsl" />
+    <None Include="Shaders\VertexColorIndexed.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DrawUsingVertexID.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\DrawUsingVertexIDPS.glsl" />
-    <None Include="Shaders\DrawUsingVertexIDVS.glsl" />
-    <None Include="Shaders\InitializeColors.glsl" />
-    <None Include="Shaders\InitializeColors.hlsl">
+    <None Include="Shaders\DrawUsingVertexID.vs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\TriangleIntersection.glsl" />
-    <None Include="Shaders\TriangleIntersection.hlsl">
+    <None Include="Shaders\InitializeColors.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\VertexColorIndexed.hlsl">
+    <None Include="Shaders\TriangleIntersection.cs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\VertexColorIndexedPS.glsl" />
-    <None Include="Shaders\VertexColorIndexedVS.glsl" />
+    <None Include="Shaders\VertexColorIndexed.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\VertexColorIndexed.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

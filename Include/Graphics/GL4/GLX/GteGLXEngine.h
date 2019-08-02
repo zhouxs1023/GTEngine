@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2017/06/29)
+// File Version: 3.0.3 (2019/04/13)
 
 #pragma once
 
@@ -29,7 +29,7 @@ public:
     virtual ~GLXEngine();
     GLXEngine(_XDisplay* display, unsigned long window, __GLXcontextRec* context,
         int xSize, int ySize, bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
-    GLXEngine(bool useDepth24Stencil8, bool saveDriverInfo, int requiredMajor = 4, int requiredMinor = 3);
+    GLXEngine(bool useDepth24Stencil8 = true, bool saveDriverInfo = false, int requiredMajor = 4, int requiredMinor = 3);
 
     // Member access.
     inline _XDisplay* GetDisplay() const { return mDisplay; }

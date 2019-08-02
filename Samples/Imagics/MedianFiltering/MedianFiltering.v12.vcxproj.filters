@@ -24,25 +24,25 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\MedianShared.hlsli">
+    <None Include="Shaders\Median3x3.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\MedianBySort.hlsl">
+    <None Include="Shaders\Median5x5.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\Median3x3.hlsl">
+    <None Include="Shaders\MedianBySort.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\Median5x5.hlsl">
+    <None Include="Shaders\MedianShared.cs.hlsli">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\Median3x3.glsl">
+    <None Include="Shaders\Median3x3.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\Median5x5.glsl">
+    <None Include="Shaders\Median5x5.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\MedianBySort.glsl">
+    <None Include="Shaders\MedianBySort.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

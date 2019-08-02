@@ -323,15 +323,17 @@
     <ClInclude Include="Fluids2DWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawDensity.glsl" />
-    <None Include="Shaders\DrawDensity.hlsl">
+    <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
+      <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DrawDensity.ps.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
-      <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
-    </ProjectReference>
+    <None Include="Shaders\DrawDensity.ps.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

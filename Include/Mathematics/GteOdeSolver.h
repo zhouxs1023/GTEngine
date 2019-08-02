@@ -24,7 +24,6 @@ class OdeSolver
 {
 public:
     // Abstract base class.
-public:
     virtual ~OdeSolver();
 protected:
     OdeSolver(Real tDelta,

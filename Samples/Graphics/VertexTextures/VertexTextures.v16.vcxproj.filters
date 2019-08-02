@@ -30,13 +30,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\Displacement.hlsl">
+    <None Include="Shaders\Displacement.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DisplacementPS.glsl">
+    <None Include="Shaders\Displacement.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\DisplacementVS.glsl">
+    <None Include="Shaders\Displacement.ps.hlsl">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="Shaders\Displacement.vs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

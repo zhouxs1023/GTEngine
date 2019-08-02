@@ -18,7 +18,7 @@ TemplateV16::TemplateV16(std::string const& name, std::string const& gtPath, boo
     mGTPath(gtPath),
     mProjectGUID(GetGuidString()),
     mRequiredGUID(GetGuidString()),
-    mSolutionGUID(GetGuidString())
+	mSolutionGUID(GetGuidString())
 {
     std::string solnName = mName + ".v16.sln";
     std::string projName = mName + ".v16.vcxproj";
@@ -55,7 +55,7 @@ bool TemplateV16::Create(std::string const& name, std::vector<std::string> const
             line = std::regex_replace(line, mPNPattern, mName);
             line = std::regex_replace(line, mPGPattern, mProjectGUID);
             line = std::regex_replace(line, mRQPattern, mRequiredGUID);
-            line = std::regex_replace(line, mSGPattern, mSolutionGUID);
+			line = std::regex_replace(line, mSGPattern, mSolutionGUID);
             line = std::regex_replace(line, mGTPattern, msGTGUID);
             outFile << line << std::endl;
         }

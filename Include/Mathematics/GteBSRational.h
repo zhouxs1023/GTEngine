@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.4 (2019/04/05)
+// File Version: 3.0.5 (2019/07/10)
 
 #pragma once
 
@@ -556,7 +556,7 @@ namespace gte
             {
                 return (RealType)0;
             }
-            }
+        }
 
 #if defined(GTE_BINARY_SCIENTIFIC_SHOW_DOUBLE)
     public:
@@ -569,6 +569,19 @@ namespace gte
         BSNumber<UIntegerType> mNumerator, mDenominator;
 
         friend class UnitTestBSRational;
+
+    public:
+        // FOR INTERNAL USE ONLY. These functions supports the std::ldexp
+        // and std::frexp functions for BSRational.
+        inline BSNumber<UIntegerType>& GetNumerator()
+        {
+            return mNumerator;
+        }
+
+        inline BSNumber<UIntegerType>& GetDenominator()
+        {
+            return mDenominator;
+        }
     };
 }
 
@@ -670,13 +683,32 @@ namespace std
     template <typename UIntegerType>
     inline gte::BSRational<UIntegerType> frexp(gte::BSRational<UIntegerType> const& x, int* exponent)
     {
-        return (gte::BSRational<UIntegerType>)std::frexp((double)x, exponent);
+        gte::BSRational<UIntegerType> result = x;
+        auto& numer = result.GetNumerator();
+        auto& denom = result.GetDenominator();
+        int32_t e = numer.GetExponent() - denom.GetExponent();
+        numer.SetExponent(0);
+        denom.SetExponent(0);
+        int32_t saveSign = numer.GetSign();
+        numer.SetSign(1);
+        if (numer >= denom)
+        {
+            ++e;
+            numer.SetExponent(-1);
+        }
+        numer.SetSign(saveSign);
+        *exponent = e;
+        return result;
     }
 
     template <typename UIntegerType>
     inline gte::BSRational<UIntegerType> ldexp(gte::BSRational<UIntegerType> const& x, int exponent)
     {
-        return (gte::BSRational<UIntegerType>)std::ldexp((double)x, exponent);
+        gte::BSRational<UIntegerType> result = x;
+        int biasedExponent = result.GetNumerator().GetBiasedExponent();
+        biasedExponent += exponent;
+        result.GetNumerator().SetBiasedExponent(biasedExponent);
+        return result;
     }
 
     template <typename UIntegerType>

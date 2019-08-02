@@ -3,14 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.21.0 (2019/01/21)
+// File Version: 3.21.1 (2019/06/22)
 
 #pragma once
 
 #include <Mathematics/GteDistPointTriangle.h>
 #include <Mathematics/GteHypersphere.h>
 #include <Mathematics/GteVector3.h>
-#include <Mathematics/GteQuadraticField.h>
+#include <Mathematics/GteQFNumber.h>
 #include <Mathematics/GteFIQuery.h>
 
 namespace gte
@@ -280,7 +280,7 @@ namespace gte
 
 
         // The implementation for arbitrary-precision types.
-        typedef typename QuadraticField<Real>::Element QFElement;
+        using QFN1 = QFNumber<Real, 1>;
 
         struct ExactResult
         {
@@ -303,16 +303,28 @@ namespace gte
 
             // The exact representation of the contact time and point.  To
             // convert to a floating-point type, use
-            //   FloatType contactTime = field.Convert(result.contactTime);
-            //   Vector3<FloatType> contactPoint
-            //   {
-            //       field.Convert(result.contactPoint[0]),
-            //       field.Convert(result.contactPoint[1]),
-            //       field.Convert(result.contactPoint[2])
-            //   };
-            QuadraticField<Real> field;
-            QFElement contactTime;
-            Vector3<QFElement> contactPoint;
+            //   FloatType contactTime;
+            //   Vector3<FloatType> contactPoint;
+            //   Result::Convert(result.contactTime, contactTime);
+            //   Result::Convert(result.contactPoint, contactPoint);
+
+            template <typename OutputType>
+            static void Convert(QFN1 const& input, OutputType& output)
+            {
+                output = static_cast<Real>(input);
+            }
+
+            template <typename OutputType>
+            static void Convert(Vector3<QFN1> const& input, Vector3<OutputType>& output)
+            {
+                for (int i = 0; i < 3; ++i)
+                {
+                    output[i] = static_cast<Real>(input[i]);
+                }
+            }
+
+            QFN1 contactTime;
+            Vector3<QFN1> contactPoint;
         };
 
         template <typename Dummy = Real>
@@ -330,9 +342,9 @@ namespace gte
             Real rsqr = sphere.radius * sphere.radius;
             if (ptResult.sqrDistance <= rsqr)
             {
-                // The values result.field, result.contactTime and
-                // result.contactPoint[] are all zero, so we need only set
-                // the result.contactPoint[].x values.
+                // The values result.contactTime and result.contactPoint[]
+                // are both zero, so we need only set the
+                // result.contactPoint[].x values.
                 result.intersectionType = (ptResult.sqrDistance < rsqr ? -1 : +1);
                 for (int j = 0; j < 3; ++j)
                 {
@@ -394,9 +406,9 @@ namespace gte
 
             // Determine where the sphere center is located relative to the
             // planes of the triangle offset faces of the sphere-swept volume.
-            QuadraticField<Real> ufield(sqrLenU);
-            QFElement element(Dot(U, Delta[0]), -sphere.radius);
-            if (ufield.GreaterThanOrEqualZero(element))
+            QFN1 const qfzero((Real)0, (Real)0, sqrLenU);
+            QFN1 element(Dot(U, Delta[0]), -sphere.radius, sqrLenU);
+            if (element >= qfzero)
             {
                 // The sphere is on the positive side of Dot(U,X-C) = r|U|.
                 // If the sphere will contact the sphere-swept volume at a
@@ -416,8 +428,8 @@ namespace gte
                 {
                     Real phi = Dot(ExU[i], Delta[i]);
                     Real psi = Dot(ExU[i], V);
-                    QFElement arg(psi * element.x - phi * dotUV, psi * element.y);
-                    if (ufield.GreaterThanZero(arg))
+                    QFN1 arg(psi * element.x - phi * dotUV, psi * element.y, sqrLenU);
+                    if (arg > qfzero)
                     {
                         foundContact = false;
                         break;
@@ -426,7 +438,6 @@ namespace gte
                 if (foundContact)
                 {
                     result.intersectionType = 1;
-                    result.field = ufield;
                     result.contactTime.x = -element.x / dotUV;
                     result.contactTime.y = -element.y / dotUV;
                     for (int j = 0; j < 3; ++j)
@@ -440,7 +451,7 @@ namespace gte
             else
             {
                 element.y = -element.y;
-                if (ufield.LessThanOrEqualZero(element))
+                if (element <= qfzero)
                 {
                     // The sphere is on the positive side of Dot(-U,X-C) = r|U|.
                     // If the sphere will contact the sphere-swept volume at a
@@ -460,8 +471,8 @@ namespace gte
                     {
                         Real phi = Dot(ExU[i], Delta[i]);
                         Real psi = Dot(ExU[i], V);
-                        QFElement arg(phi * dotUV - psi * element.x, -psi * element.y);
-                        if (ufield.GreaterThanZero(arg))
+                        QFN1 arg(phi * dotUV - psi * element.x, -psi * element.y, sqrLenU);
+                        if (arg > qfzero)
                         {
                             foundContact = false;
                             break;
@@ -470,7 +481,6 @@ namespace gte
                     if (foundContact)
                     {
                         result.intersectionType = 1;
-                        result.field = ufield;
                         result.contactTime.x = -element.x / dotUV;
                         result.contactTime.y = -element.y / dotUV;
                         for (int j = 0; j < 3; ++j)
@@ -517,20 +527,19 @@ namespace gte
                         Real beta = alpha * alpha - sqrLenHatV * (sqrLenHatDelta - rsqr);
                         if (beta >= (Real)0)
                         {
-                            QuadraticField<Real> bfield(beta);
+                            QFN1 const qfzero((Real)0, (Real)0, beta);
                             Real mu = Dot(ExU[i], Delta[i]);
                             Real omega = Dot(ExU[i], hatV);
-                            QFElement arg0(mu * sqrLenHatV + omega * alpha, -omega);
-                            if (bfield.GreaterThanOrEqualZero(arg0))
+                            QFN1 arg0(mu * sqrLenHatV + omega * alpha, -omega, beta);
+                            if (arg0 >= qfzero)
                             {
-                                QFElement arg1(del[i] * sqrLenHatV + nu[i] * alpha, -nu[i]);
-                                if (bfield.GreaterThanOrEqualZero(arg1))
+                                QFN1 arg1(del[i] * sqrLenHatV + nu[i] * alpha, -nu[i], beta);
+                                if (arg1 >= qfzero)
                                 {
-                                    QFElement arg2(delp[i] * sqrLenHatV + nu[i] * alpha, -nu[i]);
-                                    if (bfield.LessThanOrEqualZero(arg2))
+                                    QFN1 arg2(delp[i] * sqrLenHatV + nu[i] * alpha, -nu[i], beta);
+                                    if (arg2 <= qfzero)
                                     {
                                         result.intersectionType = 1;
-                                        result.field = bfield;
                                         result.contactTime.x = alpha / sqrLenHatV;
                                         result.contactTime.y = (Real)-1 / sqrLenHatV;
                                         for (int j = 0; j < 3; ++j)
@@ -559,15 +568,14 @@ namespace gte
                     Real beta = alpha * alpha - sqrLenV * (sqrLenDelta - rsqr);
                     if (beta >= (Real)0)
                     {
-                        QuadraticField<Real> bfield(beta);
-                        QFElement arg0(delp[im1] * sqrLenV + nu[im1] * alpha, -nu[im1]);
-                        if (bfield.GreaterThanOrEqualZero(arg0))
+                        QFN1 const qfzero((Real)0, (Real)0, beta);
+                        QFN1 arg0(delp[im1] * sqrLenV + nu[im1] * alpha, -nu[im1], beta);
+                        if (arg0 >= qfzero)
                         {
-                            QFElement arg1(del[i] * sqrLenV + nu[i] * alpha, -nu[i]);
-                            if (bfield.LessThanOrEqualZero(arg1))
+                            QFN1 arg1(del[i] * sqrLenV + nu[i] * alpha, -nu[i], beta);
+                            if (arg1 <= qfzero)
                             {
                                 result.intersectionType = 1;
-                                result.field = bfield;
                                 result.contactTime.x = alpha / sqrLenV;
                                 result.contactTime.y = (Real)-1 / sqrLenV;
                                 for (int j = 0; j < 3; ++j)

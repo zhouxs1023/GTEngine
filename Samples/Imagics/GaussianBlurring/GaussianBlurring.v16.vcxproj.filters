@@ -24,10 +24,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\GaussianBlur3x3.hlsl">
+    <None Include="Shaders\GaussianBlur3x3.cs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\GaussianBlur3x3.glsl">
+    <None Include="Shaders\GaussianBlur3x3.cs.hlsl">
       <Filter>Shader Files</Filter>
     </None>
   </ItemGroup>

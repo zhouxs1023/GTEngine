@@ -320,18 +320,26 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\DrawSurfaceIndirect.hlsl">
+    <None Include="Shaders\DrawSurfaceIndirect.gs.glsl" />
+    <None Include="Shaders\DrawSurfaceIndirect.ps.glsl" />
+    <None Include="Shaders\DrawSurfaceIndirect.vs.glsl" />
+    <None Include="Shaders\ExtractSurface.cs.glsl" />
+    <None Include="Shaders\ExtractSurfaceIndirect.cs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\DrawSurfaceIndirect.gs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\DrawSurfaceIndirectGS.glsl" />
-    <None Include="Shaders\DrawSurfaceIndirectPS.glsl" />
-    <None Include="Shaders\DrawSurfaceIndirectVS.glsl" />
-    <None Include="Shaders\ExtractSurface.glsl" />
-    <None Include="Shaders\ExtractSurface.hlsl">
+    <None Include="Shaders\DrawSurfaceIndirect.ps.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shaders\ExtractSurfaceIndirect.glsl" />
-    <None Include="Shaders\ExtractSurfaceIndirect.hlsl">
+    <None Include="Shaders\DrawSurfaceIndirect.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\ExtractSurface.cs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\ExtractSurfaceIndirect.cs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

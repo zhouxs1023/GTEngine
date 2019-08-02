@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/05/03)
 
 #pragma once
 
 #include <LowLevel/GteRangeIteration.h>
-#include <LowLevel/GteWrapper.h>
 #include <algorithm>
 #include <cmath>
 #include <cstring>
@@ -332,7 +331,7 @@ void SymmetricEigensolver<Real>::GetEigenvalues(Real* eigenvalues) const
         {
             // Sorting was not requested.
             size_t numBytes = mSize*sizeof(Real);
-            Memcpy(eigenvalues, &mDiagonal[0], numBytes);
+            std::memcpy(eigenvalues, &mDiagonal[0], numBytes);
         }
     }
 }
@@ -464,7 +463,7 @@ const
         Real* y = &mPVector[0];
 
         // Start with the Euclidean basis vector.
-        memset(x, 0, mSize*sizeof(Real));
+        std::memset(x, 0, mSize*sizeof(Real));
         if (mPermutation[0] >= 0)
         {
             // Sorting was requested.
@@ -521,7 +520,7 @@ const
         if (x != eigenvector)
         {
             size_t numBytes = mSize*sizeof(Real);
-            Memcpy(eigenvector, x, numBytes);
+            std::memcpy(eigenvector, x, numBytes);
         }
     }
 }

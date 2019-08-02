@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2019/05/03)
 
 #include "StructuredBuffersWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
 
 int main(int, char const*[])
 {
@@ -49,7 +51,7 @@ void StructuredBuffersWindow::OnIdle()
         mPVWMatrices.Update();
     }
 
-    memset(mDrawnPixels->GetData(), 0, mDrawnPixels->GetNumBytes());
+    std::memset(mDrawnPixels->GetData(), 0, mDrawnPixels->GetNumBytes());
     mEngine->CopyCpuToGpu(mDrawnPixels);
 
     mEngine->ClearBuffers();
@@ -85,12 +87,8 @@ bool StructuredBuffersWindow::SetEnvironment()
     mEnvironment.Insert(path + "/Samples/Graphics/StructuredBuffers/Shaders/");
     std::vector<std::string> inputs =
     {
-#if defined(GTE_DEV_OPENGL)
-        "StructuredBuffersVS.glsl",
-        "StructuredBuffersPS.glsl",
-#else
-        "StructuredBuffers.hlsl",
-#endif
+        DefaultShaderName("StructuredBuffers.vs"),
+        DefaultShaderName("StructuredBuffers.ps"),
         "StoneWall.png"
     };
 
@@ -109,52 +107,37 @@ bool StructuredBuffersWindow::SetEnvironment()
 bool StructuredBuffersWindow::CreateScene()
 {
     // Create the shaders and associated resources.
-#if defined(GTE_DEV_OPENGL)
+    std::string vsPath = mEnvironment.GetPath(DefaultShaderName("StructuredBuffers.vs"));
+    std::string psPath = mEnvironment.GetPath(DefaultShaderName("StructuredBuffers.ps"));
     mProgramFactory->defines.Set("WINDOW_WIDTH", mXSize);
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(
-            mEnvironment.GetPath("StructuredBuffersVS.glsl"),
-            mEnvironment.GetPath("StructuredBuffersPS.glsl"),
-            "");
-#else
-    std::string filename = mEnvironment.GetPath("StructuredBuffers.hlsl");
-    mProgramFactory->defines.Set("WINDOW_WIDTH", mXSize);
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(filename, filename, "");
-#endif
+    auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, "");
     if (!program)
     {
         return false;
     }
     mProgramFactory->defines.Clear();
 
-    std::shared_ptr<ConstantBuffer> cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
+    auto cbuffer = std::make_shared<ConstantBuffer>(sizeof(Matrix4x4<float>), true);
     program->GetVShader()->Set("PVWMatrix", cbuffer);
 
     // Create the pixel shader and associated resources.
-    std::shared_ptr<PixelShader> pshader = program->GetPShader();
+    auto pshader = program->GetPShader();
     std::string path = mEnvironment.GetPath("StoneWall.png");
-    std::shared_ptr<Texture2> baseTexture = WICFileIO::Load(path, false);
-#if defined(GTE_DEV_OPENGL)
-    pshader->Set("baseSampler", baseTexture);
-#else
-    pshader->Set("baseTexture", baseTexture);
-#endif
-
-    std::shared_ptr<SamplerState> baseSampler = std::make_shared<SamplerState>();
+    auto baseTexture = WICFileIO::Load(path, false);
+    auto baseSampler = std::make_shared<SamplerState>();
     baseSampler->filter = SamplerState::MIN_L_MAG_L_MIP_P;
     baseSampler->mode[0] = SamplerState::CLAMP;
     baseSampler->mode[1] = SamplerState::CLAMP;
-    pshader->Set("baseSampler", baseSampler);
+    pshader->Set("baseTexture", baseTexture, "baseSampler", baseSampler);
 
-    mDrawnPixels = std::make_shared<StructuredBuffer>(mXSize*mYSize, sizeof(Vector4<float>));
+    mDrawnPixels = std::make_shared<StructuredBuffer>(mXSize * mYSize, sizeof(Vector4<float>));
     mDrawnPixels->SetUsage(Resource::SHADER_OUTPUT);
     mDrawnPixels->SetCopyType(Resource::COPY_BIDIRECTIONAL);
-    memset(mDrawnPixels->GetData(), 0, mDrawnPixels->GetNumBytes());
+    std::memset(mDrawnPixels->GetData(), 0, mDrawnPixels->GetNumBytes());
     pshader->Set("drawnPixels", mDrawnPixels);
 
     // Create the visual effect for the square.
-    std::shared_ptr<VisualEffect> effect = std::make_shared<VisualEffect>(program);
+    auto effect = std::make_shared<VisualEffect>(program);
 
     // Create a vertex buffer for a single triangle.  The PNG is stored in
     // left-handed coordinates.  The texture coordinates are chosen to reflect
@@ -164,22 +147,23 @@ bool StructuredBuffersWindow::CreateScene()
         Vector3<float> position;
         Vector2<float> tcoord;
     };
+
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    Vertex* vertex = vbuffer->Get<Vertex>();
-    vertex[0].position = { 0.0f, 0.0f, 0.0f };
-    vertex[0].tcoord = { 0.0f, 1.0f };
-    vertex[1].position = { 1.0f, 0.0f, 0.0f };
-    vertex[1].tcoord = { 1.0f, 1.0f };
-    vertex[2].position = { 0.0f, 1.0f, 0.0f };
-    vertex[2].tcoord = { 0.0f, 0.0f };
-    vertex[3].position = { 1.0f, 1.0f, 0.0f };
-    vertex[3].tcoord = { 1.0f, 0.0f };
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto* vertices = vbuffer->Get<Vertex>();
+    vertices[0].position = { 0.0f, 0.0f, 0.0f };
+    vertices[0].tcoord = { 0.0f, 1.0f };
+    vertices[1].position = { 1.0f, 0.0f, 0.0f };
+    vertices[1].tcoord = { 1.0f, 1.0f };
+    vertices[2].position = { 0.0f, 1.0f, 0.0f };
+    vertices[2].tcoord = { 0.0f, 0.0f };
+    vertices[3].position = { 1.0f, 1.0f, 0.0f };
+    vertices[3].tcoord = { 1.0f, 0.0f };
 
     // Create an indexless buffer for a triangle mesh with two triangles.
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
 
     // Create the geometric object for drawing.  Translate it so that its
     // center of mass is at the origin.  This supports virtual trackball

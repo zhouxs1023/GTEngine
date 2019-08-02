@@ -3,12 +3,18 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2019/07/31)
 
 #include <GTEnginePCH.h>
 #include <Graphics/GteOverlayEffect.h>
 using namespace gte;
 
+OverlayEffect::OverlayEffect(int windowWidth, int windowHeight)
+    :
+    mWindowWidth(static_cast<float>(windowWidth)),
+    mWindowHeight(static_cast<float>(windowHeight))
+{
+}
 
 OverlayEffect::OverlayEffect(std::shared_ptr<ProgramFactory> const& factory,
     int windowWidth, int windowHeight, int textureWidth, int textureHeight,
@@ -27,8 +33,8 @@ OverlayEffect::OverlayEffect(std::shared_ptr<ProgramFactory> const& factory,
     mProgram = factory->CreateFromSources(*msVSSource[mFactoryAPI], psSource, "");
     if (mProgram)
     {
-        std::shared_ptr<SamplerState> sampler =
-            std::make_shared<SamplerState>();
+        SetNormalizedZ(0.0f);
+        auto sampler = std::make_shared<SamplerState>();
         sampler->filter = filter;
         sampler->mode[0] = mode0;
         sampler->mode[1] = mode1;
@@ -50,6 +56,7 @@ OverlayEffect::OverlayEffect(std::shared_ptr<ProgramFactory> const& factory,
     mProgram = factory->CreateFromSources(*msVSSource[mFactoryAPI], psSource, "");
     if (mProgram)
     {
+        SetNormalizedZ(0.0f);
         mEffect = std::make_shared<VisualEffect>(mProgram);
     }
 }
@@ -80,11 +87,9 @@ void OverlayEffect::SetTexture(std::shared_ptr<Texture2> const& texture)
 {
     if (texture)
     {
-#if defined(GTE_DEV_OPENGL)
-        mEffect->GetPixelShader()->Set("imageSampler", texture);
-#else
-        mEffect->GetPixelShader()->Set("imageTexture", texture);
-#endif
+        auto pshader = mEffect->GetPixelShader();
+        auto sampler = pshader->Get<SamplerState>("imageSampler");
+        mEffect->GetPixelShader()->Set("imageTexture", texture, "imageSampler", sampler);
     }
 }
 
@@ -93,8 +98,24 @@ void OverlayEffect::SetTexture(std::string const& textureName,
 {
     if (texture)
     {
-        mEffect->GetPixelShader()->Set(textureName, texture);
+        auto pshader = mEffect->GetPixelShader();
+        auto sampler = pshader->Get<SamplerState>("imageSampler");
+        mEffect->GetPixelShader()->Set(textureName, texture, "imageSampler", sampler);
     }
+}
+
+void OverlayEffect::SetNormalizedZ(float z)
+{
+    std::shared_ptr<ConstantBuffer> params(new ConstantBuffer(sizeof(float), true));
+    if (mFactoryAPI == ProgramFactory::PF_HLSL)
+    {
+        *params->Get<float>() = z;
+    }
+    else
+    {
+        *params->Get<float>() = 2.0f * z - 1.0f;
+    }
+    mProgram->GetVShader()->Set("ZNDC", params);
 }
 
 void OverlayEffect::Initialize(int windowWidth, int windowHeight,
@@ -169,6 +190,11 @@ void OverlayEffect::UpdateVertexBuffer()
 
 
 std::string const OverlayEffect::msGLSLVSSource =
+"uniform ZNDC\n"
+"{\n"
+"    float zNDC;\n"
+"};\n"
+"\n"
 "layout(location = 0) in vec3 modelPosition;\n"
 "layout(location = 1) in vec2 modelTCoord;\n"
 "layout(location = 0) out vec2 vertexTCoord;\n"
@@ -178,7 +204,7 @@ std::string const OverlayEffect::msGLSLVSSource =
 "    vertexTCoord = modelTCoord;\n"
 "    gl_Position.x = 2.0f*modelPosition.x - 1.0f;\n"
 "    gl_Position.y = -2.0f*modelPosition.y + 1.0f;\n"
-"    gl_Position.z = -1.0f;\n"
+"    gl_Position.z = zNDC;\n"
 "    gl_Position.w = 1.0f;\n"
 "}\n";
 
@@ -206,6 +232,11 @@ std::string const OverlayEffect::msGLSLPSGraySource =
 "}\n";
 
 std::string const OverlayEffect::msHLSLVSSource =
+"cbuffer ZNDC\n"
+"{\n"
+"    float zNDC;\n"
+"};\n"
+"\n"
 "struct VS_INPUT\n"
 "{\n"
 "    float2 modelPosition : POSITION;\n"
@@ -223,7 +254,7 @@ std::string const OverlayEffect::msHLSLVSSource =
 "    VS_OUTPUT output;\n"
 "    output.clipPosition.x = 2.0f*input.modelPosition.x - 1.0f;\n"
 "    output.clipPosition.y = -2.0f*input.modelPosition.y + 1.0f;\n"
-"    output.clipPosition.z = 0.0f;\n"
+"    output.clipPosition.z = zNDC;\n"
 "    output.clipPosition.w = 1.0f;\n"
 "    output.vertexTCoord = input.modelTCoord;\n"
 "    return output;\n"

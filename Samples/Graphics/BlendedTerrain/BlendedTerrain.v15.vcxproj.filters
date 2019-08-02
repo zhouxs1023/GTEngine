@@ -30,14 +30,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\BlendedTerrain.hlsl">
+    <None Include="Shaders\BlendedTerrain.ps.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\BlendedTerrainPixel.glsl">
+    <None Include="Shaders\BlendedTerrain.vs.glsl">
       <Filter>Shader Files</Filter>
     </None>
-    <None Include="Shaders\BlendedTerrainVertex.glsl">
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\BlendedTerrain.ps.hlsl">
       <Filter>Shader Files</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shaders\BlendedTerrain.vs.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

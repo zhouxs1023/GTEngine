@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/06/13)
 
 #pragma once
 
@@ -61,8 +61,10 @@ template <typename Real>
 bool ApprParaboloid3<Real>::operator()(int numPoints,
     Vector3<Real> const* points, Real coefficients[6])
 {
-    Matrix<6, 6, Real> A;
+    Matrix<6, 6, Real> A;  // constructor initializes to zero
     Vector<6, Real> B;
+    B.MakeZero();
+
     for (int i = 0; i < numPoints; i++)
     {
         Real x2 = points[i][0] * points[i][0];
@@ -71,17 +73,17 @@ bool ApprParaboloid3<Real>::operator()(int numPoints,
         Real zx = points[i][2] * points[i][0];
         Real zy = points[i][2] * points[i][1];
         Real x3 = points[i][0] * x2;
-        Real x2y = x2*points[i][1];
+        Real x2y = x2 * points[i][1];
         Real xy2 = points[i][0] * y2;
         Real y3 = points[i][1] * y2;
         Real zx2 = points[i][2] * x2;
         Real zxy = points[i][2] * xy;
         Real zy2 = points[i][2] * y2;
-        Real x4 = x2*x2;
-        Real x3y = x3*points[i][1];
-        Real x2y2 = x2*y2;
+        Real x4 = x2 * x2;
+        Real x3y = x3 * points[i][1];
+        Real x2y2 = x2 * y2;
         Real xy3 = points[i][0] * y3;
-        Real y4 = y2*y2;
+        Real y4 = y2 * y2;
 
         A(0, 0) += x4;
         A(0, 1) += x3y;

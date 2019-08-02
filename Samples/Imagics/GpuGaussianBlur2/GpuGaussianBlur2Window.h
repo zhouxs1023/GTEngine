@@ -3,14 +3,14 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.23.0 (2019/03/20)
+// File Version: 3.23.1 (2019/04/19)
 
 #pragma once
 
-#include <GTEngine.h>
+#include <Applications/GteWindow2.h>
 using namespace gte;
 
-class GpuGaussianBlur2Window : public Window3
+class GpuGaussianBlur2Window : public Window2
 {
 public:
     GpuGaussianBlur2Window(Parameters& parameters);

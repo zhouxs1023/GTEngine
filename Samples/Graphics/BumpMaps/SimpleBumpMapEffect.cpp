@@ -3,10 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/04)
+// File Version: 3.0.3 (2019/04/16)
 
-#include <Applications/GteTextureIO.h>
 #include "SimpleBumpMapEffect.h"
+#include <Applications/GteTextureIO.h>
+#include <Graphics/GteGraphicsDefaults.h>
 using namespace gte;
 
 SimpleBumpMapEffect::SimpleBumpMapEffect(std::shared_ptr<ProgramFactory> const& factory,
@@ -15,26 +16,9 @@ SimpleBumpMapEffect::SimpleBumpMapEffect(std::shared_ptr<ProgramFactory> const& 
     created = false;
 
     // Load and compile the shaders.
-#if defined(GTE_DEV_OPENGL)
-    std::string pathVS = environment.GetPath("SimpleBumpMapVS.glsl");
-    std::string pathPS = environment.GetPath("SimpleBumpMapPS.glsl");
-    mProgram = factory->CreateFromFiles(pathVS, pathPS, "");
-#else
-    std::string path = environment.GetPath("SimpleBumpMap.hlsl");
-
-    // The flags are chosen to allow you to debug the shaders through MSVS.
-    // The menu path is "Debug | Graphics | Start Diagnostics" (ALT+F5).
-    factory->PushFlags();
-    factory->flags =
-        D3DCOMPILE_ENABLE_STRICTNESS |
-        D3DCOMPILE_IEEE_STRICTNESS |
-        D3DCOMPILE_DEBUG |
-        D3DCOMPILE_SKIP_OPTIMIZATION;
-
-    mProgram = factory->CreateFromFiles(path, path, "");
-
-    factory->PopFlags();
-#endif
+    std::string vsPath = environment.GetPath(DefaultShaderName("SimpleBumpMap.vs"));
+    std::string psPath = environment.GetPath(DefaultShaderName("SimpleBumpMap.ps"));
+    mProgram = factory->CreateFromFiles(vsPath, psPath, "");
     if (!mProgram)
     {
         // The program factory will generate Log* messages.
@@ -60,16 +44,8 @@ SimpleBumpMapEffect::SimpleBumpMapEffect(std::shared_ptr<ProgramFactory> const& 
     std::shared_ptr<VertexShader> vshader = mProgram->GetVShader();
     std::shared_ptr<PixelShader> pshader = mProgram->GetPShader();
     vshader->Set("PVWMatrix", mPVWMatrixConstant);
-#if defined(GTE_DEV_OPENGL)
-    pshader->Set("baseSampler", mBaseTexture);
-    pshader->Set("baseSampler", mCommonSampler);
-    pshader->Set("normalSampler", mNormalTexture);
-    pshader->Set("normalSampler", mCommonSampler);
-#else
-    pshader->Set("baseTexture", mBaseTexture);
-    pshader->Set("normalTexture", mNormalTexture);
-    pshader->Set("commonSampler", mCommonSampler);
-#endif
+    pshader->Set("baseTexture", mBaseTexture, "baseSampler", mCommonSampler);
+    pshader->Set("normalTexture", mNormalTexture, "normalSampler", mCommonSampler);
 
     created = true;
 }
@@ -103,45 +79,39 @@ void SimpleBumpMapEffect::ComputeLightVectors(std::shared_ptr<Visual> const& mes
     // world-space direction is unit-length, but the geometric primitive
     // might have non-unit scaling in its model-to-world transformation, in
     // which case the normalization is necessary.
-#if defined(GTE_USE_MAT_VEC)
-    Vector4<float> tempDirection =
-        -(mesh->worldTransform.GetHInverse() * worldLightDirection);
+    Matrix4x4<float> invWMatrix = mesh->worldTransform.GetHInverse();
+    Vector4<float> tempDirection = -DoTransform(invWMatrix, worldLightDirection);
     Vector3<float> modelLightDirection = HProject(tempDirection);
-#else
-    Vector4<float> tempDirection =
-        -(worldLightDirection * mesh->worldTransform.GetHInverse());
-    Vector3<float> modelLightDirection = HProject(tempDirection);
-#endif
 
     // Set the light vectors to (0,0,0) as a flag that the quantity has not
     // yet been computed.  The probability that a light vector is actually
     // (0,0,0) should be small, so the flag system should save computation
     // time overall.
-    std::shared_ptr<VertexBuffer> vbuffer = mesh->GetVertexBuffer();
+    auto vbuffer = mesh->GetVertexBuffer();
     unsigned int const numVertices = vbuffer->GetNumElements();
-    Vertex* vertex = vbuffer->Get<Vertex>();
+    auto* vertices = vbuffer->Get<Vertex>();
     Vector3<float> const zero{ 0.0f, 0.0f, 0.0f };
     for (unsigned int i = 0; i < numVertices; ++i)
     {
-        vertex[i].lightDirection = zero;
+        vertices[i].lightDirection = zero;
     }
 
 
-    std::shared_ptr<IndexBuffer> ibuffer = mesh->GetIndexBuffer();
+    auto ibuffer = mesh->GetIndexBuffer();
     unsigned int numTriangles = ibuffer->GetNumPrimitives();
+    auto* indices = ibuffer->Get<unsigned int>();
     for (unsigned int t = 0; t < numTriangles; ++t)
     {
         // Get the triangle vertices and attributes.
         unsigned int v[3];
-        if (!ibuffer->GetTriangle(t, v[0], v[1], v[2]))
-        {
-            continue;
-        }
+        v[0] = *indices++;
+        v[1] = *indices++;
+        v[2] = *indices++;
 
         for (int i = 0; i < 3; ++i)
         {
             int v0 = v[i];
-            if (vertex[v0].lightDirection != zero)
+            if (vertices[v0].lightDirection != zero)
             {
                 continue;
             }
@@ -150,13 +120,13 @@ void SimpleBumpMapEffect::ComputeLightVectors(std::shared_ptr<Visual> const& mes
             int iN = (i + 1) % 3;
             int v1 = v[iN], v2 = v[iP];
 
-            Vector3<float> const& pos0 = vertex[v0].position;
-            Vector2<float> const& tcd0 = vertex[v0].baseTCoord;
-            Vector3<float> const& pos1 = vertex[v1].position;
-            Vector2<float> const& tcd1 = vertex[v1].baseTCoord;
-            Vector3<float> const& pos2 = vertex[v2].position;
-            Vector2<float> const& tcd2 = vertex[v2].baseTCoord;
-            Vector3<float> const& normal = vertex[v0].normal;
+            Vector3<float> const& pos0 = vertices[v0].position;
+            Vector2<float> const& tcd0 = vertices[v0].baseTCoord;
+            Vector3<float> const& pos1 = vertices[v1].position;
+            Vector2<float> const& tcd1 = vertices[v1].baseTCoord;
+            Vector3<float> const& pos2 = vertices[v2].position;
+            Vector2<float> const& tcd2 = vertices[v2].baseTCoord;
+            Vector3<float> const& normal = vertices[v0].normal;
 
             Vector3<float> tangent;
             if (!ComputeTangent(pos0, tcd0, pos1, tcd1, pos2, tcd2, tangent))
@@ -164,7 +134,7 @@ void SimpleBumpMapEffect::ComputeLightVectors(std::shared_ptr<Visual> const& mes
                 // The texture coordinate mapping is not properly defined for
                 // this.  Just say that the tangent space light vector points
                 // in the same direction as the surface normal.
-                vertex[v0].lightDirection = normal;
+                vertices[v0].lightDirection = normal;
                 continue;
             }
 
@@ -186,7 +156,7 @@ void SimpleBumpMapEffect::ComputeLightVectors(std::shared_ptr<Visual> const& mes
 
             // Transform the light vector into [0,1]^3 to make it a valid
             // Vector3<float> object.
-            vertex[v0].lightDirection =
+            vertices[v0].lightDirection =
             {
                 0.5f * (dotUT + 1.0f),
                 0.5f * (dotUB + 1.0f),

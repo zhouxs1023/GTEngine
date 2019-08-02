@@ -3,9 +3,12 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.2 (2019/05/03)
 
 #include "GeometryShadersWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
+#include <random>
 
 int main(int, char const*[])
 {
@@ -81,16 +84,12 @@ bool GeometryShadersWindow::SetEnvironment()
     mEnvironment.Insert(path + "/Samples/Graphics/GeometryShaders/Shaders/");
     std::vector<std::string> inputs =
     {
-#if defined(GTE_DEV_OPENGL)
-        "RandomSquaresDirectVS.glsl",
-        "RandomSquaresIndirectVS.glsl",
-        "RandomSquaresDirectGS.glsl",
-        "RandomSquaresIndirectGS.glsl",
-        "RandomSquaresPS.glsl"
-#else
-        "RandomSquares.hlsl",
-        "RandomSquaresIndirect.hlsl"
-#endif
+        DefaultShaderName("RandomSquaresDirect.vs"),
+        DefaultShaderName("RandomSquaresDirect.gs"),
+        DefaultShaderName("RandomSquaresDirect.ps"),
+        DefaultShaderName("RandomSquaresIndirect.vs"),
+        DefaultShaderName("RandomSquaresIndirect.gs"),
+        DefaultShaderName("RandomSquaresIndirect.ps")
     };
 
     for (auto const& input : inputs)
@@ -107,59 +106,28 @@ bool GeometryShadersWindow::SetEnvironment()
 
 bool GeometryShadersWindow::CreateScene()
 {
-#if defined(GTE_DEV_OPENGL)
+    std::string vsPath, gsPath, psPath;
 #if defined(USE_DRAW_DIRECT)
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(
-            mEnvironment.GetPath("RandomSquaresDirectVS.glsl"),
-            mEnvironment.GetPath("RandomSquaresPS.glsl"),
-            mEnvironment.GetPath("RandomSquaresDirectGS.glsl"));
+    vsPath = mEnvironment.GetPath(DefaultShaderName("RandomSquaresDirect.vs"));
+    gsPath = mEnvironment.GetPath(DefaultShaderName("RandomSquaresDirect.gs"));
+    psPath = mEnvironment.GetPath(DefaultShaderName("RandomSquaresDirect.ps"));
 #else
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(
-            mEnvironment.GetPath("RandomSquaresIndirectVS.glsl"),
-            mEnvironment.GetPath("RandomSquaresPS.glsl"),
-            mEnvironment.GetPath("RandomSquaresIndirectGS.glsl"));
+    vsPath = mEnvironment.GetPath(DefaultShaderName("RandomSquaresIndirect.vs"));
+    gsPath = mEnvironment.GetPath(DefaultShaderName("RandomSquaresIndirect.gs"));
+    psPath = mEnvironment.GetPath(DefaultShaderName("RandomSquaresIndirect.ps"));
 #endif
-#else
-    std::string filename;
-#if defined(USE_DRAW_DIRECT)
-    filename = mEnvironment.GetPath("RandomSquares.hlsl");
-#else
-    filename = mEnvironment.GetPath("RandomSquaresIndirect.hlsl");
-#endif
-    std::shared_ptr<VisualProgram> program =
-        mProgramFactory->CreateFromFiles(filename, filename, filename);
-#endif
+    auto program = mProgramFactory->CreateFromFiles(vsPath, psPath, gsPath);
     if (!program)
     {
         return false;
     }
 
     // Create particles used by direct and indirect drawing.
-#if defined(GTE_DEV_OPENGL) && !defined(USE_DRAW_DIRECT)
     struct Vertex
     {
-        Vector3<float> position;
-
-        // std430 does tight packing on arrays but for three-component
-        // vectors, according to the "red book": "both the size and alignment
-        // are four times the size of the underlying scalar".  So it cannot
-        // place the "vec3 color" immediately following the "vec3 position"
-        // because of the alignment constraint.
-        float dummy;
-
-        Vector3<float> color;
-        float size;
+        Vector4<float> position;
+        Vector4<float> colorSize;
     };
-#else
-    struct Vertex
-    {
-        Vector3<float> position;
-        Vector3<float> color;
-        float size;
-    };
-#endif
 
     // Use a Mersenne twister engine for random numbers.
     std::mt19937 mte;
@@ -171,9 +139,8 @@ bool GeometryShadersWindow::CreateScene()
     std::vector<Vertex> particles(numParticles);
     for (auto& particle : particles)
     {
-        particle.position = { symr(mte), symr(mte), symr(mte) };
-        particle.color = { unir(mte), unir(mte), unir(mte) };
-        particle.size = posr(mte);
+        particle.position = { symr(mte), symr(mte), symr(mte), 1.0f };
+        particle.colorSize = { unir(mte), unir(mte), unir(mte), posr(mte) };
     }
 
     // Create the constant buffer used by direct and indirect drawing.
@@ -183,51 +150,32 @@ bool GeometryShadersWindow::CreateScene()
 #if defined(USE_DRAW_DIRECT)
     // Create a mesh for direct drawing.
     VertexFormat vformat;
-    vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
-    vformat.Bind(VA_COLOR, DF_R32G32B32_FLOAT, 0);
-    vformat.Bind(VA_TEXCOORD, DF_R32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, numParticles);
-    Memcpy(vbuffer->GetData(), &particles[0], numParticles*sizeof(Vertex));
+    vformat.Bind(VA_POSITION, DF_R32G32B32A32_FLOAT, 0);
+    vformat.Bind(VA_COLOR, DF_R32G32B32A32_FLOAT, 0);
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, numParticles);
+    std::memcpy(vbuffer->GetData(), &particles[0], numParticles * sizeof(Vertex));
 #else
-#if defined(GTE_DEV_OPENGL)
-    BufferLayout layout;
-    program->GetGShader()->GetStructuredBufferLayout("particles", layout);
-    LogAssert(layout[0].offset == offsetof(Vertex, position),
-        "Vertex::position in GLSL is at offset = " + std::to_string(layout[0].offset));
-    LogAssert(layout[1].offset == offsetof(Vertex, color),
-        "Vertex::color in GLSL is at offset = " + std::to_string(layout[1].offset));
-    LogAssert(layout[2].offset == offsetof(Vertex, size),
-        "Vertex::size in GLSL is at offset = " + std::to_string(layout[2].offset));
-#endif
-    auto const layoutSize = program->GetGShader()->GetStructuredBufferSize("particles");
-    LogAssert(layoutSize == sizeof(Vertex),
-        "Vertex in GLSL has size = " + std::to_string(layoutSize));
-
     // Create a mesh for indirect drawing.
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(numParticles);
+    auto vbuffer = std::make_shared<VertexBuffer>(numParticles);
     mParticles = std::make_shared<StructuredBuffer>(numParticles, sizeof(Vertex));
-    Memcpy(mParticles->GetData(), &particles[0], numParticles*sizeof(Vertex));
+    std::memcpy(mParticles->GetData(), &particles[0], numParticles * sizeof(Vertex));
     program->GetGShader()->Set("particles", mParticles);
 #endif
 
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_POLYPOINT, numParticles);
-
-    std::shared_ptr<VisualEffect> effect = std::make_shared<VisualEffect>(program);
-
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_POLYPOINT, numParticles);
+    auto effect = std::make_shared<VisualEffect>(program);
     mMesh = std::make_shared<Visual>(vbuffer, ibuffer, effect);
     return true;
 }
 
 void GeometryShadersWindow::UpdateConstants()
 {
-    Matrix4x4<float> vwMatrix, pMatrix;
-#if defined(GTE_USE_MAT_VEC)
-    vwMatrix = mCamera->GetViewMatrix() * mTrackball.GetOrientation();
-#else
-    vwMatrix = mTrackball.GetOrientation() * mCamera->GetViewMatrix();
-#endif
+    Matrix4x4<float> wMatrix = mTrackball.GetOrientation();
+    Matrix4x4<float> vMatrix = mCamera->GetViewMatrix();
+    Matrix4x4<float> pMatrix = mCamera->GetProjectionMatrix();
+    Matrix4x4<float> vwMatrix = DoTransform(vMatrix, wMatrix);
 
     mMatrices->SetMember("vwMatrix", vwMatrix);
-    mMatrices->SetMember("pMatrix", mCamera->GetProjectionMatrix());
+    mMatrices->SetMember("pMatrix", pMatrix);
     mEngine->Update(mMatrices);
 }

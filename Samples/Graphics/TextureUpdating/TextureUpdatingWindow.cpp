@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/03/04)
+// File Version: 3.0.3 (2019/05/03)
 
 #include "TextureUpdatingWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteTexture2Effect.h>
 
 int main(int, char const*[])
 {
@@ -68,13 +70,13 @@ void TextureUpdatingWindow::OnIdle()
     {
         data += rowBytes * (mTexture->GetHeight() - 1);
         std::vector<uint8_t*> saveRow(rowBytes);
-        memcpy(saveRow.data(), data, rowBytes);
+        std::memcpy(saveRow.data(), data, rowBytes);
         for (unsigned y=mTexture->GetHeight()-1; y > 0; --y)
         {
             memmove(data, data-rowBytes, rowBytes);
             data -= rowBytes;
         }
-        memcpy(data, saveRow.data(), rowBytes);
+        std::memcpy(data, saveRow.data(), rowBytes);
 #if defined(GTE_DEV_OPENGL)
         mEngine->Update(mTexture);
 #else
@@ -91,13 +93,13 @@ void TextureUpdatingWindow::OnIdle()
     else
     {
         std::vector<uint8_t*> saveRow(rowBytes);
-        memcpy(saveRow.data(), data, rowBytes);
+        std::memcpy(saveRow.data(), data, rowBytes);
         for (unsigned y=1; y < mTexture->GetHeight(); ++y)
         {
             memmove(data, data+rowBytes, rowBytes);
             data += rowBytes;
         }
-        memcpy(data, saveRow.data(), rowBytes);
+        std::memcpy(data, saveRow.data(), rowBytes);
         mEngine->CopyCpuToGpu(mTexture);
     }
 }
@@ -130,22 +132,24 @@ void TextureUpdatingWindow::CreateScene()
         Vector3<float> position;
         Vector2<float> tcoord;
     };
+
     VertexFormat vformat;
     vformat.Bind(VA_POSITION, DF_R32G32B32_FLOAT, 0);
     vformat.Bind(VA_TEXCOORD, DF_R32G32_FLOAT, 0);
-    std::shared_ptr<VertexBuffer> vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
-    Vertex* vertex = vbuffer->Get<Vertex>();
-    vertex[0].position = { 0.0f, 0.0f, 0.0f };
-    vertex[0].tcoord = { 0.0f, 1.0f };
-    vertex[1].position = { 1.0f, 0.0f, 0.0f };
-    vertex[1].tcoord = { 1.0f, 1.0f };
-    vertex[2].position = { 0.0f, 1.0f, 0.0f };
-    vertex[2].tcoord = { 0.0f, 0.0f };
-    vertex[3].position = { 1.0f, 1.0f, 0.0f };
-    vertex[3].tcoord = { 1.0f, 0.0f };
+
+    auto vbuffer = std::make_shared<VertexBuffer>(vformat, 4);
+    auto* vertices = vbuffer->Get<Vertex>();
+    vertices[0].position = { 0.0f, 0.0f, 0.0f };
+    vertices[0].tcoord = { 0.0f, 1.0f };
+    vertices[1].position = { 1.0f, 0.0f, 0.0f };
+    vertices[1].tcoord = { 1.0f, 1.0f };
+    vertices[2].position = { 0.0f, 1.0f, 0.0f };
+    vertices[2].tcoord = { 0.0f, 0.0f };
+    vertices[3].position = { 1.0f, 1.0f, 0.0f };
+    vertices[3].tcoord = { 1.0f, 0.0f };
 
     // Create an indexless buffer for a triangle mesh with two triangles.
-    std::shared_ptr<IndexBuffer> ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
+    auto ibuffer = std::make_shared<IndexBuffer>(IP_TRISTRIP, 2);
 
     // Create an effect for the vertex and pixel shaders.  The texture is
     // bilinearly filtered and the texture coordinates are clamped to [0,1]^2.
@@ -153,17 +157,16 @@ void TextureUpdatingWindow::CreateScene()
     mTexture->AutogenerateMipmaps();
     mTexture->SetCopyType(Texture2::COPY_BIDIRECTIONAL);
     mTexture->SetUsage(Texture2::DYNAMIC_UPDATE);
-    uint8_t* data = mTexture->Get<uint8_t>();
+    auto* data = mTexture->Get<uint8_t>();
     for (unsigned y = 0; y < mTexture->GetHeight(); ++y)
     {
         unsigned const rowBytes = mTexture->GetWidth() * mTexture->GetElementSize();
         memset(data, y, rowBytes);
         data += rowBytes;
     }
-    std::shared_ptr<Texture2Effect> effect =
-        std::make_shared<Texture2Effect>(mProgramFactory, mTexture,
-        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP,
-        SamplerState::CLAMP);
+
+    auto effect = std::make_shared<Texture2Effect>(mProgramFactory, mTexture,
+        SamplerState::MIN_L_MAG_L_MIP_P, SamplerState::CLAMP, SamplerState::CLAMP);
 
     // Create the geometric object for drawing.  Translate it so that its
     // center of mass is at the origin.  This supports virtual trackball

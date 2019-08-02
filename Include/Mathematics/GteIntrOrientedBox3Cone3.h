@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/11/29)
+// File Version: 3.0.3 (2019/06/22)
 
 #pragma once
 
@@ -23,9 +23,16 @@
 // vertex, no intersection is reported.  If the box is above the maxHeight
 // plane and just touches the disk capping the cone, either at a single
 // point, a line segment of points or a polygon of points, no intersection
-// is reported.  However, if the box straddles the minHeight plane (part of
-// the box strictly above the plane and part of the box strictly below the
-// plane) and just touches the cone vertex, an intersection is reported.
+// is reported.
+
+// TODO: These queries were designed when an infinite cone was defined
+// by choosing maxHeight of std::numeric_limits<Real>::max(). The Cone<N,Real>
+// class has been redesigned not to use std::numeric_limits to allow for
+// arithmetic systems that do not have representations for infinities
+// (such as BSNumber and BSRational).  The intersection queries need to be
+// rewritten for the new class design.  FOR NOW, the queries will work with
+// float/double when you create a cone using the cone-frustum constructor
+// Cone(ray, angle, minHeight, std::numeric_limits<Real>::max()).
 
 namespace gte
 {

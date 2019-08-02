@@ -3,12 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2018/10/05)
+// File Version: 3.0.3 (2019/05/03)
 
 #pragma once
 
 #include <LowLevel/GteComputeModel.h>
-#include <LowLevel/GteWrapper.h>
 #include <Mathematics/GteVector2.h>
 #include <Mathematics/GteVector3.h>
 #include <Mathematics/GteETManifoldMesh.h>
@@ -641,7 +640,7 @@ void GenerateMeshUV<Real>::SolveSystemCPUSingle(unsigned int numIterations)
     // Use ping-pong buffers for the texture coordinates.
     std::vector<Vector2<Real>> tcoords(mNumVertices);
     size_t numBytes = mNumVertices * sizeof(Vector2<Real>);
-    Memcpy(&tcoords[0], mTCoords, numBytes);
+    std::memcpy(&tcoords[0], mTCoords, numBytes);
     Vector2<Real>* inTCoords = mTCoords;
     Vector2<Real>* outTCoords = &tcoords[0];
 
@@ -683,7 +682,7 @@ void GenerateMeshUV<Real>::SolveSystemCPUMultiple(unsigned int numIterations)
     // Use ping-pong buffers for the texture coordinates.
     std::vector<Vector2<Real>> tcoords(mNumVertices);
     size_t numBytes = mNumVertices * sizeof(Vector2<Real>);
-    Memcpy(&tcoords[0], mTCoords, numBytes);
+    std::memcpy(&tcoords[0], mTCoords, numBytes);
     Vector2<Real>* inTCoords = mTCoords;
     Vector2<Real>* outTCoords = &tcoords[0];
 
@@ -805,24 +804,24 @@ void GenerateMeshUV<Real>::SolveSystemGPU(unsigned int numIterations)
 
     unsigned int const vgSize = static_cast<unsigned int>(mVertexGraph.size());
     mVGBuffer = std::make_shared<StructuredBuffer>(vgSize, sizeof(Vertex));
-    Memcpy(mVGBuffer->GetData(), &mVertexGraph[0], mVGBuffer->GetNumBytes());
+    std::memcpy(mVGBuffer->GetData(), &mVertexGraph[0], mVGBuffer->GetNumBytes());
     cshader->Set("vertexGraph", mVGBuffer);
 
     unsigned int const vgdSize = static_cast<unsigned int>(mVertexGraphData.size());
     mVGDBuffer = std::make_shared<StructuredBuffer>(vgdSize, sizeof(std::pair<int, Real>));
-    Memcpy(mVGDBuffer->GetData(), &mVertexGraphData[0], mVGDBuffer->GetNumBytes());
+    std::memcpy(mVGDBuffer->GetData(), &mVertexGraphData[0], mVGDBuffer->GetNumBytes());
     cshader->Set("vertexGraphData", mVGDBuffer);
 
     unsigned int const ovSize = static_cast<unsigned int>(mOrderedVertices.size());
     mOVBuffer = std::make_shared<StructuredBuffer>(ovSize, sizeof(int));
-    Memcpy(mOVBuffer->GetData(), &mOrderedVertices[0], mOVBuffer->GetNumBytes());
+    std::memcpy(mOVBuffer->GetData(), &mOrderedVertices[0], mOVBuffer->GetNumBytes());
     cshader->Set("orderedVertices", mOVBuffer);
 
     for (int j = 0; j < 2; ++j)
     {
         mTCoordsBuffer[j] = std::make_shared<StructuredBuffer>(mNumVertices, sizeof(Vector2<Real>));
         mTCoordsBuffer[j]->SetUsage(Resource::SHADER_OUTPUT);
-        Memcpy(mTCoordsBuffer[j]->GetData(), mTCoords, mTCoordsBuffer[j]->GetNumBytes());
+        std::memcpy(mTCoordsBuffer[j]->GetData(), mTCoords, mTCoordsBuffer[j]->GetNumBytes());
     }
     mTCoordsBuffer[0]->SetCopyType(Resource::COPY_STAGING_TO_CPU);
 
@@ -843,7 +842,7 @@ void GenerateMeshUV<Real>::SolveSystemGPU(unsigned int numIterations)
     }
 
     mCModel->engine->CopyGpuToCpu(mTCoordsBuffer[0]);
-    Memcpy(mTCoords, mTCoordsBuffer[0]->GetData(), mTCoordsBuffer[0]->GetNumBytes());
+    std::memcpy(mTCoords, mTCoordsBuffer[0]->GetData(), mTCoordsBuffer[0]->GetNumBytes());
 }
 
 #endif

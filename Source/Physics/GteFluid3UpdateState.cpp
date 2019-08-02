@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/04/17)
 
 #include <GTEnginePCH.h>
 #include <Physics/GteFluid3UpdateState.h>
@@ -40,11 +40,6 @@ Fluid3UpdateState::Fluid3UpdateState(std::shared_ptr<ProgramFactory> const& fact
     {
         std::shared_ptr<ComputeShader> cshader = mComputeUpdateState->GetCShader();
         cshader->Set("Parameters", parameters);
-#if defined(GTE_DEV_OPENGL)
-        cshader->Set("stateTm1", mAdvectionSampler);
-#else
-        cshader->Set("advectionSampler", mAdvectionSampler);
-#endif
         cshader->Set("updateState", mUpdateState);
     }
 
@@ -56,10 +51,9 @@ void Fluid3UpdateState::Execute(std::shared_ptr<GraphicsEngine> const& engine,
     std::shared_ptr<Texture3> const& stateTm1,
     std::shared_ptr<Texture3> const& stateT)
 {
-    std::shared_ptr<ComputeShader> cshader =
-        mComputeUpdateState->GetCShader();
+    auto cshader = mComputeUpdateState->GetCShader();
     cshader->Set("source", source);
-    cshader->Set("stateTm1", stateTm1);
+    cshader->Set("stateTm1", stateTm1, "advectionSampler", mAdvectionSampler);
     cshader->Set("stateT", stateT);
     engine->Execute(mComputeUpdateState, mNumXGroups, mNumYGroups, mNumZGroups);
 }
@@ -79,7 +73,7 @@ std::string const Fluid3UpdateState::msGLSLSource =
 "\n"
 "layout(rgba32f) uniform readonly image3D source;\n"
 "layout(rgba32f) uniform readonly image3D stateT;\n"
-"uniform sampler3D stateTm1;\n"
+"uniform sampler3D advectionSampler;\n"
 "layout(rgba32f) uniform writeonly image3D updateState;\n"
 "\n"
 "layout (local_size_x = NUM_X_THREADS, local_size_y = NUM_Y_THREADS, local_size_z = NUM_Z_THREADS) in;\n"
@@ -111,17 +105,17 @@ std::string const Fluid3UpdateState::msGLSLSource =
 "    vec4 src = imageLoad(source, c);\n"
 "\n"
 "    // Estimate second-order derivatives of state at (x,y,z).\n"
-"    vec4 stateDXX = statePZZ - 2.0f*stateZZZ + stateMZZ;\n"
-"    vec4 stateDYY = stateZPZ - 2.0f*stateZZZ + stateZMZ;\n"
-"    vec4 stateDZZ = stateZZP - 2.0f*stateZZZ + stateZZM;\n"
+"    vec4 stateDXX = statePZZ - 2.0f * stateZZZ + stateMZZ;\n"
+"    vec4 stateDYY = stateZPZ - 2.0f * stateZZZ + stateZMZ;\n"
+"    vec4 stateDZZ = stateZZP - 2.0f * stateZZZ + stateZZM;\n"
 "\n"
 "    // Compute advection.\n"
-"    vec3 tcd = spaceDelta.xyz*(c - timeDelta.xyz*stateZZZ.xyz + 0.5f);\n"
-"    vec4 advection = textureLod(stateTm1, tcd, 0.0f);\n"
+"    vec3 tcd = spaceDelta.xyz * (c - timeDelta.xyz * stateZZZ.xyz + 0.5f);\n"
+"    vec4 advection = textureLod(advectionSampler, tcd, 0.0f);\n"
 "\n"
 "    // Update the state.\n"
 "    imageStore(updateState, c, advection +\n"
-"        (viscosityX*stateDXX + viscosityY*stateDYY + viscosityZ*stateDZZ +\n"
+"        (viscosityX * stateDXX + viscosityY * stateDYY + viscosityZ * stateDZZ +\n"
 "        timeDelta.w*src));\n"
 "}\n";
 
@@ -172,17 +166,17 @@ std::string const Fluid3UpdateState::msHLSLSource =
 "    float4 src = source[c];\n"
 "\n"
 "    // Estimate second-order derivatives of state at (x,y,z).\n"
-"    float4 stateDXX = statePZZ - 2.0f*stateZZZ + stateMZZ;\n"
-"    float4 stateDYY = stateZPZ - 2.0f*stateZZZ + stateZMZ;\n"
-"    float4 stateDZZ = stateZZP - 2.0f*stateZZZ + stateZZM;\n"
+"    float4 stateDXX = statePZZ - 2.0f * stateZZZ + stateMZZ;\n"
+"    float4 stateDYY = stateZPZ - 2.0f * stateZZZ + stateZMZ;\n"
+"    float4 stateDZZ = stateZZP - 2.0f * stateZZZ + stateZZM;\n"
 "\n"
 "    // Compute advection.\n"
-"    float3 tcd = spaceDelta.xyz*(c - timeDelta.xyz*stateZZZ.xyz + 0.5f);\n"
+"    float3 tcd = spaceDelta.xyz * (c - timeDelta.xyz*stateZZZ.xyz + 0.5f);\n"
 "    float4 advection = stateTm1.SampleLevel(advectionSampler, tcd, 0.0f);\n"
 "\n"
 "    // Update the state.\n"
 "    updateState[c] = advection +\n"
-"        (viscosityX*stateDXX + viscosityY*stateDYY + +viscosityZ*stateDZZ +\n"
+"        (viscosityX * stateDXX + viscosityY * stateDYY + +viscosityZ * stateDZZ +\n"
 "        timeDelta.w*src);\n"
 "}\n";
 

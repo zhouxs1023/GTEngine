@@ -3,9 +3,11 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2018/10/05)
+// File Version: 3.0.2 (2019/04/19)
 
 #include "ConvolutionWindow.h"
+#include <LowLevel/GteLogReporter.h>
+#include <Graphics/GteGraphicsDefaults.h>
 
 int main(int, char const*[])
 {
@@ -27,10 +29,11 @@ int main(int, char const*[])
 
 ConvolutionWindow::ConvolutionWindow(Parameters& parameters)
     :
-    Window(parameters),
+    Window2(parameters),
     mNumXGroups(0),
     mNumYGroups(0),
     mRadius(1),
+    mShadersCreated(false),
     mSelection(0)
 {
     if (!SetEnvironment())
@@ -86,15 +89,18 @@ void ConvolutionWindow::OnIdle()
 {
     mTimer.Measure();
 
-    ExecuteShaders();
-    mEngine->Draw(mOverlay[0]);
-    mEngine->Draw(mOverlay[1]);
-    std::string message = "radius = " + std::to_string(mRadius);
-    std::array<float, 4> textColor{ 1.0f, 1.0f, 0.0f, 1.0f };
-    mEngine->Draw(8, mYSize - 40, textColor, msName[mSelection]);
-    mEngine->Draw(8, mYSize - 24, textColor, message);
-    mEngine->Draw(8, mYSize - 8, textColor, mTimer.GetFPS());
-    mEngine->DisplayColorBuffer(0);
+    if (mShadersCreated)
+    {
+        ExecuteShaders();
+        mEngine->Draw(mOverlay[0]);
+        mEngine->Draw(mOverlay[1]);
+        std::string message = "radius = " + std::to_string(mRadius);
+        std::array<float, 4> textColor{ 1.0f, 1.0f, 0.0f, 1.0f };
+        mEngine->Draw(8, mYSize - 40, textColor, msName[mSelection]);
+        mEngine->Draw(8, mYSize - 24, textColor, message);
+        mEngine->Draw(8, mYSize - 8, textColor, mTimer.GetFPS());
+        mEngine->DisplayColorBuffer(0);
+    }
 
     mTimer.UpdateFrameCount();
 }
@@ -147,7 +153,7 @@ bool ConvolutionWindow::OnCharPress(unsigned char key, int x, int y)
         return true;
     }
 
-    return Window::OnCharPress(key, x, y);
+    return Window2::OnCharPress(key, x, y);
 }
 
 bool ConvolutionWindow::SetEnvironment()
@@ -161,23 +167,17 @@ bool ConvolutionWindow::SetEnvironment()
     mEnvironment.Insert(path + "/Samples/Imagics/Convolution/Shaders/");
     mEnvironment.Insert(path + "/Samples/Data/");
 
-#if defined(GTE_DEV_OPENGL)
-    std::string ext = ".glsl";
-#else
-    std::string ext = ".hlsl";
-#endif
-
     std::vector<std::string> inputs =
     {
         "MedicineBag.png",
-        "Convolve" + ext,
-        "ConvolveGS" + ext,
-        "ConvolveSeparableH" + ext,
-        "ConvolveSeparableHGS" + ext,
-        "ConvolveSeparableHGS2" + ext,
-        "ConvolveSeparableV" + ext,
-        "ConvolveSeparableVGS" + ext,
-        "ConvolveSeparableVGS2" + ext
+        DefaultShaderName("Convolve.cs"),
+        DefaultShaderName("ConvolveGS.cs"),
+        DefaultShaderName("ConvolveSeparableH.cs"),
+        DefaultShaderName("ConvolveSeparableHGS.cs"),
+        DefaultShaderName("ConvolveSeparableHGS2.cs"),
+        DefaultShaderName("ConvolveSeparableV.cs"),
+        DefaultShaderName("ConvolveSeparableVGS.cs"),
+        DefaultShaderName("ConvolveSeparableVGS2.cs")
     };
 
     for (auto const& input : inputs)
@@ -194,14 +194,9 @@ bool ConvolutionWindow::SetEnvironment()
 
 void ConvolutionWindow::CreateShaders()
 {
-#if defined(GTE_DEV_OPENGL)
-    std::string ext = ".glsl";
-#else
-    std::string ext = ".hlsl";
-#endif
-
     std::string path;
     std::shared_ptr<ComputeShader> cshader;
+    mShadersCreated = true;
 
     switch (mSelection)
     {
@@ -211,19 +206,19 @@ void ConvolutionWindow::CreateShaders()
         mProgramFactory->defines.Set("NUM_X_THREADS", 16);
         mProgramFactory->defines.Set("NUM_Y_THREADS", 16);
         mProgramFactory->defines.Set("RADIUS", mRadius);
-        path = mEnvironment.GetPath("Convolve" + ext);
+        path = mEnvironment.GetPath(DefaultShaderName("Convolve.cs"));
         mConvolve = mProgramFactory->CreateFromFile(path);
-        if (mConvolve)
+        if (!mConvolve)
         {
-            cshader = mConvolve->GetCShader();
-            cshader->Set("inImage", mImage[0]);
-            cshader->Set("outImage", mImage[1]);
-            cshader->Set("Weights", GetKernel2(mRadius));
+            LogError("Failed to compile " + DefaultShaderName("Convolve.cs"));
+            mShadersCreated = false;
+            return;
         }
-        else
-        {
-            LogError("Failed to compile Convolve" + ext);
-        }
+
+        cshader = mConvolve->GetCShader();
+        cshader->Set("inImage", mImage[0]);
+        cshader->Set("outImage", mImage[1]);
+        cshader->Set("Weights", GetKernel2(mRadius));
         mProgramFactory->defines.Clear();
         break;
 
@@ -233,19 +228,20 @@ void ConvolutionWindow::CreateShaders()
         mProgramFactory->defines.Set("RADIUS", mRadius);
         mProgramFactory->defines.Set("NUM_X_THREADS", 16);
         mProgramFactory->defines.Set("NUM_Y_THREADS", 16);
-        path = mEnvironment.GetPath("ConvolveGS" + ext);
+        path = mEnvironment.GetPath(DefaultShaderName("ConvolveGS.cs"));
         mConvolveGS = mProgramFactory->CreateFromFile(path);
-        if (mConvolveGS)
+        if (!mConvolveGS)
         {
-            cshader = mConvolveGS->GetCShader();
-            cshader->Set("inImage", mImage[0]);
-            cshader->Set("outImage", mImage[1]);
-            cshader->Set("Weights", GetKernel2(mRadius));
+            LogError("Failed to compile " + DefaultShaderName("ConvolveGS.cs"));
+            mProgramFactory->defines.Clear();
+            mShadersCreated = false;
+            return;
         }
-        else
-        {
-            LogError("Failed to compile ConvolveGS" + ext);
-        }
+
+        cshader = mConvolveGS->GetCShader();
+        cshader->Set("inImage", mImage[0]);
+        cshader->Set("outImage", mImage[1]);
+        cshader->Set("Weights", GetKernel2(mRadius));
         mProgramFactory->defines.Clear();
         break;
 
@@ -255,74 +251,108 @@ void ConvolutionWindow::CreateShaders()
         mProgramFactory->defines.Set("NUM_X_THREADS", 16);
         mProgramFactory->defines.Set("NUM_Y_THREADS", 16);
         mProgramFactory->defines.Set("RADIUS", mRadius);
-        path = mEnvironment.GetPath("ConvolveSeparableH" + ext);
+
+        path = mEnvironment.GetPath(DefaultShaderName("ConvolveSeparableH.cs"));
         mConvolveSeparableH = mProgramFactory->CreateFromFile(path);
-        path = mEnvironment.GetPath("ConvolveSeparableV" + ext);
+        if (!mConvolveSeparableH)
+        {
+            LogError("Failed to compile " + DefaultShaderName("ConvolveSeparableH.cs"));
+            mProgramFactory->defines.Clear();
+            mShadersCreated = false;
+            return;
+        }
+
+        path = mEnvironment.GetPath(DefaultShaderName("ConvolveSeparableV.cs"));
         mConvolveSeparableV = mProgramFactory->CreateFromFile(path);
-        if (mConvolveSeparableH && mConvolveSeparableV)
+        if (!mConvolveSeparableV)
         {
-            cshader = mConvolveSeparableH->GetCShader();
-            cshader->Set("inImage", mImage[0]);
-            cshader->Set("outImage", mImage[2]);
-            cshader->Set("Weights", GetKernel1(mRadius));
-            cshader = mConvolveSeparableV->GetCShader();
-            cshader->Set("inImage", mImage[2]);
-            cshader->Set("outImage", mImage[1]);
-            cshader->Set("Weights", GetKernel1(mRadius));
+            LogError("Failed to compile " + DefaultShaderName("ConvolveSeparableV.cs"));
+            mProgramFactory->defines.Clear();
+            mShadersCreated = false;
+            return;
         }
-        else
-        {
-            LogError("Failed to compile ConvolveSeparable{H,V}" + ext);
-        }
+
+        cshader = mConvolveSeparableH->GetCShader();
+        cshader->Set("inImage", mImage[0]);
+        cshader->Set("outImage", mImage[2]);
+        cshader->Set("Weights", GetKernel1(mRadius));
+        cshader = mConvolveSeparableV->GetCShader();
+        cshader->Set("inImage", mImage[2]);
+        cshader->Set("outImage", mImage[1]);
+        cshader->Set("Weights", GetKernel1(mRadius));
         mProgramFactory->defines.Clear();
         break;
 
     case 3:
         mProgramFactory->defines.Set("RADIUS", mRadius);
-        path = mEnvironment.GetPath("ConvolveSeparableHGS" + ext);
+
+        path = mEnvironment.GetPath(DefaultShaderName("ConvolveSeparableHGS.cs"));
         mConvolveSeparableHGS = mProgramFactory->CreateFromFile(path);
-        path = mEnvironment.GetPath("ConvolveSeparableVGS" + ext);
+        if (!mConvolveSeparableHGS)
+        {
+            LogError("Failed to compile " + DefaultShaderName("ConvolveSeparableHGS.cs"));
+            mProgramFactory->defines.Clear();
+            mShadersCreated = false;
+            return;
+        }
+
+        path = mEnvironment.GetPath(DefaultShaderName("ConvolveSeparableVGS.cs"));
         mConvolveSeparableVGS = mProgramFactory->CreateFromFile(path);
-        if (mConvolveSeparableHGS && mConvolveSeparableVGS)
+        if (!mConvolveSeparableVGS)
         {
-            cshader = mConvolveSeparableHGS->GetCShader();
-            cshader->Set("inImage", mImage[0]);
-            cshader->Set("outImage", mImage[2]);
-            cshader->Set("Weights", GetKernel1(mRadius));
-            cshader = mConvolveSeparableVGS->GetCShader();
-            cshader->Set("inImage", mImage[2]);
-            cshader->Set("outImage", mImage[1]);
-            cshader->Set("Weights", GetKernel1(mRadius));
+            LogError("Failed to compile " + DefaultShaderName("ConvolveSeparableVGS.cs"));
+            mProgramFactory->defines.Clear();
+            mShadersCreated = false;
+            return;
         }
-        else
-        {
-            LogError("Failed to compile ConvolveSeparable{H,V}GS" + ext);
-        }
+
+        cshader = mConvolveSeparableHGS->GetCShader();
+        cshader->Set("inImage", mImage[0]);
+        cshader->Set("outImage", mImage[2]);
+        cshader->Set("Weights", GetKernel1(mRadius));
+        cshader = mConvolveSeparableVGS->GetCShader();
+        cshader->Set("inImage", mImage[2]);
+        cshader->Set("outImage", mImage[1]);
+        cshader->Set("Weights", GetKernel1(mRadius));
         mProgramFactory->defines.Clear();
         break;
 
     case 4:
         mProgramFactory->defines.Set("RADIUS", mRadius);
-        path = mEnvironment.GetPath("ConvolveSeparableHGS2" + ext);
+
+        path = mEnvironment.GetPath(DefaultShaderName("ConvolveSeparableHGS2.cs"));
         mConvolveSeparableHGS2 = mProgramFactory->CreateFromFile(path);
-        path = mEnvironment.GetPath("ConvolveSeparableVGS2" + ext);
+        if (!mConvolveSeparableHGS2)
+        {
+            LogError("Failed to compile " + DefaultShaderName("ConvolveSeparableHGS2.cs"));
+            mProgramFactory->defines.Clear();
+            mShadersCreated = false;
+            return;
+        }
+
+        path = mEnvironment.GetPath(DefaultShaderName("ConvolveSeparableVGS2.cs"));
         mConvolveSeparableVGS2 = mProgramFactory->CreateFromFile(path);
-        if (mConvolveSeparableHGS2 && mConvolveSeparableVGS2)
+        if (!mConvolveSeparableVGS2)
         {
-            cshader = mConvolveSeparableHGS2->GetCShader();
-            cshader->Set("inImage", mImage[0]);
-            cshader->Set("outImage", mImage[2]);
-            cshader->Set("Weights", GetKernel1(mRadius));
-            cshader = mConvolveSeparableVGS2->GetCShader();
-            cshader->Set("inImage", mImage[2]);
-            cshader->Set("outImage", mImage[1]);
-            cshader->Set("Weights", GetKernel1(mRadius));
+            LogError("Failed to compile " + DefaultShaderName("ConvolveSeparableVGS2.cs"));
+            mProgramFactory->defines.Clear();
+            mShadersCreated = false;
+            return;
         }
-        else
-        {
-            LogError("Failed to compile ConvolveSeparable{H,V}GS2" + ext);
-        }
+
+        cshader = mConvolveSeparableHGS2->GetCShader();
+        cshader->Set("inImage", mImage[0]);
+        cshader->Set("outImage", mImage[2]);
+        cshader->Set("Weights", GetKernel1(mRadius));
+        cshader = mConvolveSeparableVGS2->GetCShader();
+        cshader->Set("inImage", mImage[2]);
+        cshader->Set("outImage", mImage[1]);
+        cshader->Set("Weights", GetKernel1(mRadius));
         mProgramFactory->defines.Clear();
+        break;
+
+    default:
+        mShadersCreated = false;
         break;
     }
 }

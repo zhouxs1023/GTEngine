@@ -325,16 +325,21 @@
     <ClInclude Include="CubeMapsWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\CubeMap.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shaders\CubeMapPS.glsl" />
-    <None Include="Shaders\CubeMapVS.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\GTEngine.v16.vcxproj">
       <Project>{43a54de9-1f9b-4bc6-a7bc-c3fd13b2c829}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\CubeMap.ps.glsl" />
+    <None Include="Shaders\CubeMap.vs.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\CubeMap.ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Shaders\CubeMap.vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
