@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/07/30)
+// File Version: 3.0.2 (2019/08/08)
 
 #pragma once
 
@@ -97,6 +97,15 @@ namespace gte
             Real w = Evaluate(observation[0]);
             Real error = std::fabs(w - observation[1]);
             return error;
+        }
+
+        virtual void CopyParameters(ApprQuery<Real, std::array<Real, 2>> const* input) override
+        {
+            auto source = dynamic_cast<ApprPolynomialSpecial2 const*>(input);
+            if (source)
+            {
+                *this = *source;
+            }
         }
 
         // Evaluate the polynomial.  The domain interval is provided so you can

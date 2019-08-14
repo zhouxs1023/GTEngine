@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2019/07/30)
+// File Version: 3.0.2 (2019/08/08)
 
 #pragma once
 
@@ -115,13 +115,13 @@ namespace gte
         {
             size_t imax = std::min(numIndices, indices.size());
             std::vector<int> localindices(imax);
-            std::iota(localindices.begin(), localindices.end(), 0);
+            std::copy(indices.begin(), indices.begin() + imax, localindices.begin());
             return FitIndexed(observations.size(), observations.data(), localindices.size(), localindices.data());
         }
 
 
         // Apply the RANdom SAmple Consensus algorithm for fitting a model to
-        // observations. The algorithm requires two virtual functions to be
+        // observations. The algorithm requires three virtual functions to be
         // implemented by the derived classes.
 
         // The minimum number of observations required to fit the model.
@@ -130,6 +130,10 @@ namespace gte
         // Compute the model error for the specified observation for the
         // current model parameters.
         virtual Real Error(ObservationType const& observation) const = 0;
+
+        // Copy the parameters between two models. This is used to copy the
+        // candidate-model parameters to the current best-fit model.
+        virtual void CopyParameters(ApprQuery const* input) = 0;
 
         static bool RANSAC(ApprQuery& candidateModel, std::vector<ObservationType> const& observations,
             size_t numRequiredForGoodFit, Real maxErrorForGoodFit, size_t numIterations,
@@ -144,11 +148,11 @@ namespace gte
             }
 
             // The first part of the array will store the consensus set,
-            // initially filled with the minimumu number of indices that
+            // initially filled with the minimum number of indices that
             // correspond to the candidate inliers. The last part will store
             // the remaining indices. These points are tested against the
             // model and are added to the consensus set when they fit. All
-            // the index manipulation is done in place.  Initially, the
+            // the index manipulation is done in place. Initially, the
             // candidates are the identity permutation.
             std::vector<int> candidates(numObservations);
             std::iota(candidates.begin(), candidates.end(), 0);
@@ -180,7 +184,8 @@ namespace gte
                     size_t numFittedObservations = minRequired;
                     for (size_t j = minRequired; j < numObservations; ++j)
                     {
-                        if (candidateModel.Error(observations[candidates[j]]) <= maxErrorForGoodFit)
+                        Real error = candidateModel.Error(observations[candidates[j]]);
+                        if (error <= maxErrorForGoodFit)
                         {
                             std::swap(candidates[j], candidates[numFittedObservations]);
                             ++numFittedObservations;
@@ -196,7 +201,7 @@ namespace gte
                         {
                             // The consensus set is larger than the previous
                             // consensus set, so its model becomes the best one.
-                            bestModel = candidateModel;
+                            bestModel.CopyParameters(&candidateModel);
                             bestConsensus.resize(numFittedObservations);
                             std::copy(candidates.begin(), candidates.begin() + numFittedObservations, bestConsensus.begin());
                             bestNumFittedObservations = numFittedObservations;
