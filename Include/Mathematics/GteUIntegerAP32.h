@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/12/04)
 
 #pragma once
 
@@ -45,7 +45,6 @@ public:
     UIntegerAP32(UIntegerAP32 const& number);
     UIntegerAP32(uint32_t number);
     UIntegerAP32(uint64_t number);
-    UIntegerAP32(int numBits);
 
     // Assignment.
     UIntegerAP32& operator=(UIntegerAP32 const& number);
@@ -55,13 +54,15 @@ public:
     UIntegerAP32& operator=(UIntegerAP32&& number);
 
     // Member access.
-    void SetNumBits(uint32_t numBits);
+    void SetNumBits(int32_t numBits);
     inline int32_t GetNumBits() const;
     inline std::vector<uint32_t> const& GetBits() const;
     inline std::vector<uint32_t>& GetBits();
     inline void SetBack(uint32_t value);
     inline uint32_t GetBack() const;
     inline int32_t GetSize() const;
+    inline int32_t GetMaxSize() const;
+    inline void SetAllBitsToZero();
 
     // Disk input/output.  The fstream objects should be created using
     // std::ios::binary.  The return value is 'true' iff the operation
@@ -79,7 +80,7 @@ private:
     static std::atomic<size_t> msMaxSize;
 public:
     static void SetMaxSizeToZero() { msMaxSize = 0; }
-    static size_t GetMaxSize() { return msMaxSize; }
+    static size_t GetMaxSizeUsed() { return msMaxSize; }
 #endif
 };
 
@@ -114,5 +115,14 @@ inline int32_t UIntegerAP32::GetSize() const
     return static_cast<int32_t>(mBits.size());
 }
 
+inline int32_t UIntegerAP32::GetMaxSize() const
+{
+    return std::numeric_limits<int32_t>::max();
+}
+
+inline void UIntegerAP32::SetAllBitsToZero()
+{
+    std::fill(mBits.begin(), mBits.end(), 0u);
+}
 
 }

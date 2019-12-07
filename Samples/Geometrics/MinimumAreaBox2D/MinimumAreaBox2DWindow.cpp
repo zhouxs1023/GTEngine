@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.2 (2019/04/13)
+// File Version: 3.0.3 (2019/12/05)
 
 #include "MinimumAreaBox2DWindow.h"
 #include <LowLevel/GteLogReporter.h>
@@ -47,7 +47,6 @@ MinimumAreaBox2DWindow::MinimumAreaBox2DWindow(Parameters& parameters)
     Vector2<float> axis[2] = { { 1.0f, 1.0f }, { -1.0f, 1.0f } };
     Normalize(axis[0]);
     Normalize(axis[1]);
-    rnd(mte);
     int const numVertices = 256;
     mVertices.resize(numVertices);
     for (auto& v : mVertices)

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/07/04)
+// File Version: 3.0.2 (2019/12/04)
 
 #pragma once
 
@@ -51,7 +51,6 @@ public:
     UIntegerFP32(UIntegerFP32 const& number);
     UIntegerFP32(uint32_t number);
     UIntegerFP32(uint64_t number);
-    UIntegerFP32(int numBits);
 
     // Assignment.  Only mSize elements are copied.
     UIntegerFP32& operator=(UIntegerFP32 const& number);
@@ -67,13 +66,15 @@ public:
     UIntegerFP32& operator=(UIntegerFP32&& number);
 
     // Member access.
-    void SetNumBits(uint32_t numBits);
+    void SetNumBits(int32_t numBits);
     inline int32_t GetNumBits() const;
     inline std::array<uint32_t, N> const& GetBits() const;
     inline std::array<uint32_t, N>& GetBits();
     inline void SetBack(uint32_t value);
     inline uint32_t GetBack() const;
     inline int32_t GetSize() const;
+    inline int32_t GetMaxSize() const;
+    inline void SetAllBitsToZero();
 
     // Disk input/output.  The fstream objects should be created using
     // std::ios::binary.  The return value is 'true' iff the operation
@@ -91,7 +92,7 @@ private:
     static std::atomic<int32_t> msMaxSize;
 public:
     static void SetMaxSizeToZero() { msMaxSize = 0; }
-    static int32_t GetMaxSize() { return msMaxSize; }
+    static int32_t GetMaxSizeUsed() { return msMaxSize; }
 #endif
 };
 
@@ -167,23 +168,6 @@ UIntegerFP32<N>::UIntegerFP32(uint64_t number)
 }
 
 template <int N>
-UIntegerFP32<N>::UIntegerFP32(int numBits)
-    :
-    mNumBits(numBits),
-    mSize(1 + (numBits - 1) / 32)
-{
-    static_assert(N >= 1, "Invalid size N.");
-
-#if defined(GTE_ASSERT_ON_UINTEGERFP32_OUT_OF_RANGE)
-    LogAssert(mSize <= N, "N not large enough to store number of bits.");
-#endif
-
-#if defined(GTE_COLLECT_UINTEGERFP32_STATISTICS)
-    AtomicMax(msMaxSize, mSize);
-#endif
-}
-
-template <int N>
 UIntegerFP32<N>& UIntegerFP32<N>::operator=(UIntegerFP32 const& number)
 {
     static_assert(N >= 1, "Invalid size N.");
@@ -214,10 +198,22 @@ UIntegerFP32<N>& UIntegerFP32<N>::operator=(UIntegerFP32&& number)
 }
 
 template <int N>
-void UIntegerFP32<N>::SetNumBits(uint32_t numBits)
+void UIntegerFP32<N>::SetNumBits(int32_t numBits)
 {
-    mNumBits = numBits;
-    mSize = 1 + (numBits - 1) / 32;
+    if (numBits > 0)
+    {
+        mNumBits = numBits;
+        mSize = 1 + (numBits - 1) / 32;
+    }
+    else if (numBits == 0)
+    {
+        mNumBits = 0;
+        mSize = 0;
+    }
+    else
+    {
+        LogError("The number of bits must be nonnegative.");
+    }
 
 #if defined(GTE_ASSERT_ON_UINTEGERFP32_OUT_OF_RANGE)
     LogAssert(mSize <= N, "N not large enough to store number of bits.");
@@ -262,6 +258,18 @@ template <int N> inline
 int32_t UIntegerFP32<N>::GetSize() const
 {
     return mSize;
+}
+
+template <int N> inline
+int32_t UIntegerFP32<N>::GetMaxSize() const
+{
+    return N;
+}
+
+template <int N> inline
+void UIntegerFP32<N>::SetAllBitsToZero()
+{
+    std::fill(mBits.begin(), mBits.end(), 0u);
 }
 
 template <int N>

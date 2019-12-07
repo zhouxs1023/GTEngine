@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/07/04)
+// File Version: 3.0.2 (2019/12/04)
 
 #pragma once
 
@@ -256,7 +256,8 @@ void UIntegerALU32<UInteger>::Sub(UInteger const& n0, UInteger const& n1)
 
     // Create the two's-complement number n2.  We know n2.GetNumElements() is
     // the same as numElements0.
-    UInteger n2(n0NumBits);
+    UInteger n2;
+    n2.SetNumBits(n0NumBits);
     auto& n2Bits = n2.GetBits();
     int32_t i;
     for (i = 0; i < numElements1; ++i)
@@ -301,7 +302,14 @@ void UIntegerALU32<UInteger>::Sub(UInteger const& n0, UInteger const& n1)
         }
     }
 
-    self.SetNumBits(32 * block + GetLeadingBit(bits[block]) + 1);
+    if (block >= 0)
+    {
+        self.SetNumBits(32 * block + GetLeadingBit(bits[block]) + 1);
+    }
+    else
+    {
+        self.SetNumBits(0);
+    }
 }
 
 template <typename UInteger>
@@ -319,7 +327,8 @@ void UIntegerALU32<UInteger>::Mul(UInteger const& n0, UInteger const& n1)
     auto& bits = self.GetBits();
 
     // Product of a single-block number with a multiple-block number.
-    UInteger product(numBits);
+    UInteger product;
+    product.SetNumBits(numBits);
     auto& pBits = product.GetBits();
 
     // Get the array sizes.

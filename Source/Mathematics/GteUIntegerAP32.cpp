@@ -3,9 +3,10 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.1 (2017/07/04)
+// File Version: 3.0.2 (2019/12/04)
 
 #include <GTEnginePCH.h>
+#include <LowLevel/GteLogger.h>
 #include <Mathematics/GteBitHacks.h>
 #include <Mathematics/GteUIntegerAP32.h>
 #include <algorithm>
@@ -72,16 +73,6 @@ UIntegerAP32::UIntegerAP32(uint64_t number)
 #endif
 }
 
-UIntegerAP32::UIntegerAP32(int numBits)
-    :
-    mNumBits(numBits),
-    mBits(1 + (numBits - 1) / 32)
-{
-#if defined(GTE_COLLECT_UINTEGERAP32_STATISTICS)
-    AtomicMax(msMaxSize, mBits.size());
-#endif
-}
-
 UIntegerAP32& UIntegerAP32::operator=(UIntegerAP32 const& number)
 {
     mNumBits = number.mNumBits;
@@ -102,16 +93,21 @@ UIntegerAP32& UIntegerAP32::operator=(UIntegerAP32&& number)
     return *this;
 }
 
-void UIntegerAP32::SetNumBits(uint32_t numBits)
+void UIntegerAP32::SetNumBits(int32_t numBits)
 {
-    mNumBits = numBits;
-    if (mNumBits > 0)
+    if (numBits > 0)
     {
+        mNumBits = numBits;
         mBits.resize(1 + (numBits - 1) / 32);
+    }
+    else if (numBits == 0)
+    {
+        mNumBits = 0;
+        mBits.clear();
     }
     else
     {
-        mBits.clear();
+        LogError("The number of bits must be nonnegative.");
     }
 
 #if defined(GTE_COLLECT_UINTEGERAP32_STATISTICS)
