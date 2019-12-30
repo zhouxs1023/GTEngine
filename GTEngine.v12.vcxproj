@@ -938,6 +938,7 @@
     <ClInclude Include="Include\Mathematics\GteApprOrthogonalLine3.h" />
     <ClInclude Include="Include\Mathematics\GteApprOrthogonalPlane3.h" />
     <ClInclude Include="Include\Mathematics\GteApprParaboloid3.h" />
+    <ClInclude Include="Include\Mathematics\GteApprParallelLines2.h" />
     <ClInclude Include="Include\Mathematics\GteApprPolynomial2.h" />
     <ClInclude Include="Include\Mathematics\GteApprPolynomial3.h" />
     <ClInclude Include="Include\Mathematics\GteApprPolynomial4.h" />

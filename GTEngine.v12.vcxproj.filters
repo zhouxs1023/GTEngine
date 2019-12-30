@@ -2331,6 +2331,9 @@
     <ClInclude Include="Include\Graphics\GL4\GL\wglext.h">
       <Filter>Files\Graphics\OpenGL4\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Mathematics\GteApprParallelLines2.h">
+      <Filter>Files\Mathematics\Approximation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\GTEnginePCH.cpp">

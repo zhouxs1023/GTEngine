@@ -595,6 +595,7 @@ Files (14)
             GteApprOrthogonalLine3.h
             GteApprOrthogonalPlane3.h
             GteApprParaboloid3.h
+			GteApprParallelLines2.h
             GteApprPolynomial2.h
             GteApprPolynomial3.h
             GteApprPolynomial4.h

@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.40 (2019/07/10)
+// File Version: 3.0.41 (2019/12/27)
 
 #pragma once
 
@@ -58,6 +58,7 @@
 #include <Mathematics/GteApprOrthogonalLine3.h>
 #include <Mathematics/GteApprOrthogonalPlane3.h>
 #include <Mathematics/GteApprParaboloid3.h>
+#include <Mathematics/GteApprParallelLines2.h>
 #include <Mathematics/GteApprPolynomial2.h>
 #include <Mathematics/GteApprPolynomial3.h>
 #include <Mathematics/GteApprPolynomial4.h>

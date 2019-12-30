@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.0 (2016/06/19)
+// File Version: 3.0.1 (2019/12/26)
 
 #pragma once
 
@@ -12,7 +12,7 @@
 // Minimax polynomial approximations to 2^x.  The polynomial p(x) of
 // degree D minimizes the quantity maximum{|2^x - p(x)| : x in [0,1]}
 // over all polynomials of degree D.  The natural exponential is
-// computed using exp(x) = 2^{x log(2)}, where log(2) is the natural
+// computed using exp(x) = 2^{x/log(2)}, where log(2) is the natural
 // logarithm of 2.
 
 namespace gte
@@ -42,14 +42,14 @@ template <typename Real>
 template <int D>
 inline Real ExpEstimate<Real>::Degree(Real x)
 {
-    return Exp2Estimate<Real>::Degree<D>((Real)GTE_C_LN_2 * x);
+    return Exp2Estimate<Real>::Degree<D>(x * (Real)GTE_C_INV_LN_2);
 }
 
 template <typename Real>
 template <int D>
 inline Real ExpEstimate<Real>::DegreeRR(Real x)
 {
-    return Exp2Estimate<Real>::DegreeRR<D>((Real)GTE_C_LN_2 * x);
+    return Exp2Estimate<Real>::DegreeRR<D>(x * (Real)GTE_C_INV_LN_2);
 }
 
 

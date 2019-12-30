@@ -3,7 +3,7 @@
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
 // http://www.geometrictools.com/License/Boost/LICENSE_1_0.txt
-// File Version: 3.0.4 (2019/05/03)
+// File Version: 3.0.5 (2019/12/28)
 
 #pragma once
 
@@ -55,7 +55,8 @@ namespace gte
             }
             else
             {
-                std::memset(mControls.data(), 0, mControls.size() * sizeof(mControls[0]));
+                Vector<N, Real> zero{ (Real)0 };
+                std::fill(mControls.begin(), mControls.end(), zero);
             }
             if (weights)
             {
@@ -63,7 +64,7 @@ namespace gte
             }
             else
             {
-                std::memset(mWeights.data(), 0, mWeights.size() * sizeof(mWeights[0]));
+                std::fill(mWeights.begin(), mWeights.end(), (Real)0);
             }
             mConstructed = true;
         }
